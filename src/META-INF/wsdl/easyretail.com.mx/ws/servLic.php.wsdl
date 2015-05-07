@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://easyretail.com.mx/ws/ns" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://easyretail.com.mx/ws/ns">
+<types>
+<xsd:schema targetNamespace="http://easyretail.com.mx/ws/ns"
+>
+ <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+ <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+ <xsd:complexType name="servLic.vGivMacRequestType">
+  <xsd:all>
+   <xsd:element name="sMacP" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="servLic.vGivMacResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="servLic.sPrueConRequestType"/>
+ <xsd:complexType name="servLic.sPrueConResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="servLic.sDecryp2RequestType">
+  <xsd:all>
+   <xsd:element name="sData" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="servLic.sDecryp2ResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="servLic.sEncrip2RequestType">
+  <xsd:all>
+   <xsd:element name="sData" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="servLic.sEncrip2ResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:element name="servLic.vGivMac" type="tns:servLic.vGivMacRequestType"/>
+ <xsd:element name="servLic.vGivMacResponse" type="tns:servLic.vGivMacResponseType"/>
+ <xsd:element name="servLic.sPrueCon" type="tns:servLic.sPrueConRequestType"/>
+ <xsd:element name="servLic.sPrueConResponse" type="tns:servLic.sPrueConResponseType"/>
+ <xsd:element name="servLic.sDecryp2" type="tns:servLic.sDecryp2RequestType"/>
+ <xsd:element name="servLic.sDecryp2Response" type="tns:servLic.sDecryp2ResponseType"/>
+ <xsd:element name="servLic.sEncrip2" type="tns:servLic.sEncrip2RequestType"/>
+ <xsd:element name="servLic.sEncrip2Response" type="tns:servLic.sEncrip2ResponseType"/>
+</xsd:schema>
+</types>
+<message name="servLic.vGivMacRequest">
+  <part name="parameters" element="tns:servLic.vGivMac" /></message>
+<message name="servLic.vGivMacResponse">
+  <part name="parameters" element="tns:servLic.vGivMacResponse" /></message>
+<message name="servLic.sPrueConRequest">
+  <part name="parameters" element="tns:servLic.sPrueCon" /></message>
+<message name="servLic.sPrueConResponse">
+  <part name="parameters" element="tns:servLic.sPrueConResponse" /></message>
+<message name="servLic.sDecryp2Request">
+  <part name="parameters" element="tns:servLic.sDecryp2" /></message>
+<message name="servLic.sDecryp2Response">
+  <part name="parameters" element="tns:servLic.sDecryp2Response" /></message>
+<message name="servLic.sEncrip2Request">
+  <part name="parameters" element="tns:servLic.sEncrip2" /></message>
+<message name="servLic.sEncrip2Response">
+  <part name="parameters" element="tns:servLic.sEncrip2Response" /></message>
+<portType name="EASY RETAIL WEB SERVICES CLASS EXAMPLEPortType">
+  <operation name="servLic.vGivMac">
+    <documentation>Genera una serie o devuelve una ya existente del cliente que hace la petición</documentation>
+    <input message="tns:servLic.vGivMacRequest"/>
+    <output message="tns:servLic.vGivMacResponse"/>
+  </operation>
+  <operation name="servLic.sPrueCon">
+    <documentation>Prueba conexión con el web service</documentation>
+    <input message="tns:servLic.sPrueConRequest"/>
+    <output message="tns:servLic.sPrueConResponse"/>
+  </operation>
+  <operation name="servLic.sDecryp2">
+    <documentation>Decript temporal</documentation>
+    <input message="tns:servLic.sDecryp2Request"/>
+    <output message="tns:servLic.sDecryp2Response"/>
+  </operation>
+  <operation name="servLic.sEncrip2">
+    <documentation>Encriptador temporal</documentation>
+    <input message="tns:servLic.sEncrip2Request"/>
+    <output message="tns:servLic.sEncrip2Response"/>
+  </operation>
+</portType>
+<binding name="EASY RETAIL WEB SERVICES CLASS EXAMPLEBinding" type="tns:EASY RETAIL WEB SERVICES CLASS EXAMPLEPortType">
+  <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="servLic.vGivMac">
+    <soap:operation soapAction="http://easyretail.com.mx/ws/servLic.php/servLic.vGivMac" style="document"/>
+    <input><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></input>
+    <output><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></output>
+  </operation>
+  <operation name="servLic.sPrueCon">
+    <soap:operation soapAction="http://easyretail.com.mx/ws/servLic.php/servLic.sPrueCon" style="document"/>
+    <input><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></input>
+    <output><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></output>
+  </operation>
+  <operation name="servLic.sDecryp2">
+    <soap:operation soapAction="http://easyretail.com.mx/ws/servLic.php/servLic.sDecryp2" style="document"/>
+    <input><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></input>
+    <output><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></output>
+  </operation>
+  <operation name="servLic.sEncrip2">
+    <soap:operation soapAction="http://easyretail.com.mx/ws/servLic.php/servLic.sEncrip2" style="document"/>
+    <input><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></input>
+    <output><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></output>
+  </operation>
+</binding>
+<service name="EASY RETAIL WEB SERVICES CLASS EXAMPLE">
+  <port name="EASY RETAIL WEB SERVICES CLASS EXAMPLEPort" binding="tns:EASY RETAIL WEB SERVICES CLASS EXAMPLEBinding">
+    <soap:address location="http://easyretail.com.mx/ws/servLic.php"/>
+  </port>
+</service>
+</definitions>

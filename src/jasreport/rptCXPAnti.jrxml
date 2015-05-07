@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="F_D" class="java.lang.String"/>
+	<parameter name="EMP" class="java.lang.String"/>
+	<parameter name="LOG" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 
+IFNULL(a.nom,'') AS nom,
+IFNULL(a.PROV,'') AS prov,
+IFNULL(SUM(CASE WHEN carg > abon AND diasvenc >= 0 THEN carg ELSE 0 END),0)-IFNULL(SUM(CASE WHEN carg > abon AND diasvenc >= 0 THEN abon ELSE 0 END),0) AS ven, 
+IFNULL(SUM(CASE WHEN carg > abon AND diasvenc <= 15 AND diasvenc >= 0 THEN carg ELSE 0 END),0)-IFNULL(SUM(CASE WHEN carg > abon AND diasvenc <= 15 AND diasvenc >= 0 THEN abon ELSE 0 END),0) AS Anti15,
+IFNULL(SUM(CASE WHEN carg > abon AND diasvenc <= 30 AND diasvenc >= 16 THEN carg ELSE 0 END),0)-IFNULL(SUM(CASE WHEN carg > abon AND diasvenc <= 30 AND diasvenc >= 16 THEN abon ELSE 0 END),0) AS Anti30,
+IFNULL(SUM(CASE WHEN carg > abon AND diasvenc <= 45 AND diasvenc >= 31 THEN carg ELSE 0 END),0)-IFNULL(SUM(CASE WHEN carg > abon AND diasvenc <= 45 AND diasvenc >= 31 THEN abon ELSE 0 END),0) AS Anti45,
+IFNULL(SUM(CASE WHEN carg > abon AND diasvenc >= 46 THEN carg ELSE 0 END),0)-IFNULL(SUM(CASE WHEN carg > abon AND diasvenc >= 46 THEN abon ELSE 0 END),0) AS Anti45Mas
+FROM (SELECT cxp.PROV, SUM(carg) AS carg, SUM(abon) AS abon,DATEDIFF(DATE(NOW()), DATE(fvenc)) as diasvenc, nom FROM cxp LEFT OUTER JOIN provs ON CONCAT_WS('', provs.SER, provs.PROV) = cxp.PROV WHERE CASE WHEN '$P!{EMP}' = '' THEN 1=1 ELSE cxp.PROV = '$P!{EMP}' END GROUP BY cxp.PROV, diasvenc)a GROUP BY prov]]>
+	</queryString>
+	<field name="nom" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prov" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ven" class="java.lang.Double"/>
+	<field name="Anti15" class="java.lang.Double"/>
+	<field name="Anti30" class="java.lang.Double"/>
+	<field name="Anti45" class="java.lang.Double"/>
+	<field name="Anti45Mas" class="java.lang.Double"/>
+	<variable name="TOTVEN" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{ven}]]></variableExpression>
+	</variable>
+	<variable name="TOT115" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Anti15}]]></variableExpression>
+	</variable>
+	<variable name="TOT1630" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Anti30}]]></variableExpression>
+	</variable>
+	<variable name="TOT3145" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Anti45}]]></variableExpression>
+	</variable>
+	<variable name="TOT45MAS" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Anti45Mas}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="100" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="60" height="13" uuid="6e486492-6b7f-43af-910e-663399f76bee"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="583" y="10" width="40" height="20" uuid="c68eb191-f58a-4300-90db-c95d740b68b3"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="54" height="13" uuid="c1b3d68e-3d51-4f47-8ee2-abb0eea0bde3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="49" width="552" height="38" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<textElement textAlignment="Center">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CXP ANTIGUEDAD DE SALDOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="31" width="55" height="15" uuid="e116ac4c-3129-41f6-bab3-6a0a8871668b"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="65" y="31" width="111" height="15" uuid="72c7afef-2235-4502-9ec8-00ef02f3110d"/>
+				<textFieldExpression><![CDATA[$P{F_D}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="10" y="6" width="23" height="20" uuid="c3c91480-4dcf-4303-ab08-b3d7e2a412fb"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="3" width="62" height="13" forecolor="#3333FF" uuid="88b66b26-e7c3-4441-919f-1dbcb743e01e"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="331" y="3" width="59" height="13" forecolor="#3333FF" uuid="4fa35c2d-3233-4f28-83a0-f9ba8d072dc9"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1-15]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="65" y="3" width="190" height="13" forecolor="#3333FF" uuid="965595ce-ae63-45dd-a445-f058cb02bd9a"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="255" y="3" width="76" height="13" forecolor="#3333FF" uuid="21b86c69-4d6a-46c3-abb9-dfec3265793f"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Vencido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="390" y="3" width="62" height="13" forecolor="#3333FF" uuid="a685cf37-d928-4bdb-a097-63dc854a7d21"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[16-30]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="452" y="3" width="49" height="13" forecolor="#3333FF" uuid="1d7c7255-7a09-4f68-ba15-5beee913d32f"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[31-45]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="501" y="3" width="52" height="13" forecolor="#3333FF" uuid="6ab3f37c-ca75-4028-9745-1398797274dc"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[45-+]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="65" y="0" width="190" height="15" uuid="5bd322a5-3990-47a7-92d9-9d778d092145"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="3" y="0" width="62" height="15" uuid="ca804d9c-eb89-41ee-94d0-1bcd30be6d31"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prov}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="255" y="0" width="76" height="15" uuid="6df849ea-f99f-4078-b1d4-4e9125a46666"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ven}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="331" y="0" width="59" height="15" uuid="a9ba8149-4e2f-44e9-aec5-b2232e814e9d"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Anti15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="390" y="0" width="62" height="15" uuid="0bb8c8d6-b995-424a-83ca-24bf1ee87c23"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Anti30}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="501" y="0" width="52" height="15" uuid="f0a50d7a-a783-4503-87e5-3b04afc163e0"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Anti45Mas}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="452" y="0" width="49" height="15" uuid="c430d928-214c-45ae-8d2f-fe81a7bcd3ab"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Anti45}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="49" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="21" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="66" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="176" y="32" width="61" height="13" forecolor="#3333FF" uuid="0df49e32-2d7d-4663-a4a0-909accfb4588"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Totales]]></text>
+			</staticText>
+			<line>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="10" width="550" height="1" uuid="f9bea13c-c8a0-41d5-bb3a-8eec85b3a341"/>
+			</line>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="255" y="32" width="76" height="13" uuid="7e976e22-2281-4328-ba69-dda4b8ac693b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTVEN}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="333" y="32" width="57" height="13" uuid="0ebf0342-b6a0-42db-89f3-6dc1cef196ab"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOT115}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="390" y="32" width="62" height="13" uuid="4a742fb1-0c74-4572-93b8-da77f9620d6a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOT1630}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="455" y="32" width="46" height="13" uuid="3045e925-fd15-4f50-b2af-a30639945b02"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOT3145}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="501" y="32" width="52" height="13" uuid="ac84bb82-bab6-4b22-9a8c-0782721b73e9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOT45MAS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://easyretail.com.mx/ws/ns" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://easyretail.com.mx/ws/ns">
+<types>
+<xsd:schema targetNamespace="http://easyretail.com.mx/ws/ns"
+>
+ <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+ <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+ <xsd:complexType name="saludarRequestType">
+  <xsd:all>
+   <xsd:element name="var" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="saludarResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="saludar2RequestType"/>
+ <xsd:complexType name="saludar2ResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:element name="saludar" type="tns:saludarRequestType"/>
+ <xsd:element name="saludarResponse" type="tns:saludarResponseType"/>
+ <xsd:element name="saludar2" type="tns:saludar2RequestType"/>
+ <xsd:element name="saludar2Response" type="tns:saludar2ResponseType"/>
+</xsd:schema>
+</types>
+<message name="saludarRequest">
+  <part name="parameters" element="tns:saludar" /></message>
+<message name="saludarResponse">
+  <part name="parameters" element="tns:saludarResponse" /></message>
+<message name="saludar2Request">
+  <part name="parameters" element="tns:saludar2" /></message>
+<message name="saludar2Response">
+  <part name="parameters" element="tns:saludar2Response" /></message>
+<portType name="EASY RETAIL WEB SERVICES CLASS EXAMPLEPortType">
+  <operation name="saludar">
+    <documentation>Un método que saluda</documentation>
+    <input message="tns:saludarRequest"/>
+    <output message="tns:saludarResponse"/>
+  </operation>
+  <operation name="saludar2">
+    <documentation>Un método que saluda2</documentation>
+    <input message="tns:saludar2Request"/>
+    <output message="tns:saludar2Response"/>
+  </operation>
+</portType>
+<binding name="EASY RETAIL WEB SERVICES CLASS EXAMPLEBinding" type="tns:EASY RETAIL WEB SERVICES CLASS EXAMPLEPortType">
+  <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="saludar">
+    <soap:operation soapAction="http://easyretail.com.mx/ws/servLic2.php/saludar" style="document"/>
+    <input><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></input>
+    <output><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></output>
+  </operation>
+  <operation name="saludar2">
+    <soap:operation soapAction="http://easyretail.com.mx/ws/servLic2.php/saludar2" style="document"/>
+    <input><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></input>
+    <output><soap:body use="literal" namespace="http://easyretail.com.mx/ws/ns"/></output>
+  </operation>
+</binding>
+<service name="EASY RETAIL WEB SERVICES CLASS EXAMPLE">
+  <port name="EASY RETAIL WEB SERVICES CLASS EXAMPLEPort" binding="tns:EASY RETAIL WEB SERVICES CLASS EXAMPLEBinding">
+    <soap:address location="http://easyretail.com.mx/ws/servLic2.php"/>
+  </port>
+</service>
+</definitions>

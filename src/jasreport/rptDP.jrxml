@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="382"/>
+	<parameter name="F_D" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="F_A" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CANTTIC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TOTTIC" class="java.lang.String"/>
+	<parameter name="LOG" class="java.lang.String"/>
+	<parameter name="CANTICCA" class="java.lang.String"/>
+	<parameter name="TOTTICCA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT CURDATE()]]>
+	</queryString>
+	<field name="CURDATE()" class="java.sql.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="101" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="60" height="13" uuid="6e486492-6b7f-43af-910e-663399f76bee"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="583" y="10" width="40" height="20" uuid="c68eb191-f58a-4300-90db-c95d740b68b3"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="54" height="13" uuid="c1b3d68e-3d51-4f47-8ee2-abb0eea0bde3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="62" width="555" height="38" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<textElement textAlignment="Center">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE VENTAS DATAPARK]]></text>
+			</staticText>
+			<image>
+				<reportElement x="10" y="6" width="23" height="20" uuid="83c48e3a-cc39-4d42-8d4b-ae149880dcd1"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="37" y="46" width="100" height="15" uuid="77ac03ae-9159-4982-b6b6-a0dfed566408"/>
+				<textFieldExpression><![CDATA[$P{F_A}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="37" y="31" width="100" height="15" uuid="ca59181b-1c86-4d87-a54e-d76116d527dc"/>
+				<textFieldExpression><![CDATA[$P{F_D}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="46" width="26" height="15" uuid="cddfb750-f470-449e-94ce-58db9ce82f04"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Al:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="31" width="26" height="15" uuid="8465f4ac-4473-49f3-a464-35fcc327a8eb"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Del:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="2" width="73" height="13" forecolor="#3333FF" uuid="88b66b26-e7c3-4441-919f-1dbcb743e01e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tickets]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="76" y="2" width="66" height="13" forecolor="#3333FF" uuid="965595ce-ae63-45dd-a445-f058cb02bd9a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="142" y="2" width="102" height="13" forecolor="#3333FF" uuid="7bfb3423-1b7d-43bb-8692-bd56546ef1fb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tickets cancelados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="244" y="2" width="66" height="13" forecolor="#3333FF" uuid="9ffa5454-ec23-4b0c-a318-9d363fabec10"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="244" y="0" width="66" height="20" uuid="2bcd7137-8410-432d-8cf9-50cdecfcfd92"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOTTICCA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="142" y="0" width="100" height="20" uuid="784d1c5e-7999-4ea0-8239-4bc36a2e4bfc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CANTICCA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3" y="0" width="73" height="20" uuid="56dd4142-50b2-4df7-a821-725bd6a89d4c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CANTTIC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="76" y="0" width="66" height="20" uuid="fec53aa2-20f4-446c-89fb-02a3544cb6a4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOTTIC}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="21" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="186" splitType="Stretch"/>
+	</summary>
+</jasperReport>

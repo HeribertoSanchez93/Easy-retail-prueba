@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="F_D" class="java.lang.String"/>
+	<parameter name="F_A" class="java.lang.String"/>
+	<parameter name="TIP" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NOCAJ" class="java.lang.String"/>
+	<parameter name="SUC" class="java.lang.String"/>
+	<parameter name="ENTSAL" class="java.lang.String"/>
+	<parameter name="ESTAC" class="java.lang.String"/>
+	<parameter name="LOG" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT estacs.NOM, logini.estac, logini.sucu, logini.nocaj, logini.entsal, logini.falt FROM logini LEFT OUTER JOIN estacs ON estacs.ESTAC = logini.ESTAC WHERE 1=1 AND CASE WHEN '$P!{F_D}'= '' THEN logini.FALT = logini.FALT ELSE DATE(logini.FALT) >=  
+'$P!{F_D}' END AND CASE WHEN '$P!{F_A}' = '' THEN logini.FALT = logini.FALT ELSE DATE(logini.FALT) <= '$P!{F_A}' END AND CASE WHEN '$P!{ESTAC}' = '' THEN logini.ESTAC = logini.ESTAC ELSE logini.ESTAC = '$P!{ESTAC}' END  AND CASE WHEN '$P!{SUC}' = '' THEN logini.SUCU = logini.SUCU ELSE logini.SUCU = '$P!{SUC}' END AND CASE WHEN '$P!{NOCAJ}' = '' THEN logini.NOCAJ = logini.NOCAJ ELSE logini.NOCAJ = '$P!{NOCAJ}' END AND CASE WHEN '$P!{TIP}' = '0' THEN logini.ENTSAL = 0 ELSE logini.ENTSAL = logini.ENTSAL END AND CASE WHEN '$P!{TIP}' = '1' THEN logini.ENTSAL = 1 ELSE logini.ENTSAL = logini.ENTSAL END AND CASE WHEN '$P!{TIP}' = '2' THEN logini.ENTSAL = logini.ENTSAL ELSE logini.ENTSAL = logini.ENTSAL END ORDER BY logini.FALT DESC]]>
+	</queryString>
+	<field name="NOM" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estac" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sucu" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nocaj" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="entsal" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="falt" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="71" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="60" height="13" uuid="6e486492-6b7f-43af-910e-663399f76bee"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="583" y="10" width="40" height="20" uuid="c68eb191-f58a-4300-90db-c95d740b68b3"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="54" height="13" uuid="c1b3d68e-3d51-4f47-8ee2-abb0eea0bde3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="160" y="25" width="256" height="38" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<textElement textAlignment="Center">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LOGIN USUARIOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="41" width="26" height="15" uuid="b244af57-0e65-492d-be2d-9e5b6744b3c3"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Al:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="26" width="26" height="15" uuid="e116ac4c-3129-41f6-bab3-6a0a8871668b"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Del:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="36" y="26" width="116" height="15" uuid="aa01f04f-3b7f-4405-8b88-e9174e1017db"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{F_D}=="")?"Todas las Fechas":$P{F_D}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="36" y="41" width="116" height="15" uuid="eb494b9c-2b45-4960-89a9-9d3c0f70de8a"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{F_A}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="12" y="3" width="23" height="20" uuid="cc5a5bc8-6e4f-4343-826d-f2022bf15061"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="2" width="77" height="13" forecolor="#3333FF" uuid="88b66b26-e7c3-4441-919f-1dbcb743e01e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Usuario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="386" y="2" width="55" height="13" forecolor="#3333FF" uuid="4fa35c2d-3233-4f28-83a0-f9ba8d072dc9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[E/S]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="251" y="2" width="80" height="13" forecolor="#3333FF" uuid="965595ce-ae63-45dd-a445-f058cb02bd9a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sucursal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="332" y="2" width="54" height="13" forecolor="#3333FF" uuid="21b86c69-4d6a-46c3-abb9-dfec3265793f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No. Caja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="441" y="2" width="113" height="13" forecolor="#3333FF" uuid="a685cf37-d928-4bdb-a097-63dc854a7d21"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="80" y="2" width="171" height="13" forecolor="#3333FF" uuid="696eea6e-e2fb-4776-ab02-20cad12a5cda"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre Usuario]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="3" y="0" width="77" height="13" uuid="a23b5ec4-5c40-4503-9feb-c81dd88d6fda"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estac}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="251" y="0" width="81" height="13" uuid="ec2bd148-d9e3-471f-942c-8286e4947f3f"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sucu}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="332" y="0" width="54" height="13" uuid="f4de4eab-877a-4981-9acf-22ac1566e9b7"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nocaj}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="386" y="0" width="55" height="13" uuid="a061b4ea-a60d-4757-b88e-d22874dbfaa8"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{entsal})?"S":"E"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="441" y="0" width="113" height="13" uuid="55911426-a296-4b69-9d9a-e6149aff3ca8"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{falt}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="80" y="0" width="171" height="13" uuid="0e623ec4-f74d-46b0-88e7-1901635e305e"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="19" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="21" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="66" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOG" class="java.lang.String"/>
+	<parameter name="CONCEP" class="java.lang.String"/>
+	<parameter name="F_D" class="java.lang.String"/>
+	<parameter name="F_A" class="java.lang.String"/>
+	<parameter name="PROD" class="java.lang.String"/>
+	<parameter name="TIP" class="java.lang.String"/>
+	<parameter name="BAJ" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LUG" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT lug, id_id, CASE WHEN baj = 1 THEN totvalactbaj WHEN DATE(NOW()) >= DATE(ffindep) THEN 0 ELSE cost - (TIMESTAMPDIFF(MONTH, finidep, NOW()) * ((cost * ((porcendep/12)/100))  - ((cost * 
+((porcendep/12)/100))  * (porcendedu/100)))) END AS valactua, 
+CASE WHEN DATE(NOW()) >= DATE(ffindep) THEN cost WHEN baj = 1 THEN totacumes ELSE TIMESTAMPDIFF(MONTH, finidep, NOW()) * ((cost * ((porcendep/12)/100))  - ((cost * ((porcendep/12)/100))  * 
+(porcendedu/100))) END AS acumdepmens, CASE WHEN baj = 1 THEN totestadbaj WHEN DATE(NOW()) >= ffindep THEN 'COMPLETO' WHEN TIMESTAMPDIFF(MONTH, finidep, NOW()) <= (TIMESTAMPDIFF(MONTH, finidep, 
+ffindep) / 2) THEN 'NUEVO' WHEN TIMESTAMPDIFF(MONTH, finidep, NOW()) > (TIMESTAMPDIFF(MONTH, finidep, ffindep) / 2) THEN 'PARCIAL' END AS estadsis, (cost * 
+((porcendep/12)/100)) * (porcendedu/100) AS deduunitmes, TIMESTAMPDIFF(MONTH, finidep, NOW()) * (cost * ((porcendep/12)*100)) - (cost * ((porcendep/12)*100)) * 
+((porcendedu/12)/100) AS valact, cost * ((porcendep/12)/100) AS depunitmes, prod, descrip, serprod, tipact, CASE WHEN baj = 1 THEN DATE(fbaj) ELSE '' END AS fbaj, 
+estadusr, CASE WHEN baj = 0 THEN 'Si' ELSE 'No' END AS act, DATE(fadquisusr) AS fadqui, CASE WHEN baj = 1 THEN totmesbaj ELSE TIMESTAMPDIFF(MONTH, finidep, ffindep) END AS totmesdep, TIMESTAMPDIFF(MONTH, 
+finidep, ffindep) AS mesdep, DATE(finidep) AS finidep, DATE(ffindep) AS ffindep, porcendep, porcendedu, cost, ctadepre, ctagast, ctadedu FROM actfij WHERE CASE WHEN 
+'$P!{PROD}' = '' THEN prod = prod ELSE '$P!{PROD}' = prod END AND CASE WHEN 
+'$P!{LUG}' = '' THEN lug = lug ELSE '$P!{LUG}' = lug END AND CASE WHEN '$P!{CONCEP}' = '' THEN estadusr = estadusr ELSE '$P!{CONCEP}' = estadusr END AND (CASE WHEN 
+'$P!{TIP}' = '2' THEN baj = 0 WHEN '$P!{TIP}' = '3' THEN (DATE(NOW()) >= ffindep OR TIMESTAMPDIFF(MONTH, finidep, NOW()) > (TIMESTAMPDIFF(MONTH, finidep, ffindep) / 2)) AND baj = 0 WHEN '$P!{TIP}' = '4' THEN (TIMESTAMPDIFF(MONTH, finidep, NOW()) <= (TIMESTAMPDIFF(MONTH, finidep, ffindep) / 2) OR DATE(NOW()) >= ffindep) AND baj = 0 WHEN '$P!{TIP}' = '5' THEN (TIMESTAMPDIFF(MONTH, finidep, NOW()) > (TIMESTAMPDIFF(MONTH, finidep, ffindep) / 2) OR DATE(NOW()) >= ffindep) AND baj = 0 WHEN '$P!{TIP}' = '6' THEN (TIMESTAMPDIFF(MONTH, finidep, NOW()) <= (TIMESTAMPDIFF(MONTH, finidep, ffindep) / 2)) AND baj = 0 WHEN '$P!{TIP}' = '7' THEN (TIMESTAMPDIFF(MONTH, finidep, NOW()) > (TIMESTAMPDIFF(MONTH, finidep, ffindep) / 2)) AND baj = 0 WHEN '$P!{TIP}' = '8' THEN DATE(NOW()) >= ffindep AND baj = 0 END OR baj = '$P!{BAJ}' ) AND CASE WHEN '$P!{F_A}' = '' THEN finidep = finidep ELSE DATE(finidep) >= DATE('$P!{F_A}') END AND 
+CASE WHEN '$P!{F_D}' = '' THEN ffindep = ffindep ELSE DATE(ffindep) <= DATE('$P!{F_D}') END ORDER BY id_id ASC]]>
+	</queryString>
+	<field name="lug" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="valactua" class="java.lang.Double"/>
+	<field name="acumdepmens" class="java.lang.Double"/>
+	<field name="estadsis" class="java.lang.String"/>
+	<field name="deduunitmes" class="java.lang.Double"/>
+	<field name="valact" class="java.lang.Double"/>
+	<field name="depunitmes" class="java.lang.Double"/>
+	<field name="prod" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descrip" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="serprod" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tipact" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fbaj" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estadusr" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="act" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fadqui" class="java.sql.Date"/>
+	<field name="totmesdep" class="java.lang.Long"/>
+	<field name="mesdep" class="java.lang.Long"/>
+	<field name="finidep" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ffindep" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="porcendep" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="porcendedu" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cost" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ctadepre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ctagast" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ctadedu" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="QTY" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{id_id}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="62" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="60" height="20" uuid="6e486492-6b7f-43af-910e-663399f76bee"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="54" height="20" uuid="c1b3d68e-3d51-4f47-8ee2-abb0eea0bde3"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="201" y="20" width="163" height="40" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<textElement>
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ACTIVO FIJO]]></text>
+			</staticText>
+			<image>
+				<reportElement x="4" y="5" width="23" height="20" uuid="8dffd3c4-a8ad-4805-bfa1-97d45b2eeb79"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="1" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="134" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="70" y="3" width="109" height="13" uuid="41dbf4c9-3ed1-4b4d-b8ea-6f23cdfca5c4"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prod}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="71" y="107" width="108" height="15" uuid="be592b05-723e-479e-add6-b4793a12bd76"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estadsis}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="70" y="16" width="109" height="37" uuid="3e35c091-b5db-467f-b173-8756ec362de2"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descrip}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="70" y="54" width="109" height="13" uuid="11d79eac-0448-4d6e-9cfd-728bdb63e286"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{serprod}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="70" y="67" width="109" height="13" uuid="13fd6ea4-28bb-43f2-bbd9-bd98be38188b"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipact}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="70" y="80" width="109" height="13" uuid="fadaaf3a-884c-48c5-8174-cf302dc8346b"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fbaj}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="70" y="93" width="109" height="16" uuid="a39396d9-a79f-4429-92fc-2f24e7536682"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estadusr}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="240" y="3" width="113" height="13" uuid="2ef74cc4-334e-4bc6-b1fd-d183921e9807"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{act}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="240" y="16" width="113" height="13" uuid="9a33fd11-7b0b-4927-a081-b4da7b186315"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fadqui}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="240" y="28" width="113" height="14" uuid="61e28eff-ac2e-44cb-94a8-5f4efbea5f40"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finidep}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="240" y="41" width="113" height="14" uuid="9f308856-8126-426d-b40c-82d93d5d485f"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ffindep}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="434" y="55" width="105" height="14" uuid="760ee9ed-0308-4be2-9d63-f87a868dbd38"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valactua}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="434" y="15" width="105" height="13" uuid="a6fc8dac-141d-4ad2-ac83-eaee7dede4f4"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{depunitmes}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="434" y="29" width="105" height="13" uuid="f9a53272-afb5-4f52-8019-d87bb470b6c3"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{deduunitmes}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="434" y="41" width="105" height="12" uuid="00be55c2-efe9-4a71-b4c6-5353669fdfd4"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{acumdepmens}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="240" y="55" width="113" height="14" uuid="b04ba989-7702-40fe-a63a-53a366b43e48"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mesdep}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="434" y="70" width="105" height="13" uuid="bb8baba7-f8e8-4548-ba97-6b3d3f6b7229"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totmesdep}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="240" y="69" width="113" height="14" uuid="e194b9a3-7d23-40d7-b567-5b4a1c3daac2"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{porcendep}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="240" y="81" width="113" height="14" uuid="8cdce067-48c3-4c59-8ebd-63a2bc697b0d"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{porcendedu}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="433" y="83" width="106" height="12" uuid="76ddf708-56d4-42ad-8c32-112df9c1775f"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ctadepre}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="433" y="99" width="106" height="12" uuid="fb5d5b64-50c8-40e4-9df2-0a9465ac4c36"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ctagast}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="433" y="111" width="106" height="12" uuid="a45744cc-3d7c-498a-86b6-88a040af914d"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ctadedu}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="433" y="3" width="106" height="13" uuid="3d61234e-196b-4f4d-a351-1d4193ea2439"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cost}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="133" width="571" height="1" uuid="7204d134-b6f6-4049-a5d2-04f1724b917f"/>
+			</line>
+			<staticText>
+				<reportElement x="4" y="3" width="66" height="13" forecolor="#3333FF" uuid="725bf2f2-e197-4be8-a2b4-b121ef2c389c"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Activo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="16" width="66" height="13" forecolor="#3333FF" uuid="035758b0-78ce-4c77-8558-fc03902c1afa"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="54" width="66" height="13" forecolor="#3333FF" uuid="b208cb5a-341f-4ec8-ac51-eb3cad34694e"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serie:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="67" width="66" height="13" forecolor="#3333FF" uuid="f8c39944-f491-4b4a-a41a-ddc59a373f33"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo activo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="80" width="66" height="13" forecolor="#3333FF" uuid="083ced16-2d06-47fa-aece-1f4fcb72a116"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha baja:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="93" width="66" height="13" forecolor="#3333FF" uuid="117e2a99-6338-49c1-afad-a3ca78387db2"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Concepto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="107" width="67" height="15" forecolor="#3333FF" uuid="4f1e430c-61fe-4d85-bb2e-34bf160d3abf"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Depreciación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="3" width="61" height="13" forecolor="#3333FF" uuid="b7cd5c01-acb2-483d-a7a7-88cd2a8da2e8"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Activo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="16" width="61" height="13" forecolor="#3333FF" uuid="6d118d52-829d-4380-849d-2c17da837b1d"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Adqui:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="29" width="61" height="13" forecolor="#3333FF" uuid="6d071fdc-893d-4944-bd4b-c9a147dae240"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[F.Inicio Dep:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="42" width="61" height="13" forecolor="#3333FF" uuid="2ff84175-93a9-4a98-a80b-5d0dd8b3ebab"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fin Dep:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="178" y="55" width="62" height="13" forecolor="#3333FF" uuid="ad5a66ba-ae00-43d6-945c-c5d9a6def66a"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dep.Meses:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="178" y="68" width="62" height="13" forecolor="#3333FF" uuid="913501ce-039d-4561-bb8d-bf700dac67e3"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%Dep:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="178" y="80" width="62" height="15" forecolor="#3333FF" uuid="e238e644-dd27-4c6d-8df8-dd4ace5c8e0b"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%Dedu:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="3" width="80" height="13" forecolor="#3333FF" uuid="24b639fa-6fa6-4d5c-b3b4-f47a6f27baa4"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Costo Inicial:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="15" width="80" height="13" forecolor="#3333FF" uuid="228d9673-8160-44f8-b860-cf9f4060954e"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dep.Mensual:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="29" width="80" height="13" forecolor="#3333FF" uuid="5984798c-8679-4b5b-a420-256979155e49"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dedu.Mensual:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="41" width="80" height="13" forecolor="#3333FF" uuid="f2853076-d852-4f4c-b1c6-1c0293bbbdd3"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Acum.Dep:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="54" width="80" height="15" forecolor="#3333FF" uuid="7f97bb24-8b53-4b0e-9e75-5f96336d13b8"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Actual:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="70" width="80" height="13" forecolor="#3333FF" uuid="8c13139e-4a2d-4853-b8cf-cbec71f242aa"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.Meses:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="352" y="82" width="81" height="13" forecolor="#3333FF" uuid="50e35f53-688e-4081-94d4-23af85787d5e"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cta.Dep:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="97" width="80" height="13" forecolor="#3333FF" uuid="c2c614ff-089b-4b05-aa8a-c0288e2db87c"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cta.Gasto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="110" width="80" height="13" forecolor="#3333FF" uuid="c1542c59-d578-4f72-b836-f78811a23747"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cta.Deducible:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="178" y="94" width="62" height="15" forecolor="#3333FF" uuid="e365eecb-0bd1-46d0-9788-352f92568ad7"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lugar:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="240" y="95" width="113" height="14" uuid="f6ebf928-907f-435d-bdfc-12b3e1259044"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lug}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="45" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="57" height="13" uuid="e7df26e6-a666-4c4a-a0f8-f3a687eec0a4"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Activos:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="57" y="0" width="66" height="13" uuid="07a2aa47-502d-43d7-bc2f-9371e2df0e32"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{QTY}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

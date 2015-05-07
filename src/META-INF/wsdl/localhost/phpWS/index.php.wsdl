@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://localhost/phpWS/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://localhost/phpWS/">
+<types>
+<xsd:schema targetNamespace="http://localhost/phpWS/"
+>
+ <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+ <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+ <xsd:complexType name="saludarRequestType">
+  <xsd:all>
+   <xsd:element name="name" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="saludarResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string" form="unqualified"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:element name="saludar" type="tns:saludarRequestType"/>
+ <xsd:element name="saludarResponse" type="tns:saludarResponseType"/>
+</xsd:schema>
+</types>
+<message name="saludarRequest">
+  <part name="parameters" element="tns:saludar" /></message>
+<message name="saludarResponse">
+  <part name="parameters" element="tns:saludarResponse" /></message>
+<portType name="PRUEBAPortType">
+  <operation name="saludar">
+    <input message="tns:saludarRequest"/>
+    <output message="tns:saludarResponse"/>
+  </operation>
+</portType>
+<binding name="PRUEBABinding" type="tns:PRUEBAPortType">
+  <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="saludar">
+    <soap:operation soapAction="http://localhost/phpWS/index.php/saludar" style="document"/>
+    <input><soap:body use="literal" namespace="http://localhost/phpWS/"/></input>
+    <output><soap:body use="literal" namespace="http://localhost/phpWS/"/></output>
+  </operation>
+</binding>
+<service name="PRUEBA">
+  <port name="PRUEBAPort" binding="tns:PRUEBABinding">
+    <soap:address location="http://localhost/phpWS/index.php"/>
+  </port>
+</service>
+</definitions>

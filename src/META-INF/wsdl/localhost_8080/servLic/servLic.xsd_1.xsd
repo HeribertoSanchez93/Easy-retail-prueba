@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.1-b419 (branches/2.3.1.x-7937; 2014-08-04T08:11:03+0000) JAXWS-RI/2.2.10-b140803.1500 JAXWS-API/2.2.11 JAXB-RI/2.2.10-b140802.1033 JAXB-API/2.2.12-b140109.1041 svn-revision#unknown. --><xs:schema xmlns:tns="http://princip/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://princip/">
+
+<xs:element name="avis" type="tns:avis"/>
+
+<xs:element name="avisResponse" type="tns:avisResponse"/>
+
+<xs:element name="givmac" type="tns:givmac"/>
+
+<xs:element name="givmacResponse" type="tns:givmacResponse"/>
+
+<xs:element name="msjmac" type="tns:msjmac"/>
+
+<xs:element name="msjmacResponse" type="tns:msjmacResponse"/>
+
+<xs:element name="pruebcon" type="tns:pruebcon"/>
+
+<xs:element name="pruebconResponse" type="tns:pruebconResponse"/>
+
+<xs:element name="regmsj" type="tns:regmsj"/>
+
+<xs:element name="regmsjResponse" type="tns:regmsjResponse"/>
+
+<xs:element name="revsis" type="tns:revsis"/>
+
+<xs:element name="revsisResponse" type="tns:revsisResponse"/>
+
+<xs:element name="serkey" type="tns:serkey"/>
+
+<xs:element name="serkeyResponse" type="tns:serkeyResponse"/>
+
+<xs:complexType name="regmsj">
+<xs:sequence>
+<xs:element name="mac" type="xs:string" minOccurs="0"/>
+<xs:element name="msj" type="xs:string" minOccurs="0"/>
+<xs:element name="ser" type="xs:string" minOccurs="0"/>
+<xs:element name="key" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="regmsjResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="msjmac">
+<xs:sequence>
+<xs:element name="mac" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="msjmacResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="revsis">
+<xs:sequence>
+<xs:element name="ser" type="xs:string" minOccurs="0"/>
+<xs:element name="key" type="xs:string" minOccurs="0"/>
+<xs:element name="mac" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="revsisResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="pruebcon">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="pruebconResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="serkey">
+<xs:sequence>
+<xs:element name="ser" type="xs:string" minOccurs="0"/>
+<xs:element name="key" type="xs:string" minOccurs="0"/>
+<xs:element name="mac" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="serkeyResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="avis">
+<xs:sequence>
+<xs:element name="mac" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="avisResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="givmac">
+<xs:sequence>
+<xs:element name="mac" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="givmacResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

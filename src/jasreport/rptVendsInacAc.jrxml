@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOG" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT NOW() AS fech, (SELECT COUNT(estac) FROM estacs WHERE vend = 1) AS cantvend, (SELECT COUNT(estac) FROM (SELECT COUNT(vtas.ESTAC) estac FROM vtas WHERE vtas.ESTAD = 'CO' GROUP BY vtas.ESTAC)a)countact, (SELECT COUNT(estac) FROM estacs WHERE vend = 1 AND estac NOT IN((SELECT vtas.ESTAC FROM vtas WHERE vtas.ESTAD = 'CO' GROUP BY vtas.ESTAC )))countinac, estacs.ESTAC estac, CASE WHEN estacs.ESTAC IN(SELECT estac FROM vtas WHERE estad = 'CO') THEN 'ACTIVO' ELSE 'INACTIVO' END estad, nom  FROM estacs WHERE estacs.VEND = 1 GROUP BY estacs.ESTAC ORDER BY estad]]>
+	</queryString>
+	<field name="fech" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cantvend" class="java.lang.Long"/>
+	<field name="countact" class="java.lang.Long"/>
+	<field name="countinac" class="java.lang.Long"/>
+	<field name="estac" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estad" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nom" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="89" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="60" height="20" uuid="6e486492-6b7f-43af-910e-663399f76bee"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="54" height="20" uuid="c1b3d68e-3d51-4f47-8ee2-abb0eea0bde3"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="56" y="46" width="446" height="40" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<textElement>
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENDEDORES ACTIVOS/INACTIVOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="28" width="43" height="15" uuid="3b87c9c5-2a7d-4437-bfa5-21fb7268493b"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="48" y="28" width="168" height="15" uuid="9cc61f3a-0877-43e7-8c55-49e6cee7a2bb"/>
+				<textFieldExpression><![CDATA[$F{fech}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="5" y="4" width="23" height="20" uuid="26c0522c-feed-4f70-ba99-4fd7eb044d09"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="12" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="57" height="13" forecolor="#0000FF" uuid="725bf2f2-e197-4be8-a2b4-b121ef2c389c"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vendedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="78" y="0" width="217" height="13" forecolor="#0000FF" uuid="035758b0-78ce-4c77-8558-fc03902c1afa"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre Vendedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="0" width="62" height="13" forecolor="#0000FF" uuid="24415c7e-0d41-433a-9d0c-b0d094551b7a"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="57" height="15" uuid="9b60c2d4-3ffa-4e15-ba58-e598b656bed9"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estac}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="78" y="0" width="217" height="15" uuid="e7cecaae-c1ba-4533-890f-85095241ced0"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="295" y="0" width="62" height="15" uuid="a156f129-e2c4-4c68-b546-fa52861a429e"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="81" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="39" width="86" height="13" uuid="e7df26e6-a666-4c4a-a0f8-f3a687eec0a4"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty. Vendedores:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="52" width="86" height="13" uuid="39ee6249-ed8e-4495-9232-3230fdee8d30"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty. Activos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="65" width="86" height="13" uuid="7ccf8cb0-5890-4e9c-8d59-52c7875d54e0"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty. Inactivos:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="86" y="52" width="100" height="13" uuid="2e6aa966-3bc2-4e30-b337-100286c80039"/>
+				<textFieldExpression><![CDATA[$F{countact}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="86" y="65" width="100" height="13" uuid="63bc359b-540d-4b40-aa61-58704b26ce8a"/>
+				<textFieldExpression><![CDATA[$F{countinac}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="86" y="39" width="100" height="13" uuid="4ec97b7a-0ab0-4054-a6f5-509970f10d4d"/>
+				<textFieldExpression><![CDATA[$F{cantvend}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

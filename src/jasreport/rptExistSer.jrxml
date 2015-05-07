@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="EMP" class="java.lang.String"/>
+	<parameter name="F_D" class="java.lang.String"/>
+	<parameter name="F_A" class="java.lang.String"/>
+	<parameter name="PROD" class="java.lang.String"/>
+	<parameter name="ESTAC" class="java.lang.String"/>
+	<parameter name="SUCU" class="java.lang.String"/>
+	<parameter name="NOCAJ" class="java.lang.String"/>
+	<parameter name="FECH" class="java.lang.String"/>
+	<parameter name="ALMA" class="java.lang.String"/>
+	<parameter name="ANAQ" class="java.lang.String"/>
+	<parameter name="LUG" class="java.lang.String"/>
+	<parameter name="LIN" class="java.lang.String"/>
+	<parameter name="MARC" class="java.lang.String"/>
+	<parameter name="IMP" class="java.lang.String"/>
+	<parameter name="CLAS" class="java.lang.String"/>
+	<parameter name="UNI" class="java.lang.String"/>
+	<parameter name="COLO" class="java.lang.String"/>
+	<parameter name="PES" class="java.lang.String"/>
+	<parameter name="UBIAD" class="java.lang.String"/>
+	<parameter name="MED" class="java.lang.String"/>
+	<parameter name="LOG" class="java.lang.String"/>
+	<parameter name="JERA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT serieprod.COMEN, serieprod.SER, serieprod.PROD, prods.DESCRIP, serieprod.ALMA,  serieprod.EXIST FROM serieprod LEFT OUTER JOIN prods ON prods.PROD = serieprod.PROD WHERE 1=1 AND CASE WHEN '$P!{JERA}' = '' THEN clasjera = clasjera ELSE clasjera = '$P!{JERA}' END AND CASE WHEN '$P!{NOCAJ}' = '' THEN 1=1 ELSE serieprod.NOCAJ = '$P!{NOCAJ}' END AND CASE WHEN '$P!{PROD}' = '' THEN 1=1 ELSE serieprod.PROD = '$P!{PROD}' END AND CASE WHEN '$P!{ALMA}' = '' THEN 1=1 ELSE serieprod.ALMA = '$P!{ALMA}' END AND CASE WHEN '$P!{MED}' = '' THEN codmed = codmed ELSE codmed = '$P!{MED}' END AND CASE WHEN '$P!{SUCU}' = '' THEN 1=1 ELSE serieprod.SUCU = '$P!{SUCU}' END AND CASE WHEN '$P!{UBIAD}' = '' THEN prods.CODUBI = prods.CODUBI ELSE prods.CODUBI = '$P!{UBIAD}' END AND CASE WHEN '$P!{ESTAC}' = '' THEN 1=1 ELSE serieprod.ESTAC = '$P!{ESTAC}' END AND CASE WHEN '$P!{ANAQ}' = '' THEN anaq = anaq ELSE anaq = '$P!{ANAQ}' END AND CASE WHEN '$P!{LUG}' = '' THEN lug = lug ELSE lug = '$P!{LUG}' END AND CASE WHEN '$P!{LIN}' = '' THEN lin = lin ELSE lin = '$P!{LIN}' END AND CASE WHEN '$P!{MARC}' = '' THEN marc = marc ELSE marc = '$P!{MARC}' END AND CASE WHEN '$P!{IMP}' = '' THEN prods.IMPUE = prods.IMPUE ELSE prods.IMPUE = '$P!{IMP}' END AND CASE WHEN '$P!{CLAS}' = '' THEN codext = codext ELSE codext = '$P!{CLAS}' END ORDER BY serieprod.PROD]]>
+	</queryString>
+	<field name="COMEN" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SER" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PROD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DESCRIP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ALMA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="EXIST" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="QTY" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{PROD}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="Total" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{EXIST}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="62" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="60" height="20" uuid="6e486492-6b7f-43af-910e-663399f76bee"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="54" height="20" uuid="c1b3d68e-3d51-4f47-8ee2-abb0eea0bde3"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="132" y="20" width="322" height="40" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<textElement textAlignment="Center">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EXISTENCIAS X SERIE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="28" width="26" height="15" uuid="44ece71b-b665-4cdd-9ad3-61a15440bfa0"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Del:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="43" width="26" height="15" uuid="16161462-e0fd-451f-9517-8effb5db02b7"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Al:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="32" y="28" width="100" height="15" uuid="16a6a543-f097-446a-8832-f4065118332d"/>
+				<textFieldExpression><![CDATA[($P{F_D}=="")?"Todas las Fechas":$P{F_D}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="43" width="100" height="15" uuid="44806294-1e22-4998-9dca-61103ed0976e"/>
+				<textFieldExpression><![CDATA[$P{F_A}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="7" y="5" width="23" height="20" uuid="06987811-d0bc-4955-a1a2-4528d6950445"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="9" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="180" y="0" width="261" height="15" forecolor="#0000FF" uuid="bb84dcd9-ba56-45e1-ba36-fa54c2bcf2f8"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="107" y="0" width="73" height="15" forecolor="#0000FF" uuid="aa1c73c5-93e8-4f7b-a6c4-fbd69ebe6b3c"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="441" y="0" width="66" height="15" forecolor="#0000FF" uuid="48b04d30-7c26-4359-bfb1-bfdddf673fb4"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Almacén]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="506" y="0" width="66" height="15" forecolor="#0000FF" uuid="179bd972-8b1c-4d95-a8f5-fc96ac3eb89b"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Existencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="107" height="15" forecolor="#0000FF" uuid="63bd6eb1-0535-4eb9-9067-f2091d830456"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="15" width="572" height="15" forecolor="#0000FF" uuid="50a050fc-669e-4e7a-b4d1-e26dce061af6"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comentario]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="28" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="108" y="0" width="72" height="14" uuid="518168e6-e4d7-47b6-922e-71069509fb2c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="180" y="0" width="261" height="14" uuid="dfe1f687-283e-416e-b948-34f1d222de64"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIP}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="441" y="0" width="66" height="15" uuid="3936b2bb-b927-4483-aca4-5062b311ef21"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ALMA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00">
+				<reportElement stretchType="RelativeToTallestObject" x="507" y="0" width="65" height="15" uuid="c56911dc-884b-46b3-bd9d-52db9b5ab37e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EXIST}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="1" y="0" width="106" height="14" uuid="1ad1acbe-d6be-46a3-b066-7ee110d6f148"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="13" width="571" height="15" uuid="8585a48f-6735-4765-bd18-b0886bd9346d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COMEN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="12" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="45" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="49" splitType="Stretch">
+			<textField pattern="###0.00">
+				<reportElement x="507" y="20" width="65" height="13" uuid="6a2b11bf-736e-4560-902c-269be4bf46b7"/>
+				<textFieldExpression><![CDATA[$V{Total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="4" width="73" height="15" forecolor="#0000FF" uuid="830fa9c1-92cc-4bff-8135-c52dfa363b87"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Totales:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="1" y="19" width="72" height="13" uuid="22c9de92-59f6-4492-a0b3-550b35e6ce61"/>
+				<textFieldExpression><![CDATA[$V{QTY}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

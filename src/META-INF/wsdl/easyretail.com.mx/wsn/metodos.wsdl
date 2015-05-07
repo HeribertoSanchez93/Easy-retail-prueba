@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<definitions name="ERWSServicio" 
+    targetNamespace="urn:ERWS" xmlns:tns="urn:ERWS" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+  <message name="ERWSRETsPrueCon1">
+    <!-- <part name="in" type="xsd:string" /> -->
+  </message>
+  <message name="ERWSRETsPrueCon2">
+    <part name="out" type="xsd:string" />
+  </message>
+  <message name="ERWSPeticion">
+    <part name="operando1" type="xsd:float" />
+    <part name="operando2" type="xsd:float" />
+  </message>
+  <message name="ERWSRespuesta">
+    <part name="respuesta" type="xsd:string" />
+  </message>
+  <message name="ERWSCALvGivMac">
+    <part name="sMacP" type="xsd:string" />
+  </message>
+  <message name="ERWSRETvGivMac">
+    <part name="respuesta" type="xsd:string" />
+  </message>
+  <message name="ERWSCALvRevoSis">
+    <part name="sSerU" type="xsd:string" />
+    <part name="sKeyU" type="xsd:string" />
+    <part name="sMac" type="xsd:string" />
+  </message>
+  <message name="ERWSRETvRevoSis">
+    <part name="respuesta" type="xsd:string" />
+  </message>
+
+  <message name="ERWSCALvSerKeyU">
+    <part name="sSerU" type="xsd:string" />
+    <part name="sKeyU" type="xsd:string" />
+    <part name="sMac" type="xsd:string" />
+  </message>
+  <message name="ERWSRETvSerKeyU">
+    <part name="respuesta" type="xsd:string" />
+  </message>
+
+  <message name="ERWSCALvAvisNot">
+    <part name="sMac" type="xsd:string" />
+  </message>
+  <message name="ERWSRETvAvisNot">
+    <part name="respuesta" type="xsd:string" />
+  </message>
+
+  <message name="ERWSCALvMsjMac">
+    <part name="sMac" type="xsd:string" />
+  </message>
+  <message name="ERWSRETvMsjMac">
+    <part name="respuesta" type="xsd:string" />
+  </message>
+
+  <message name="ERWSCALsRegMsj">
+    <part name="sMac" type="xsd:string" />
+    <part name="sMsj" type="xsd:string" />
+    <part name="sSer" type="xsd:string" />
+    <part name="sKey" type="xsd:string" />
+  </message>
+  <message name="ERWSRETsRegMsj">
+    <part name="respuesta" type="xsd:string" />
+  </message>
+
+
+  <message name="ERWSCALconsultaSer">
+    <part name="ser" type="xsd:string" />
+  </message>
+  <message name="ERWSRETconsultaSer">
+    <part name="respuesta" type="xsd:string" />
+  </message>
+  <message name="ERWSCALasignaKey">
+    <part name="sSerU" type="xsd:string" />
+    <part name="sKeyU" type="xsd:string" />
+    <part name="sRazSoc" type="xsd:string" />
+    <part name="sCalle" type="xsd:string" />
+    <part name="sColonia" type="xsd:string" />
+    <part name="sCP" type="xsd:string" />
+    <part name="sNi" type="xsd:string" />
+    <part name="sTel" type="xsd:string" />
+    <part name="sCel" type="xsd:string" />
+    <part name="sPers" type="xsd:string" />
+  </message>
+  <message name="ERWSRETasignaKey">
+    <part name="ser" type="xsd:string" />
+  </message>
+ 
+  
+  <portType name="ERWSPort">
+    <operation name="sPrueCon">
+      <input message="tns:ERWSRETsPrueCon1" />
+      <output message="tns:ERWSRETsPrueCon2" />
+    </operation>
+    <operation name="sumar2">
+      <input message="tns:ERWSPeticion" />
+      <output message="tns:ERWSRespuesta" />
+    </operation>
+    <operation name="vGivMac">
+      <input message="tns:ERWSCALvGivMac" />
+      <output message="tns:ERWSRETvGivMac" />
+    </operation>
+
+    <operation name="vRevoSis">
+      <input message="tns:ERWSCALvRevoSis" /> 
+      <output message="tns:ERWSRETvRevoSis" />
+    </operation>
+
+    <operation name="vSerKeyU">
+      <input message="tns:ERWSCALvSerKeyU" />
+      <output message="tns:ERWSRETvSerKeyU" />
+    </operation>
+    <operation name="vAvisNot">
+      <input message="tns:ERWSCALvAvisNot" />
+      <output message="tns:ERWSRETvAvisNot" />
+    </operation>
+    <operation name="vMsjMac">
+      <input message="tns:ERWSCALvMsjMac" />
+      <output message="tns:ERWSRETvMsjMac" />
+    </operation>
+    <operation name="sRegMsj">
+      <input message="tns:ERWSCALsRegMsj" />
+      <output message="tns:ERWSRETsRegMsj" />
+    </operation>
+    <operation name="consultaSer">
+      <input message="tns:ERWSCALconsultaSer" />
+      <output message="tns:ERWSRETconsultaSer" />
+    </operation>
+
+    <operation name="asignaKey">
+      <input message="tns:ERWSCALasignaKey" />
+      <output message="tns:ERWSRETasignaKey" />
+    </operation>
+        
+  </portType>
+ 
+  <binding name="ERWSBinding" type="tns:ERWSPort">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+
+    <operation name="sPrueCon">
+      <soap:operation soapAction="urn:ERWS#sPrueCon" />
+        <input><soap:body use="literal" namespace="urn:ERWS" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output><soap:body use="literal" namespace="urn:ERWS" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+
+    <operation name="sumar2">
+      <soap:operation soapAction="urn:ERWS#sumar2" />
+      <input><soap:body use="literal" namespace="urn:ERWS"
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output><soap:body use="literal" namespace="urn:ERWS"
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+    
+    <operation name="vGivMac">
+      <soap:operation soapAction="urn:ERWS#vGivMac" />
+      <input><soap:body use="literal" namespace="urn:ERWS"
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output><soap:body use="literal" namespace="urn:ERWS"
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+
+    <operation name="vRevoSis">
+      <soap:operation soapAction="urn:ERWS#vRevoSis" />
+        <input><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+
+    <operation name="vSerKeyU">
+      <soap:operation soapAction="urn:ERWS#vSerKeyU" />
+        <input><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    <operation name="vAvisNot">
+      <soap:operation soapAction="urn:ERWS#vAvisNot" />
+        <input><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    <operation name="vMsjMac">
+      <soap:operation soapAction="urn:ERWS#vMsjMac" />
+        <input><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    <operation name="sRegMsj">
+      <soap:operation soapAction="urn:ERWS#sRegMsj" />
+        <input><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+
+    <operation name="consultaSer">
+      <soap:operation soapAction="urn:ERWS#consultaSer" />
+        <input><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    <operation name="asignaKey">
+      <soap:operation soapAction="urn:ERWS#asignaKey" />
+        <input><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output><soap:body use="literal" namespace="urn:ERWS"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+  </binding>
+ 
+  <service name="ERWSServicio">
+    <port name="ERWSPort" binding="tns:ERWSBinding">
+      <soap:address location="http://easyretail.com.mx/wsn/natserver.php" />
+    </port>
+  </service>
+</definitions>

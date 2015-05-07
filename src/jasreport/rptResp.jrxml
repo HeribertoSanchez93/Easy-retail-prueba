@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="F_D" class="java.lang.String"/>
+	<parameter name="F_A" class="java.lang.String"/>
+	<parameter name="ESTAC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NOCAJ" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIP" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOG" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT CASE WHEN tip = 0 THEN 'I' ELSE 'E' END AS tip, pathdemysq, pathamysq, pathde, patha, msj, resplog.ESTAC, resplog.SUCU, resplog.NOCAJ, resplog.FALT FROM resplog LEFT OUTER JOIN estacs ON estacs.ESTAC = resplog.ESTAC WHERE 1=1 AND CASE WHEN '$P!{F_D}'= '' THEN resplog.FALT = resplog.FALT ELSE DATE(resplog.FALT) >=  
+'$P!{F_D}' END AND CASE WHEN '$P!{F_A}' = '' THEN resplog.FALT = resplog.FALT ELSE DATE(resplog.FALT) <= '$P!{F_A}' END AND CASE WHEN '$P!{ESTAC}' = '' THEN resplog.ESTAC = resplog.ESTAC ELSE resplog.ESTAC = '$P!{ESTAC}' END  AND CASE WHEN '$P!{SUC}' = '' THEN resplog.SUCU = resplog.SUCU ELSE resplog.SUCU = '$P!{SUC}' END AND CASE WHEN '$P!{NOCAJ}' = '' THEN resplog.NOCAJ = resplog.NOCAJ ELSE resplog.NOCAJ = '$P!{NOCAJ}' END AND CASE WHEN '$P!{TIP}' = '0' THEN resplog.TIP = 0 ELSE resplog.TIP = resplog.TIP END AND CASE WHEN '$P!{TIP}' = '1' THEN resplog.TIP = 1 ELSE resplog.TIP = resplog.TIP END AND CASE WHEN '$P!{TIP}' = '2' THEN resplog.TIP = resplog.TIP ELSE resplog.TIP = resplog.TIP END ORDER BY resplog.ID_ID DESC]]>
+	</queryString>
+	<field name="tip" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pathdemysq" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pathamysq" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pathde" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="patha" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="msj" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ESTAC" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SUCU" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOCAJ" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FALT" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="100" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="60" height="20" uuid="6e486492-6b7f-43af-910e-663399f76bee"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="54" height="20" uuid="c1b3d68e-3d51-4f47-8ee2-abb0eea0bde3"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="53" y="59" width="446" height="40" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<textElement textAlignment="Center">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE RESPALDOS]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="36" y="42" width="91" height="15" uuid="8f3bb264-1315-471d-8d1b-e0c1b101e280"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{F_A}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="36" y="27" width="91" height="15" uuid="e1839c87-0a35-4cef-836f-dbf367d562fd"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{F_D}=="")?"Todas las Fechas":$P{F_D}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="42" width="26" height="15" uuid="e7bd08d0-a6a2-4687-b21f-abc54400c675"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Al:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="27" width="26" height="15" uuid="3b87c9c5-2a7d-4437-bfa5-21fb7268493b"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Del:]]></text>
+			</staticText>
+			<image>
+				<reportElement x="10" y="4" width="23" height="20" uuid="eda72a14-3feb-41b0-b5de-b8e2085d60fb"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="12" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="36" height="13" forecolor="#0000CC" uuid="725bf2f2-e197-4be8-a2b4-b121ef2c389c"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="0" width="65" height="13" forecolor="#0000CC" uuid="035758b0-78ce-4c77-8558-fc03902c1afa"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BD De]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="173" y="0" width="93" height="13" forecolor="#0000CC" uuid="24415c7e-0d41-433a-9d0c-b0d094551b7a"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Archivo De]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="104" y="0" width="65" height="13" forecolor="#0000CC" uuid="ac947403-5f5c-49fe-9d38-49386199c7b5"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BD A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="1" width="93" height="13" forecolor="#0000CC" uuid="d5cca480-c5ee-4346-b631-642db6483e1e"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Archivo A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="364" y="0" width="48" height="13" forecolor="#0000CC" uuid="11aab26b-c832-45a6-84af-adf7eb6bc116"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Error]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="0" width="48" height="13" forecolor="#0000CC" uuid="9e5f5f0c-7011-4548-9b64-cacc5e9ddb5c"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sucursal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="459" y="1" width="32" height="13" forecolor="#0000CC" uuid="cccf8369-17d3-45b7-aadf-7c02e03639c1"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Caja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="492" y="1" width="40" height="13" forecolor="#0000CC" uuid="21456ea6-45b2-47f2-b751-871b0768df91"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Usuario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="532" y="0" width="40" height="13" forecolor="#0000CC" uuid="bd0251b4-1a13-4754-aa70-fa0d187902db"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="36" height="14" uuid="ddd2d2aa-397c-4a58-aca4-daf95f2112ae"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tip}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="36" y="0" width="65" height="14" uuid="098ca3fa-c3e9-4fa0-b8fa-789c474acdab"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pathdemysq}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="104" y="0" width="66" height="14" uuid="a8ada87f-162d-4740-81f7-f7b8860b4695"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pathamysq}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="173" y="0" width="93" height="14" uuid="390b6eb8-5c1b-4e5a-8652-d34bf4263720"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pathde}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="271" y="0" width="93" height="14" uuid="9dd500c8-a47c-43fc-b7aa-bba31aff88f2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patha}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="366" y="0" width="46" height="14" uuid="c099ab3f-1d01-4455-a4e1-ed07b0f62ab4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{msj}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="412" y="0" width="48" height="14" uuid="b890759c-c387-4734-9bc5-4194e2f53b90"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SUCU}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="459" y="0" width="33" height="14" uuid="a76862e7-26ad-4626-a0ea-70e3239f4ace"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOCAJ}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="532" y="0" width="40" height="14" uuid="689caf30-af57-4452-9dc5-4d6a292da2c9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FALT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="491" y="0" width="41" height="14" uuid="7b92aae2-b803-405b-96ca-3999f3de78ae"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTAC}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="73" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="36" width="86" height="13" uuid="e7df26e6-a666-4c4a-a0f8-f3a687eec0a4"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty. Respaldos:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="86" y="36" width="100" height="13" uuid="73caafff-754f-4d9b-8b50-21c78e1b7cc5"/>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="PROD" class="java.lang.String"/>
+	<parameter name="FECH" class="java.lang.String"/>
+	<parameter name="ANAQ" class="java.lang.String"/>
+	<parameter name="LUG" class="java.lang.String"/>
+	<parameter name="LIN" class="java.lang.String"/>
+	<parameter name="MARC" class="java.lang.String"/>
+	<parameter name="IMP" class="java.lang.String"/>
+	<parameter name="CLAS" class="java.lang.String"/>
+	<parameter name="UNI" class="java.lang.String"/>
+	<parameter name="COLO" class="java.lang.String"/>
+	<parameter name="PES" class="java.lang.String"/>
+	<parameter name="UBIAD" class="java.lang.String"/>
+	<parameter name="MED" class="java.lang.String"/>
+	<parameter name="LOG" class="java.lang.String"/>
+	<parameter name="JERA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT codkit, cant, prods.PROD, prods.DESCRIP, prods.ALMA FROM kits LEFT OUTER JOIN prods ON CONCAT_WS('', kits.ALMA, kits.CODKIT) = CONCAT_WS('', prods.ALMA, prods.PROD) WHERE compue = 1 AND CASE WHEN '$P!{JERA}' = '' THEN clasjera = clasjera ELSE clasjera = '$P!{JERA}' END AND CASE WHEN '$P!{PROD}' = '' THEN 1=1 ELSE kits.CODKIT = '$P!{PROD}' END AND CASE WHEN '$P!{MED}' = '' THEN codmed = codmed ELSE codmed = '$P!{MED}' END AND CASE WHEN '$P!{UBIAD}' = '' THEN CODUBI = CODUBI ELSE CODUBI = '$P!{UBIAD}' END AND CASE WHEN '$P!{ANAQ}' = '' THEN anaq = anaq ELSE anaq = '$P!{ANAQ}' END AND CASE WHEN '$P!{LUG}' = '' THEN lug = lug ELSE lug = '$P!{LUG}' END AND CASE WHEN '$P!{LIN}' = '' THEN lin = lin ELSE lin = '$P!{LIN}' END AND CASE WHEN '$P!{MARC}' = '' THEN marc = marc ELSE marc = '$P!{MARC}' END AND CASE WHEN '$P!{IMP}' = '' THEN IMPUE = IMPUE ELSE IMPUE = '$P!{IMP}' END AND CASE WHEN '$P!{CLAS}' = '' THEN codext = codext ELSE codext = '$P!{CLAS}' END ORDER BY PROD]]>
+	</queryString>
+	<field name="codkit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cant" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PROD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DESCRIP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ALMA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="TOT" class="java.lang.Integer" incrementType="Group" incrementGroup="Encabe" calculation="Count">
+		<variableExpression><![CDATA[$F{codkit}]]></variableExpression>
+	</variable>
+	<group name="Encabe">
+		<groupExpression><![CDATA[$F{codkit}]]></groupExpression>
+		<groupHeader>
+			<band height="14">
+				<textField isStretchWithOverflow="true">
+					<reportElement x="0" y="0" width="101" height="14" uuid="16495a40-a256-45bd-8c8f-704adcfa3ff3"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codkit}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="62" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="60" height="20" uuid="6e486492-6b7f-43af-910e-663399f76bee"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="54" height="20" uuid="c1b3d68e-3d51-4f47-8ee2-abb0eea0bde3"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="159" y="20" width="269" height="40" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<textElement textAlignment="Center">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[KITS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="28" width="39" height="15" uuid="44ece71b-b665-4cdd-9ad3-61a15440bfa0"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="46" y="28" width="100" height="15" uuid="16a6a543-f097-446a-8832-f4065118332d"/>
+				<textFieldExpression><![CDATA[$P{FECH}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="7" y="5" width="23" height="20" uuid="06987811-d0bc-4955-a1a2-4528d6950445"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="9" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="39" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="101" height="15" forecolor="#0000FF" uuid="aa1c73c5-93e8-4f7b-a6c4-fbd69ebe6b3c"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="59" y="25" width="100" height="13" forecolor="#009900" uuid="a3ab55df-5762-44a1-b2ba-c4f079799848"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="160" y="26" width="347" height="13" forecolor="#009900" uuid="4d858ce0-aae5-4737-806e-af3446698249"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="507" y="26" width="64" height="13" forecolor="#009900" uuid="8876480d-bafe-4520-9ecc-5c8725ba6e11"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="59" y="0" width="100" height="15" forecolor="#006666" uuid="b05b7203-239a-473d-b47f-ab1393e5128e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="160" y="0" width="347" height="15" forecolor="#006666" uuid="2437a735-df10-4823-ab5e-c02a0357b160"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIP}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="508" y="0" width="63" height="15" forecolor="#006666" uuid="bdc3f9fc-f869-4e3e-b49e-126991af8ba9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cant}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="12" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="45" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement x="7" y="6" width="100" height="23" uuid="e7df26e6-a666-4c4a-a0f8-f3a687eec0a4"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL KITS:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="7" y="29" width="100" height="20" uuid="c795f1b2-d823-476d-8228-101547292843"/>
+				<textFieldExpression><![CDATA[$V{TOT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

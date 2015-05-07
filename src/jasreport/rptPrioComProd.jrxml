@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="PROD" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ALMA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="F_D" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LUG" class="java.lang.String"/>
+	<parameter name="ANAQ" class="java.lang.String"/>
+	<parameter name="LIN" class="java.lang.String"/>
+	<parameter name="MARC" class="java.lang.String"/>
+	<parameter name="CLAS" class="java.lang.String"/>
+	<parameter name="IMP" class="java.lang.String"/>
+	<parameter name="UNI" class="java.lang.String"/>
+	<parameter name="COLO" class="java.lang.String"/>
+	<parameter name="PES" class="java.lang.String"/>
+	<parameter name="UBIAD" class="java.lang.String"/>
+	<parameter name="MED" class="java.lang.String"/>
+	<parameter name="F_A" class="java.lang.String"/>
+	<parameter name="LOG" class="java.lang.String"/>
+	<parameter name="JERA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT prods.DESCRIP, SUM(partcomprs.CANT) AS cant, partcomprs.PROD, SUM(partcomprs.COST * comprs.TIPCAM) AS pre FROM partcomprs LEFT OUTER JOIN prods ON prods.PROD = partcomprs.PROD LEFT OUTER JOIN comprs ON comprs.CODCOMP = partcomprs.CODCOM WHERE comprs.ESTADO IN('CO','DEVP') AND (partcomprs.CANT - partcomprs.DEVS) > 0 AND CASE WHEN '$P!{JERA}' = '' THEN clasjera = clasjera ELSE clasjera = '$P!{JERA}' END AND CASE WHEN '$P!{F_D}'= '' THEN partcomprs.FALT = partcomprs.FALT ELSE DATE(partcomprs.FALT) >= '$P!{F_D}' END AND CASE WHEN '$P!{F_A}' = '' THEN partcomprs.FALT = partcomprs.FALT ELSE DATE(partcomprs.FALT) <= '$P!{F_A}' END  AND CASE WHEN '$P!{ALMA}' = '' THEN partcomprs.ALMA = partcomprs.ALMA ELSE partcomprs.ALMA = '$P!{ALMA}' END AND CASE WHEN   '$P!{PROD}' = '' THEN partcomprs.PROD = partcomprs.PROD ELSE partcomprs.PROD = '$P!{PROD}' END AND CASE WHEN '$P!{ANAQ}' = '' THEN anaq = anaq ELSE anaq = '$P!{ANAQ}' END AND CASE WHEN '$P!{LUG}' = '' THEN lug = lug ELSE lug = '$P!{LUG}' END AND CASE WHEN '$P!{LIN}' = '' THEN lin = lin ELSE lin = '$P!{LIN}' END AND CASE WHEN '$P!{MARC}' = '' THEN marc = marc ELSE marc = '$P!{MARC}' END AND CASE WHEN '$P!{MED}' = '' THEN codmed = codmed ELSE codmed = '$P!{MED}' END AND CASE WHEN '$P!{IMP}' = '' THEN prods.IMPUE = prods.IMPUE ELSE prods.IMPUE = '$P!{IMP}' END AND CASE WHEN '$P!{UBIAD}' = '' THEN prods.CODUBI = prods.CODUBI ELSE prods.CODUBI = '$P!{UBIAD}' END AND CASE WHEN '$P!{CLAS}' = '' THEN codext = codext ELSE codext = '$P!{CLAS}' END AND CASE WHEN '$P!{UNI}' = '' THEN partcomprs.UNID = partcomprs.UNID ELSE partcomprs.UNID = '$P!{UNI}' END AND CASE WHEN '$P!{PES}' = '' THEN pes = pes ELSE pes = '$P!{PES}' END AND CASE WHEN '$P!{COLO}' = '' THEN partcomprs.COLO = partcomprs.COLO ELSE partcomprs.COLO = '$P!{COLO}' END AND CASE WHEN '$P!{CLAS}' = '' THEN codext = codext ELSE codext = '$P!{CLAS}' END GROUP BY partcomprs.PROD ORDER BY cant DESC]]>
+	</queryString>
+	<field name="DESCRIP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cant" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PROD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pre" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="TOTCANT" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{cant}]]></variableExpression>
+	</variable>
+	<variable name="TOTOT" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{pre}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="74" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="60" height="20" uuid="6e486492-6b7f-43af-910e-663399f76bee"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="583" y="10" width="40" height="20" uuid="c68eb191-f58a-4300-90db-c95d740b68b3"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="54" height="20" uuid="c1b3d68e-3d51-4f47-8ee2-abb0eea0bde3"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="152" y="32" width="306" height="40" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<textElement textAlignment="Center">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRIORIDAD DE COMPRA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="36" y="33" width="116" height="15" uuid="569632a2-82c7-430a-a477-fbd3cb7956d5"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{F_D}=="")?"Todas las Fechas":$P{F_D}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="33" width="26" height="15" uuid="7c69e51c-d679-4574-a0ba-5624359b5c6c"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Del:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="36" y="48" width="116" height="15" uuid="12b72798-8bb9-4864-87b5-844106333921"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{F_A}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="48" width="26" height="15" uuid="2cdf916b-fc8d-4e78-96d5-c60f9df0c68b"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Al:]]></text>
+			</staticText>
+			<image>
+				<reportElement x="10" y="8" width="23" height="20" uuid="26c384a2-0fbd-437d-93e7-a5282700c903"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="16" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="38" height="15" forecolor="#3333FF" uuid="6c2edac7-c0a9-47e9-a0db-8b4e5cb2e627"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="38" y="1" width="79" height="15" forecolor="#3333FF" uuid="33e13d49-5c60-4299-babd-1763abb0bbef"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="117" y="1" width="376" height="15" forecolor="#3333FF" uuid="43baeff5-10cd-4205-9a59-699b66700ddd"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="493" y="1" width="62" height="15" forecolor="#3333FF" uuid="03ccefd4-df46-47e5-a4a4-a87197972c84"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="38" height="16" uuid="48dceeeb-f8b4-4c13-ab68-9f858ddac11f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cant}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="38" y="0" width="79" height="16" uuid="2ceb909c-acfd-48ab-81dd-5878865469ff"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="117" y="0" width="376" height="16" uuid="fee0f515-3881-4b3a-8bc1-c57a84e5482e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIP}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="493" y="1" width="62" height="15" uuid="7a47b944-9a89-4833-a350-4689c98890df"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="69" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="29" width="36" height="20" forecolor="#3333FF" uuid="c966b03f-fd83-452c-a41f-93760379bfaa"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Totales:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="49" width="38" height="20" uuid="9116aae0-5fa1-427a-8a03-fe0b20205deb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTCANT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="493" y="49" width="62" height="20" uuid="f609bbdb-3bc5-453d-b5ec-f8c27458a044"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTOT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

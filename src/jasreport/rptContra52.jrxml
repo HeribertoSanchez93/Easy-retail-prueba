@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="180" pageHeight="842" columnWidth="170" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="3e8ca1cd-82e7-4dd8-9626-c0bfa296c9a6">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="172"/>
+	<parameter name="LOG" class="java.lang.String"/>
+	<parameter name="EMPLOC" class="java.lang.String"/>
+	<parameter name="RESPON" class="java.lang.String"/>
+	<parameter name="ID" class="java.lang.String"/>
+	<parameter name="CALLLOC" class="java.lang.String"/>
+	<parameter name="TELLOC" class="java.lang.String"/>
+	<parameter name="COLLOC" class="java.lang.String"/>
+	<parameter name="CPLOC" class="java.lang.String"/>
+	<parameter name="CIUESTLOC" class="java.lang.String"/>
+	<parameter name="NO" class="java.lang.String"/>
+	<parameter name="LOGE" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT nom, tot, fech, comp, (SELECT SUM(tot) FROM contras WHERE id_id = $P!{ID}) AS sumtot FROM contras LEFT OUTER JOIN provs ON provs.PROV = contras.PROV WHERE contras.ID_ID = $P!{ID}]]>
+	</queryString>
+	<field name="nom" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tot" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fech" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="comp" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sumtot" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="231" splitType="Stretch">
+			<image>
+				<reportElement x="33" y="6" width="100" height="72" uuid="f63abf8b-2dee-4465-8158-d5effcc58086"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="160" width="170" height="13" uuid="6836d92e-c6ea-412a-aa0f-1d403f2d6026"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONTRARECIBO]]></text>
+			</staticText>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="84" width="170" height="13" uuid="2d4f3de2-3dab-41d8-a4a4-46ac03c6a348"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPLOC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="217" width="45" height="13" uuid="4b5c548e-dffd-40e3-a50c-7116711abe31"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMPRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="190" width="74" height="13" uuid="b0151eba-e2b2-4e7a-bb43-5cda84a5d367"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROVEEDOR:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="45" y="217" width="71" height="13" uuid="3703ced9-79c8-4465-8bfe-a649ac9b3ea9"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="217" width="54" height="13" uuid="ee330530-3a1d-4526-ac21-10710e713aae"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="2" y="203" width="168" height="14" uuid="8715d5d4-48f2-4604-abca-3bd2e6517216"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2" y="97" width="168" height="11" uuid="bd271be5-a4f2-45ac-bf54-284b3479e69a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CALLLOC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2" y="108" width="168" height="11" uuid="1ac33d47-ee98-4947-9f68-7094d187c034"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{COLLOC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2" y="118" width="168" height="11" uuid="41ea3e87-58bd-4f4a-bfdf-3a7f7c44a061"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CPLOC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2" y="129" width="168" height="11" uuid="790cbebe-cb14-44b4-bf8c-d713daddb1b3"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CIUESTLOC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2" y="140" width="168" height="11" uuid="2e9f09c9-b827-41cf-b5cc-129e9a436994"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TELLOC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="173" width="31" height="13" uuid="588063be-aa9f-4df1-953a-cab40635b862"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="33" y="173" width="137" height="13" uuid="1f4c498d-07ef-44ae-942c-be899481bde1"/>
+				<textFieldExpression><![CDATA[$P{ID}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField pattern="¤ #,##0.00">
+				<reportElement stretchType="RelativeToTallestObject" x="116" y="0" width="54" height="16" uuid="c96cb855-9c3b-4629-88e4-40b91850e9dc"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tot}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="45" y="0" width="71" height="16" uuid="c27be5d2-970e-4fff-b750-b65dba453415"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fech}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2" y="0" width="43" height="16" uuid="72c858f9-8800-4691-b308-f7c8d32dc01d"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{comp}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="131" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="-1" y="71" width="170" height="14" uuid="4ae0b7bc-47ca-4b91-ab82-0c9fbc94a0b2"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RESPON}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="43" y="42" width="71" height="13" uuid="3c02c20f-e39b-49f0-b7ec-47a87d08e0ca"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RESPONSABLE]]></text>
+			</staticText>
+			<line>
+				<reportElement x="11" y="68" width="140" height="1" uuid="a080f955-d240-45f2-acd8-d9982cc0c101"/>
+			</line>
+			<staticText>
+				<reportElement x="55" y="12" width="45" height="13" uuid="05742022-71d9-46e9-834d-05462ca8ad20"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="114" y="12" width="54" height="13" uuid="f66c4515-9deb-4c21-aa68-736aa78965bc"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{sumtot}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="2" y="97" width="23" height="20" uuid="ba849494-f89f-49e6-8a80-f0e6eca0872a"/>
+				<imageExpression><![CDATA[$P{LOGE}]]></imageExpression>
+			</image>
+		</band>
+	</summary>
+</jasperReport>

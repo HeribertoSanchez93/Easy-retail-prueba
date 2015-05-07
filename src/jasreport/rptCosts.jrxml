@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="F_D" class="java.lang.String"/>
+	<parameter name="F_A" class="java.lang.String"/>
+	<parameter name="PROD" class="java.lang.String"/>
+	<parameter name="ESTAC" class="java.lang.String"/>
+	<parameter name="SUCU" class="java.lang.String"/>
+	<parameter name="NOCAJ" class="java.lang.String"/>
+	<parameter name="FECH" class="java.lang.String"/>
+	<parameter name="ANAQ" class="java.lang.String"/>
+	<parameter name="LUG" class="java.lang.String"/>
+	<parameter name="LIN" class="java.lang.String"/>
+	<parameter name="MARC" class="java.lang.String"/>
+	<parameter name="IMP" class="java.lang.String"/>
+	<parameter name="CLAS" class="java.lang.String"/>
+	<parameter name="UNI" class="java.lang.String"/>
+	<parameter name="COLO" class="java.lang.String"/>
+	<parameter name="PES" class="java.lang.String"/>
+	<parameter name="UBIAD" class="java.lang.String"/>
+	<parameter name="MED" class="java.lang.String"/>
+	<parameter name="LOG" class="java.lang.String"/>
+	<parameter name="METCOST" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT (SELECT costpro FROM partcomprs LEFT OUTER JOIN comprs ON comprs.CODCOMP = partcomprs.CODCOM LEFT OUTER JOIN prods ON prods.PROD = partcomprs.PROD WHERE comprs.ESTADO = 'CO' AND CASE WHEN '$P!{NOCAJ}' = '' THEN 1=1 ELSE comprs.NOCAJ = '$P!{NOCAJ}' END AND CASE WHEN '$P!{PROD}' = '' THEN 1=1 ELSE partcomprs.PROD = '$P!{PROD}' END AND CASE WHEN '$P!{MED}' = '' THEN codmed = codmed ELSE codmed = '$P!{MED}' END AND CASE WHEN '$P!{SUCU}' = '' THEN 1=1 ELSE comprs.SUCU = '$P!{SUCU}' END AND CASE WHEN '$P!{UBIAD}' = '' THEN prods.CODUBI = prods.CODUBI ELSE prods.CODUBI = '$P!{UBIAD}' END AND CASE WHEN '$P!{ESTAC}' = '' THEN 1=1 ELSE comprs.ESTAC = '$P!{ESTAC}' END AND CASE WHEN '$P!{F_D}'= '' THEN comprs.FALT = comprs.FALT ELSE DATE(comprs.FALT) >=  
+'$P!{F_D}' END AND CASE WHEN '$P!{F_A}' = '' THEN comprs.FALT = comprs.FALT ELSE DATE(comprs.FALT) <= '$P!{F_A}' END AND CASE WHEN '$P!{ANAQ}' = '' THEN anaq = anaq ELSE anaq = '$P!{ANAQ}' END AND CASE WHEN '$P!{LUG}' = '' THEN lug = lug ELSE lug = '$P!{LUG}' END AND CASE WHEN '$P!{LIN}' = '' THEN lin = lin ELSE lin = '$P!{LIN}' END AND CASE WHEN '$P!{MARC}' = '' THEN marc = marc ELSE marc = '$P!{MARC}' END AND CASE WHEN '$P!{IMP}' = '' THEN prods.IMPUE = prods.IMPUE ELSE prods.IMPUE = '$P!{IMP}' END AND CASE WHEN '$P!{CLAS}' = '' THEN codext = codext ELSE codext = '$P!{CLAS}' END ORDER BY partcomprs.ID_ID ASC LIMIT 1) AS costp, prods.COST, partvta.UEPS, partvta.PEPS, partvta.FALT, partvta.PROD, prods.DESCRIP FROM partvta LEFT OUTER JOIN vtas ON vtas.VTA = partvta.VTA LEFT OUTER JOIN prods ON prods.PROD = partvta.PROD WHERE vtas.ESTAD = 'CO' AND CASE WHEN '$P!{NOCAJ}' = '' THEN 1=1 ELSE vtas.NOCAJ = '$P!{NOCAJ}' END AND CASE WHEN '$P!{PROD}' = '' THEN 1=1 ELSE partvta.PROD = '$P!{PROD}' END AND CASE WHEN '$P!{MED}' = '' THEN codmed = codmed ELSE codmed = '$P!{MED}' END AND CASE WHEN '$P!{SUCU}' = '' THEN 1=1 ELSE vtas.SUCU = '$P!{SUCU}' END AND CASE WHEN '$P!{UBIAD}' = '' THEN prods.CODUBI = prods.CODUBI ELSE prods.CODUBI = '$P!{UBIAD}' END AND CASE WHEN '$P!{ESTAC}' = '' THEN 1=1 ELSE vtas.ESTAC = '$P!{ESTAC}' END AND CASE WHEN '$P!{F_D}'= '' THEN vtas.FEMI = vtas.FEMI ELSE DATE(vtas.FEMI) >=  
+'$P!{F_D}' END AND CASE WHEN '$P!{F_A}' = '' THEN vtas.FEMI = vtas.FEMI ELSE DATE(vtas.FEMI) <= '$P!{F_A}' END AND CASE WHEN '$P!{ANAQ}' = '' THEN anaq = anaq ELSE anaq = '$P!{ANAQ}' END AND CASE WHEN '$P!{LUG}' = '' THEN lug = lug ELSE lug = '$P!{LUG}' END AND CASE WHEN '$P!{LIN}' = '' THEN lin = lin ELSE lin = '$P!{LIN}' END AND CASE WHEN '$P!{MARC}' = '' THEN marc = marc ELSE marc = '$P!{MARC}' END AND CASE WHEN '$P!{IMP}' = '' THEN prods.IMPUE = prods.IMPUE ELSE prods.IMPUE = '$P!{IMP}' END AND CASE WHEN '$P!{CLAS}' = '' THEN codext = codext ELSE codext = '$P!{CLAS}' END]]>
+	</queryString>
+	<field name="costp" class="java.lang.Float"/>
+	<field name="COST" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="UEPS" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PEPS" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FALT" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PROD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DESCRIP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="QTY" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{PEPS}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="TOTUEPS" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{UEPS}]]></variableExpression>
+	</variable>
+	<variable name="TOTPEPS" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{PEPS}]]></variableExpression>
+	</variable>
+	<variable name="TOTULTCOST" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{UEPS}]]></variableExpression>
+	</variable>
+	<variable name="TOTCOSTP" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{costp}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="119" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="60" height="20" uuid="6e486492-6b7f-43af-910e-663399f76bee"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="54" height="20" uuid="c1b3d68e-3d51-4f47-8ee2-abb0eea0bde3"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="159" y="34" width="269" height="40" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<textElement textAlignment="Center">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COSTEOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="36" width="26" height="15" uuid="44ece71b-b665-4cdd-9ad3-61a15440bfa0"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Del:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="51" width="26" height="15" uuid="16161462-e0fd-451f-9517-8effb5db02b7"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Al:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="36" y="36" width="100" height="15" uuid="16a6a543-f097-446a-8832-f4065118332d"/>
+				<textFieldExpression><![CDATA[($P{F_D}=="")?"Todas las Fechas":$P{F_D}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="36" y="51" width="100" height="15" uuid="44806294-1e22-4998-9dca-61103ed0976e"/>
+				<textFieldExpression><![CDATA[$P{F_A}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="10" y="11" width="23" height="20" uuid="f55acd34-f800-4229-aa5c-820a7239625c"/>
+				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="10" y="73" width="100" height="20" forecolor="#000000" uuid="ed2ab94d-9dbf-4415-867f-b289b4b3c672"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Método de Costeo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="10" y="93" width="100" height="20" uuid="6203c4d3-253b-4460-9879-182d58ec9575"/>
+				<textFieldExpression><![CDATA[$P{METCOST}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="14" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement x="139" y="0" width="162" height="15" uuid="bb84dcd9-ba56-45e1-ba36-fa54c2bcf2f8"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="52" y="0" width="87" height="15" uuid="aa1c73c5-93e8-4f7b-a6c4-fbd69ebe6b3c"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cod. Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="1" width="55" height="15" uuid="48b04d30-7c26-4359-bfb1-bfdddf673fb4"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PEPS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="349" y="1" width="53" height="15" uuid="179bd972-8b1c-4d95-a8f5-fc96ac3eb89b"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UEPS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="1" width="66" height="15" uuid="52c3c173-24f1-4aec-9784-5f131a12298d"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ult.Costo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="469" y="1" width="103" height="15" uuid="365d516b-b764-420e-8915-49ca15a03f1c"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Costo Prom.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2" width="52" height="15" uuid="5b2bbcea-cfc5-453c-8e32-4140884302af"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="349" y="0" width="53" height="17" uuid="d9a938a9-ef7f-4d21-99de-91b663ac6b2d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UEPS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="292" y="0" width="57" height="17" uuid="ab053141-1b5e-4b25-920c-c56890214b64"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PEPS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="139" y="0" width="153" height="17" uuid="aec3870f-7c91-44a2-b6d2-ad3a6bba678c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIP}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="52" y="0" width="87" height="17" uuid="08d2fb7e-d3b3-4510-904e-adfc5ee27f2e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="402" y="0" width="66" height="17" uuid="d3b50951-f882-444a-b2d6-34a7c4ee37ac"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COST}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="52" height="17" uuid="42270636-3a76-41d2-818d-46aa48e880f9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FALT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="470" y="0" width="100" height="17" uuid="8cee438d-8c4e-4a09-bf9c-5a150a49f177"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{costp}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="12" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="45" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="72" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="21" width="100" height="23" uuid="e7df26e6-a666-4c4a-a0f8-f3a687eec0a4"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Productos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="231" y="43" width="71" height="20" uuid="850a2da2-3d65-4880-9305-d2a8e96daf89"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Totales:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="302" y="43" width="47" height="20" uuid="4f12c6df-7557-4056-8ac7-fc3cde378523"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTUEPS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="349" y="43" width="53" height="20" uuid="3c825c25-f8a7-4f99-9351-918283257a28"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTPEPS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="44" width="100" height="20" uuid="8e0503df-1206-48e9-9c38-6bb0fe1e16db"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{QTY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="402" y="43" width="66" height="20" uuid="51bcbcb7-2e52-4060-a973-29723c28f413"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTULTCOST}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="469" y="43" width="100" height="20" uuid="acf45760-2cdf-405d-9682-324e1519a4da"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTCOSTP}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
