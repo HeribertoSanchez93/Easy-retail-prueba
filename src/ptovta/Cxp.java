@@ -1655,7 +1655,37 @@ public class Cxp extends javax.swing.JFrame
             return;
         }
         
-        //Declara variables de la base de datos
+        //Se checa que no sea vacio
+        if(jTFolBanc.getText().trim().compareTo("")!=0)
+        {
+            //Se revisa que no este repetido el folio en un cxc
+            String sResptra = Star.sTraUnCamp(con, "folbanc", "cxc", jTFolBanc.getText().trim() + "' AND concep <> 'ACA ABON");
+
+            //Se revisa que no este repetido el folio en un cxp
+            String sResptra2 = Star.sTraUnCamp(con, "folbanc", "cxp", jTFolBanc.getText().trim() + "' AND concep <> 'ACA ABON");
+
+            //Si es nulo marca error
+            if(sResptra==null||sResptra2==null)
+                return;
+            else if(sResptra.compareTo("no existe")!=0||sResptra2.compareTo("no existe")!=0)
+            {
+                //Cierra la base de datos
+                if(Star.iCierrBas(con)==-1)
+                    return;
+
+                //Mensajea  
+                JOptionPane.showMessageDialog(null, "El folio: " + jTFolBanc.getText() + " ya existe.", "Folio de banco", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+                //Coloca el foco del teclado en el control
+                jTFolBanc.grabFocus();
+
+                //Coloca el borde rojo y regresa                               
+                jTFolBanc.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+                return;
+            }
+        }//Fin if(jTFolBanc.getText().trim().compareTo("")!=0)
+        
+        /*Declara variables de la base de datos*/
         Statement   st;
         ResultSet   rs;
         String      sQ; 
@@ -1798,6 +1828,36 @@ public class Cxp extends javax.swing.JFrame
             if(Star.iCierrBas(con)==-1)
             return;
         }
+        
+        //Se checa que no sea vacio
+        if(jTFolBanc.getText().trim().compareTo("")!=0)
+        {
+            //Se revisa que no este repetido el folio en un cxc
+            String sResptra = Star.sTraUnCamp(con, "folbanc", "cxc", jTFolBanc.getText().trim() + "' AND concep <> 'ACA ABON");
+
+            //Se revisa que no este repetido el folio en un cxp
+            String sResptra2 = Star.sTraUnCamp(con, "folbanc", "cxp", jTFolBanc.getText().trim() + "' AND concep <> 'ACA ABON");
+
+            //Si es nulo marca error
+            if(sResptra==null||sResptra2==null)
+                return;
+            else if(sResptra.compareTo("no existe")!=0||sResptra2.compareTo("no existe")!=0)
+            {
+                //Cierra la base de datos
+                if(Star.iCierrBas(con)==-1)
+                    return;
+
+                //Mensajea  
+                JOptionPane.showMessageDialog(null, "El folio: " + jTFolBanc.getText() + " ya existe.", "Folio de banco", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+                //Coloca el foco del teclado en el control
+                jTFolBanc.grabFocus();
+
+                //Coloca el borde rojo y regresa                               
+                jTFolBanc.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+                return;
+            }
+        }//Fin if(jTFolBanc.getText().trim().compareTo("")!=0)
         
         //Comprueba si el proveedor existe
         int iResp   = Star.iExisProv(con, jTProv.getText().trim());
@@ -3291,6 +3351,64 @@ public class Cxp extends javax.swing.JFrame
         vCargCxp();
         
     }//GEN-LAST:event_jCCaActionPerformed
+
+    
+    //Cuando en folio del banco gana el foco
+    private void jTFolBancFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFolBancFocusGained
+        
+        /*Selecciona todo el texto cuando gana el foco*/
+        jTFolBanc.setSelectionStart(0);jTFolBanc.setSelectionEnd(jTFolBanc.getText().length());
+        
+    }//GEN-LAST:event_jTFolBancFocusGained
+
+    
+    //Cuando en folio del banco pierde el foco
+    private void jTFolBancFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFolBancFocusLost
+        
+        /*Coloca el caret al principio del control*/
+        jTFolBanc.setCaretPosition(0);
+        
+    }//GEN-LAST:event_jTFolBancFocusLost
+
+    
+    //Cuando se preciona una tecla en el folio de banco
+    private void jTFolBancKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFolBancKeyPressed
+        
+        //Llama a la función escalable
+        vKeyPreEsc(evt);
+        
+    }//GEN-LAST:event_jTFolBancKeyPressed
+
+    
+    //Cuando se preciona una tecla en el folio de banco solo se puede letas y numeros
+    private void jTFolBancKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFolBancKeyTyped
+        
+        int iFolBanc=jTFolBanc.getText().trim().length();
+        
+        //Limita a 50 el campo de folio
+        if(iFolBanc < 50)
+        {
+            /*Comprueba que el carácter este en los límites permitidos para el teléfono entonces*/
+            if(((evt.getKeyChar() < 'A') || (evt.getKeyChar() > 'Z')) && ((evt.getKeyChar() < '0') || (evt.getKeyChar() > '9')) && ((evt.getKeyChar() < 'a') || (evt.getKeyChar() > 'z')) && evt.getKeyChar() != 'Ñ' && evt.getKeyChar() != 'ñ' && evt.getKeyChar() != '.' && evt.getKeyChar() != ',' && evt.getKeyChar() != '-' && evt.getKeyChar() != '_'  )         
+                evt.consume();
+        }
+        else
+        {
+            jTFolBanc.setText(jTFolBanc.getText().substring(0,50));
+            evt.consume();
+        }
+        
+        //Variable para guardar el folio correcto
+        String sSinEsp = "";
+
+        //Se determina cuando cuales tuenen error
+        for(int i=0;i<jTFolBanc.getText().length();i++)
+            if(!(((jTFolBanc.getText().charAt(i) < 'A') || (jTFolBanc.getText().charAt(i) > 'Z')) && ((jTFolBanc.getText().charAt(i) < '0') || (jTFolBanc.getText().charAt(i) > '9')) && ((jTFolBanc.getText().charAt(i) < 'a') || (jTFolBanc.getText().charAt(i) > 'z')) && jTFolBanc.getText().charAt(i) != 'Ñ' && jTFolBanc.getText().charAt(i) != 'ñ' && jTFolBanc.getText().charAt(i) != '.' && jTFolBanc.getText().charAt(i) != ',' && jTFolBanc.getText().charAt(i) != '-' && jTFolBanc.getText().charAt(i) != '_'  ))         
+                sSinEsp = sSinEsp + jTFolBanc.getText().charAt(i);
+
+        jTFolBanc.setText(sSinEsp);
+        
+    }//GEN-LAST:event_jTFolBancKeyTyped
     
     
     /*Función escalable para cuando se presiona una tecla en el módulo*/

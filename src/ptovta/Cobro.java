@@ -1506,9 +1506,15 @@ public class Cobro extends javax.swing.JFrame
         /*Si tiene que insertar en CXC y es factura entonces*/
         if(bSi && sTip.compareTo("fac")==0)
         {
+            //Inserta el CXC del abono
+            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, sTotG, "0", "'" + sFVenc + "'", "'" + sFDoc + "'", "ABON FAC", "", "", "", "","")==-1)
+                return;
+            if(jRPagad.isSelected())
+            {
             //Inserta cxc en la base de datos            
             if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, "'" + sFVenc + "'", "'" + sFDoc + "'", "FAC", "", "0", "", "","")==-1)
             return;
+            }
         }
         //Else no será a crédito entonces
         else
@@ -1518,11 +1524,11 @@ public class Cobro extends javax.swing.JFrame
 //                return;                                
 //            
             //Inserta el CXC del abono
-            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, "'" + sFVenc + "'", "'" + sFDoc + "'", "EFE", "", "", "", "","")==-1)
+            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, sTotG, "0", "'" + sFVenc + "'", "'" + sFDoc + "'", sTipDoc, "", "", "", "","")==-1)
                 return;
             if(jRPagad.isSelected())
             {
-            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, "'" + sFVenc + "'", "'" + sFDoc + "'", "ABON FAC", "", "", "", "","")==-1)
+            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, "'" + sFVenc + "'", "'" + sFDoc + "'", "EFE", "", "", "", "","")==-1)
                 return;
             }
         }
@@ -2444,18 +2450,18 @@ public class Cobro extends javax.swing.JFrame
             return;
        
         //Inserta el CXC de la deuda        
-        if(Star.iInsCXCP(con, "cxc", sConTic, sSerTic, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, sTotG, "0", "now()", "'" + sFDoc + "'", "TIK", "", "", "", "","")==-1)
+        if(Star.iInsCXCP(con, "cxc", sConTic, sSerTic, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, sTotG, "0", "now()", "'" + sFDoc + "'", "TIK", "", "0", "", "","")==-1)
             return;
 
-		//Inserta el CXC del abono        
-        if(Star.iInsCXCP(con, "cxc", sConTic, sSerTic, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, "now()", "'" + sFDoc + "'", "ABON TIK", "EFE", "", "", "","")==-1)
+//		//Inserta el CXC del abono        
+//        if(Star.iInsCXCP(con, "cxc", sConTic, sSerTic, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, sTotG, "0",  "now()", "'" + sFDoc + "'", "ABON TIK", "EFE", "", "", "","")==-1)
                  
                 
         //Si va a estar pagado
         if(jRPagad.isSelected())
         {
             //Inserta el abono            
-            if(Star.iInsCXCP(con, "cxc", sConTic, sSerTic, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, "now()", "'" + sFDoc + "'", "ABON TIK", "EFE", "", "", "","")==-1)
+            if(Star.iInsCXCP(con, "cxc", sConTic, sSerTic, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, "now()", "'" + sFDoc + "'", "ABON TIK", "EFE", "0", "", "","")==-1)
             return;               
         }
                                 

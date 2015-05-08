@@ -1892,7 +1892,7 @@ public class RepProds extends javax.swing.JFrame
                     /*Crea los parámetros que se pasarán*/
                     Map <String,String> pa = new HashMap<>();             
                     pa.clear();
-                    pa.put(Star.sSerMostG,  sEmpFi);
+                    pa.put("EMP",           sEmpFi);
                     pa.put("LOG",           getClass().getResource(Star.sIconDef).toString());
                     pa.put("F_D",           sFDeFi);
                     pa.put("F_A",           sFAFi);

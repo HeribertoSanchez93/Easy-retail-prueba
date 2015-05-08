@@ -3690,7 +3690,7 @@ public class CotNorm extends javax.swing.JFrame
                         jComMon.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
 
                         /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "No se tiene permitido cotizar con una Moneda distinta a la Nacional por configuración del sistema: " + sCodMN + ".", "Cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                        JOptionPane.showMessageDialog(null, "Por configuración del sistema, solo se permiten cotizaciones en Moneda Nacional: " + sCodMN + ".", "Cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
                         
                         /*Coloca el foco del teclado en el control y regresa*/
                         jComMon.grabFocus();
@@ -3704,7 +3704,7 @@ public class CotNorm extends javax.swing.JFrame
                         jComMon.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
 
                         /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "No se tiene permitido cotizar al cliente con una Moneda distinta a la Nacional: " + sCodMN + ".", "Cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                        JOptionPane.showMessageDialog(null, "La configuración del cliente no permite cotizar en una moneda distinta a la Moneda Nacional: " + sCodMN + ".", "Cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
                         
                         /*Coloca el foco del teclado en el control y regresa*/
                         jComMon.grabFocus();

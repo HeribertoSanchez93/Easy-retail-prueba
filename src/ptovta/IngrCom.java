@@ -3320,7 +3320,7 @@ public class IngrCom extends javax.swing.JFrame
                         jComMon.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
 
                         /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "No se tiene permitido comprar con una Moneda distinta a la Nacional por configuración del sistema \"" + sCodMN + "\".", "Compras", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                        JOptionPane.showMessageDialog(null, "Por configuración del sistema, solo se permite comprar en Moneda Nacional: \"" + sCodMN + "\".", "Compras", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
 
                         /*Coloca el foco del teclado en el control y regresa*/
                         jComMon.grabFocus();
@@ -3336,7 +3336,7 @@ public class IngrCom extends javax.swing.JFrame
                         jComMon.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
 
                         /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "No se tiene permitido comprar al provedor con una Moneda distinta a la Nacional \"" + sCodMN + "\".", "Compras", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                        JOptionPane.showMessageDialog(null, "La configuración del proveedor no permite comprar en una moneda distinta a la Moneda Nacional: \"" + sCodMN + "\".", "Compras", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
 
                         /*Coloca el foco del teclado en el control y regresa*/
                         jComMon.grabFocus();

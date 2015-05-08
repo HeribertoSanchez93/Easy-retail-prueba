@@ -624,7 +624,6 @@ public class RepCXP extends javax.swing.JFrame
         else
             sEst         ="";
         
-        System.out.println(sEst);
         /*Determina el reporte que será*/
         String sTipRep  = "";
         if(jComTip.getSelectedItem().toString().compareTo("Encabezados")==0)
@@ -701,13 +700,7 @@ public class RepCXP extends javax.swing.JFrame
                 /*Muestra el formulario*/
                 try
                 {
-//                    System.out.println("pa.put(\"EMP\",           sEmpFi);                    \n" +
-//"                    pa.put(\"LOG\",           "+getClass().getResource(Star.sIconDef).toString()+");\n" +
-//"                    pa.put(\"F_D\",           "+sFDeFi+");\n" +
-//"                    pa.put(\"F_A\",           "+sFAFi+");\n" +
-//"                    pa.put(\"ESTADABON\",     "+sEstAbonFi+");\n" +
-//"                    pa.put(\"ESTAD\",        "+sEstFi+");");
-//                    /*Crea los parámetros que se pasarán*/
+
                     Map <String,String> pa = new HashMap<>();             
                     pa.clear();
                     pa.put("EMP",           sEmpFi);                    

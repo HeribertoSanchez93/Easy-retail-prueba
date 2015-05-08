@@ -633,8 +633,7 @@ public class Cxc extends javax.swing.JFrame
         
         /*Trae el cxc de la base de datos y cargalos en la tabla*/
         try
-        {  System.out.println(sQ = "SELECT sucuu, nocajj, estacs.NOM, id_Idd, a.NOREFER, a.NOSER, serr, empre, a.SUBTOT, a.IMPUE, a.TOT, vtas.estad, DATE(a.FVENC) AS fven, fdoc, emps.NOM, a.ESTAC FROM (SELECT fdoc, id_id AS id_idd, falt, fvenc, empre, subtot, impue, tot, noser, ser AS serr, sucu AS sucuu, norefer, nocaj AS nocajj, estac, SUM(carg) AS carg, SUM(abon) AS abon FROM cxc GROUP BY norefer, noser, empre)a LEFT OUTER JOIN estacs ON estacs.ESTAC = a.ESTAC LEFT OUTER JOIN emps ON CONCAT_WS('',emps.SER, emps.CODEMP) = empre LEFT OUTER JOIN vtas ON CONCAT_WS('', vtas.NOSER, vtas.NOREFER) = CONCAT_WS('', a.NOSER, a.NOREFER) WHERE " + sEstadDoc + " " + sConFech + " " + sCondClas + " " + sCondEm + "  " + sEsta +  " GROUP BY id_idd"); 
-            sQ = "SELECT sucuu, nocajj, estacs.NOM, id_Idd, a.NOREFER, a.NOSER, serr, empre, a.SUBTOT, a.IMPUE, a.TOT, vtas.estad, DATE(a.FVENC) AS fven, fdoc, emps.NOM, a.ESTAC FROM (SELECT fdoc, id_id AS id_idd, falt, fvenc, empre, subtot, impue, tot, noser, ser AS serr, sucu AS sucuu, norefer, nocaj AS nocajj, estac, SUM(carg) AS carg, SUM(abon) AS abon FROM cxc GROUP BY norefer, noser, empre)a LEFT OUTER JOIN estacs ON estacs.ESTAC = a.ESTAC LEFT OUTER JOIN emps ON CONCAT_WS('',emps.SER, emps.CODEMP) = empre LEFT OUTER JOIN vtas ON CONCAT_WS('', vtas.NOSER, vtas.NOREFER) = CONCAT_WS('', a.NOSER, a.NOREFER) WHERE " + sEstadDoc + " " + sConFech + " " + sCondClas + " " + sCondEm + "  " + sEsta +  " GROUP BY id_idd";
+        {   sQ = "SELECT sucuu, nocajj, estacs.NOM, id_Idd, a.NOREFER, a.NOSER, serr, empre, a.SUBTOT, a.IMPUE, a.TOT, vtas.estad, DATE(a.FVENC) AS fven, fdoc, emps.NOM, a.ESTAC FROM (SELECT fdoc, id_id AS id_idd, falt, fvenc, empre, subtot, impue, tot, noser, ser AS serr, sucu AS sucuu, norefer, nocaj AS nocajj, estac, SUM(carg) AS carg, SUM(abon) AS abon FROM cxc GROUP BY norefer, noser, empre)a LEFT OUTER JOIN estacs ON estacs.ESTAC = a.ESTAC LEFT OUTER JOIN emps ON CONCAT_WS('',emps.SER, emps.CODEMP) = empre LEFT OUTER JOIN vtas ON CONCAT_WS('', vtas.NOSER, vtas.NOREFER) = CONCAT_WS('', a.NOSER, a.NOREFER) WHERE " + sEstadDoc + " " + sConFech + " " + sCondClas + " " + sCondEm + "  " + sEsta +  " GROUP BY id_idd";
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos*/
@@ -1734,6 +1733,35 @@ public class Cxc extends javax.swing.JFrame
         //Si hubo error entonces regresa
         if(con==null)
             return;
+//Se checa que no sea vacio
+        if(jTFolBanc.getText().trim().compareTo("")!=0)
+        {
+            //Se revisa que no este repetido el folio en un cxc
+            String sResptra = Star.sTraUnCamp(con, "folbanc", "cxc", jTFolBanc.getText().trim() + "' AND concep <> 'ACA ABON");
+
+            //Se revisa que no este repetido el folio en un cxp
+            String sResptra2 = Star.sTraUnCamp(con, "folbanc", "cxp", jTFolBanc.getText().trim() + "' AND concep <> 'ACA ABON");
+
+            //Si es nulo marca error
+            if(sResptra==null||sResptra2==null)
+                return;
+            else if(sResptra.compareTo("no existe")!=0||sResptra2.compareTo("no existe")!=0)
+            {
+                //Cierra la base de datos
+                if(Star.iCierrBas(con)==-1)
+                    return;
+
+                //Mensajea  
+                JOptionPane.showMessageDialog(null, "El folio: " + jTFolBanc.getText() + " ya existe.", "Folio de banco", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+                //Coloca el foco del teclado en el control
+                jTFolBanc.grabFocus();
+
+                //Coloca el borde rojo y regresa                               
+                jTFolBanc.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+                return;
+            }
+        }
         
         //Comprueba si el tipo de pago existe
         int iResp   = Star.iExistTipPag(con, jTFormPag.getText().trim());
@@ -1924,6 +1952,36 @@ public class Cxc extends javax.swing.JFrame
             Star.iCierrBas(con);            
             return;
         }
+        
+        //Se checa que no sea vacio
+        if(jTFolBanc.getText().trim().compareTo("")!=0)
+        {
+            //Se revisa que no este repetido el folio en un cxc
+            String sResptra = Star.sTraUnCamp(con, "folbanc", "cxc", jTFolBanc.getText().trim() + "' AND concep <> 'ACA ABON");
+
+            //Se revisa que no este repetido el folio en un cxp
+            String sResptra2 = Star.sTraUnCamp(con, "folbanc", "cxp", jTFolBanc.getText().trim() + "' AND concep <> 'ACA ABON");
+
+            //Si es nulo marca error
+            if(sResptra==null||sResptra2==null)
+                return;
+            else if(sResptra.compareTo("no existe")!=0||sResptra2.compareTo("no existe")!=0)
+            {
+                //Cierra la base de datos
+                if(Star.iCierrBas(con)==-1)
+                    return;
+
+                //Mensajea  
+                JOptionPane.showMessageDialog(null, "El folio: " + jTFolBanc.getText() + " ya existe.", "Folio de banco", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+                //Coloca el foco del teclado en el control
+                jTFolBanc.grabFocus();
+
+                //Coloca el borde rojo y regresa                               
+                jTFolBanc.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+                return;
+            }
+        }//Fin if(jTFolBanc.getText().trim().compareTo("")!=0)
         
         //Comprueba si el cliente existe
         int iResp   = Star.iExistCli(con, jTCli.getText().trim());
@@ -3910,6 +3968,65 @@ public class Cxc extends javax.swing.JFrame
         vCargCxc();
         
     }//GEN-LAST:event_jCCaActionPerformed
+
+    
+    //Cuando el campo de foliobancario gana el foco
+    private void jTFolBancFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFolBancFocusGained
+
+        /*Selecciona todo el texto cuando gana el foco*/
+        jTFolBanc.setSelectionStart(0);jTFolBanc.setSelectionEnd(jTFolBanc.getText().length());
+
+    }//GEN-LAST:event_jTFolBancFocusGained
+
+    
+    //Cuando el campo de foliobancario pierde el foco
+    private void jTFolBancFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFolBancFocusLost
+
+        /*Coloca el caret al principio del control*/
+        jTFolBanc.setCaretPosition(0);
+
+    }//GEN-LAST:event_jTFolBancFocusLost
+
+    
+    
+    //Cuando el campo de foliobancario se preciona una tecla
+    private void jTFolBancKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFolBancKeyPressed
+
+        //Llama a la función escalable
+        vKeyPreEsc(evt);
+
+    }//GEN-LAST:event_jTFolBancKeyPressed
+
+    
+    //Validar los caracteres del banco
+    private void jTFolBancKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFolBancKeyTyped
+
+        iFolBanc=jTFolBanc.getText().trim().length();
+
+        //Limita a 50 el campo de folio
+        if(iFolBanc < 50)
+        {
+            /*Comprueba que el carácter este en los límites permitidos para el teléfono entonces*/
+            if(((evt.getKeyChar() < 'A') || (evt.getKeyChar() > 'Z')) && ((evt.getKeyChar() < '0') || (evt.getKeyChar() > '9')) && ((evt.getKeyChar() < 'a') || (evt.getKeyChar() > 'z')) && evt.getKeyChar() != 'Ñ' && evt.getKeyChar() != 'ñ' && evt.getKeyChar() != '.' && evt.getKeyChar() != ',' && evt.getKeyChar() != '-' && evt.getKeyChar() != '_'  )
+            evt.consume();
+        }
+        else
+        {
+            jTFolBanc.setText(jTFolBanc.getText().substring(0,50));
+            evt.consume();
+        }
+
+        //Variable para guardar el folio correcto
+        String sSinEsp = "";
+
+        //Se determina cuando cuales tuenen error
+        for(int i=0;i<jTFolBanc.getText().length();i++)
+        if(!(((jTFolBanc.getText().charAt(i) < 'A') || (jTFolBanc.getText().charAt(i) > 'Z')) && ((jTFolBanc.getText().charAt(i) < '0') || (jTFolBanc.getText().charAt(i) > '9')) && ((jTFolBanc.getText().charAt(i) < 'a') || (jTFolBanc.getText().charAt(i) > 'z')) && jTFolBanc.getText().charAt(i) != 'Ñ' && jTFolBanc.getText().charAt(i) != 'ñ' && jTFolBanc.getText().charAt(i) != '.' && jTFolBanc.getText().charAt(i) != ',' && jTFolBanc.getText().charAt(i) != '-' && jTFolBanc.getText().charAt(i) != '_'  ))
+        sSinEsp = sSinEsp + jTFolBanc.getText().charAt(i);
+
+        jTFolBanc.setText(sSinEsp);
+
+    }//GEN-LAST:event_jTFolBancKeyTyped
     
     
     /*Función escalable para cuando se presiona una tecla en el módulo*/

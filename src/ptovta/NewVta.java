@@ -3721,7 +3721,7 @@ public class NewVta extends javax.swing.JFrame
                         jComMon.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
 
                         /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "No se tiene permitido vender con una moneda distinta a la nacional por configuración del sistema: " + sCodMN + ".", "Nueva venta", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                        JOptionPane.showMessageDialog(null, "Por configuración del sistema, solo se permite vender en Moneda Nacional: " + sCodMN + ".", "Nueva venta", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
                         
                         /*Coloca el foco del teclado en el control y regresa*/
                         jComMon.grabFocus();
@@ -3733,7 +3733,7 @@ public class NewVta extends javax.swing.JFrame
                         jComMon.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
 
                         /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "No se tiene permitido vender al cliente con una moneda distinta a la nacional: " + sCodMN + ".", "Nueva venta", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                        JOptionPane.showMessageDialog(null, "La configuración del cliente no permite vender en una moneda distinta a la Moneda Nacional: " + sCodMN + ".", "Nueva venta", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
                         
                         /*Coloca el foco del teclado en el control y regresa*/
                         jComMon.grabFocus();
@@ -4123,6 +4123,7 @@ public class NewVta extends javax.swing.JFrame
                     /*Pide clave de administrador*/            
                     ClavMast cl = new ClavMast(this, 1);
                     cl.setVisible(true);
+                       
                    
 ////                    synchronized (cl){
 ////                    while(ClavMast.ban==false)
@@ -6509,7 +6510,6 @@ public class NewVta extends javax.swing.JFrame
         //Para evitar un proceso mas primero verifica si es backorder 
         if(!jCBack.isSelected())
         {
-            sBackOrder=1;
             try
             {
                 sQ = "SELECT val FROM confgral WHERE clasif = 'vtas' AND conf = 'vendsinexistfac'";                        
