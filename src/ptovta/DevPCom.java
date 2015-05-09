@@ -212,6 +212,7 @@ public class DevPCom extends javax.swing.JFrame
                 NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
                 sCost               = n.format(dCant);
                 
+                String Impue        =rs.getString("impue");
                 /*Obtiene el importe*/
                 String sImp         = rs.getString("impo");   
                 
@@ -227,7 +228,7 @@ public class DevPCom extends javax.swing.JFrame
                 
                 /*Agrega todos los datos obtenidos en la tabla de partidas*/
                 DefaultTableModel tm= (DefaultTableModel)jTab.getModel();
-                Object nu[]         = {iContFi, rs.getString("prod"), rs.getString("cant"), rs.getString("unid"), rs.getString("alma"), rs.getString("descrip"), sCost, rs.getString("descu"), rs.getString("descad"), rs.getString("codimpue"), rs.getString("mon"), sImp, rs.getString("devs"), "", rs.getString("lot"), rs.getString("pedimen"), rs.getString("flotvenc"), rs.getString("id_id"), sKit};        
+                Object nu[]         = {iContFi, rs.getString("prod"), rs.getString("cant"), rs.getString("unid"), rs.getString("alma"), rs.getString("descrip"), sCost, rs.getString("descu"), rs.getString("descad"), rs.getString("codimpue"), rs.getString("mon"), Impue, rs.getString("devs"), "", rs.getString("lot"), rs.getString("pedimen"), rs.getString("flotvenc"), rs.getString("id_id"), sKit};        
                 tm.addRow(nu);
                 
                 /*Aumenta en uno el contador de filas*/
@@ -1380,8 +1381,10 @@ public class DevPCom extends javax.swing.JFrame
             //sImpue  = Double.toString(Double.parseDouble(sImpue) + (Double.parseDouble(jTab.getValueAt(x, 11).toString().replace("$", "").replace(",", "")) * (Double.parseDouble(jTab.getValueAt(x, 10).toString())) / 100));
         
             cSubTotal = Double.toString(Double.parseDouble(cSubTotal) + (Double.parseDouble(jTab.getValueAt(x, 6).toString().replace("$", "").replace(",", "")) * (Double.parseDouble(jTab.getValueAt(x, 13).toString())))) ;
-        
-            cImpue =Double.toString(Double.parseDouble(cImpue) + (Double.parseDouble(jTab.getValueAt(x, 6).toString().replace("$", "").replace(",", "")) * (Double.parseDouble(jTab.getValueAt(x, 13).toString())))* (Double.parseDouble(jTab.getValueAt(x, 7).toString())) / 100) ;
+            System.out.println(jTab.getValueAt(x, 10).toString());
+            System.out.println(jTab.getValueAt(x, 11).toString());
+            System.out.println(jTab.getValueAt(x, 12).toString());
+            cImpue =Double.toString(Double.parseDouble(cImpue) + (Double.parseDouble(jTab.getValueAt(x, 6).toString().replace("$", "").replace(",", "")) * (Double.parseDouble(jTab.getValueAt(x, 13).toString())))* (Double.parseDouble(jTab.getValueAt(x, 11).toString())) / 100) ;
         }
         
         /*Crea el total*/
@@ -1413,8 +1416,6 @@ public class DevPCom extends javax.swing.JFrame
             return;                                                                                            
         }
         
-        System.out.println(sProv);
-        
         /*Obtiene la serie el cliente*/
         String sSerCli  = "";
         try
@@ -1425,7 +1426,6 @@ public class DevPCom extends javax.swing.JFrame
             /*Si hay datos entonces obtiene el resultado*/
             if(rs.next())
             {
-                System.out.println("yep");
                 sSerCli = rs.getString("ser");
             }
         }
@@ -1437,7 +1437,7 @@ public class DevPCom extends javax.swing.JFrame
         }         
         
         //Inserta el abono en CXP de la base de datos     chalo       
-        if(Star.iInsCXCP(con, "cxp", jTNoDoc.getText().trim(), jTNoSer.getText().trim(), sProv, sSerCli, cSubTotal, cImpue, cTotal, "0", cTotal, "'" + sFVenc + "'", "'" + sFDoc + "'", "DEV COMP", "", "0", "", "","")==-1)
+        if(Star.iInsCXCP(con, "cxp", jTNoDoc.getText().trim(), jTNoSer.getText().trim(), sProv, sSerCli, cSubTotal, cImpue, cTotal, "0", cTotal, "'" + sFVenc + "'", "'" + sFDoc + "'", "DEV PARC", "", "0", "", "","")==-1)
             return;                                   
                 
         //Termina la transacción

@@ -139,8 +139,8 @@ public class AcerD extends javax.swing.JFrame
         jP1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 80, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jLabel3.setText("Easy Retail");
-        jP1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 80, -1));
+        jLabel3.setText("Easy Retail® Admin");
+        jP1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 160, -1));
 
         jTSer.setEditable(false);
         jTSer.setNextFocusableComponent(jTEstad);

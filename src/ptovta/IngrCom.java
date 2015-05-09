@@ -3340,6 +3340,7 @@ public class IngrCom extends javax.swing.JFrame
 
                         /*Coloca el foco del teclado en el control y regresa*/
                         jComMon.grabFocus();
+                        return ;
                         }
                     }
                 }
@@ -3792,7 +3793,8 @@ public class IngrCom extends javax.swing.JFrame
             
             //Obitiene el valor del iva
             String IvaVal               = jTab.getValueAt(x, 10).toString().replace("$", "").replace(",", "").trim();
-            
+            System.out.println(IvaVal);
+            System.out.println(jTab.getValueAt(x, 10).toString().replace("$", "").replace(",", "").trim());
             if(IvaVal.compareTo("")==0)
                 IvaVal          = "0";
             

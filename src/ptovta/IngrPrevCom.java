@@ -5796,79 +5796,7 @@ public class IngrPrevCom extends javax.swing.JFrame
         boolean bSerUnVez = false;
         if(sRespChec.compareTo("1")==0)
             bSerUnVez = true;
-    
         
-        
-//        /*Obtiene cuál es la moneda nacional*/
-//        String sCodMN   = Star.sGetMonNac(con);
-//        
-//        //Si hubo error entonces regresa
-//        if(sCodMN==null)
-//            return;
-//        
-//        
-//        /*Obtiene si la configuración global para que no se pueda comprar a ningùn proveedor con moneda distinta a la nacional esta activada o no*/
-//        boolean bSi = true;
-//        sRespChec=Star.sCheckUnConf(con, "prev", "prevmonac");
-//
-//        //Si es nulo marca error
-//        if(sRespChec==null || sRespChec.compareTo("no existe")==0)
-//            return;
-//        if(sRespChec.compareTo("0")==0)
-//            bSi = false;
-//        
-//        /*Declara variables de la base de datos*/
-//        Statement   st;
-//        ResultSet   rs;        
-//        String      sQ   = "";
-//        
-//        /*Comprueba si el proveedor tiene o no habilitado que se le pueda comprar con otra moneda distinta a la nacional*/
-//        try
-//        {
-//            sQ = "SELECT otramon FROM provs WHERE CONCAT_WS('', ser, prov) = '" + jTProv.getText().trim() + "'";
-//            st = con.createStatement();
-//            rs = st.executeQuery(sQ);
-//            /*Si hay datos*/
-//            if(rs.next())
-//            {
-//                /*Si no tiene habilitado la compra con otra moneda o globalmente entonces*/
-//                if(rs.getString("otramon").compareTo("0")==0 || !bSi)
-//                {
-//                    /*Compara el código de moneda nacional con el que se quiere agregar*/
-//                    if(sCodMN.compareTo(jComMon.getSelectedItem().toString())!=0)
-//                    {
-//                        //Cierra la base de datos
-//                        if(Star.iCierrBas(con)==-1)
-//                            return ;
-//
-//                        /*Coloca el borde rojo*/
-//                        jComMon.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
-//
-//                        /*Mensajea*/
-//                        JOptionPane.showMessageDialog(null, "No se tiene permitido comprar con una Moneda distinta a la Nacional \"" + sCodMN + "\".", "Compras", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-//
-//                        /*Coloca el foco del teclado en el control y regresa*/
-//                        jComMon.grabFocus();
-//                        return ;
-//                    }
-//                }
-//            }
-//        }
-//        catch(SQLException e)
-//        {
-//            //Cierra la base de datos
-//            if(Star.iCierrBas(con)==-1)
-//                return ;
-//            
-//            /*Agrega en el log*/
-//            Login.vLog(e.getMessage());
-//
-//            /*Mensajea y regresa*/
-//            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));
-//            return ;
-//        }
-        
-            
         //Cierra la base de datos
         if(Star.iCierrBas(con)==-1)
             return;
@@ -6396,73 +6324,7 @@ public class IngrPrevCom extends javax.swing.JFrame
             }
         }
         
-        /*Obtiene cuál es la moneda nacional*/
-        String sCodMN   = Star.sGetMonNac(con);
         
-        //Si hubo error entonces regresa
-        if(sCodMN==null)
-            return -1;
-        
-        //pendiente alan
-//        /*Obtiene si la configuración global para que no se pueda comprar a ningùn proveedor con moneda distinta a la nacional esta activada o no*/
-        boolean bSi = true;
-        
-        /*Comprueba si se puede o no modificar la descripción del producto*/
-        String sRespChec=Star.sCheckUnConf(con, "prev", "prevmonac");
-
-        //Si es nulo marca error
-        if(sRespChec==null || sRespChec.compareTo("no existe")==0)
-            return -1;
-
-        //Se almacena en la variable para checar la serie
-        if(sRespChec.compareTo("0")==0)
-            bSi = false;
-        
-        /*Comprueba si el proveedor tiene o no habilitado que se le pueda comprar con otra moneda distinta a la nacional*/
-        try
-        {
-            sQ = "SELECT otramon FROM provs WHERE CONCAT_WS('', ser, prov) = '" + jTProv.getText().trim() + "'";
-            st = con.createStatement();
-            rs = st.executeQuery(sQ);
-            /*Si hay datos*/
-            if(rs.next())
-            {
-                /*Si no tiene habilitado la compra con otra moneda o globalmente entonces*/
-                if(rs.getString("otramon").compareTo("0")==0 || !bSi)
-                {
-                    /*Compara el código de moneda nacional con el que se quiere agregar*/
-                    if(sCodMN.compareTo(jComMon.getSelectedItem().toString())!=0)
-                    {
-                        //Cierra la base de datos
-                        if(Star.iCierrBas(con)==-1)
-                            return -1;
-
-                        /*Coloca el borde rojo*/
-                        jComMon.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
-
-                        /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "No se tiene permitido comprar con una Moneda distinta a la Nacional \"" + sCodMN + "\".", "Compras", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-
-                        /*Coloca el foco del teclado en el control y regresa*/
-                        jComMon.grabFocus();
-                        return -1;
-                    }
-                }
-            }
-        }
-        catch(SQLException e)
-        {
-            //Cierra la base de datos
-            if(Star.iCierrBas(con)==-1)
-                return -1;
-            
-            /*Agrega en el log*/
-            Login.vLog(e.getMessage());
-
-            /*Mensajea y regresa*/
-            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));
-            return -1;
-        }
 
         /*Comprueba si la unidad tomada es la que tiene el producto asignada*/        
         String sSiUnid = Star.sEsUnidProd(con, jTProd.getText().trim(), jComUnid.getSelectedItem().toString().trim());        
@@ -6568,7 +6430,7 @@ public class IngrPrevCom extends javax.swing.JFrame
         }                                
         
         //Declara variables locales
-        bSi = false;      
+        boolean bSi = false;      
         int iCant2;
         
         /*Recorre toda la tabla de partidas de compra*/        

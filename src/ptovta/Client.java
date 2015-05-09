@@ -108,7 +108,20 @@ public class Client extends javax.swing.JFrame
     {        
         /*Inicializa los componentes gráfcos*/
         initComponents();
-    
+        if(sCli.compareTo("")==0)
+        {
+            jComSer.setVisible(true);
+            jLabel35.setVisible(true);
+            jTCodEmp.setVisible(true);
+            jLabel36.setVisible(true);
+        }
+        else
+        {
+            jComSer.setVisible(false);
+            jLabel35.setVisible(false);
+            jTCodEmp.setVisible(false);
+            jLabel36.setVisible(false);
+        }
         /*Guarda el código del cliente*/
         sCliG   = sCli;
         
@@ -2183,7 +2196,43 @@ public class Client extends javax.swing.JFrame
         Statement   st;
         ResultSet   rs;          
         String      sQ;
-                  
+        //correcion para que no se pueda poner 2 veses el mismo codigo
+        if(jComSer.getSelectedItem().toString().compareTo("")==0)
+        { 
+            jComSer.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            JOptionPane.showMessageDialog(null, "La serie del cliente es obligatoria.", "Serie", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            jComSer.grabFocus();
+            return-1;
+        }           
+        if(jComSer.getSelectedItem().toString().compareTo("")!=0&&jTCodEmp.getText().compareTo("")!=0)
+        {
+           
+            try
+            {
+                sQ = "SELECT * FROM emps WHERE ser = '" + jComSer.getSelectedItem().toString()+ "' and codemp = '"+jTCodEmp.getText()+"'";	
+                st = con.createStatement();
+                rs = st.executeQuery(sQ);
+                /*Si no hay datos entonces no existe*/
+                if(rs.next())
+                {
+                    /*Coloca el borde rojo*/                               
+                    jTCodEmp.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            
+                    /*Mensajea*/
+                    JOptionPane.showMessageDialog(null, "El codigo del cliente: " + jComSer.getSelectedItem().toString()+jTCodEmp.getText() + " ya existe no se puede tener 2 codigos iguales.", "Codigo", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                    
+                    /*Coloca el foco del teclado en el control y regresa*/
+                    jTCodEmp.grabFocus();
+                    return-1;
+                }
+            }
+            catch(SQLException expnSQL)
+            {
+                //Procesa el error y regresa
+                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
+                return-1;
+            }
+        }          
         
         
         /*Comprueba si el nombre del cliente existe en la base de datos con ese RFC*/                

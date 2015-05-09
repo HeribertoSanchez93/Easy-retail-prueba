@@ -104,6 +104,20 @@ public class Prov extends javax.swing.JFrame
     {
         /*Inicializa los componentes gráfcos*/
         initComponents();
+        if(sProv.compareTo("")==0)
+        {
+            jComSer.setVisible(true);
+            jLabel35.setVisible(true);
+            jTCodProv.setVisible(true);
+            jLabel20.setVisible(true);
+        }
+        else
+        {
+            jComSer.setVisible(false);
+            jLabel35.setVisible(false);
+            jTCodProv.setVisible(false);
+            jLabel20.setVisible(false);
+        }
                 
         /*Obtiene la tabla de proveedores del otro formulario*/
         jTabProv    = jTabPro;
@@ -2466,7 +2480,44 @@ public class Prov extends javax.swing.JFrame
         Statement   st;
         ResultSet   rs;          
         String      sQ; 
-        
+        //correcion para que no se pueda poner 2 veses el mismo codigo
+        System.out.println("yep");
+        if(jComSer.getSelectedItem().toString().compareTo("")==0)
+        { 
+            jComSer.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            JOptionPane.showMessageDialog(null, "La serie del proveedor es obligatoria.", "Serie", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            jComSer.grabFocus();
+            return-1;
+        }           
+        if(jComSer.getSelectedItem().toString().compareTo("")!=0&&jTCodProv.getText().compareTo("")!=0)
+        {
+           
+            try
+            {
+                sQ = "SELECT * FROM provs WHERE ser = '" + jComSer.getSelectedItem().toString()+ "' and prov = '"+jTCodProv.getText()+"'";	
+                st = con.createStatement();
+                rs = st.executeQuery(sQ);
+                /*Si no hay datos entonces no existe*/
+                if(rs.next())
+                {
+                    /*Coloca el borde rojo*/                               
+                    jTCodProv.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            
+                    /*Mensajea*/
+                    JOptionPane.showMessageDialog(null, "El codigo del proveedor: " + jComSer.getSelectedItem().toString()+jTCodProv.getText() + " ya existe no se puede tener 2 codigos iguales.", "Codigo", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                    
+                    /*Coloca el foco del teclado en el control y regresa*/
+                    jTCodProv.grabFocus();
+                    return-1;
+                }
+            }
+            catch(SQLException expnSQL)
+            {
+                //Procesa el error y regresa
+                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
+                return-1;
+            }
+        }
         
         if(jTNomb.getText().compareTo("") != 0)
         {

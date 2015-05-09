@@ -48,7 +48,7 @@ public class NewNot extends javax.swing.JFrame
     private int                 iContCelEd;        
     private int                 iContFi;
     private boolean             bSiCred             = false;            
-    
+    private boolean             sPrimVent           = false;
     /*Para controlar si seleccionar todo o deseleccionarlo de la tabla*/
     private boolean             bSel;
     private String              Folio;
@@ -2549,13 +2549,16 @@ public class NewNot extends javax.swing.JFrame
                 /*Mensajea*/
                 JOptionPane.showMessageDialog(null, "El total de la nota de crédito: " + jTTot.getText() + " es mayor que el saldo: " + sSald + " del cliente. Se necesita permiso de admnistrador para completar la operación.", "Nota de crédito", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
 
-                /*Pide clave de administrador*/            
-                ClavMast cl = new ClavMast(this, 1);
-                cl.setVisible(true);
-
+                            
+                
                 /*Si la clave que ingreso el usuario fue incorrecta entonces*/
                 if(!ClavMast.bSi)
                 {
+                    /*Pide clave de administrador*/
+                    Star.gClavMast = new ClavMast(this, 1);
+                    Star.gClavMast.setVisible(true);
+                        
+
                     //Cierra la base de datos y regresa
                     Star.iCierrBas(con);
                     return;
@@ -3204,6 +3207,69 @@ public class NewNot extends javax.swing.JFrame
         ResultSet   rs;       
         String      sQ;
      
+        if(sPrimVent==false)
+        {/*Si el total es mayor al saldo disponible entonces*/
+        if(Double.parseDouble(jTTot.getText().replace("$", "").replace(",", "")) > Double.parseDouble(jTSaldDispo.getText().replace("$", "").replace(",", "")))
+        {            
+            /*Comprueba la configuración para vender sobre límite de crédito en las facturas*/
+            boolean bSi = false;
+            try
+            {
+                sQ = "SELECT val FROM confgral WHERE conf = 'slimtcredfac' AND clasif = 'vtas'";
+                st = con.createStatement();
+                rs = st.executeQuery(sQ);
+                /*Si hay datos*/
+                if(rs.next())
+                {
+                    /*Si no esta habilitado para que se pueda vender sobre límite de crédito de la cliente entonces coloca la bandera*/
+                    if(rs.getString("val").compareTo("1")==0)                                   
+                        bSi = true;                        
+                }
+            
+            }
+            catch(SQLException expnSQL)
+            {
+                //Procesa el error y regresa
+                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
+                return;                                        
+            }
+            
+            /*Obtiene los días de crédito*/
+            String sDiaCred = jTDiaCre.getText();
+            
+            /*Si es cadena vacia que sea 0*/
+            if(sDiaCred.compareTo("")==0)
+                sDiaCred    = "0";
+            
+            /*Si no esta permitido vender sobre el límite de crédito y si el cliente tiene crédito entonces*/
+            if(!bSi && Integer.parseInt(sDiaCred)>0)
+            {
+                /*Obtiene el saldo disponible*/
+                String sSald    = jTSaldDispo.getText();
+
+                /*Dale formato de moneda al saldo disponible*/                            
+                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                double dCant    = Double.parseDouble(sSald);                
+                sSald           = n.format(dCant);
+
+                /*Mensajea*/
+                JOptionPane.showMessageDialog(null, "El total de la nota de crédito: " + jTTot.getText() + " es mayor que el saldo: " + sSald + " del cliente. Se necesita permiso de admnistrador para completar la operación.", "Nota de crédito", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+
+                            
+                
+                /*Si la clave que ingreso el usuario fue incorrecta entonces*/
+                    /*Pide clave de administrador*/
+                    Star.gClavMast = new ClavMast(this, 1);
+                    Star.gClavMast.setVisible(true);
+                    sPrimVent=true;
+
+                    //Cierra la base de datos y regresa
+                
+                
+            }/*Fin de if(!bSi)*/                
+            
+        }/*Fin de if(Double.parseDouble(jTTot.getText().replace("$", "").replace(",", "")) > Double.parseDouble(jTSaldDispo.getText().replace("$", "").replace(",", "")))*/                                
+    }
         try
         {
             sQ = "SELECT norefer, timbr FROM vtas WHERE norefer = '" + Folio + "'";                      
@@ -3648,6 +3714,8 @@ public class NewNot extends javax.swing.JFrame
         jTSaldDispo.setText ("0");
         jTLimCred.setText   ("0");
         jTDiaCre.setText    ("0");
+        sPrimVent=false;
+        Star.gClavMast=null;
     }
                 
                 

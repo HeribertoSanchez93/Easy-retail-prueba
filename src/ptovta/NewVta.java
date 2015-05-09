@@ -79,11 +79,13 @@ public class NewVta extends javax.swing.JFrame
     private String              sGaranOri;
     private String              sCodImpOri;
     
+    //variables de control agragadas por carlos gonzalo ramirez
     private int                 sBackOrder          =    0;
-    
+    private boolean             sPrimVent            = false;
+            
     /*Bandera para que no se modifique la descripción del producto en la tabla*/
     private boolean             bModDescrip         = true;
-    
+                 
     /*Declara variables privadas de clase*/    
     private JTable              jTabVe;
     private int                 iContCelEd;        
@@ -4115,37 +4117,15 @@ public class NewVta extends javax.swing.JFrame
                     NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
                     double dCant    = Double.parseDouble(sSald);                
                     sSald           = n.format(dCant);
-
-                    /*Mensajea*/
-                    JOptionPane.showMessageDialog(null, "El total de la venta: " + jTTot.getText() + " es mayor que el saldo: " + sSald + " del cliente. Se necesita permiso de admnistrador para completar la venta.", "Venta", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
-                    /*Obtiene la imágen si es que tiene*/
-        
-                    /*Pide clave de administrador*/            
-                    ClavMast cl = new ClavMast(this, 1);
-                    cl.setVisible(true);
                        
-                   
-////                    synchronized (cl){
-////                    while(ClavMast.ban==false)
-////                        {
-////                            try{
-////                            cl.wait();
-////                            }catch(InterruptedException e)
-////                            {
-////                                System.out.println("ajam");
-////                            }
-////                            
-////                        }
-////                    }
-//                    try {
-//                             Thread.sleep(60000);                 //1000 milliseconds is one second.
-//                        } catch(InterruptedException ex) {
-//                            Thread.currentThread().interrupt();
-//                            }
-                    /*Si la clave que ingreso el usuario fue incorrecta entonces*/
                     if(ClavMast.bSi==false)
                     {
-                        System.out.println("mal");
+                        /*Mensajea*/
+                         JOptionPane.showMessageDialog(null, "El total de la venta: " + jTTot.getText() + " es mayor que el saldo: " + sSald + " del cliente. y la clave de admnistrador que habia dado para completar la venta fue incorrecta favor de volverla a ingresar.", "Venta", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                        
+                        /*Pide clave de administrador*/            
+                         Star.gClavMast= new ClavMast(this, 1);
+                         Star.gClavMast.setVisible(true);
                         //Cierra la base de datos y regresa
                         Star.iCierrBas(con);
                         return;
@@ -5940,6 +5920,60 @@ public class NewVta extends javax.swing.JFrame
         ResultSet   rs;       
         String      sQ; 
         
+        if(sPrimVent==false)
+        {
+            if(!jCConta.isSelected())
+            {
+                /*Si el total es mayor al saldo disponible entonces*/
+                if(Double.parseDouble(jTTot.getText().replace("$", "").replace(",", "")) > Double.parseDouble(jTSaldDispo.getText().replace("$", "").replace(",", "")))
+                {            
+                    /*Comprueba la configuración para vender sobre límite de crédito en las facturas*/
+                    boolean bSi = false;
+                    try
+                    {
+                        sQ = "SELECT val FROM confgral WHERE conf = 'slimtcredfac' AND clasif = 'vtas'";
+                        st = con.createStatement();
+                        rs = st.executeQuery(sQ);
+                        /*Si hay datos*/
+                        if(rs.next())
+                        {
+                            /*Si no esta habilitado para que se pueda vender sobre límite de crédito de la cliente entonces coloca la bandera*/
+                            if(rs.getString("val").compareTo("1")==0)                                   
+                                bSi = true;                        
+                        }            
+                    }
+                    catch(SQLException expnSQL)
+                    {
+                        //Procesa el error y regresa
+                        Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
+                        return;                                            
+                    }   
+
+                    /*Si no esta permitido vender sobre el límite de crédito y si el cliente tiene crédito entonces*/
+                    if(!bSi && Double.parseDouble(jTDiaCre.getText())>0)
+                    {
+                        /*Obtiene el saldo disponible*/
+                        String sSald    = jTSaldDispo.getText();
+
+                        /*Dale formato de mon al saldo disponible*/                            
+                        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                        double dCant    = Double.parseDouble(sSald);                
+                        sSald           = n.format(dCant);
+
+                        /*Mensajea*/
+                        JOptionPane.showMessageDialog(null, "El total de la venta: " + jTTot.getText() + " es mayor que el saldo: " + sSald + " del cliente. Se necesita permiso de administrador para completar la venta.", "Venta", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                        /*Obtiene la imágen si es que tiene*/
+        
+                        /*Pide clave de administrador*/            
+                        Star.gClavMast = new ClavMast(this, 1);
+                        Star.gClavMast.setVisible(true);
+                        sPrimVent=true;
+                    }/*Fin de if(!bSi)*/
+                
+                }/*Fin de if(Double.parseDouble(jTTot.getText().replace("$", "").replace(",", "")) > Double.parseDouble(jTSaldDispo.getText().replace("$", "").replace(",", "")))*/                                
+            
+            }
+        }
         /*Si es un kit entonces*/
         if(jTEsKit.getText().compareTo("1")==0)
         {
@@ -7336,7 +7370,7 @@ public class NewVta extends javax.swing.JFrame
     private void vResEmpCam()
     {
         /*Resetea los campos que involucran a la cliente*/
-        jTNom.setText    ("");
+        jTNom.setText       ("");
         jTCall.setText      ("");
         jTCol.setText       ("");
         jTTel.setText       ("");
@@ -7357,6 +7391,9 @@ public class NewVta extends javax.swing.JFrame
         jTSaldDispo.setText ("0");
         jTLimCred.setText   ("0");
         jTDiaCre.setText    ("0");
+        sPrimVent=false;
+        if(Star.gClavMast!=null)
+            Star.gClavMast=null;
     }
                 
                 

@@ -312,6 +312,9 @@ public class Star
     
     //para que no se abra dos veces la forma de punto de venta 
     public static PtoVtaTou         gPtoVtaTou;
+    
+    //para administras las claves
+    public static ClavMast          gClavMast;
             
     /*Timer para reportar los mínimos*/
     public static Timer             timMax;
