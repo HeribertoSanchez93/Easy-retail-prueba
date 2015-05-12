@@ -63,7 +63,8 @@ public class ClavMast extends javax.swing.JFrame
         jLAyu.setVisible(false);
         
         /*Centra la ventana*/
-        this.setLocationRelativeTo(null);
+        this.setTitle("Clave de administrador");
+        this.setLocation(540, 70);
         
         //Establece el ícono de la forma
         Star.vSetIconFram(this);

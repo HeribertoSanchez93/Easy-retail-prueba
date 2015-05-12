@@ -12,12 +12,18 @@
 	<parameter name="VENC" class="java.lang.String"/>
 	<parameter name="LOG" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT * FROM (SELECT CASE WHEN IFNULL(SUM(carg),0) <= IFNULL(SUM(abon),0) THEN 'CO' WHEN IFNULL(SUM(carg),0) > IFNULL(SUM(abon),0) THEN 'PE' END AS estad, norefer, noser, prov, ser, tot, fdoc, fvenc, sucu, nocaj, estac, tot - (SUM(carg) - SUM(abon)) AS abon, SUM(carg) AS carg, concep 
-FROM cxp WHERE concep <> 'NOT' GROUP BY norefer)a
-WHERE CASE WHEN '$P!{ESTAD}' = '' THEN 1=1 WHEN '$P!{ESTAD}' = '1' THEN 1=1 WHEN '$P!{ESTAD}' = '2' THEN (carg > abon OR carg <= abon) WHEN '$P!{ESTAD}' = '3' THEN (carg > abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) WHEN '$P!{ESTAD}' = '4' THEN (carg <= abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) WHEN '$P!{ESTAD}' = '5' THEN carg <= abon WHEN '$P!{ESTAD}' = '6' THEN carg > abon WHEN '$P!{ESTAD}' = '7' THEN carg > abon AND DATE(fvenc)<=DATE(now()) ELSE 1=1 END AND CASE WHEN '$P!{F_D}' = '' THEN fdoc = fdoc ELSE DATE(FDOC) >=  
+		<![CDATA[SELECT * FROM (SELECT CASE WHEN concep='CA ABON' OR concep='CA COMP' THEN 'CA' WHEN IFNULL(SUM(carg),0) <= IFNULL(SUM(abon),0) THEN 'CO' WHEN IFNULL(SUM(carg),0) > IFNULL(SUM(abon),0) THEN 'PE' END AS estad, norefer, noser, prov, ser, tot, fdoc, fvenc, sucu, nocaj, estac, tot - (SUM(carg) - SUM(abon)) AS abon, SUM(carg) AS carg, concep,id_id 
+FROM cxp WHERE concep <> 'NOTP' GROUP BY id_id,norefer)a
+WHERE CASE WHEN '$P!{ESTAD}' = '' THEN 1=1 WHEN '$P!{ESTAD}' = '1' THEN 1=1 WHEN '$P!{ESTAD}' = '2' THEN (carg > abon OR carg <= abon) WHEN '$P!{ESTAD}' = '3' THEN (carg > abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) WHEN '$P!{ESTAD}' = '4' THEN (carg <= abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) WHEN '$P!{ESTAD}' = '5' THEN carg <= abon WHEN '$P!{ESTAD}' = '6' THEN carg > abon WHEN '$P!{ESTAD}' = '7' THEN carg > abon AND DATE(fvenc)<=DATE(now()) WHEN '$P!{ESTAD}' = '8' THEN (carg > abon OR carg <= abon) OR (concep='CA ABON' OR concep='CA COMP')
+WHEN '$P!{ESTAD}' = '9' THEN (carg > abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) OR (concep='CA ABON' OR concep='CA COMP')
+WHEN '$P!{ESTAD}' = '10' THEN (carg <= abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) OR (concep='CA ABON' OR concep='CA COMP')
+WHEN '$P!{ESTAD}' = '11' THEN carg <= abon OR (concep='CA ABON' OR concep='CA COMP')
+WHEN '$P!{ESTAD}' = '12' THEN carg > abon OR (concep='CA ABON' OR concep='CA COMP')
+WHEN '$P!{ESTAD}' = '13' THEN (carg > abon AND DATE(fvenc)<=DATE(now())) OR (concep='CA ABON' OR concep='CA COMP') 
+WHEN '$P!{ESTAD}' = '14' THEN concep='CA COMP' OR concep='CA ABON'  ELSE 1=1 END AND CASE WHEN '$P!{F_D}' = '' THEN fdoc = fdoc ELSE DATE(FDOC) >=  
 '$P!{F_D}' END AND CASE WHEN '$P!{F_A}' = '' THEN fdoc = fdoc ELSE DATE(FDOC) <= '$P!{F_A}' END AND CASE WHEN '$P!{EMP}' = '' THEN prov = prov
 ELSE prov = '$P!{EMP}' END
-GROUP BY norefer, noser, prov]]>
+GROUP BY  id_id, norefer]]>
 	</queryString>
 	<field name="estad" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -59,6 +65,9 @@ GROUP BY norefer, noser, prov]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="concep" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_id" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="TOT" class="java.lang.Double" calculation="Sum">

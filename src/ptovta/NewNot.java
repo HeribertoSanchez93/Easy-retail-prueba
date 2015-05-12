@@ -3253,7 +3253,7 @@ public class NewNot extends javax.swing.JFrame
                 sSald           = n.format(dCant);
 
                 /*Mensajea*/
-                JOptionPane.showMessageDialog(null, "El total de la nota de crédito: " + jTTot.getText() + " es mayor que el saldo: " + sSald + " del cliente. Se necesita permiso de admnistrador para completar la operación.", "Nota de crédito", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                JOptionPane.showMessageDialog(null, "El total de la nota de crédito: " + jTTotF.getText() + " es mayor que el saldo: " + sSald + " del cliente. Se necesita permiso de admnistrador para completar la operación.", "Nota de crédito", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
 
                             
                 

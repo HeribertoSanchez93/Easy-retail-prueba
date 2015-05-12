@@ -10,11 +10,18 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="VENC" class="java.lang.String"/>
-	<parameter name="LOG" class="java.lang.String"/>
+	<parameter name="LOG" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CHECK" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[SELECT * FROM (SELECT CASE WHEN IFNULL(SUM(carg),0) <= IFNULL(SUM(abon),0) THEN 'CO' WHEN IFNULL(SUM(carg),0) > IFNULL(SUM(abon),0) THEN 'PE' END AS estad, norefer, noser, empre, ser, tot, fdoc, fvenc, sucu, nocaj, estac, tot - (SUM(carg) - SUM(abon)) AS abon, SUM(carg) AS carg, concep 
-FROM cxc WHERE concep <> 'NOT' GROUP BY norefer)a
-WHERE CASE WHEN '$P!{ESTAD}' = '' THEN 1=1 WHEN '$P!{ESTAD}' = '1' THEN 1=1 WHEN '$P!{ESTAD}' = '2' THEN (carg > abon OR carg <= abon) WHEN '$P!{ESTAD}' = '3' THEN (carg > abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) WHEN '$P!{ESTAD}' = '4' THEN (carg <= abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) WHEN '$P!{ESTAD}' = '5' THEN carg <= abon WHEN '$P!{ESTAD}' = '6' THEN carg > abon WHEN '$P!{ESTAD}' = '7' THEN carg > abon AND DATE(fvenc)<=DATE(now()) ELSE 1=1 END AND CASE WHEN '$P!{F_D}' = '' THEN fdoc = fdoc ELSE DATE(FDOC) >=  
+		<![CDATA[SELECT * FROM (SELECT CASE WHEN concep='CA ABON' OR concep='CA FAC' THEN 'CA' WHEN IFNULL(SUM(carg),0) <= IFNULL(SUM(abon),0) THEN 'CO' WHEN IFNULL(SUM(carg),0) > IFNULL(SUM(abon),0) THEN 'PE' END AS estad, norefer, noser, empre, ser, tot, fdoc, fvenc, sucu, nocaj, estac, tot - (SUM(carg) - SUM(abon)) AS abon, SUM(carg) AS carg, concep 
+FROM cxc WHERE concep <> 'NOTC' GROUP BY id_id,norefer)a
+WHERE CASE WHEN '$P!{ESTAD}' = '' THEN 1=1 WHEN '$P!{ESTAD}' = '1' THEN 1=1 WHEN '$P!{ESTAD}' = '2' THEN (carg > abon OR carg <= abon) WHEN '$P!{ESTAD}' = '3' THEN (carg > abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) WHEN '$P!{ESTAD}' = '4' THEN (carg <= abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) WHEN '$P!{ESTAD}' = '5' THEN carg <= abon WHEN '$P!{ESTAD}' = '6' THEN carg > abon WHEN '$P!{ESTAD}' = '7' THEN carg > abon AND DATE(fvenc)<=DATE(now())WHEN '$P!{ESTAD}' = '8' THEN (carg > abon OR carg <= abon) OR (concep='CA ABON' OR concep='CA FAC')WHEN '$P!{ESTAD}' = '9' THEN (carg > abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) OR (concep='CA ABON' OR concep='CA FAC')WHEN '$P!{ESTAD}' = '10' THEN (carg <= abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) OR (concep='CA ABON' OR concep='CA FAC')WHEN '$P!{ESTAD}' = '11' THEN carg <= abon OR (concep='CA ABON' OR concep='CA FAC')WHEN '$P!{ESTAD}' = '12' THEN carg > abon OR (concep='CA ABON' OR concep='CA FAC')WHEN '$P!{ESTAD}' = '13' THEN (carg > abon AND DATE(fvenc)<=DATE(now())) OR (concep='CA ABON' OR concep='CA FAC') WHEN '$P!{ESTAD}' = '14' THEN concep='CA ABON' OR concep='CA FAC' ELSE 1=1 
+
+END AND CASE WHEN '$P!{F_D}' = '' THEN fdoc = fdoc ELSE DATE(FDOC) >=  
 '$P!{F_D}' END AND CASE WHEN '$P!{F_A}' = '' THEN fdoc = fdoc ELSE DATE(FDOC) <= '$P!{F_A}' END AND CASE WHEN '$P!{EMP}' = '' THEN empre = empre
 ELSE empre = '$P!{EMP}' END]]>
 	</queryString>
@@ -33,7 +40,7 @@ ELSE empre = '$P!{EMP}' END]]>
 	<field name="ser" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="tot" class="java.lang.Double">
+	<field name="tot" class="java.lang.Float">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="fdoc" class="java.sql.Timestamp">

@@ -1930,7 +1930,7 @@ public class Compr extends javax.swing.JFrame
             if(sTip.compareTo("ORD")!=0)
             {
                 //Agrega una partida en CXP para agregarle saldo al proveedor de la cancelación                          
-                if(Star.iInsCXCP(con, "cxp", jTab1.getValueAt(iSel[x], 2).toString(), sNoSer, sProv, sSer, sSubTot, sImpue, sTot, "0", sTot, "'" + sFVenc + "'", "'" + sFDoc + "'", "DEV COMP", "", "0", "", "","")==-1)
+                if(Star.iInsCXCP(con, "cxp", jTab1.getValueAt(iSel[x], 2).toString(), sNoSer, sProv, sSer, sSubTot, sImpue, sTot, "0", sTot, "'" + sFVenc + "'", "'" + sFDoc + "'", "CA COMP", "", "0", "", "","")==-1)
                     return;        
                 
                 /*Recorre todas las partidas de la compra*/

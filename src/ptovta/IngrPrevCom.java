@@ -3137,7 +3137,7 @@ public class IngrPrevCom extends javax.swing.JFrame
                         jComMon.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
 
                         /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "Por configuración del sistema, solo se permiten previos de compra en Moneda Nacional: " + sCodMN + ".", "Cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                        JOptionPane.showMessageDialog(null, "Por configuración del sistema, solo se permiten previos de compra en Moneda Nacional: " + sCodMN + ".", "Previo de Compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
                         
                         /*Coloca el foco del teclado en el control y regresa*/
                         jComMon.grabFocus();
@@ -3153,7 +3153,7 @@ public class IngrPrevCom extends javax.swing.JFrame
                         jComMon.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
 
                         /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "La configuración del proveedor no permite previos de compra en una moneda distinta a la Moneda Nacional: " + sCodMN + ".", "Cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                        JOptionPane.showMessageDialog(null, "La configuración del proveedor no permite previos de compra en una moneda distinta a la Moneda Nacional: " + sCodMN + ".", "Previo de Compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
                         
                         /*Coloca el foco del teclado en el control y regresa*/
                         jComMon.grabFocus();

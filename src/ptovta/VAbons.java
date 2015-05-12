@@ -779,7 +779,7 @@ public class VAbons extends javax.swing.JFrame
             /*Actualiza ese pago para saber que fue de abono a cancelación*/
             try 
             {                
-                sQ = "UPDATE " + sTab + " SET concep = 'ACA ABON', fvenc= '" +  sFVenc + "' WHERE id_id = " + jTab.getValueAt(iSel[x], 10).toString().trim();                                               
+                sQ = "UPDATE " + sTab + " SET concep = 'CA ABON', fvenc= '" +  sFVenc + "' WHERE id_id = " + jTab.getValueAt(iSel[x], 10).toString().trim();                                               
                 st = con.createStatement();
                 st.executeUpdate(sQ);
              }

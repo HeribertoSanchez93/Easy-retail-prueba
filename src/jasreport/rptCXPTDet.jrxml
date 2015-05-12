@@ -12,14 +12,14 @@
 	<parameter name="VENC" class="java.lang.String"/>
 	<parameter name="LOG" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT * FROM cxp WHERE CONCAT_WS('', noser, norefer ) IN((SELECT CONCAT_WS('', a.NOSER, a.NOREFER) AS noreferser FROM (SELECT SUM(abon) AS abon, SUM(carg) AS carg, noser, norefer, fdoc, prov, concep FROM cxp WHERE concep <> 'NOT' GROUP BY noser, norefer)a WHERE 
+		<![CDATA[SELECT * FROM cxp WHERE CONCAT_WS('', noser, norefer ) IN((SELECT CONCAT_WS('', a.NOSER, a.NOREFER) AS noreferser FROM (SELECT SUM(abon) AS abon, SUM(carg) AS carg, noser, norefer, fdoc, prov, concep FROM cxp WHERE concep <> 'NOTC' GROUP BY id_id, norefer)a WHERE 
 CASE WHEN '$P!{F_D}'= '' THEN FDOC = FDOC 
 ELSE IF(ABON=0,DATE(FDOC) >=  '$P!{F_D}',DATE(FALT) >=  '$P!{F_D}')  END AND CASE WHEN '$P!{F_A}' = '' THEN fdoc = fdoc 
 ELSE IF(ABON=0,DATE(fdoc) <= '$P!{F_A}',DATE(FALT) <=  '$P!{F_A}') END AND CASE WHEN '$P!{EMP}' = '' THEN prov = prov
 ELSE prov = '$P!{EMP}' END AND CASE WHEN '$P!{ESTAD}' = '' THEN 1=1 WHEN '$P!{ESTAD}' = '1' THEN 1=1 WHEN '$P!{ESTAD}' = '2' THEN (carg > abon OR carg <= abon) WHEN 
 '$P!{ESTAD}' = '3' THEN (carg > abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) WHEN '$P!{ESTAD}' = '4' THEN (carg <= abon OR (DATE(fvenc)<=DATE(now()) AND carg > 
 abon)) WHEN '$P!{ESTAD}' = '5' THEN carg <= abon WHEN '$P!{ESTAD}' = '6' THEN carg > abon WHEN '$P!{ESTAD}' = '7' THEN carg > carg AND DATE
-(fvenc)<=DATE(now()) ELSE 1=1 END))]]>
+(fvenc)<=DATE(now()) WHEN '$P!{ESTAD}' = '8' THEN (carg > abon OR carg <= abon) OR (concep='CA ABON' OR concep='CA COMP')WHEN '$P!{ESTAD}' = '9' THEN (carg > abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) OR (concep='CA ABON' OR concep='CA COMP')WHEN '$P!{ESTAD}' = '10' THEN (carg <= abon OR (DATE(fvenc)<=DATE(now()) AND carg > abon)) OR (concep='CA ABON' OR concep='CA COMP')WHEN '$P!{ESTAD}' = '11' THEN carg <= abon OR (concep='CA ABON' OR concep='CA COMP')WHEN '$P!{ESTAD}' = '12' THEN carg > abon OR (concep='CA ABON' OR concep='CA COMP')WHEN '$P!{ESTAD}' = '13' THEN (carg > abon AND DATE(fvenc)<=DATE(now())) OR (concep='CA ABON' OR concep='CA COMP') WHEN '$P!{ESTAD}' = '14' THEN concep='CA ABON' OR concep='CA COMP' ELSE 1=1 END))]]>
 	</queryString>
 	<field name="id_id" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -61,6 +61,9 @@ abon)) WHEN '$P!{ESTAD}' = '5' THEN carg <= abon WHEN '$P!{ESTAD}' = '6' THEN ca
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="concep" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="folbanc" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="fvenc" class="java.sql.Timestamp">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -20,9 +20,9 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT comprs.TIPCAM, codimpue, cant, unid, descu, descad, codcomp, nodoc, prov, nomprov, fdoc, estado, sucu, estac, nocaj, comprs.TOT * comprs.TIPCAM AS tottip, comprs.TOT, prod, partcomprs.DESCRIP, alma, comprs.MON, cost, impo, devs FROM partcomprs LEFT OUTER JOIN comprs ON comprs.CODCOMP = partcomprs.CODCOM WHERE tip IN($P!{TIPDOC}) AND estado IN($P!{TIPESTAD})  AND CASE WHEN '$P!{PROV}' = '' THEN comprs.PROV = comprs.PROV ELSE comprs.PROV = '$P!{PROV}' END AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE DATE
+		<![CDATA[SELECT comprs.TIPCAM, codimpue, COUNT(comprs.id_id) AS conteo, cant, unid, descu, descad, codcomp, nodoc, prov, nomprov, fdoc, estado, sucu, estac, nocaj, comprs.TOT * comprs.TIPCAM AS tottip, comprs.TOT, prod, partcomprs.DESCRIP, alma, comprs.MON, cost, impo, devs FROM partcomprs LEFT OUTER JOIN comprs ON comprs.CODCOMP = partcomprs.CODCOM WHERE tip IN($P!{TIPDOC}) AND estado IN($P!{TIPESTAD})  AND CASE WHEN '$P!{PROV}' = '' THEN comprs.PROV = comprs.PROV ELSE comprs.PROV = '$P!{PROV}' END AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE DATE
 (comprs.FDOC) >= '$P!{F_D}' END AND CASE WHEN '$P!{F_A}' = '' THEN 1=1 ELSE DATE(comprs.FDOC) <= 
-'$P!{F_A}' END  ORDER BY 
+'$P!{F_A}'  END  ORDER BY 
 comprs.FDOC DESC]]>
 	</queryString>
 	<field name="TIPCAM" class="java.lang.Float">
@@ -31,6 +31,7 @@ comprs.FDOC DESC]]>
 	<field name="codimpue" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="conteo" class="java.lang.Long"/>
 	<field name="cant" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -523,7 +524,7 @@ comprs.FDOC DESC]]>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{conteo}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="366" y="21" width="71" height="13" forecolor="#3333FF" uuid="5829af9d-d410-4a70-b573-a95e0bc02941"/>

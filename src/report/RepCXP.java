@@ -605,25 +605,39 @@ public class RepCXP extends javax.swing.JFrame
             }
         }
         
-        /*Determina el estado de los documentos*/        
-        String sEst;        
-        if(jCCo.isSelected() && jCPe.isSelected() && jCVen.isSelected())
-            sEst         = "1";        
+        /*Determina el estado de los documentos*/
+        String sEst="";
+        if(jCCo.isSelected() && jCPe.isSelected() && jCVen.isSelected() && jCCa.isSelected())
+            sEst         = "1";
+        else if(jCCo.isSelected() && jCPe.isSelected()&& jCCa.isSelected())
+            sEst="8";
+        else if(jCCo.isSelected() && jCVen.isSelected()&& jCCa.isSelected())
+            sEst="9";
+        else if(jCPe.isSelected() && jCVen.isSelected()&& jCCa.isSelected())
+            sEst         = "10";
         else if(jCCo.isSelected() && jCPe.isSelected())
             sEst         = "2";               
         else if(jCPe.isSelected() && jCVen.isSelected())
             sEst         = "3";
         else if(jCCo.isSelected() && jCVen.isSelected())
             sEst         = "4";
+        else if(jCCo.isSelected()&& jCCa.isSelected())
+            sEst         = "11";
+        else if(jCPe.isSelected()&& jCCa.isSelected())
+            sEst         = "12";
+        else if(jCVen.isSelected()&& jCCa.isSelected())
+            sEst         = "13";
         else if(jCCo.isSelected())
             sEst         = "5";
         else if(jCPe.isSelected())
             sEst         = "6";
         else if(jCVen.isSelected())
             sEst         = "7";
+        else if(jCCa.isSelected())
+            sEst         = "14";
         else
             sEst         ="";
-        
+
         /*Determina el reporte que será*/
         String sTipRep  = "";
         if(jComTip.getSelectedItem().toString().compareTo("Encabezados")==0)

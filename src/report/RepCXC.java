@@ -582,7 +582,7 @@ public class RepCXC extends javax.swing.JFrame
         }
             
         /*Si no esta seleccionado por lo menos confirmados, pendientes o vencidos entonces*/
-        if(!jCCo.isSelected() && !jCPe.isSelected() && !jCVen.isSelected() && jComTip.getSelectedItem().toString().compareTo("Abonos por conceptos")!=0)
+        if(!jCCa.isSelected() && !jCCo.isSelected() && !jCPe.isSelected() && !jCVen.isSelected() && jComTip.getSelectedItem().toString().compareTo("Abonos por conceptos")!=0)
         {
             /*Mensajea*/
             JOptionPane.showMessageDialog(null, "Selecciona por lo menos pendientes, confirmados o vencidos.", "Reporte", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
@@ -608,23 +608,36 @@ public class RepCXC extends javax.swing.JFrame
         
         /*Determina el estado de los documentos*/        
         String sEst;        
-        if(jCCo.isSelected() && jCPe.isSelected() && jCVen.isSelected())
-            sEst         = "1";        
+        if(jCCo.isSelected() && jCPe.isSelected() && jCVen.isSelected() && jCCa.isSelected())
+            sEst         = "1";
+        else if(jCCo.isSelected() && jCPe.isSelected()&& jCCa.isSelected())
+            sEst="8";
+        else if(jCCo.isSelected() && jCVen.isSelected()&& jCCa.isSelected())
+            sEst="9";
+        else if(jCPe.isSelected() && jCVen.isSelected()&& jCCa.isSelected())
+            sEst         = "10";
         else if(jCCo.isSelected() && jCPe.isSelected())
             sEst         = "2";               
         else if(jCPe.isSelected() && jCVen.isSelected())
             sEst         = "3";
         else if(jCCo.isSelected() && jCVen.isSelected())
             sEst         = "4";
+        else if(jCCo.isSelected()&& jCCa.isSelected())
+            sEst         = "11";
+        else if(jCPe.isSelected()&& jCCa.isSelected())
+            sEst         = "12";
+        else if(jCVen.isSelected()&& jCCa.isSelected())
+            sEst         = "13";
         else if(jCCo.isSelected())
             sEst         = "5";
         else if(jCPe.isSelected())
             sEst         = "6";
         else if(jCVen.isSelected())
             sEst         = "7";
+        else if(jCCa.isSelected())
+            sEst         = "14";
         else
             sEst         ="";
-        
         /*Determina el reporte que será*/
         String sTipRep  = "";
         if(jComTip.getSelectedItem().toString().compareTo("Encabezados")==0)
@@ -690,13 +703,23 @@ public class RepCXC extends javax.swing.JFrame
         }
         
         //Determina el estado del documento para abonos de conceptos 
-        String sEstAbon      = "";        
+        String sEstAbon      = "";
+        String check         = "";
         if(jCCo.isSelected() && jCCa.isSelected())
-            sEstAbon         = "1";        
+        {
+            sEstAbon         = "1";
+            check            ="CO y CA";
+        }
         else if(jCCo.isSelected())
+        {
             sEstAbon         = "2";
+            check            ="CO";
+        }
         else if(jCCa.isSelected())
+        {
             sEstAbon         = "3";
+            check            ="CA";
+        }
         
         /*Declara variables final para el thread*/
         final String sEstAbonFi     = sEstAbon;
@@ -705,8 +728,9 @@ public class RepCXC extends javax.swing.JFrame
         final String sFDeFi         = sFDe;                             
         final String sTipRepFi      = sTipRep;                             
         final String sEmpFi         = jTCli.getText();
+        final String sCheckFi         =check;
         
-        /*Crea el th para cargar el reporte en un hilo aparte*/
+        /*Crea el nth para cargar el reporte en un hilo aparte*/
         (new Thread()
         {
             @Override
@@ -731,7 +755,7 @@ public class RepCXC extends javax.swing.JFrame
                     pa.put("F_A",           sFAFi);                    
                     pa.put("ESTADABON",     sEstAbonFi);
                     pa.put("ESTAD",         sEstFi);                    
-                    
+                    pa.put("CHECK",         sCheckFi);
                     /*Compila el reporte y muestralo maximizado*/
                     JasperReport ja     = JasperCompileManager.compileReport(getClass().getResourceAsStream(sTipRepFi));
                     JasperPrint pr      = JasperFillManager.fillReport(ja, (Map)pa, con);
