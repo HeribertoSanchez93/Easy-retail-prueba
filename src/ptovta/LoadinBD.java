@@ -13078,7 +13078,7 @@ public class LoadinBD extends javax.swing.JDialog {
             }
 
             /*Si la ruta del directorio inicial no existe que lo cree*/
-            String sRutA = "\\\\\\\\" + sNam + System.getProperty("user.dir").substring(2).replace("\\", "\\\\") + "\\\\Easy Retail";
+            String sRutA = "\\\\\\\\" + sNam + System.getProperty("user.dir").substring(2).replace("\\", "\\\\") + "\\\\Easy Retail®";
             if(!new File(sRutA).exists())             
                 new File(sRutA).mkdir();            
 

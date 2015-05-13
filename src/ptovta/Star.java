@@ -6747,7 +6747,7 @@ public class Star
             try
             {                
                 /*Intenta copiar todo*/
-                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut1O + "\\Easy Retail"));
+                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut1O + "\\Easy Retail®"));
 
                 /*Inserta en log que todo se copio con éxito*/
                 try 
@@ -6856,7 +6856,7 @@ public class Star
             try
             {
                 /*Intenta copiar todo*/
-                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut2O + "\\Easy Retail"));
+                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut2O + "\\Easy Retail®"));
 
                 /*Inserta en log que todo se copio con éxito*/
                 try 
@@ -6955,7 +6955,7 @@ public class Star
             try
             {
                 /*Intenta copiar todo*/
-                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut3O + "\\Easy Retail"));
+                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut3O + "\\Easy Retail®"));
 
                 /*Inserta en log que todo se copio con éxito*/
                 try 
@@ -10498,6 +10498,7 @@ public class Star
             par.put("IMPUE",      sImpue);
             par.put("TOT",        sTot);
             par.put("LOGE",       sRutLog);
+
 
             /*Establece la ruta del reporte xml*/            
             JasperReport ja   = JasperCompileManager.compileReport(Star.class.getResourceAsStream("/jasreport/rptVPrevCom.jrxml"));

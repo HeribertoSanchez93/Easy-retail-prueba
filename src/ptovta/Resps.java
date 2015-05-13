@@ -2410,7 +2410,7 @@ public class Resps extends javax.swing.JFrame
             String sRut        = fc.getCurrentDirectory().getAbsolutePath() + "\\" + fc.getSelectedFile().getName();
             
             /*Agrega a la ruta seleccionada el nombre de la carpeta del sistema*/
-            sRut                += "\\Easy Retail";
+            sRut                += "\\Easy Retail®";
             
             //Abre la base de datos
             Connection  con = Star.conAbrBas(true, false);

@@ -75,6 +75,7 @@ import report.RepOrd;
 import report.RepKard;
 import report.RepCosts;
 import report.RepResp;
+import report.RepPrevCom;
 
 
 
@@ -2506,6 +2507,7 @@ public class Princip extends javax.swing.JFrame
         jMRepCom = new javax.swing.JMenuItem();
         jMenCXP = new javax.swing.JMenuItem();
         jMRepOr = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMInven = new javax.swing.JMenu();
         jMVProd = new javax.swing.JMenuItem();
         jMenItKits = new javax.swing.JMenuItem();
@@ -4303,6 +4305,15 @@ public class Princip extends javax.swing.JFrame
             }
         });
         jMMRepCom.add(jMRepOr);
+
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Prevcom.png"))); // NOI18N
+        jMenuItem4.setText("Previo de compra");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMMRepCom.add(jMenuItem4);
 
         jMenComps.add(jMMRepCom);
 
@@ -12832,6 +12843,12 @@ public class Princip extends javax.swing.JFrame
         c.setVisible(true);
         
     }//GEN-LAST:event_NotVeActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        RepPrevCom c = new RepPrevCom();
+        c.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
     
         /*Cuando se presiona el botón de intérfaz de contapaqi*/
     private void jMContpaqActionPerformed(java.awt.event.ActionEvent evt) {                                          
@@ -13348,6 +13365,7 @@ public class Princip extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuMarcMod;
     private javax.swing.JPanel jP1;
     private javax.swing.JPanel jPanel1;

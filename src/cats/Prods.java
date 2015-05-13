@@ -2646,6 +2646,11 @@ public class Prods extends javax.swing.JFrame
                 jTMinFocusLost(evt);
             }
         });
+        jTMin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTMinActionPerformed(evt);
+            }
+        });
         jTMin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTMinKeyPressed(evt);
@@ -5598,7 +5603,7 @@ public class Prods extends javax.swing.JFrame
     private void jTMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTMinKeyTyped
         
         /*Comprueba que el carácter este en los límites permitidos para numeración*/
-        if(((evt.getKeyChar() < '0') || (evt.getKeyChar() > '9')) && (evt.getKeyChar() != '\b') && (evt.getKeyChar() != '.')) 
+        if(((evt.getKeyChar() < '0') || (evt.getKeyChar() > '9')) && (evt.getKeyChar() != '\b')) 
             evt.consume();
         
     }//GEN-LAST:event_jTMinKeyTyped
@@ -5608,7 +5613,7 @@ public class Prods extends javax.swing.JFrame
     private void jTMaxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTMaxKeyTyped
         
         /*Comprueba que el carácter este en los límites permitidos para numeración*/
-        if(((evt.getKeyChar() < '0') || (evt.getKeyChar() > '9')) && (evt.getKeyChar() != '\b') && (evt.getKeyChar() != '.')) 
+        if(((evt.getKeyChar() < '0') || (evt.getKeyChar() > '9')) && (evt.getKeyChar() != '\b')) 
             evt.consume();
         
     }//GEN-LAST:event_jTMaxKeyTyped
@@ -11067,6 +11072,10 @@ public class Prods extends javax.swing.JFrame
         vKeyPreEsc(evt);
         
     }//GEN-LAST:event_jBCompMarcModKeyPressed
+
+    private void jTMinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTMinActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTMinActionPerformed
   
     
     /*Función escalable para cuando se presiona una tecla en el módulo*/

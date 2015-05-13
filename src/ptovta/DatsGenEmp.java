@@ -1971,7 +1971,7 @@ public class DatsGenEmp extends javax.swing.JFrame
         /*Si la ruta original es diferente de la nueva entonces agrega la ruta de easy retail al final*/
         String sCarpAp = jTCarp.getText();
         if(sRutOri.compareTo(jTCarp.getText())!=0)                    
-            sCarpAp         += "\\Easy Retail";        
+            sCarpAp         += "\\Easy Retail®";        
                         
         /*Reemplaza los carácteres de barra invertida por 2 para que la base de datos los pueda guardar*/        
         sCarpAp = sCarpAp.replace("\\", "\\\\");                

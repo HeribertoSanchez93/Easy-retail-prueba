@@ -3864,7 +3864,7 @@ public class AOrd extends javax.swing.JFrame
                         return;
 
                     /*Si la carpeta de easy reatail no existe entonces creala*/
-                    sCarp += "\\Easy Retail";
+                    sCarp += "\\Easy Retail®";
                     if(!new File(sCarp).exists())
                         new File(sCarp).mkdir();
 

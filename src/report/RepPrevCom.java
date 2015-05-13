@@ -30,17 +30,17 @@ import net.sf.jasperreports.view.JasperViewer;
 
 
 /*Clase para controlar el reporteador de cotizaciones*/
-public class RepCots extends javax.swing.JFrame 
+public class RepPrevCom extends javax.swing.JFrame 
 {
+    
     /*Contiene el color original del botón*/
     private final java.awt.Color      colOri;
     
     
     
     
-    
     /*Constructor sin argumentos*/
-    public RepCots() 
+    public RepPrevCom() 
     {
         /*Inicaliza los componentes gráficos*/
         initComponents();
@@ -58,7 +58,7 @@ public class RepCots extends javax.swing.JFrame
         this.setLocationRelativeTo(null);                
         
         /*Establece el titulo de la ventana con El usuario, la fecha y hora*/                
-        this.setTitle("Reporte cotizaciones, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
+        this.setTitle("Reporte de Previo de Compras, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
         
         //Establece el ícono de la forma
         Star.vSetIconFram(this);
@@ -223,7 +223,7 @@ public class RepCots extends javax.swing.JFrame
         jP1.add(jTEmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, 250, 20));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Cliente:");
+        jLabel2.setText("Provedor:");
         jP1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 360, 170, 20));
 
         jDateDe.setEnabled(false);
@@ -1217,11 +1217,12 @@ public class RepCots extends javax.swing.JFrame
         Statement   st;
         ResultSet   rs;        
         String      sQ; 
-
-        /*Comprueba si el cliente existe*/        
+        
+        System.out.println(jTEmp.getText().replaceAll("\\d+.*", ""));
+        /*Comprueba si el proveedor existe*/        
         try
         {
-            sQ = "SELECT codemp FROM emps WHERE codemp = '" + jTEmp.getText().replace(jTSer.getText(), "") + "' AND ser = '" + jTSer.getText() + "'";                      
+            sQ = "SELECT prov FROM provs WHERE prov = '" + jTEmp.getText().replaceAll("[^\\d.]", "") + "' AND ser = '" + jTEmp.getText().replaceAll("\\d+.*", "") + "'";                      
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos*/
@@ -1235,7 +1236,7 @@ public class RepCots extends javax.swing.JFrame
                 jTEmp.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
                 
                 /*Mensajea*/
-                JOptionPane.showMessageDialog(null, "El cliente: " + jTSer.getText() + jTEmp.getText().replace(jTSer.getText(), "") + " no existe.", "No existe", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                JOptionPane.showMessageDialog(null, "El proveedor: " + jTSer.getText() + jTEmp.getText().replace(jTSer.getText(), "") + " no existe.", "No existe", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
 
                 /*Coloca el foco del teclado en el campo y regresa*/
                 jTEmp.grabFocus();             
@@ -1700,7 +1701,7 @@ public class RepCots extends javax.swing.JFrame
                     /*Crea los parámetros que se pasarán*/
                     Map <String,String> pa = new HashMap<>();             
                     pa.clear();
-                    pa.put("EMP",           sEmpFi);
+                    pa.put("EMP",            sEmpFi);
                     pa.put("LOG",           getClass().getResource(Star.sIconDef).toString());
                     pa.put("F_D",           sFDeFi);
                     pa.put("F_A",           sFAFi);
@@ -1726,7 +1727,7 @@ public class RepCots extends javax.swing.JFrame
                     JasperReport ja;
                     
                     /*Compila el reporte*/
-                    ja     = JasperCompileManager.compileReport(getClass().getResourceAsStream("/jasreport/rptCots.jrxml"));
+                    ja     = JasperCompileManager.compileReport(getClass().getResourceAsStream("/jasreport/rptPrevCom.jrxml"));
                     
                     /*Llenalo y muestralo*/
                     JasperPrint pr      = JasperFillManager.fillReport(ja, (Map)pa, con);
@@ -1807,7 +1808,7 @@ public class RepCots extends javax.swing.JFrame
     private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscActionPerformed
         
         /*Llama al otro formulario de búsqueda y pasale lo que el usuario escribió*/
-        Busc b = new Busc(this, jTEmp.getText(), 1, jTEmp, jTSer, jTSer, "", null);
+        Busc b = new Busc(this, jTEmp.getText(), 3, jTEmp, null, null, "", null);
         b.setVisible(true);
         
     }//GEN-LAST:event_jBBuscActionPerformed

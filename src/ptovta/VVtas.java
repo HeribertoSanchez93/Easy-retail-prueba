@@ -292,7 +292,7 @@ public class VVtas extends javax.swing.JFrame
         }
         
         /*Crea la consulta correcta dependiendo de lo que se tenga que bùscar entre tickets, remisiones y facturas*/        
-        sQ = "SELECT estacs.NOM, vtas.NOREFER, vtas.ESTAC, vtas.ESTAD, vtas.TIPDOC, vtas.VTA, vtas.NOSER, vtas.SUCU, vtas.NOCAJ, vtas.NOREFER, emps.NOM, vtas.TOT, vtas.FEMI FROM vtas LEFT OUTER JOIN estacs ON estacs.ESTAC = vtas.ESTAC LEFT OUTER JOIN emps ON CONCAT_WS('', emps.SER, emps.CODEMP ) = vtas.CODEMP WHERE 1=1 " + sVtaDi + " AND vtas.TIPDOC IN(''" + sFac + sRem + sTic + ") ORDER BY vtas.NOREFER DESC";                                                
+        sQ = "SELECT estacs.NOM, vtas.NOREFER, vtas.ESTAC, vtas.ESTAD, vtas.TIPDOC, vtas.VTA, vtas.NOSER, vtas.SUCU, vtas.NOCAJ, vtas.NOREFER, emps.NOM, vtas.TOT, vtas.TOTDESCU, vtas.FEMI FROM vtas LEFT OUTER JOIN estacs ON estacs.ESTAC = vtas.ESTAC LEFT OUTER JOIN emps ON CONCAT_WS('', emps.SER, emps.CODEMP ) = vtas.CODEMP WHERE 1=1 " + sVtaDi + " AND vtas.TIPDOC IN(''" + sFac + sRem + sTic + ") ORDER BY vtas.NOREFER DESC";                                                
         
         /*Crea el modelo para cargar cadenas en el*/
         DefaultTableModel te = (DefaultTableModel)jTab.getModel();                    
@@ -301,6 +301,7 @@ public class VVtas extends javax.swing.JFrame
         String      sFol;
         String      sNom;
         String      sTot;
+        String      sTotDescu;
         String      sFech;
         
         /*Trae todas las vtas  de la base de datos y cargalas en la tabla*/
@@ -314,7 +315,8 @@ public class VVtas extends javax.swing.JFrame
                 /*Obtiene los datos de la consulta*/
                 sFol                = rs.getString("vtas.NOREFER");                                
                 sNom                = rs.getString("emps.NOM");                                 
-                sTot                = rs.getString("vtas.TOT");                                 
+                sTot                = rs.getString("vtas.TOT");
+                sTotDescu           = rs.getString("vtas.TOTDESCU");
                 sFech               = rs.getString("vtas.FEMI");                                 
                 
                 /*Dale formato de moneda al total*/                
@@ -323,7 +325,7 @@ public class VVtas extends javax.swing.JFrame
                 sTot            = n.format(dCant);
                 
                 /*Agregalo a la tabla*/
-                Object nu[]     = {iContFi, rs.getString("vtas.TIPDOC"), sFol, rs.getString("vtas.NOSER"), rs.getString("vtas.ESTAD"), sNom, sTot, sFech, rs.getString("vtas.SUCU"), rs.getString("vtas.NOCAJ"), rs.getString("vtas.ESTAC"), rs.getString("estacs.NOM"), rs.getString("vtas.VTA")};
+                Object nu[]     = {iContFi, rs.getString("vtas.TIPDOC"), sFol, rs.getString("vtas.NOSER"), rs.getString("vtas.ESTAD"), sNom, sTot, sTotDescu, sFech, rs.getString("vtas.SUCU"), rs.getString("vtas.NOCAJ"), rs.getString("vtas.ESTAC"), rs.getString("estacs.NOM"), rs.getString("vtas.VTA")};
                 te.addRow(nu);
                 
                 /*Aumenta en uno el contador de filas el contador de filas en uno*/

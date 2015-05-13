@@ -4265,7 +4265,7 @@ public class IngrPrevCom extends javax.swing.JFrame
                     para.put("LOGE",       Star.class.getResource(Star.sIconDef).toString());
                     
                     /*Compila el reporte y muestralo maximizado*/
-                    JasperReport ja     = JasperCompileManager.compileReport(getClass().getResourceAsStream("/jasreport/rptVCom.jrxml"));
+                    JasperReport ja     = JasperCompileManager.compileReport(getClass().getResourceAsStream("/jasreport/rptPrevCom.jrxml"));
                     pr                  = JasperFillManager.fillReport(ja, (Map)para, con2);
                     JasperViewer v      = new JasperViewer(pr, false);
                     v.setExtendedState(JasperViewer.MAXIMIZED_BOTH);                    

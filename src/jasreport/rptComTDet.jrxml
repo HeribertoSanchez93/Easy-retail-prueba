@@ -22,7 +22,7 @@
 	<queryString>
 		<![CDATA[SELECT comprs.TIPCAM, codimpue, COUNT(comprs.id_id) AS conteo, cant, unid, descu, descad, codcomp, nodoc, prov, nomprov, fdoc, estado, sucu, estac, nocaj, comprs.TOT * comprs.TIPCAM AS tottip, comprs.TOT, prod, partcomprs.DESCRIP, alma, comprs.MON, cost, impo, devs FROM partcomprs LEFT OUTER JOIN comprs ON comprs.CODCOMP = partcomprs.CODCOM WHERE tip IN($P!{TIPDOC}) AND estado IN($P!{TIPESTAD})  AND CASE WHEN '$P!{PROV}' = '' THEN comprs.PROV = comprs.PROV ELSE comprs.PROV = '$P!{PROV}' END AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE DATE
 (comprs.FDOC) >= '$P!{F_D}' END AND CASE WHEN '$P!{F_A}' = '' THEN 1=1 ELSE DATE(comprs.FDOC) <= 
-'$P!{F_A}'  END  ORDER BY 
+'$P!{F_A}' END GROUP BY comprs.id_id ORDER BY 
 comprs.FDOC DESC]]>
 	</queryString>
 	<field name="TIPCAM" class="java.lang.Float">
@@ -524,7 +524,7 @@ comprs.FDOC DESC]]>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{conteo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="366" y="21" width="71" height="13" forecolor="#3333FF" uuid="5829af9d-d410-4a70-b573-a95e0bc02941"/>

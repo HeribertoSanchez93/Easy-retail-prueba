@@ -879,11 +879,11 @@ public class Cxp extends javax.swing.JFrame
 
             },
             new String [] {
-                "No.", "Folio", "Compra", "Serie", "Proveedor", "Nombre", "Importe", "Impuesto", "Total", "Total Abonos", "Pendiente Liquidar", "Fecha", "Fecha Vencimiento", "Sucursal", "Caja", "Usuario", "Estado", "Estado", "id"
+                "No.", "Folio", "Serie", "Compra", "Proveedor", "Subtotal", "Impuesto", "Total", "Total Abonos", "Pendiente Liquidar", "Fecha", "Fecha Vencimiento", "Sucursal", "Caja", "Usuario", "Nombre de Usuario", "Estado", "id"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false
+                false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
