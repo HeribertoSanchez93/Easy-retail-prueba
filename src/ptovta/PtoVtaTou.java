@@ -3421,10 +3421,9 @@ public class PtoVtaTou extends javax.swing.JFrame
             }/*Fin de if(sCodProd.compareTo(jTablePartidas.getValueAt(x, 1).toString())==0)*/
             
         }/*Fin de for(int x = 0; x < jTablePartidas.getRowCount(); x++)*/
-
+        
         /*Obtiene el precio que debe tener correctamente por las reglas de negocio*/
         String sPre     = Star.sPreCostVta(jTProd.getText().trim(), jTCli.getText().trim(), "1", "vtas", "pvta");                
-        
         /*Si hubo error entonces regresa*/
         if(sPre==null)
             return;                

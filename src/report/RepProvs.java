@@ -53,6 +53,8 @@ public class RepProvs extends javax.swing.JFrame
         /*Inicaliza los componentes gráficos*/
         initComponents();
         
+        Star.lCargGral=null;
+        
         /*Establece el botón por default*/
         this.getRootPane().setDefaultButton(jBAbr);
         

@@ -115,12 +115,16 @@ public class PlanGralCat extends javax.swing.JFrame
         
         /*Si viene de clasificaciones proveedores entonces*/
         if(this.sTipL.compareTo("clasprov")==0) 
-            sTipM   = "clasificaciones de proveedores";
-            
-        /*Establece el titulo de la ventana con El usuario, la fecha y hora*/                
-        this.setTitle("Catálogo de activo fijo, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
-        
+            sTipM   = "clasificación de proveedores";
+        if(this.sTipM.compareTo("concepto general")==0) 
+            this.setTitle("Catálogo general, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);
+        else if(this.sTipM.compareTo("concepto de giro")==0)
+            this.setTitle("Catálogo de giros, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);
+        else
+        /*Establece el titulo de la ventana con El usuario, la fecha y hora*/
+            this.setTitle("Catálogo de "+sTipM+", Usuario: <" + Login.sUsrG + "> " + Login.sFLog);
         /*Para que la tabla este ordenada al mostrarce y al dar clic en el nombre de la columna*/
+        
         TableRowSorter trs = new TableRowSorter<>((DefaultTableModel)jTab.getModel());
         jTab.setRowSorter(trs);
         trs.setSortsOnUpdates(true);

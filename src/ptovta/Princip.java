@@ -25,6 +25,7 @@ import cats.Clients;
 import cats.ClasCli;
 import cats.CatMsjs;
 import cats.Almas;
+import cats.AltPers;
 import java.awt.Cursor;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -44,6 +45,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -59,24 +61,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import report.RepCXC;
-import report.RepCXP;
-import report.RepCots;
-import report.RepEstac;
-import report.RepProds;
-import report.RepVends;
-import report.RepVtas;
-import report.RepConta;
-import report.RepEstadiCor;
-import report.RepBack;
-import report.RepLogCor;
-import report.RepComT;
-import report.RepOrd;
-import report.RepKard;
-import report.RepCosts;
-import report.RepResp;
-import report.RepPrevCom;
-
+import report.*;
 
 
 
@@ -104,6 +89,8 @@ public class Princip extends javax.swing.JFrame
     {                  
         /*Inicializa los componentes gráficos*/
         initComponents();
+        
+        Star.lCargGral=null;
             
         /*Crea un imageicon con la imàgen del banner*/        
         ImageIcon img       = new ImageIcon(new ImageIcon(getClass().getResource("/imgs/ban.png")).getImage());        
@@ -3988,7 +3975,7 @@ public class Princip extends javax.swing.JFrame
         jMMUtil.add(jMCalc);
 
         jMEasCon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/easyconve.png"))); // NOI18N
-        jMEasCon.setText("Easy convertirdor");
+        jMEasCon.setText("Easy convertidor");
         jMEasCon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMEasConActionPerformed(evt);
@@ -6334,7 +6321,6 @@ public class Princip extends javax.swing.JFrame
         }
         else
         {      
-            System.out.println("no deberia pasar");
             /*Si ya esta visible entonces traela al frente*/
             if(Star.gPtoVtaTou.isVisible())            
                 Star.gPtoVtaTou.toFront();
@@ -9166,7 +9152,7 @@ public class Princip extends javax.swing.JFrame
 
     
     /*Cuando se presiona el menú de importar catálogo de productos desde excel*/
-    private void jMInvenImpoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMInvenImpoActionPerformed
+    private void jMInvenImpoActionPerformed(java.awt.event.ActionEvent evt) {                                            
         
         /*Configura el file chooser para escogerl a ruta donde esta el archivo de excel*/
         JFileChooser fc = new JFileChooser();
@@ -9187,15 +9173,16 @@ public class Princip extends javax.swing.JFrame
         if(!sRut.endsWith("xlsx") && !sRut.endsWith("xls"))
         {
             /*Mensajea y regresa*/
-            JOptionPane.showMessageDialog(null, "No es un archivo de excel. Ingresa por favor un archivo .xlsx o .xls", "Archivo no Válido", JOptionPane.INFORMATION_MESSAGE, null); 
+            JOptionPane.showMessageDialog(null, "No es un archivo de excel. Ingresa por favor un archivo .xlsx o .xls", "Archivo no VÃ¡lido", JOptionPane.INFORMATION_MESSAGE, null); 
             return;
         }                
 
-        /*Llama a la forma que hará la importación*/
+        /*Llama a la forma que harÃ¡ la importaciÃ³n*/
         Loadin lo = new Loadin(sRut);
         lo.setVisible(true);                                                                
         
-    }//GEN-LAST:event_jMInvenImpoActionPerformed
+    }                                           
+
 
     
     /*Cuando se presiona el menú de exportar catálogo de productos a excel*/
@@ -9209,22 +9196,23 @@ public class Princip extends javax.swing.JFrame
         if(fc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
             return;
         
-        //Muestra el loading
-        Star.vMostLoading("");
+        /*Muestra la forma para simular que esta cargando el reporte*/
+        Star.lCargGral = new LoadinGral("Exportando de productos a excel...");
+        Star.lCargGral.setVisible(true);
 
         /*Realiza todo esto en un thread*/
-        (new Thread()
-        {
-            @Override
-            public void run()
-            {
+//        Thread th = new Thread()
+//        {
+//            @Override
+//            public void run()
+//            {
                 /*Lee la ruta seleccionada*/
                 String sRut = fc.getCurrentDirectory().getAbsolutePath();
 
                 /*Obtiene el nombre del archivo y concatenalo a la ruta*/
                 sRut += "\\" + fc.getSelectedFile().getName(); 
 
-                /*Agregale la extensión de excel*/
+                /*Agregale la extensiÃ³n de excel*/
                 sRut += ".xlsx";
                 /*Crea un documentovacio*/
                 XSSFWorkbook wkbok = new XSSFWorkbook();
@@ -9235,24 +9223,37 @@ public class Princip extends javax.swing.JFrame
                 /*Variable contadora*/        
                 int         iConta                   = 1;
                 
-                //Abre la base de datos nuevamente
-                Connection con = Star.conAbrBas(true, false);
+                /*Abre la base de datos*/
+                Connection  con;
+                try
+                {
+                    con = DriverManager.getConnection("jdbc:mysql://" + Star.sInstancia + ":" + Star.sPort + "/" + Star.sBD + "?user=" + Star.sUsuario + "&password=" + Star.sContrasenia );
+                }
+                catch(SQLException | HeadlessException e)
+                {
+                    /*Escone el loading*/
+                    if(Star.lCargGral!=null)                        
+                        Star.lCargGral.setVisible(false);
 
-                //Si hubo error entonces regresa
-                if(con==null)
-                    return;                                    
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Mensajea y regresa*/
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));
+                    return;
+                }
 
                 /*Pon los encabezados en el archivo de excel*/
                 Map<String, Object[]> data = new TreeMap<>();
-                data.put(Integer.toString(iConta), new Object[] {"COD PRODUCTO (1)", "COD PROD OPCIONAL 1 (2)", "COD PROD OPCIONAL 2 (3)", "COD MEDIDA (4)", "MEDIDA (5)", "DESCRIPCION LARGA (6)", "DESCRIPCION CORTA (7)", "COD LINEA Y DESCRIPCIÓN (8)", "COD MARCA Y DESCRIPCIÓN (9)", "COD FABRICANTE Y DESCRIPCIÓN (10)", "COD COLOR Y DESCRIPCIÓN(11)", "COD PESO Y DESCRIPCIÓN (12)", "PESO (13)", "PRECIO LISTA 1 (14)", "PRECIO LISTA 2 (15)", "PRECIO LISTA 3 (16)", "PRECIO LISTA 4 (17)", "PRECIO LISTA 5 (18)", "PRECIO LISTA 6 (19)", "PRECIO LISTA 7 (20)", "PRECIO LISTA 8 (21)", "PRECIO LISTA 9 (22)", "PRECIO LISTA 10 (23)", "COSTO (24)", "COSTO RECOGER (25)", "EXISTENCIA (26)", "COD UNIDAD Y DESCRIPCIÓN (27)", "COD ALMACEN Y DESCRIPCIÓN (28)", "COD ANAQUEL Y DESCRIPCIÓN (29)", "COD LUGAR Y DESCRIPCIÓN (30)", "ANOTACIONES(31)", "INFORMACION (32)", "MINIMO (33)", "MAXIMO (34)", "COMPUESTO (35)", "IMPUESTO Y VALOR(36)", "INVENTARIABLE (37)", "VENDER ABAJO DEL COSTO (38)", "ES PARA VENTA(39)", "ES SERVICIO(40)", "TIPO(41)"});
+                data.put(Integer.toString(iConta), new Object[] {"COD PRODUCTO (1)", "COD PROD OPCIONAL 1 (2)", "COD PROD OPCIONAL 2 (3)", "COD MEDIDA (4)", "MEDIDA (5)", "DESCRIPCION LARGA (6)", "DESCRIPCION CORTA (7)", "COD LINEA Y DESCRIPCIÃ“N (8)", "COD MARCA Y DESCRIPCIÃ“N (9)", "COD FABRICANTE Y DESCRIPCIÃ“N (10)", "COD COLOR Y DESCRIPCIÃ“N(11)", "COD PESO Y DESCRIPCIÃ“N (12)", "PESO (13)", "PRECIO LISTA 1 (14)", "PRECIO LISTA 2 (15)", "PRECIO LISTA 3 (16)", "PRECIO LISTA 4 (17)", "PRECIO LISTA 5 (18)", "PRECIO LISTA 6 (19)", "PRECIO LISTA 7 (20)", "PRECIO LISTA 8 (21)", "PRECIO LISTA 9 (22)", "PRECIO LISTA 10 (23)", "COSTO (24)", "COSTO RECOGER (25)", "EXISTENCIA (26)", "COD UNIDAD Y DESCRIPCIÃ“N (27)", "COD ALMACEN Y DESCRIPCIÃ“N (28)", "COD ANAQUEL Y DESCRIPCIÃ“N (29)", "COD LUGAR Y DESCRIPCIÃ“N (30)", "ANOTACIONES(31)", "INFORMACION (32)", "MINIMO (33)", "MAXIMO (34)", "COMPUESTO (35)", "IMPUESTO Y VALOR(36)", "INVENTARIABLE (37)", "VENDER ABAJO DEL COSTO (38)", "ES PARA VENTA(39)", "ES SERVICIO(40)", "TIPO(41)"});
 
                 /*Aumenta en uno el contador de filas del libro*/
                 ++iConta;
 
-                //Declara variables de la base de datos
+                /*Declara variables de la base de datos*/
                 Statement   st;
                 ResultSet   rs;                
-                String      sQ;
+                String      sQ              = "";
 
                 /*Trae todos los registros de los productos*/
                 try
@@ -9270,21 +9271,39 @@ public class Princip extends javax.swing.JFrame
                         ++iConta;
                     }
                 }
-                catch(SQLException expnSQL)
+                catch(SQLException e)
                 {
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                    return;                                                                                       
+                    /*Escone el loading*/
+                    if(Star.lCargGral!=null)                        
+                        Star.lCargGral.setVisible(false);
+
+                    //Cierra la base de datos
+                    if(Star.iCierrBas(con)==-1)                  
+                        return;
+
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Mensajea y regresa*/
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));
+                    return;
                 }
 
                 //Cierra la base de datos
                 if(Star.iCierrBas(con)==-1)                  
-                    return;                                    
+                {
+                    /*Escone el loading*/
+                    if(Star.lCargGral!=null)                        
+                        Star.lCargGral.setVisible(false);
+                    
+                    //Regresa
+                    return;
+                }                    
 
                 /*Agrega el terminador de fichero*/
                 data.put(Integer.toString(iConta), new Object[] {"FINARCHIVO"});
 
-                /*Itera sobre la información y escribela en la hoja*/
+                /*Itera sobre la informaciÃ³n y escribela en la hoja*/
                 Set<String> keyset = data.keySet();
                 int rownum = 0;
                 for (String key : keyset)
@@ -9311,22 +9330,30 @@ public class Princip extends javax.swing.JFrame
                     wkbok.write(out);
                     out.close();
                 }
-                catch(IOException expnIO)
+                catch(IOException e)
                 {
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace(), con);
-                    return;                                                                                       
+                    /*Escone el loading*/
+                    if(Star.lCargGral!=null)                        
+                        Star.lCargGral.setVisible(false);
+
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Mensajea y regresa*/
+                    JOptionPane.showMessageDialog(null, "Error por " + e.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));
+                    return;
                 }
 
-                //Esconde la forma de loading
-                Star.vOcultLoadin();
-                
-                /*Mensaje de éxito*/
-                JOptionPane.showMessageDialog(null, "Archivo exportado en \"" + sRut + "\" con éxito.", "Exportar", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                /*Escone el loading*/
+                if(Star.lCargGral!=null)                        
+                    Star.lCargGral.setVisible(false);
+
+                /*Mensaje de Ã©xito*/
+                JOptionPane.showMessageDialog(null, "Archivo exportado en \"" + sRut + "\" con Ã©xito.", "Exportar", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
 
                 /*Preguntar al usuario si quiere abrir el archivo*/
                 Object[] op     = {"Si","No"};
-                int iRes        = JOptionPane.showOptionDialog(null, "¿Quieres abrir el archivo?", "Abrir archivo", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
+                int iRes        = JOptionPane.showOptionDialog(null, "Â¿Quieres abrir el archivo?", "Abrir archivo", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
                 if(iRes==JOptionPane.NO_OPTION || iRes==JOptionPane.CLOSED_OPTION)
                     return;                       
 
@@ -9335,16 +9362,17 @@ public class Princip extends javax.swing.JFrame
                 {
                     Desktop.getDesktop().open(new File(sRut));
                 } 
-                catch(IOException expnIO) 
+                catch(IOException e) 
                 {
-                    //Procesa el error
-                    Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace(), con);                                                                      
+                    /*Agrega en el log y mensajea*/
+                    Login.vLog(e.getMessage());            
+                    JOptionPane.showMessageDialog(null, "No se puede abrir archivo por " + e.getMessage(), "Abrir Archivo", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
                 }
 
-            }/*Fin de public void run()*/
-            
-        }).start();
-        
+//            }/*Fin de public void run()*/
+//        };
+//        th.start();                               
+                
     }//GEN-LAST:event_jMInvenExporActionPerformed
 
     
@@ -9366,34 +9394,51 @@ public class Princip extends javax.swing.JFrame
         if(!sRut.endsWith("xlsx") && !sRut.endsWith("xls"))
         {
             /*Mensajea y regresa*/
-            JOptionPane.showMessageDialog(null, "No es un archivo de excel. Ingresa por favor un archivo .xlsx o .xls", "Archivo no Válido", JOptionPane.INFORMATION_MESSAGE, null); 
+            JOptionPane.showMessageDialog(null, "No es un archivo de excel. Ingresa por favor un archivo .xlsx o .xls", "Archivo no VÃ¡lido", JOptionPane.INFORMATION_MESSAGE, null); 
             return;
         }                
 
         /*Realiza todo en un thread*/
-        (new Thread()
+        Thread th = new Thread()
         {
             @Override
             public void run()
             {                
-                //Abre la base de datos nuevamente
-                Connection con = Star.conAbrBas(true, false);
+                /*Abre la base de datos*/                                        
+                Connection      con;
+                try 
+                {
+                    con = DriverManager.getConnection("jdbc:mysql://" + Star.sInstancia + ":" + Star.sPort + "/" + Star.sBD + "?user=" + Star.sUsuario + "&password=" + Star.sContrasenia );       
+                    con.setAutoCommit(false);
+                } 
+                catch(SQLException | HeadlessException e) 
+                {   
+                    /*Esconde el loading*/
+                    if(Star.lCargGral!=null)
+                        Star.lCargGral.setVisible(false);
 
-                //Si hubo error entonces regresa
-                if(con==null)
-                    return;                                    
-                
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Mensajea y regresa*/    
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, null); 
+                    return;
+                }
+
                 /*Crea la instancia hacia el archivo a importar*/
                 FileInputStream file;
                 try
                 {
                     file    =  new FileInputStream(new File(sRut));
                 }
-                catch(IOException expnIO)
+                catch(Exception e)
                 {
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace());
-                    return;                                                                                       
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Mensajea y regresa*/    
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE, null); 
+                    return;
                 }                    
 
                 /*Instancia el objeto de excel*/
@@ -9402,23 +9447,45 @@ public class Princip extends javax.swing.JFrame
                 {
                     wkbok   = new XSSFWorkbook(file);
                 }
-                catch(IOException expnIO)
+                catch(Exception e)
                 {
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace());
-                    return;                                                                   
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Mensajea y regresa*/    
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE, null); 
+                    return;
                 }                                        
 
                 /*Obtiene la primera hoja del libro*/
                 XSSFSheet sheet         = wkbok.getSheetAt(0);
-                               
-                //Inicia la transacción
-                if(Star.iIniTransCon(con)==-1)
-                    return;               
+                                                    
+                /*Inicia la transacciÃ³n*/
+                try           
+                {
+                    con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+                }
+                catch(SQLException ex)
+                {
+                    /*Esconde la forma de loading*/
+                    if(Star.lCargGral!=null)
+                        Star.lCargGral.setVisible(false);
 
-                //Declara variables de la base de datos
+                    //Cierra la base de datos
+                    if(Star.iCierrBas(con)==-1)                  
+                        return;
+                    
+                    /*Agrega en el log*/
+                    Login.vLog(ex.getMessage());
+
+                    /*Mensajea y regresa*/   
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + ex.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, null);      
+                    return;
+                }
+
+                /*Declara variables de la base de datos*/
                 Statement       st;                                        
-                String          sQ; 
+                String          sQ              = ""; 
                 ResultSet       rs;                
                 
                 /*Borra todos los registros de las series*/
@@ -9428,11 +9495,19 @@ public class Princip extends javax.swing.JFrame
                     st = con.createStatement();
                     st.executeUpdate(sQ);
                  }
-                 catch(SQLException expnSQL) 
+                 catch(SQLException | HeadlessException e) 
                  { 
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                    return;                                                                                       
+                    /*Esconde el loading*/
+                    if(Star.lCargGral!=null)
+                        Star.lCargGral.setVisible(false);
+
+                    //Cierra la base de datos
+                    if(Star.iCierrBas(con)==-1)                  
+                        return;
+                    
+                    /*Agrega en el log y mensajea*/
+                    Login.vLog(e.getMessage());                        
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));             
                 }
             
                 /*Contador de fila*/
@@ -9462,7 +9537,7 @@ public class Princip extends javax.swing.JFrame
                     /*Inicializa la consulta*/
                     String sQInsert    = "INSERT INTO serieprod(prod, ser, comen, exist, alma, sucu, nocaj, estac) VALUES('";                    
                 
-                    /*Contiene el código del producto y la serie*/
+                    /*Contiene el cÃ³digo del producto y la serie*/
                     String sProd = "", sSer  = "";
                     
                     /*Recorre todas las celdas de la fila*/
@@ -9486,25 +9561,45 @@ public class Princip extends javax.swing.JFrame
                                     /*Si es el fin del archivo entonces*/
                                     if(sIn.compareTo("FINARCHIVO")==0)
                                     {
-                                        //Esconde la forma de loading
-                                        Star.vOcultLoadin();
-                                                                                
-                                        //Termina la transacción
-                                        if(Star.iTermTransCon(con)==-1)
+                                        /*Termina la transacciÃ³n*/
+                                        try           
+                                        {
+                                            con.commit();
+                                        }
+                                        catch(SQLException ex)
+                                        {                                            
+                                            /*Esconde la forma de loading*/
+                                            if(Star.lCargGral!=null)
+                                                Star.lCargGral.setVisible(false);
+
+                                            //Cierra la base de datos
+                                            if(Star.iCierrBas(con)==-1)                  
+                                                return;
+                                            
+                                            /*Agrega en el log*/
+                                            Login.vLog(ex.getMessage());
+
+                                            /*Mensajea y regresa*/   
+                                            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + ex.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, null);      
                                             return;
+                                        }
+
+                                        /*Esconde el loading*/
+                                        if(Star.lCargGral!=null)
+                                            Star.lCargGral.setVisible(false);
                                         
                                         //Cierra la base de datos
                                         if(Star.iCierrBas(con)==-1)                  
                                             return;
                                         
                                         /*Mensajea y regresa*/
-                                        JOptionPane.showMessageDialog(null, "Exito en la importación de " + (iConta - 1) + " series.", "Series", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                                                                     
+                                        JOptionPane.showMessageDialog(null, "Exito en la importaciÃ³n de " + (iConta - 1) + " series.", "Series", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                                                                     
                                         return;
                                     }
                                     /*Else no es el final del archivo entonces*/
                                     else
                                     {
-                                        /*Guarda el código del producto y completa la consulta*/
+                                        /*Guarda el cÃ³digo del producto y completa la consulta*/
                                         sProd       = cell.getStringCellValue();
                                         sQInsert   += cell.getStringCellValue() + "','";
                                     }
@@ -9517,11 +9612,11 @@ public class Princip extends javax.swing.JFrame
                                     sSer       = cell.getStringCellValue();
                                     sQInsert   += cell.getStringCellValue() + "','";
                                 }
-                                /*Else if: Almacén*/
+                                /*Else if: AlmacÃ©n*/
                                 else if(iContCell==5)
                                 {   
-                                    /*Checa si el código del almacén ya existe en la base de datos*/        
-                                    int iRes    = Star.iExistAlma(con, cell.getStringCellValue().trim());
+                                    /*Checa si el cÃ³digo del almacÃ©n ya existe en la base de datos*/        
+                                    int iRes    = Star.iExiste(con, cell.getStringCellValue().trim(), "almas", "alma");
 
                                     //Si hubo error entonces
                                     if(iRes==-1)
@@ -9543,13 +9638,13 @@ public class Princip extends javax.swing.JFrame
                                 
                                 break;
 
-                                /*En caso de que sea de tipo número entonces*/
+                                /*En caso de que sea de tipo nÃºmero entonces*/
                                 case Cell.CELL_TYPE_NUMERIC:
                                     
                                     /*Si va en la celda de la existencia entonces*/
                                     if(iContCell==4)
                                     {
-                                        /*Quita la última coma y completa la consulta*/
+                                        /*Quita la Ãºltima coma y completa la consulta*/
                                         sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
                                         sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                    
                                     }
@@ -9569,7 +9664,7 @@ public class Princip extends javax.swing.JFrame
                     /*Resetea el contador de celdas*/
                     iContCell   = 1;
                             
-                    /*Quita los últimos carácteres inválidos*/
+                    /*Quita los Ãºltimos carÃ¡cteres invÃ¡lidos*/
                     sQInsert        = sQInsert.substring(0, sQInsert.length() - 2);
 
                     /*Agrega el terminador de la consulta*/
@@ -9585,11 +9680,18 @@ public class Princip extends javax.swing.JFrame
                             if(rs.next())
                                 continue;
                         }
-                        catch(SQLException expnSQL)
+                        catch(SQLException e)
                         {
-                            //Procesa el error y regresa
-                            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                            return;                                                                                               
+                            //Cierra la base de datos y regresa
+                            if(Star.iCierrBas(con)==-1)                                
+                                return;
+
+                            /*Agrega en el log*/
+                            Login.vLog(e.getMessage());
+
+                            /*Mensajea y regresa*/
+                            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, null); 
+                            return;
                         }
 
                     /*Inserta en la base de datos el registro*/
@@ -9598,21 +9700,36 @@ public class Princip extends javax.swing.JFrame
                         st = con.createStatement();                        
                         st.executeUpdate(sQInsert);
                     }
-                    catch(SQLException expnSQL)
+                    catch(SQLException | HeadlessException e)
                     {
-                        //Procesa el error y regresa
-                        Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                        return;                                                                                           
+                        /*Esconde el loading*/
+                        if(Star.lCargGral!=null)
+                            Star.lCargGral.setVisible(false);
+
+                        //Cierra la base de datos y regresa
+                        if(Star.iCierrBas(con)==-1)                                
+                            return;
+                        
+                        /*Agrega en el log*/
+                        Login.vLog(e.getMessage());
+
+                        /*Llama al recolector de basura y mensajea*/
+                        System.gc();                       
+                        
+                        /*Mensajea y regresa*/
+                        JOptionPane.showMessageDialog(null, "Error en fila: "  + iConta + " celda: " + iContCell + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));                    
+                        return;
                     }                                                                        
                     
                 }/*Fin de while(rowIt.hasNext())*/                                    
                 
             }/*Fin de public void run()*/
-            
-        }).start();
+        };
+        th.start();                                
                 
-        //Muestra el loading
-        Star.vMostLoading("");
+        /*Muestra la forma para simular que estÃ¡n importando las series*/
+        Star.lCargGral = new LoadinGral("Importando Series...");
+        Star.lCargGral.setVisible(true);
 
     }//GEN-LAST:event_jMInvenImpoSerActionPerformed
                                         
@@ -9809,8 +9926,7 @@ public class Princip extends javax.swing.JFrame
     
     /*Cuando se presiona el menú de importar catálogo de clientes desde excel*/
     private void jMImpCliensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMImpCliensActionPerformed
-        
-        /*Configura el file chooser para escogerl a ruta donde esta el archivo de excel*/
+     /*Configura el file chooser para escoger a ruta donde esta el archivo de excel*/
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Archivo de excel");
 
@@ -9825,335 +9941,509 @@ public class Princip extends javax.swing.JFrame
         if(!sRut.endsWith("xlsx") && !sRut.endsWith("xls"))
         {
             /*Mensajea y regresa*/
-            JOptionPane.showMessageDialog(null, "No es un archivo de excel. Ingresa por favor un archivo .xlsx o .xls", "Archivo no Válido", JOptionPane.INFORMATION_MESSAGE, null); 
+            JOptionPane.showMessageDialog(null, "No es un archivo de excel. Ingresa por favor un archivo .xlsx o .xls", "Archivo no VÃ¡lido", JOptionPane.INFORMATION_MESSAGE, null); 
             return;
         }                
-
-        /*Realiza todo en un thread*/
-        (new Thread()
+                       
+        /*Muestra la forma para simular que estÃ¡n importando los clientes*/
+        Star.lCargGral = new LoadinGral("Importando Clientes desde Excel...");
+        Star.lCargGral.setVisible(true);
+        Connection      con;
+        try 
         {
-            @Override
-            public void run()
-            {               
-                //Abre la base de datos nuevamente
-                Connection con = Star.conAbrBas(false, false);
+            con = DriverManager.getConnection("jdbc:mysql://" + Star.sInstancia + ":" + Star.sPort + "/" + Star.sBD + "?useServerPrepStmts=true&user=" + Star.sUsuario + "&password=" + Star.sContrasenia);       
+        } 
+        catch(SQLException | HeadlessException e) 
+        {   
+            /*Esconde el loading*/
+            if(Star.lCargGral!=null)
+                Star.lCargGral.setVisible(false);
+
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Mensajea y regresa*/    
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, null); 
+            return;
+        }
+
+        /*Crea la instancia hacia el archivo a importar*/
+        FileInputStream file;
+        try
+        {
+            file    =  new FileInputStream(new File(sRut));
+        }
+        catch(Exception e)
+        {
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Mensajea y regresa*/    
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE, null); 
+            return;
+        }                    
+
+        /*Instancia el objeto de excel*/
+        XSSFWorkbook wkbok;
+        try
+        {
+            wkbok   = new XSSFWorkbook(file);
+        }
+        catch(Exception e)
+        {
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Mensajea y regresa*/    
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE, null); 
+            return;
+        }                                        
+
+        /*Obtiene la primera hoja del libro*/
+        XSSFSheet sheet         = wkbok.getSheetAt(0);
+
+
+        /*Declara variables de la base de datos*/
+        PreparedStatement pst;
+        Statement        st;                                        
+        String          sQ              = ""; 
+//                ResultSet       rs;                
+
+        /*Borra todos los clientes de la base de datos*/
+        try 
+        {            
+            //borra todos los registros, y reinica el contador autoincrementable (Truncate solo es aplicable a tablas sin llaves foreaneas)
+            sQ = "Truncate table emps";                    
+            st = con.createStatement();
+            st.executeUpdate(sQ);
+         }
+         catch(SQLException | HeadlessException e) 
+         {                                
+
+
+            /*Esconde el loading*/
+            if(Star.lCargGral!=null)
+                Star.lCargGral.setVisible(false);
+
+            //Cierra la base de datos y regresa
+            if(Star.iCierrBas(con)==-1)                                
+                return;
+
+            //Agrega en el log
+            Login.vLog(e.getMessage());                        
+
+            //Mensajea y regresa
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));             
+            return;
+        }
+
+        /*Contador de fila*/
+        int iConta = 0;               
+
+        /*Inicializa el contador de la celda por cada fila*/
+        int iContCell = 1;
+
+        /*Recorre todas las hojas de excel*/
+        Iterator<Row> rowIt     = sheet.iterator();
+        while(rowIt.hasNext())
+        {                    
+            cliente:{
+                /*Obtiene la fila*/
+                Row row = rowIt.next();
+
+                 /*Si el contador es igual a uno entonces continua ya que no quiero leer la primera fila de encabezados y que continue*/
+                if(iConta < 1)
+                {
+                    ++iConta;
+                    continue;
+                }
+
+                /*Variable para leer las celdas*/
+                String sIn;                   
+
+                /*Inicializa la consulta*/
+                //String sQInsert     = "INSERT INTO emps(codemp, ser, codclas, lada, tel, exten, cel, telper1, telper2, nom, calle, col, cp, ciu, estad, pai, revis, pags, rfc, descu, co1, co2, co3, pagweb1, pagweb2, contac, puest, contact2, puest2, observ, noint, noext, diacred, limtcred, metpag, cta, pers, bloq, list, zon, giro, sucu, nocaj, estac) VALUES('";                    
+                String sQInsert = "INSERT INTO emps(codemp, ser, pers, nom, list, calle, col, noext, cp, ciu, estad, pai, rfc, co1, codclas,  lada, tel, exten, cel, telper1, telper2, noint, descu, diacred, limtcred, curp, co2, co3, pagweb1, pagweb2, contac, puest, contact2, puest2, observ, metpag, cta, ctaconta, banc, clavbanc, revis, pags, cumple, giro, zon, deposit, ctapred, otramon, otramonc, bloq, bloqlimcred, estac, sucu, nocaj)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+                //Contiene los valores que van en el query dentro de VALUES
+                java.util.ArrayList<String> valores = new java.util.ArrayList<>();
+
+                //Uso la variable para hacer entero el list
+                Double d;
+
+                //Uso para cadena de rfc en el matches
+                String rfc = "";
+                
+                //Uso para tomar el tipo de celda
+                int tipo;
+                
+                /*Recorre todas las celdas de la fila*/
+                for(int i=1; i <= 51; i++) 
+                {
+                    /*Obtiene el objeto de la celda*/      
+                    Cell cell = row.getCell(i, Row.CREATE_NULL_AS_BLANK);
+                    if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
+                        sIn = cell.getNumericCellValue()+"";  
+                    else
+                        sIn = cell.getStringCellValue();
+                    
+                    tipo = cell.getCellType();
+
+                    //Determina la celda en la que estamos
+                    switch(iContCell)
+                    {
+                        case 1://codigo
+                            sIn = Star.checaLongitud(30, sIn);
+                            if(tipo == 0 && !sIn.isEmpty())
+                                sIn = quitaDoble(sIn);
+                             if( !sIn.matches("\\d+")) 
+                                 valores.add("");
+                             else{
+                                 d = cell.getNumericCellValue();
+                                 valores.add(d.intValue()+""); 
+                             }
+                            break;
+                        case 2:{//serie
+                            sIn = Star.checaLongitud(30, sIn);
+                            if(! sIn.matches("[a-zA-Z\\d]+,.+")){
+                                if(valores.get(0).isEmpty())
+                                    break cliente;
+                                else
+                                    valores.add("");
+                            }
+                            else{
+                                /*Si la serie no existe entonces creala*/
+                                vCreSerCli(con, sIn);
+
+                                /*Si hubo error entonces resetea la bandera de error y regresa*/
+                                if(bErr)
+                                {
+                                    bErr    = false;
+                                    return;
+                                }
+                                /*Tokniza la cadena para obtener la serie*/
+                                java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
+                                valores.add(stk.nextToken());
+                            }
+                            }break;
+                        case 3: case 48: case 49: case 50: case 51://Persona moral
+                            //le quita los decimales a los numeros que pudiran haber escrito
+                            if(tipo == 0 && !sIn.isEmpty())
+                                sIn = quitaDoble(sIn);
+                             if (!sIn.matches("0|1")){
+                                 //pongo los valores default que tienen en la tabla de BD, correspondientes
+                                 if(iContCell == 48 || iContCell == 49)
+                                    valores.add("1");
+                                 else
+                                     valores.add("0");
+                             }
+                             else{
+                                 valores.add(sIn);
+                             }
+                            break;
+                        case 4: case 6: case 7: case 10: case 11: case 12: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 39://razon social,calle, colonia, ciudad, estado, pais, pagweb1, pagweb2, contac1-2,puesto1-2, observaciones, metPago
+                            if(sIn.isEmpty()){
+                                if( iContCell <= 12)
+                                    break cliente;
+                                else
+                                    valores.add("");
+                            }
+                            else{
+                                if(iContCell == 36 )
+                                    valores.add(Star.checaLongitud(45, sIn));
+                                else if(iContCell == 39 )
+                                    valores.add(Star.checaLongitud(30, sIn));
+                                else
+                                    valores.add(Star.checaLongitud(255, sIn));
+                            }
+                            break;
+                        case 5://lista de precios
+                            //le quita los decimales a los numeros que pudiran haber escrito
+                            if(tipo == 0 && !sIn.isEmpty())
+                                sIn = quitaDoble(sIn);
+                            
+                             if( !sIn.matches("[1-9]|10")) 
+                                 break cliente;
+                             else{
+                                 valores.add(sIn); 
+                             }
+                                
+                            break;
+                        case 8: case 22://no ext
+                            if(tipo == 0 && !sIn.isEmpty())
+                                sIn = quitaDoble(sIn);
+                             if( !sIn.matches("[\\da-zA-Z\\-]+")){
+                                 if(iContCell == 8)
+                                    break cliente;
+                                 else
+                                     valores.add("");
+                             }
+                             else
+                                valores.add(sIn); 
+                            break;
+                        case 9://CP
+                            //le quita los decimales a los numeros que pudiran haber escrito
+                            if(tipo == 0 && !sIn.isEmpty())
+                                sIn = quitaDoble(sIn);
+                             if( !sIn.matches("\\d{5}")) 
+                                 break cliente;
+                             else{
+                                 valores.add(sIn);
+                             }
+                                 
+                            break;
+                        case 13://RFC
+                            sIn = ( valores.get(2).equals("0") )? Star.checaLongitud(13, sIn): Star.checaLongitud(12, sIn);
+                            rfc = ( valores.get(2).equals("0") )? "[a-zA-Z]{4}\\d{6}.{3}":  "[a-zA-Z]{3}\\d{6}.{3}";
+                            
+                            if( !sIn.matches(rfc))
+                                break cliente;
+                            else{//Si no existe el rfc, lo agrega
+                                if( Star.iExisteRFC(con, sIn, "emps") == 0)
+                                    valores.add(sIn);
+                                else//si ya existe o hay algun error se brinca al siguiente cliente
+                                    break cliente;
+                            }
+                             break;
+                        case 14: case 27: case 28://email
+                            sIn = Star.checaLongitud(100, sIn);
+                            if( !sIn.matches(".+@.+")){
+                                if(iContCell == 14)//si es el correo obligatorio y no cumple se brinca al siguiente cliente
+                                    break cliente;
+                                else
+                                    valores.add("");
+                            }
+                            else
+                                valores.add(sIn);
+                            break;
+                        case 15: {// clasificacion
+                                sIn = Star.checaLongitud(30, sIn);
+                                if(!sIn.matches("[a-zA-Z\\d\\-]+,.+"))
+                                        valores.add("");
+                                else{
+                                    /*Si la clasificaciÃ³n no existe entonces creala*/
+                                    vCreClas(con, sIn);
+
+                                    /*Si hubo error entonces resetea la bandera de error y regresa*/
+                                    if(bErr)
+                                    {
+                                        bErr    = false;
+                                        return;
+                                    }
+
+                                    /*Tokniza la cadena para obtener el cÃ³digo de la clasificaciÃ³n*/
+                                    java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
+                                    valores.add(stk.nextToken());   
+                                }
+                        }break;
+                        case 16: case 17: case 18: case 19: case 20: case 21://lada, telefono, extension, cel, telper1, telper2
+                            switch(iContCell){
+                                case 16: sIn = Star.checaLongitud(10, sIn); break;   
+                                case 18: sIn = Star.checaLongitud(20, sIn); break;
+                                default: sIn = Star.checaLongitud(255, sIn);
+                            }
+                            
+                            //le quita los decimales a los numeros que pudiran haber escrito
+                            if(tipo == 0 && !sIn.isEmpty())
+                                sIn = quitaDoble(sIn);
+                            if(!sIn.matches("\\d+\\-?\\d+"))
+                                valores.add("");
+                            else
+                                valores.add(sIn);
+                            break;
+                        case 23: case 25: case 46://descuento, limite credito, dep garantia
+                            //esta validacion es porque la expresion regular si acepta vacios
+                            if(sIn.isEmpty())
+                                valores.add("0");
+                            else{
+                                if(!sIn.matches("(\\d+)?(\\.\\d{1,2})?"))
+                                    valores.add("0");//le pongo el valor default
+                                else{
+                                    valores.add(sIn);
+                                }
+                            }
+                            
+                            break;
+                         case 24: case 37: case 38: case 40: case 41: case 42: case 47://dias credito, cuenta bancaria, cuenta contable
+                             switch(iContCell){
+                                 case 24: sIn = Star.checaLongitud(21, sIn); break;
+                                 case 37: sIn = Star.checaLongitud(45, sIn); break;
+                                 case 38: sIn = Star.checaLongitud(30, sIn); break;
+                                 case 40: sIn = Star.checaLongitud(255, sIn); break;
+                                 case 41: case 42: case 47: sIn = Star.checaLongitud(100, sIn); break;
+                             }
+                             //le quita los decimales a los numeros que pudiran haber escrito
+                            if(tipo == 0 && !sIn.isEmpty())
+                                sIn = quitaDoble(sIn);
+                             if(!sIn.matches("\\d+")){
+                                 if(iContCell == 37)
+                                     valores.add("0000");
+                                 else
+                                     valores.add("");
+                             }
+                            else
+                                valores.add(sIn);
+                            
+                            break;
+                        case 26:
+                            sIn = Star.checaLongitud(50, sIn);
+                            if(!sIn.matches("[a-zA-Z\\d]+"))
+                                valores.add("");
+                            else{
+                                valores.add(sIn);
+                            }
+                            break;
+                        case 43://cumpleaÃ±os
+                            sIn = Star.checaLongitud(30, sIn);
+                            if(!sIn.matches("(\\d|1\\d|2\\d|3[0-1])/((0[1-9])|(1[012]))/\\d{4}"))
+                                valores.add("");
+                            else{
+                                valores.add(sIn);
+                            }
+                            break;
+                        case 44:{ 
+                            sIn = Star.checaLongitud(30, sIn);
+                            if(!sIn.matches("[a-zA-Z\\d]+"))
+                                valores.add("");
+                            else{
+                                /*Si el giro no existe entonces creala*/
+                                vCreGir(con, sIn);
+
+                                /*Si hubo error entonces resetea la bandera de error y regresa*/
+                                if(bErr)
+                                {
+                                    bErr    = false;
+                                    return;
+                                }
+
+                                /*Tokniza la cadena para obtener el cÃ³digo de la zona*/
+                                java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
+
+                                /*Guarda el giro y completa la consulta*/ 
+                                valores.add(stk.nextToken());
+                            }
+                        }break;
+                        case 45:
+                            sIn = Star.checaLongitud(30, sIn);
+                            if(!sIn.matches("[a-zA-Z\\d]+"))
+                                valores.add("");
+                            else{
+                            /*Si la zona no existe entonces creala*/
+                                vCreZon(con, sIn);
+
+                                /*Si hubo error entonces resetea la bandera de error y regresa*/
+                                if(bErr)
+                                {
+                                    bErr    = false;
+                                    return;
+                                }
+
+                                /*Tokniza la cadena para obtener el cÃ³digo de la zona*/
+                                java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
+
+                                /*Guarda la zona y completa la consulta*/                                    
+                                valores.add(stk.nextToken()); 
+                            }
+                            break;   
+                        default: valores.add(sIn); 
+                    }
+
+
+                    /*Aumenta en uno el contador de las celdas*/
+                    ++iContCell;
+
+                }/*Fin de while(cellIterator.hasNext())*/
+
+                /*Aumenta en uno el contador de las filas*/
+                ++iConta;
+
+                /*Resetea el contador de celdas*/
+                iContCell       = 1;
+
+
+                //Comprueba si ya existe este cliente, concateno serie+codigo
+                int iRes    = Star.iExistCliProv(con,  valores.get(1) + valores.get(0), true);
 
                 //Si hubo error entonces regresa
-                if(con==null)
-                    return;                
-                
-                /*Crea la instancia hacia el archivo a importar*/
-                FileInputStream file;
+                if(iRes==-1)
+                    return;
+
+                //Si el cliente existe entonces continua
+                if(iRes==1)
+                    continue;
+
+                /*Inserta en la base de datos el registro*/
                 try
                 {
-                    file    =  new FileInputStream(new File(sRut));
-                }
-                catch(IOException expnIO)
-                {
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace());
-                    return;                                                                   
-                }                    
+                    //(codemp, ser, nom, list, calle, col, noext, cp, ciu, estad, pai, rfc, co1, codclas, estac, sucu, nocaj)
+                    pst = con.prepareStatement(sQInsert );      
 
-                /*Instancia el objeto de excel*/
-                XSSFWorkbook wkbok;
-                try
-                {
-                    wkbok   = new XSSFWorkbook(file);
-                }
-                catch(IOException expnIO)
-                {
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace());
-                    return;                                                                                       
-                }                                        
-
-                /*Obtiene la primera hoja del libro*/
-                XSSFSheet sheet         = wkbok.getSheetAt(0);
-                
-                //Inicia la transacción
-                if(Star.iIniTransCon(con)==-1)
-                    return;                
-
-                //Declara variables de la base de datos
-                Statement       st;                                        
-                String          sQ;                 
-				ResultSet       rs;
-                
-                /*Borra todos los clientes de la base de datos*/
-                try 
-                {            
-                    sQ = "DELETE FROM emps";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException expnSQL) 
-                 {                                        
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                    return;                                                                                       
-                }
-            
-                /*Contador de fila*/
-                int iConta                  = 1;               
-            
-                /*Inicializa el contador de la celda por cada fila*/
-                int iContCell           = 1;
-
-                /*Recorre todas las hojas de excel*/
-                Iterator<Row> rowIt     = sheet.iterator();
-                while(rowIt.hasNext())
-                {                    
-                    /*Obtiene la fila*/
-                    Row row             = rowIt.next();
-                    Iterator<Cell> cellIterator = row.cellIterator();
-
-                    /*Si el contador es igual a uno entonces continua ya que no quiero leer la primera fila de encabezados y que continue*/
-                    if(iConta == 1)
-                    {
-                        ++iConta;
-                        continue;
+                    //recorreo todo el array y agrega los valores
+                    for (int i = 0; i < valores.size(); i++) {
+                        switch(i){
+                            case 4: 
+                                //casos especiales, donde el tipo de dato es integer
+                                if(!valores.get(i).isEmpty())
+                                    pst.setInt(i + 1, Integer.parseInt(valores.get(i))); break;
+                            case 22: case 24: case 45:
+                                //casos especiales, donde el tipo de dato es flotante
+                                if(!valores.get(i).isEmpty())
+                                    pst.setFloat(i + 1,Float.parseFloat(valores.get(i))); break;
+                            case 47: case 48: case 49: case 50:
+                                //casos especiales, donde el tipo de dato es boolean
+                                if(!valores.get(i).isEmpty())
+                                    pst.setBoolean(i + 1, (Integer.parseInt(valores.get(i)) == (1))); break;
+                            default: pst.setString(i + 1,valores.get(i));
+                        }
+                    }    
+                    pst.setString(52,Login.sUsrG); //agrego estac 
+                    pst.setString(53,Star.sSucu);  //agrego sucu
+                    pst.setString(54,Star.sNoCaj); //agrego nocaj
+                    
+                    //Cambio el boolean a la letra correspondiente de persona moral
+                    if(valores.get(2).equals("1"))
+                        pst.setString(3, "M");
+                    else
+                        pst.setString(3, "F");
+                    
+                    //si no tiene codigo, mando llamar el consecutivo
+                    if(valores.get(0).isEmpty()){
+                        String s = regresaConsecutivo(valores.get(1),"EMP", con);
+                        
+                        if(s.contentEquals("-1"))//si hubo error regresa
+                            return;
+                        else//sino, reemplaza el condigo por el consecutivo
+                            pst.setString(1, s);
                     }
 
-                    /*Variable para leer las celdas*/
-                    String sIn;                   
+                    pst.executeUpdate();
+                }
+                catch(SQLException | HeadlessException e)
+                {                        
 
-                    /*Inicializa la consulta*/
-                    String sQInsert     = "INSERT INTO emps(codemp, ser, cod, lada, tel, exten, cel, telper1, telper2, nom, calle, col, cp, ciu, estad, pai, revis, pags, rfc, descu, co1, co2, co3, pagweb1, pagweb2, contac, puest, contact2, puest2, observ, noint, noext, diacred, limtcred, metpag, cta, pers, bloq, list, zon, giro, sucu, nocaj, estac) VALUES('";                    
-                
-                    /*Contiene el código del cliente y la serie*/
-                    String sClien       = "", sSer  = "";
-                    
-                    /*Contiene el código de la clasificación*/
-                    String sClas;
-                    
-                    /*Contiene el código del giro*/
-                    String sGir;
-                    
-                    /*Contiene el código de la zona*/
-                    String sZon;
-                    
-                    /*Recorre todas las celdas de la fila*/
-                    while(cellIterator.hasNext())
-                    {
-                        /*Obtiene el objeto de la celda*/
-                        Cell cell       = cellIterator.next();                 
-                                                
-                        /*Determina el tipo de celda que es*/
-                        switch(cell.getCellType())
-                        {
-                            /*En caso de que sea de tipo string entonces*/
-                            case Cell.CELL_TYPE_STRING:
-                                
-                                /*Obtiene el valor de la celda*/
-                                sIn         = cell.getStringCellValue();                                                            
-                                
-                                /*Si es punto entonces que sea cadeva vacia*/
-                                if(sIn.compareTo(".")==0)
-                                    sIn     = "";
-                                
-                                /*Si es la celda 1 entonces*/
-                                if(iContCell==1)
-                                {
-                                    /*Si es el fin del archivo entonces*/
-                                    if(sIn.compareTo("FINARCHIVO")==0)
-                                    {
-                                        //Esconde la forma de loading
-                                        Star.vOcultLoadin();
+                    /*Esconde el loading*/
+                    if(Star.lCargGral!=null)
+                        Star.lCargGral.setVisible(false);
 
-                                        //Termina la transacción
-                                        if(Star.iTermTransCon(con)==-1)
-                                            return;
-                                        
-                                        //Cierra la base de datos y regresa
-                                        if(Star.iCierrBas(con)==-1)                                
-                                            return;
-
-                                        /*Mensajea y regresa*/
-                                        JOptionPane.showMessageDialog(null, "Exito en la importación de " + (iConta - 1) + " Clientes.", "Series", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                                                                     
-                                        return;
-                                    }
-                                    /*Else no es el final del archivo entonces*/
-                                    else
-                                    {
-                                        /*Obtiene el código del cliente*/
-                                        sClien      = sIn;
-                                        
-                                        /*Si el código del cliente es este símbolo entonces genera uno automáticamente*/
-                                        if(sClien.compareTo("%")==0)                                        
-                                            sClien  = Star.sGenClavDia() + "%";                                                                                                                               
-                    
-                                        /*Duerme el thread 1 segundo para la próxima clave del día*/
-                                        try
-                                        {
-                                            Thread.sleep(1000);
-                                        }
-                                        catch(InterruptedException expnInterru)
-                                        {                                    
-                                        }
-
-                                        /*Completa la consulta*/
-                                        sQInsert   += sClien + "','";
-                                    }
-                                    
-                                }/*Fin de if(iContCell==1)*/                                    
-                                /*Else if: serie*/
-                                else if(iContCell==2)
-                                {
-                                    /*Si la serie no existe entonces creala*/
-                                    vCreSerCli(con, sIn);
-                                    
-                                    /*Si hubo error entonces resetea la bandera de error y regresa*/
-                                    if(bErr)
-                                    {
-                                        bErr    = false;
-                                        return;
-                                    }
-                                    
-                                    /*Tokniza la cadena para obtener la serie*/
-                                    java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
-                                    sSer        = stk.nextToken();
-                                                                        
-                                    /*Guarda el la serie y completa la consulta*/                                    
-                                    sQInsert   += sSer + "','";                                    
-                                }
-                                /*Else if: Clasificación*/
-                                else if(iContCell==3)
-                                {                                   
-                                    /*Si la clasificación no existe entonces creala*/
-                                    vCreClas(con, sIn);
-                                    
-                                    /*Si hubo error entonces resetea la bandera de error y regresa*/
-                                    if(bErr)
-                                    {
-                                        bErr    = false;
-                                        return;
-                                    }
-                                    
-                                    /*Tokniza la cadena para obtener el código de la clasificación*/
-                                    java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
-                                    sClas        = stk.nextToken();
-                                                                        
-                                    /*Guarda el la serie y completa la consulta*/                                    
-                                    sQInsert   += sClas + "','";
-                                }
-                                /*Else if: Bloqueado*/
-                                else if(iContCell==38)
-                                {
-                                    /*Quita la última coma y completa la cadena*/
-                                    sQInsert = sQInsert.substring(0, sQInsert.length() - 1);                                    
-                                    sQInsert   += cell.getStringCellValue() + ",'";                                
-                                }
-                                /*Else if: Zona*/
-                                else if(iContCell==40)
-                                {                                   
-                                    /*Si la zonoa no existe entonces creala*/
-                                    vCreZon(con, sIn);
-                                    
-                                    /*Si hubo error entonces resetea la bandera de error y regresa*/
-                                    if(bErr)
-                                    {
-                                        bErr    = false;
-                                        return;
-                                    }
-                                    
-                                    /*Tokniza la cadena para obtener el código de la zona*/
-                                    java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
-                                    sZon        = stk.nextToken();
-                                                                        
-                                    /*Guarda la zona y completa la consulta*/                                    
-                                    sQInsert   += sZon + "','";
-                                }
-                                /*Else if: Giro*/
-                                else if(iContCell==41)
-                                {                                   
-                                    /*Si el giro no existe entonces creala*/
-                                    vCreGir(con, sIn);
-                                    
-                                    /*Si hubo error entonces resetea la bandera de error y regresa*/
-                                    if(bErr)
-                                    {
-                                        bErr    = false;
-                                        return;
-                                    }
-                                    
-                                    /*Tokniza la cadena para obtener el código de la zona*/
-                                    java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
-                                    sGir        = stk.nextToken();
-                                                                        
-                                    /*Guarda el giro y completa la consulta*/                                    
-                                    sQInsert   += sGir + "','";
-                                }
-                                /*Else completa la cadena de sql*/
-                                else
-                                    sQInsert   += sIn + "','";
-                                
-                                break;
-                                
-                                /*En caso de que sea de tipo númerico entonces*/
-                                case Cell.CELL_TYPE_NUMERIC:
-
-                                    /*Quita la última coma*/
-                                    sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
-
-                                    /*Si esta en la celda del código entonces completa la consulta con el valor absoluto*/
-                                    if(iContCell==1)
-                                        sQInsert   += Integer.toString((int)Math.abs(cell.getNumericCellValue())) + ",'";                                
-                                    else
-                                        sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                                break;
-                                
-                        }/*Fin de switch(cell.getCellType())*/
-
-                        /*Aumenta en uno el contador de las celdas*/
-                        ++iContCell;
-                        
-                    }/*Fin de while(cellIterator.hasNext())*/
-
-                    /*Aumenta en uno el contador de las filas*/
-                    ++iConta;
-                    
-                    /*Resetea el contador de celdas*/
-                    iContCell       = 1;
-                            
-                    /*Quita los últimos carácteres inválidos*/
-                    sQInsert        = sQInsert.substring(0, sQInsert.length() - 2);
-
-                    /*Agrega el terminador de la consulta*/
-                    sQInsert        += ",'" + Star.sSucu + "','" + Star.sNoCaj + "', '" + Login.sUsrG + "')";
-                    
-                    //Comprueba si ya existe este cliente                    
-                    int iRes    = Star.iExistCli(con, sSer + sClien);
-
-                    //Si hubo error entonces regresa
-                    if(iRes==-1)
+                    //Cierra la base de datos y regresa
+                    if(Star.iCierrBas(con)==-1)                                
                         return;
 
-                    //Si el cliente existe entonces continua
-                    if(iRes==1)
-                        continue;
-                                        
-                    /*Inserta en la base de datos el registro*/
-                    try
-                    {
-                        st = con.createStatement();                        
-                        st.executeUpdate(sQInsert);
-                    }
-                    catch(SQLException expnSQL)
-                    {                        
-                        //Procesa el error y regresa
-                        Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                        return;                                                                                           
-                    }                                                                        
-                    
-                }/*Fin de while(rowIt.hasNext())*/                                    
-                
-            }/*Fin de public void run()*/
-            
-        }).start();
-                
-        //Muestra el loading
-        Star.vMostLoading("");
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Llama al recolector de basura y mensajea*/
+                    System.gc();                       
+
+                    /*Mensajea y regresa*/
+                    JOptionPane.showMessageDialog(null, "Error en fila: "  + iConta + " celda: " + iContCell + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));                    
+                    return;
+                }                                                                        
+            }   
+        }/*Fin de while(rowIt.hasNext())*/                                    
+
+        if(Star.lCargGral != null)
+            Star.lCargGral.setVisible(false);
         
     }//GEN-LAST:event_jMImpCliensActionPerformed
 
@@ -10211,7 +10501,7 @@ public class Princip extends javax.swing.JFrame
                 /*Trae todos los registros de los clientes*/
                 try
                 {
-                    sQ = "SELECT IFNULL(emps.GIRO, '' ) giro, IFNULL(emps.ZON, '' ) zon, IFNULL(girdescrip, '' ) girdescrip, IFNULL(descrip,'') zondescrip, codemp, IFNULL(emps.SER,'') ser, IFNULL(consecs.DESCRIP,'') descrip, IFNULL(emps.CODCLAS,'') codclas, IFNULL(descrip,'') descrip, CASE WHEN lada = '' THEN '.' ELSE lada END lada, CASE WHEN tel = '' THEN '.' ELSE tel END tel, CASE WHEN exten = '' THEN '.' ELSE exten END exten, CASE WHEN cel = '' THEN '.' ELSE cel END cel, CASE WHEN telper1 = '' THEN '.' ELSE telper1 END telper1, CASE WHEN telper2 = '' THEN '.' ELSE telper2 END telper2, CASE WHEN nom = '' THEN '.' ELSE nom END nom, CASE WHEN calle = '' THEN '.' ELSE calle END calle, CASE WHEN col = '' THEN '.' ELSE col END col, CASE WHEN cp = '' THEN '.' ELSE cp END cp, CASE WHEN ciu = '' THEN '.' ELSE ciu END ciu, CASE WHEN estad = '' THEN '.' ELSE estad END estad, CASE WHEN pai = '' THEN '.' ELSE pai END pai, CASE WHEN revis = '' THEN '' ELSE revis END revis, CASE WHEN pags = '' THEN '.' ELSE pags END pags,  CASE WHEN rfc = '' THEN '.' ELSE rfc END rfc, descu, CASE WHEN co1 = '' THEN '.' ELSE co1 END co1, CASE WHEN co2 = '' THEN '.' ELSE co2 END co2, CASE WHEN co3 = '' THEN '.' ELSE co3 END co3, CASE WHEN pagweb1 = '' THEN '.' ELSE pagweb1 END pagweb1, CASE WHEN pagweb2 = '' THEN '.' ELSE pagweb2 END pagweb2, CASE WHEN contac = '' THEN '.' ELSE contac END contac, CASE WHEN puest = '' THEN '.' ELSE puest END puest, CASE WHEN contact2 = '' THEN '.' ELSE contact2 END contact2, CASE WHEN puest2 = '' THEN '.' ELSE puest2 END puest2, CASE WHEN observ = '' THEN '.' ELSE observ END observ, CASE WHEN noint = '' THEN '.' ELSE noint END noint, CASE WHEN noext = '' THEN '.' ELSE noext END noext, CASE WHEN diacred = '' THEN '.' ELSE diacred END diacred, limtcred, CASE WHEN metpag = '' THEN '.' ELSE metpag END metpag, CASE WHEN cta = '' THEN '.' ELSE cta END cta, pers, bloq, list FROM emps LEFT OUTER JOIN giro ON giro.GIR = emps.GIRO LEFT OUTER JOIN zona ON zona.COD = emps.ZON LEFT OUTER JOIN clasemp ON clasemp.COD = emps.CODCLAS LEFT OUTER JOIN consecs ON CONCAT_WS('', tip, consecs.SER) = CONCAT_WS('', 'EMP', emps.SER) ORDER BY emps.ID_ID DESC";
+                    sQ = "SELECT IFNULL(emps.GIRO, '' ) giro, IFNULL(emps.ZON, '' ) zon, IFNULL(giro.descrip, '' ) girdescrip, IFNULL(descrip,'') zondescrip, codemp, IFNULL(emps.SER,'') ser, IFNULL(consecs.DESCRIP,'') descrip, IFNULL(emps.CODCLAS,'') codclas, IFNULL(descrip,'') descrip, CASE WHEN lada = '' THEN '.' ELSE lada END lada, CASE WHEN tel = '' THEN '.' ELSE tel END tel, CASE WHEN exten = '' THEN '.' ELSE exten END exten, CASE WHEN cel = '' THEN '.' ELSE cel END cel, CASE WHEN telper1 = '' THEN '.' ELSE telper1 END telper1, CASE WHEN telper2 = '' THEN '.' ELSE telper2 END telper2, CASE WHEN nom = '' THEN '.' ELSE nom END nom, CASE WHEN calle = '' THEN '.' ELSE calle END calle, CASE WHEN col = '' THEN '.' ELSE col END col, CASE WHEN cp = '' THEN '.' ELSE cp END cp, CASE WHEN ciu = '' THEN '.' ELSE ciu END ciu, CASE WHEN estad = '' THEN '.' ELSE estad END estad, CASE WHEN pai = '' THEN '.' ELSE pai END pai, CASE WHEN revis = '' THEN '' ELSE revis END revis, CASE WHEN pags = '' THEN '.' ELSE pags END pags,  CASE WHEN rfc = '' THEN '.' ELSE rfc END rfc, descu, CASE WHEN co1 = '' THEN '.' ELSE co1 END co1, CASE WHEN co2 = '' THEN '.' ELSE co2 END co2, CASE WHEN co3 = '' THEN '.' ELSE co3 END co3, CASE WHEN pagweb1 = '' THEN '.' ELSE pagweb1 END pagweb1, CASE WHEN pagweb2 = '' THEN '.' ELSE pagweb2 END pagweb2, CASE WHEN contac = '' THEN '.' ELSE contac END contac, CASE WHEN puest = '' THEN '.' ELSE puest END puest, CASE WHEN contact2 = '' THEN '.' ELSE contact2 END contact2, CASE WHEN puest2 = '' THEN '.' ELSE puest2 END puest2, CASE WHEN observ = '' THEN '.' ELSE observ END observ, CASE WHEN noint = '' THEN '.' ELSE noint END noint, CASE WHEN noext = '' THEN '.' ELSE noext END noext, CASE WHEN diacred = '' THEN '.' ELSE diacred END diacred, limtcred, CASE WHEN metpag = '' THEN '.' ELSE metpag END metpag, CASE WHEN cta = '' THEN '.' ELSE cta END cta, pers, bloq, list FROM emps LEFT OUTER JOIN giro ON giro.GIR = emps.GIRO LEFT OUTER JOIN zona ON zona.COD = emps.ZON LEFT OUTER JOIN clasemp ON clasemp.COD = emps.CODCLAS LEFT OUTER JOIN consecs ON CONCAT_WS('', tip, consecs.SER) = CONCAT_WS('', 'EMP', emps.SER) ORDER BY emps.ID_ID DESC";
                     st = con.createStatement();
                     rs = st.executeQuery(sQ);
                     /*Si hay datos*/
@@ -10370,7 +10660,6 @@ public class Princip extends javax.swing.JFrame
     
     /*Cuando se presiona el menú de importar catálogo de proveedores de excel*/
     private void jMImpProvsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMImpProvsActionPerformed
-        
         /*Configura el file chooser para escogerl a ruta donde esta el archivo de excel*/
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Archivo de excel");
@@ -10379,36 +10668,57 @@ public class Princip extends javax.swing.JFrame
         if(fc.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
             return;
                 
-        //Muestra el loading
-        Star.vMostLoading("");
+        /*Muestra la forma para simular que esta cargando el reporte*/
+        Star.lCargGral = new LoadinGral("Importando catÃ¡logo de proveedores...");
+        Star.lCargGral.setVisible(true);
 
         /*Lee la ruta seleccionada con el nombre del archivo*/
         final String sRut = fc.getCurrentDirectory().getAbsolutePath() + "\\" + fc.getSelectedFile().getName();
 
         /*Realiza todo esto en un thread*/
-        (new Thread()
-        {
-            @Override
-            public void run()
-            {               
-                //Abre la base de datos nuevamente
-                Connection con = Star.conAbrBas(false, true);
+//        Thread th = new Thread()
+//        {
+//            @Override
+//            public void run()
+//            {                
+                /*Abre la base de datos*/        
+                Connection      con;
+                try 
+                {
+                    con = DriverManager.getConnection("jdbc:mysql://" + Star.sInstancia + ":" + Star.sPort + "/" + Star.sBD + "?user=" + Star.sUsuario + "&password=" + Star.sContrasenia );               
+                } 
+                catch(SQLException | HeadlessException e) 
+                {   
+                    /*Esconde la forma de loading*/
+                    if(Star.lCargGral!=null)
+                        Star.lCargGral.setVisible(false);
 
-                //Si hubo error entonces regresa
-                if(con==null)
-                    return;                
-                
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Mensajea y regresa*/
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+                    return;
+                }
+
                 /*Crea la instancia hacia el archivo a importar*/            
                 FileInputStream f;
                 try
                 {
                     f   = new FileInputStream(new File(sRut));
                 }
-                catch(FileNotFoundException expnFilNotFoun)
+                catch(Exception e)
                 {
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnFilNotFoun.getMessage(), Star.sErrFilNotFoun, expnFilNotFoun.getStackTrace());
-                    return;                                                                                       
+                    /*Esconde la forma de loading*/
+                    if(Star.lCargGral!=null)
+                        Star.lCargGral.setVisible(false);
+
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Mensajea y regresa*/
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+                    return;
                 }                                
 
                 /*Crea el objeto de excel*/                                       
@@ -10417,21 +10727,27 @@ public class Princip extends javax.swing.JFrame
                 {
                     wkbok = new XSSFWorkbook(f);
                 }
-                catch(IOException expnIO)
+                catch(Exception e)
                 {
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace());
-                    return;                                                                                       
+                    /*Esconde la forma de loading*/
+                    if(Star.lCargGral!=null)
+                        Star.lCargGral.setVisible(false);
+
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Mensajea y regresa*/
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+                    return;
                 }                                                
 
                 /*Obtiene la primera hoja del archivo de excel*/
                 XSSFSheet sheet = wkbok.getSheetAt(0);
 
-                //Declara variables de la base de datos
-                Statement       st;
-                ResultSet       rs;                
-                String          sQInsert;
-                String          sQ;
+                /*Declara variables de la base de datos*/
+                PreparedStatement pst;
+                Statement       st;              
+                String sQ = "";
 
                 /*Borra todos los registros de la base de datos de los proveedores*/
                 try 
@@ -10440,353 +10756,443 @@ public class Princip extends javax.swing.JFrame
                     st = con.createStatement();
                     st.executeUpdate(sQ);
                  }
-                 catch(SQLException expnSQL) 
+                 catch(SQLException | HeadlessException e) 
                  { 
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                    return;                                                                                       
+                    //Cierra la base de datos y regresa
+                    if(Star.iCierrBas(con)==-1)                                
+                        return;
+                    
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
+
+                    /*Mensajea y regresa*/
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+                    return;
                  }
 
                 /*Contador de fila y de celda respectivamente*/        
-                int             iCont           = 1;
-                int             iContCell;                        
+                int             iCont           = 0;
+                //Inicializa el contador de la celda por cada fila
+                int             iContCell = 1;                        
 
                 /*Recorre todas las filas una por una*/
                 Iterator<Row> rowIterator = sheet.iterator();
                 while(rowIterator.hasNext())
                 {
-                    /*Objeto para recorrer todas las celdas*/
-                    Row row = rowIterator.next();
-                    Iterator<Cell> cellIterator = row.cellIterator();
+                    proveedor:{
+                        /*Resetea el contador de celdas*/
+                        iContCell       = 1;
+                        
+                        /*Objeto para recorrer todas las celdas*/
+                        Row row = rowIterator.next();
 
-                    /*Si el contador no es igual a uno entonces continua ya que no quiero leer la primera fila y que continue*/
-                    if(iCont == 1)
-                    {
-                        ++iCont;
-                        continue;
-                    }
+                        /*Si el contador no es igual a uno entonces continua ya que no quiero leer la primera fila y que continue*/
+                        if(iCont < 1)
+                        {
+                            ++iCont;
+                            continue;
+                        }
 
-                    /*Inicializa la consulta*/
-                    sQInsert    = "INSERT INTO provs (prov, nom, ser, codclas, lada, tel, exten, cel, calle, col, cp, noint, noext, ciu, estad, pais, rfc, revis, pags, descu, diacred, limcred, co1, co2, co3, pagweb1, pagweb2, eje1, telper1, telper2, eje2, telper21, telper22,   observ, pers, bloq, zon, giro, sucu, nocaj, estac) VALUES('";
+                        /*Inicializa la consulta*/
+                        String sQInsert = "INSERT INTO provs (prov, ser, pers, nom, calle, col, noext, cp, ciu, estad, pais, rfc, co1, codclas,  lada, tel, exten, cel, telper1, telper2, noint, descu, diacred, limcred,  co2, co3, pagweb1, pagweb2, eje1,  eje2,  observ, metpag, cta, ctaconta, banc, clavbanc, rubr, revis, pags,  giro, zon, tentre, otramon, otramonc, bloq, bloqlimcred, estac, sucu, nocaj)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-                    /*Inicializa el contador de la celda*/
-                    iContCell   = 1;
+                        //Contiene los valores que van en el query dentro de VALUES
+                        java.util.ArrayList<String> valores = new java.util.ArrayList<>();
 
-                    /*Contiene el código del proveedor y la serie*/
-                    String sProv= "";
-                    String sSer = "";
-                    
-                    /*Contiene la zona y el giro*/
-                    String sZon;
-                    String sGir;
-                    
-                    /*Recorre todas las celdas de la fila*/
-                    while(cellIterator.hasNext())
-                    {
-                        /*Obtiene la primera celda*/
-                        Cell cell = cellIterator.next();
+                        /*Variable para leer las celdas*/
+                        String sIn; 
 
-                        /*Switch entre los tipos de celdas encontrados*/
-                        switch (cell.getCellType())
-                        {                                
-                            /*En caso de que sea de tipo string entonces*/
-                            case Cell.CELL_TYPE_STRING:
+                        //Uso la variable para hacer entero el list
+                        Double d;
 
-                                /*Si el contador de celda es igual a uno entonces es la celda del código de la empresa*/
-                                if(iContCell == 1)
-                                {
-                                    /*Si es el fin del archivo entonces*/
-                                    if(cell.getStringCellValue().compareTo("FINARCHIVO")==0)
-                                    {
-                                        //Esconde la forma de loading
-                                        Star.vOcultLoadin();
+                        //variables de serie y proveedor
+                        String sSer = "";
 
-                                        //Termina la transacción
-                                        if(Star.iTermTransCon(con)==-1)
-                                            return;
-                                        
-                                        //Cierra la base de datos y regresa
-                                        if(Star.iCierrBas(con)==-1)                                
-                                            return;
-                                        
-                                        /*Mensajea y regresa*/
-                                        JOptionPane.showMessageDialog(null, "Exito en la importación de " + (iCont - 1) + " proveedores.", "Proveedores", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                                                                     
-                                        return;
-                                    }                                    
-                                    /*Else if el código de la empresa es este símbolo entonces*/
-                                    else if(cell.getStringCellValue().compareTo("%")==0)
-                                    {
-                                        /*Obtiene el consecutivo del proveedor*/
-                                        String          sConsec         = "";
-                                        try
-                                        {
-                                            sQ = "SELECT consec FROM consecs WHERE valor = 'PROVEEDORES'";
-                                            st = con.createStatement();
-                                            rs = st.executeQuery(sQ);
-                                            /*Si hay datos entonces obtiene el resultado*/
-                                            if(rs.next())
-                                                sConsec = rs.getString("consec");
-                                        }
-                                        catch(SQLException expnSQL)
-                                        {
-                                            //Procesa el error y regresa
-                                            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                                            return;                                                                                                               
-                                        }
+                        //Uso para tomar el tipo de celda
+                        int tipo;
 
-                                        /*Genera el código del proveedor*/
-                                        sProv = "PRO" + sConsec;
+                        //Uso para rfc
+                        String rfc;
+                        
+                        /*Recorre todas las celdas de la fila*/
+                        for(int i=1; i <= 46; i++) 
+                        {
+                            /*Obtiene la primera celda*/
+                            Cell cell = row.getCell(i, Row.CREATE_NULL_AS_BLANK);
+                            if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
+                                sIn = cell.getNumericCellValue()+"";  
+                            else
+                                sIn = cell.getStringCellValue();
 
-                                        /*Aumenta uno el consecutivo del proveedor*/
-                                        try
-                                        {                                            
-                                            sQ = "UPDATE consecs SET "
-                                                    + "consec       = consec + 1, "
-                                                    + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                                                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "'"
-                                                    + " WHERE valor = 'PROVEEDORES'";
-                                            st = con.createStatement();
-                                            st.executeUpdate(sQ);
-                                        }
-                                        catch(SQLException expnSQL)
-                                        {
-                                            //Procesa el error y regresa
-                                            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                                            return;                                                                                                               
-                                        }
+                            tipo = cell.getCellType();
 
-                                        /*Agregae el código del proveedor al acadena de inserción*/
-                                        sQInsert   += sProv + "','";                                        
+                            //Determina la celda en la que estamos
+                            switch(iContCell)
+                            {
+                                case 1://codigo
+                                    sIn = Star.checaLongitud(30, sIn);
+                                    if(tipo == 0 && !sIn.isEmpty())
+                                        sIn = quitaDoble(sIn);
+                                     if( !sIn.matches("\\d+")) 
+                                         valores.add("");
+                                     else{
+                                         d = cell.getNumericCellValue();
+                                         valores.add(d.intValue()+""); 
+                                     }
+                                break;
+                                case 2:{//serie
+                                    sIn = Star.checaLongitud(30, sIn);
+                                    if(! sIn.matches("[a-zA-Z\\d]+,.+")){
+                                        if(valores.get(0).isEmpty())
+                                            break proveedor;
+                                        else
+                                            valores.add("");
                                     }
-                                    /*Else obtiene solamente el código del proveedor*/
+                                    else{
+                                    /*Si la serie no existe entonces creala*/
+                                        vCreSer(con, sIn);
+
+                                        /*Si hubo error entonces resetea la bandera de error y regresa*/
+                                        if(bErr)
+                                        {
+                                            bErr    = false;
+                                            return;
+                                        }
+
+                                        /*Tokniza la cadena para obtener la serie*/
+                                        java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
+                                        sSer = stk.nextToken();
+                                        valores.add(sSer);
+                                    }
+                                }break;
+                                case 3: case 43: case 44: case 45: case 46://Persona moral, booleanos
+                                    //le quita los decimales a los numeros que pudiran haber escrito
+                                    if(tipo == 0 && !sIn.isEmpty())
+                                        sIn = quitaDoble(sIn);
+
+                                     if (!sIn.matches("0|1")){
+                                         //pongo los valores default 
+                                         if(iContCell == 43 || iContCell == 44)
+                                            valores.add("1");
+                                         else
+                                             valores.add("0");
+                                     }
+                                     else{
+                                         valores.add(sIn);
+                                     }
+                                break;
+                                case 4: case 5: case 6: case 9: case 10: case 11: case 27: case 28: case 29: case 30: case 31: case 32: case 35: case 42://razon, calle, colonia, ciudad, estado, pais, pagweb1, pagweb2, eje, eje2, observ, metpag, banco, tentre
+                                    if(sIn.isEmpty()){
+                                        if(iContCell <= 11)
+                                            break proveedor;
+                                        else
+                                            valores.add("");
+                                    }
+                                    else{
+                                        if(iContCell != 35)
+                                            valores.add(Star.checaLongitud(255, sIn));
+                                        else//banco
+                                            valores.add(Star.checaLongitud(30, sIn));
+                                    }
+
+                                break;
+                                case 7: case 21://no ext, no int
+                                    sIn = Star.checaLongitud(100, sIn);
+                                    if(tipo == 0 && !sIn.isEmpty())
+                                        sIn = quitaDoble(sIn);
+                                    if( !sIn.matches("[\\da-zA-Z\\-]+")){
+                                        if(iContCell == 7)
+                                           break proveedor;
+                                        else
+                                            valores.add("");
+                                    }
                                     else
-                                    {
-                                        /*Obtiene el código del proveedor y completa la cadena*/
-                                        sProv       = cell.getStringCellValue();
-                                        sQInsert   += sProv + "','";
+                                       valores.add(sIn); 
+                                break;
+                                case 8://CP
+                                    sIn = Star.checaLongitud(20, sIn);
+                                    //le quita los decimales a los numeros que pudiran haber escrito
+                                    if(tipo == 0 && !sIn.isEmpty())
+                                        sIn = quitaDoble(sIn);
+                                     if( !sIn.matches("\\d{5}")) 
+                                         break proveedor;
+                                     else{
+                                         valores.add(sIn);
+                                     }
+                                break;
+                                case 12://RFC
+                                    sIn = ( valores.get(2).equals("0") )? Star.checaLongitud(13, sIn): Star.checaLongitud(12, sIn);
+                                    rfc = ( valores.get(2).equals("0") )?     "[a-zA-Z]{4}\\d{6}.{3}":  "[a-zA-Z]{3}\\d{6}.{3}";
+
+                                    if( !sIn.matches(rfc))
+                                        break proveedor;
+                                    else{//Si no existe el rfc, lo agrega
+                                        if( Star.iExisteRFC(con, sIn, "provs") == 0)
+                                            valores.add(sIn);
+                                        else//si ya existe o hay algun error se brinca al siguiente cliente
+                                            break proveedor;
                                     }
-
-                                }/*Fin de if(iContCell==1)*/
-                                /*Else if: serie del proveedor*/
-                                else if(iContCell==3)
-                                {
-                                    /*Obtiene el valor de la celda*/
-                                    sSer  = cell.getStringCellValue();
-
-                                    /*Si el valor que se va a insertar es un punto entonces*/                                
-                                    if(sSer.compareTo(".")==0)                              
-                                    {
-                                        /*Que sea cadena vacia la serie*/
-                                        sSer= "";                                                                                    
-
-                                        /*Completa la consulta con todas las celdas y continua en el switch*/
-                                        sQInsert   += sSer + "','";                            
-                                        break;
+                                 break;
+                                case 13: case 25: case 26://email
+                                    sIn = Star.checaLongitud(100, sIn);
+                                    if( !sIn.matches(".+@.+")){
+                                        if(iContCell == 13)//si es el correo obligatorio y no cumple se brinca al siguiente cliente
+                                            break proveedor;
+                                        else
+                                            valores.add("");
                                     }
-
-                                    /*Si no existe la serie entonces creala*/
-                                    vCreSer(con, sSer);
-
-                                    /*Si hubo error entonces resetea la bandera y regresa*/
-                                    if(bErr)                                      
-                                    {
-                                        bErr    = false;
-                                        return;                                        
+                                    else
+                                        valores.add(sIn);
+                                break;
+                                case 14: 
+                                    sIn = Star.checaLongitud(30, sIn);
+                                    if(!sIn.matches("[a-zA-Z\\d\\-]+,.+"))
+                                            valores.add("");
+                                    else{// clasificacion
+                                        /*Si la clasificaciÃ³n no existe entonces creala*/
+                                        vCreClasProv(con, sIn);
+                                        /*Si hubo error entonces resetea la bandera de error y regresa*/
+                                        if(bErr)
+                                        {
+                                            bErr    = false;
+                                            return;
+                                        }
+                                        /*Tokniza la cadena para obtener el cÃ³digo de la clasificaciÃ³n*/
+                                        java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
+                                        valores.add(stk.nextToken());   
+                                }break;   
+                                case 15: case 16: case 17: case 18: case 19: case 20://lada, tel, exten, cel, telper1, telper2
+                                    switch(iContCell){
+                                        case 15: Star.checaLongitud(10, sIn); break;
+                                        case 17: Star.checaLongitud(20, sIn); break;
+                                        default:Star.checaLongitud(255, sIn); 
                                     }
-
-                                    /*Obtiene solo el código de la serie*/
-                                    java.util.StringTokenizer stk   = new java.util.StringTokenizer(sSer,",");                                        
-                                    sSer                            = stk.nextToken();
-
-                                    /*Completa la consulta con todas las celdas*/                                        
-                                    sQInsert   += sSer + "','";                                                                                                                                       
-                                }
-                                /*Else if: clasificación del proveedor*/
-                                else if(iContCell==4)
-                                {
-                                    /*Obtiene el valor de la celda*/
-                                    String sIn  = cell.getStringCellValue();
-
-                                    /*Si el valor que se va a insertar es un punto entonces*/                                
-                                    if(sIn.compareTo(".")==0)                              
-                                    {
-                                        /*Que sea cadena vacia*/
-                                        sIn= "";                                                                                    
-
-                                        /*Completa la consulta con todas las celdas y continua en el switch*/
-                                        sQInsert   += sIn + "','";                            
-                                        break;
+                                    //le quita los decimales a los numeros que pudiran haber escrito
+                                    if(tipo == 0 && !sIn.isEmpty())
+                                        sIn = quitaDoble(sIn);
+                                    if(!sIn.matches("\\d+\\-?\\d+"))
+                                        valores.add("");
+                                    else
+                                        valores.add(sIn);
+                                    break;
+                                case 22:  case 24:// valores flotantes (descu, limcred)
+                                    //esta validacion es porque la expresion regular si acepta vacios
+                                    if(sIn.isEmpty())
+                                        valores.add("0");
+                                    else{
+                                        if(!sIn.matches("(\\d+)?(\\.\\d{1,2})?"))
+                                            valores.add("0");//le pongo el valor default
+                                        else{
+                                            valores.add(sIn);
+                                        }
                                     }
+                                break;
+                                case 23: case 33: case 36: case 38: case 39://diacred, cta, clave, revision, pagos
+                                    switch(iContCell){
+                                        case 23: sIn = Star.checaLongitud(21, sIn); break;
+                                        case 33: sIn = Star.checaLongitud(45, sIn); break;
+                                        case 36: sIn = Star.checaLongitud(255, sIn); break;
+                                        default: sIn = Star.checaLongitud(100, sIn); 
 
-                                    /*Si no existe la clasificación entonces creala*/
-                                    vCreClas(con, sIn);
-
-                                    /*Si hubo error entonces resetea la bandera y regresa*/
-                                    if(bErr)                                      
-                                    {
-                                        bErr    = false;
-                                        return;                                        
                                     }
+                                    if(tipo == 0 && !sIn.isEmpty())
+                                        sIn = quitaDoble(sIn);
+                                     if(!sIn.matches("\\d+")){
+                                         if(iContCell == 33)
+                                             valores.add("0000");
+                                         else
+                                             valores.add("");
+                                     }
+                                    else
+                                        valores.add(sIn);
 
-                                    /*Obtiene solo el código de la clasificación*/
-                                    java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");                                        
+                                break;
+                                case 34://ctaconta
+                                    sIn = Star.checaLongitud(30, sIn);
+                                    if(tipo == 0 && !sIn.isEmpty())
+                                        sIn = quitaDoble(sIn);
+                                     if(!sIn.matches("[\\d\\-]+"))
+                                        valores.add("");
+                                    else
+                                        valores.add(sIn);
+                                    break;
+                                case 37:
+                                    sIn = Star.checaLongitud(30, sIn);
+                                    if(!sIn.matches("[a-zA-Z\\d\\-]+,.+"))
+                                            valores.add("");
+                                    else{// rubro
+                                    /*Si el rubro no existe entonces creala*/
+                                        vCreRubr(con, sIn);
 
-                                    /*Completa la consulta con todas las celdas*/
-                                    sQInsert   += stk.nextToken() + "','";                                                                                                                                       
-                                }
-                                /*Else if: bloqueado*/
-                                else if(iContCell==36)
-                                {
-                                    /*Quita la última coma*/
-                                    sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
+                                        /*Si hubo error entonces resetea la bandera de error y regresa*/
+                                        if(bErr)
+                                        {
+                                            bErr    = false;
+                                            return;
+                                        }
 
-                                    /*Completa la consulta con todas las celdas*/
-                                    sQInsert   += cell.getStringCellValue() + ",'";
-                                }
-                                /*Else if: Zona*/
-                                else if(iContCell==37)
-                                {                                   
-                                    /*Si la zonoa no existe entonces creala*/
-                                    vCreZon(con, cell.getStringCellValue());
-                                    
-                                    /*Si hubo error entonces resetea la bandera de error y regresa*/
-                                    if(bErr)
-                                    {
-                                        bErr    = false;
-                                        return;
-                                    }
-                                    
-                                    /*Tokniza la cadena para obtener el código de la zona*/
-                                    java.util.StringTokenizer stk = new java.util.StringTokenizer(cell.getStringCellValue(),",");
-                                    sZon        = stk.nextToken();
-                                                                        
-                                    /*Guarda la zona y completa la consulta*/                                    
-                                    sQInsert   += sZon + "','";
-                                }
-                                /*Else if: Giro*/
-                                else if(iContCell==38)
-                                {                                   
+                                        /*Tokniza la cadena para obtener el cÃ³digo de la zona*/
+                                        java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
+
+                                        /*Guarda el giro y completa la consulta*/ 
+                                        valores.add(stk.nextToken());
+                                }break;
+                                case 40:
+                                    sIn = Star.checaLongitud(30, sIn);
+                                    if(!sIn.matches("[a-zA-Z\\d\\-]+,.+"))
+                                            valores.add("");
+                                    else{ 
                                     /*Si el giro no existe entonces creala*/
-                                    vCreGir(con, cell.getStringCellValue());
-                                    
-                                    /*Si hubo error entonces resetea la bandera de error y regresa*/
-                                    if(bErr)
-                                    {
-                                        bErr    = false;
-                                        return;
-                                    }
-                                    
-                                    /*Tokniza la cadena para obtener el código de la zona*/
-                                    java.util.StringTokenizer stk = new java.util.StringTokenizer(cell.getStringCellValue(),",");
-                                    sGir        = stk.nextToken();
-                                                                        
-                                    /*Guarda el giro y completa la consulta*/                                    
-                                    sQInsert   += sGir + "','";
-                                }
-                                /*Else procesa todo continuo*/
-                                else
-                                {
-                                    /*Obtiene el valor de la celda*/
-                                    String sIn  = cell.getStringCellValue();
+                                        vCreGir(con, sIn);
 
-                                    /*Si el valor que se va a insertar es un punto entonces que sea vacio*/                                
-                                    if(sIn.compareTo(".")==0)
-                                        sIn= "";
+                                        /*Si hubo error entonces resetea la bandera de error y regresa*/
+                                        if(bErr)
+                                        {
+                                            bErr    = false;
+                                            return;
+                                        }
 
-                                    /*Completa la consulta con todas las celdas*/
-                                    sQInsert   += sIn + "','";                                                       
-                                }                                                                            
+                                        /*Tokniza la cadena para obtener el cÃ³digo de la zona*/
+                                        java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
 
-                            break;
+                                        /*Guarda el giro y completa la consulta*/ 
+                                        valores.add(stk.nextToken());
+                                    }break;
+                                case 41:
+                                    sIn = Star.checaLongitud(30, sIn);
+                                    if(!sIn.matches("[a-zA-Z\\d\\-]+,.+"))
+                                            valores.add("");
+                                    else{
+                                    /*Si la zona no existe entonces creala*/
+                                        vCreZon(con, sIn);
 
-                            /*En caso de que sea de tipo númerico*/
-                            case Cell.CELL_TYPE_NUMERIC:
+                                        /*Si hubo error entonces resetea la bandera de error y regresa*/
+                                        if(bErr)
+                                        {
+                                            bErr    = false;
+                                            return;
+                                        }
 
-                                /*Quita la última coma*/
-                                sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
+                                        /*Tokniza la cadena para obtener el cÃ³digo de la zona*/
+                                        java.util.StringTokenizer stk = new java.util.StringTokenizer(sIn,",");
 
-                                /*Si esta en la celda del código entonces completa la consulta con el valor absoluto*/
-                                if(iContCell==1)
-                                    sQInsert   += Integer.toString((int)Math.abs(cell.getNumericCellValue())) + ",'";                                
-                                else
-                                    sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
+                                        /*Guarda la zona y completa la consulta*/                                    
+                                        valores.add(stk.nextToken()); 
+                                }break;
+                                default: valores.add(sIn); 
+                            }
 
-                            break;
-
-                        }/*Fin de switch(cell.getCellType())*/
-
-                        /*Aumenta el contador para no volver a entrar aquí*/
-                        ++iContCell;
+                            /*Aumenta el contador para no volver a entrar aquÃ­*/
+                            ++iContCell;
 
                     }/*Fin de while (cellIterator.hasNext())*/
+                    /*Aumenta en uno el contador de las filas*/
+                    ++iCont;
 
-                    /*Quita los últimos carácteres inválidos*/
-                    sQInsert     = sQInsert.substring(0, sQInsert.length() - 2);
+                    
 
-                    /*Agrega el terminador de la consulta*/
-                    sQInsert     += ", '" + Star.sSucu + "','" + Star.sNoCaj + "', '" + Login.sUsrG + "')";                    
-
-                    /*Comprueba si ya existe este proveedor*/
+                    ResultSet rs;
+                    //Comprueba si ya existe este proveedor                    
                     try
                     {
-                        sQ = "SELECT prov FROM provs WHERE CONCAT_WS('', ser, prov) = '" + sSer + sProv + "'";	                        
+                        sQ = "SELECT prov FROM provs WHERE CONCAT_WS('', ser, prov) = '" + sSer + valores.get(0) + "'";	                        
                         st = con.createStatement();
                         rs = st.executeQuery(sQ);
                         /*Si hay datos entonces si existe y continua*/
                         if(rs.next())
                             continue;
                     }
-                    catch(SQLException expnSQL)
+                    catch(SQLException e)
                     {
-                        //Procesa el error y regresa
-                        Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                        return;                                                                                           
+                        //Cierra la base de datos y regresa
+                        if(Star.iCierrBas(con)==-1)                                
+                            return;
+
+                        /*Agrega en el log*/
+                        Login.vLog(e.getMessage());
+
+                        /*Mensajea y regresa*/
+                        JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, null); 
+                        return;
                     }
-                    
-                    /*Inserta en la base de datos el registro*/
+
+                  /*Inserta en la base de datos el registro*/
                     try
                     {
-                        st = con.createStatement();
-                        st.executeUpdate(sQInsert);
-                    }
-                    catch(SQLException expnSQL)
-                    {
-                        //Procesa el error y regresa
-                        Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-                        return;                                                                   
-                    }
+                        //(codemp, ser, nom, list, calle, col, noext, cp, ciu, estad, pai, rfc, co1, codclas, estac, sucu, nocaj)
+                        pst = con.prepareStatement(sQInsert );      
 
-                }/*Fin de while (rowIterator.hasNext())*/
+                        //recorreo todo el array y agrega los valores
+                        for (int i = 0; i < valores.size(); i++) {
+                            switch(i){
+                                case 21: case 23:
+                                    //casos especiales, donde el tipo de dato es float
+                                    if(!valores.get(i).isEmpty())
+                                        pst.setFloat(i + 1,Float.parseFloat(valores.get(i))); break;
+                                case 42: case 43: case 44: case 45:
+                                    //casos especiales, donde el tipo de dato es boolean
+                                    if(!valores.get(i).isEmpty())
+                                        pst.setBoolean(i + 1, (Integer.parseInt(valores.get(i)) == (1))); break;
+                                default: pst.setString(i + 1,valores.get(i));
+                            }
+                        }    
+                        pst.setString(47,Login.sUsrG);  //agrego estac 
+                        pst.setString(48,Star.sSucu);  //agrego sucu
+                        pst.setString(49,Star.sNoCaj); //agrego nocaj
 
-                //Inicia la transacción
-                if(Star.iIniTransCon(con)==-1)
-                    return;                
+                        //Cambio el boolean a la letra correspondiente de persona moral
+                        if(valores.get(2).equals("1"))
+                            pst.setString(3, "M");
+                        else
+                            pst.setString(3, "F");
 
-                //Cierra la base de datos
-                if(Star.iCierrBas(con)==-1)                                
-                    return;                                    
+                        //si no tiene codigo, mando llamar el consecutivo
+                        if(valores.get(0).isEmpty()){
+                            String s = regresaConsecutivo(valores.get(1),"PROV", con);
 
-                /*Cierra el fichero*/            
-                try
-                {
-                    f.close();
+                            if(s.contentEquals("-1"))//si hubo error regresa
+                                return;
+                            else//sino, reemplaza el condigo por el consecutivo
+                                pst.setString(1, s);
+                        }
+
+                            pst.executeUpdate();
+                        }
+                    catch(SQLException | HeadlessException e)
+                    {                        
+
+                        /*Esconde el loading*/
+                        if(Star.lCargGral!=null)
+                            Star.lCargGral.setVisible(false);
+
+                        //Cierra la base de datos y regresa
+                        if(Star.iCierrBas(con)==-1)                                
+                            return;
+
+                        /*Agrega en el log*/
+                        Login.vLog(e.getMessage());
+
+                        /*Llama al recolector de basura y mensajea*/
+                        System.gc();                       
+
+                        /*Mensajea y regresa*/
+                        JOptionPane.showMessageDialog(null, "Error en fila: "  + iCont + " celda: " + iContCell + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));                    
+                        return;
+                    }    
                 }
-                catch(IOException expnIO)
-                {
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace());                                                       
-                    return;
-                }                
+            }/*Fin de while (rowIterator.hasNext())*/
+             
 
-                //Esconde la forma de loading
-                Star.vOcultLoadin();
+                /*Esconde la forma de loading*/
+                if(Star.lCargGral!=null)
+                    Star.lCargGral.setVisible(false);
 
-                /*Mensaje de éxito*/
-                JOptionPane.showMessageDialog(null, "Termino importación desde: " + sRut + ".", "Proveedores", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                /*Mensaje de Ã©xito*/
+                //JOptionPane.showMessageDialog(null, "Termino importaciÃ³n desde \"" + sRut + "\".", "Proveedores", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
 
-            }/*Fin de public void run()*/
-            
-        }).start();
+//            }/*Fin de public void run()*/
+//        };
+//        th.start();                                   
         
     }//GEN-LAST:event_jMImpProvsActionPerformed
 
@@ -10845,7 +11251,7 @@ public class Princip extends javax.swing.JFrame
                 /*Trae todos los registros de los proveedores*/
                 try
                 {
-                    sQ = "SELECT IFNULL(provs.GIRO,'') giro, IFNULL(provs.ZON,'') zon, IFNULL(zona.DESCRIP,'') zondescrip, IFNULL(girdescrip,'') girdescrip, prov, nom,  IFNULL(consecs.DESCRIP,'') descrip, IFNULL(provs.SER,'') ser, IFNULL(provs.CODCLAS,'') codclas, IFNULL(clasprov.DESCRIP,'') descrip, lada, tel, exten, cel, calle, col, cp, noint, noext, ciu, estad, pais, rfc, revis, pags, descu, diacred, limcred, co1, co2, co3, pagweb1, pagweb2, eje1, telper1, telper2, eje2, telper21, telper22, observ, pers, bloq FROM provs LEFT OUTER JOIN giro ON giro.GIR = provs.GIRO LEFT OUTER JOIN zona ON zona.COD = provs.ZON LEFT OUTER JOIN clasprov ON provs.CODCLAS = clasprov.COD LEFT OUTER JOIN consecs ON CONCAT_WS('', consecs.TIP, consecs.SER)  = CONCAT_WS('', consecs.TIP, provs.SER)";
+                    sQ = "SELECT IFNULL(provs.GIRO,'') giro, IFNULL(provs.ZON,'') zon, IFNULL(zona.DESCRIP,'') zondescrip, IFNULL(giro.descrip,'') girdescrip, prov, nom,  IFNULL(consecs.DESCRIP,'') descrip, IFNULL(provs.SER,'') ser, IFNULL(provs.CODCLAS,'') codclas, IFNULL(clasprov.DESCRIP,'') descrip, lada, tel, exten, cel, calle, col, cp, noint, noext, ciu, estad, pais, rfc, revis, pags, descu, diacred, limcred, co1, co2, co3, pagweb1, pagweb2, eje1, telper1, telper2, eje2, telper21, telper22, observ, pers, bloq FROM provs LEFT OUTER JOIN giro ON giro.GIR = provs.GIRO LEFT OUTER JOIN zona ON zona.COD = provs.ZON LEFT OUTER JOIN clasprov ON provs.CODCLAS = clasprov.COD LEFT OUTER JOIN consecs ON CONCAT_WS('', consecs.TIP, consecs.SER)  = CONCAT_WS('', consecs.TIP, provs.SER)";
                     st = con.createStatement();
                     rs = st.executeQuery(sQ);
                     /*Si hay datos*/
@@ -12497,7 +12903,7 @@ public class Princip extends javax.swing.JFrame
     private void jMCatActFijActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMCatActFijActionPerformed
         
         /*Muestra la forma de activo fijo*/        
-        cats.PlanGralCat l = new cats.PlanGralCat("concepnot","comprs","concep","concepto de notas de crédito","conCnot","concep");
+        cats.PlanGralCat l = new cats.PlanGralCat("actfijcat","actfij","tipact","activo fijo","ActTip","concep");
 	l.setVisible(true);
         
     }//GEN-LAST:event_jMCatActFijActionPerformed
@@ -12953,6 +13359,56 @@ public class Princip extends javax.swing.JFrame
             
     }/*Fin de private void vCreClas(Connection con, String sS1)*/
     
+    /*Si la clasificación de proveedor no existe entonces creala*/
+    private void vCreClasProv(Connection con, String sS1)
+    {
+        /*Obtiene el código y la descricipción de la clasificación del cliente*/
+        java.util.StringTokenizer stk = new java.util.StringTokenizer(sS1,",");
+        String sCod         = stk.nextToken();
+        String sDescrip     = stk.nextToken();
+        
+        /*Declara variables de la base de datos*/
+        Statement   st;        
+        String      sQ              = ""; 
+                                        
+        //Comprueba si la clasificación para el cliente existe        
+        int iRes    = Star.iExistClasProv(con, sCod);
+        
+        //Si hubo error entonces regresa
+        if(iRes==-1)
+            return;
+        
+        //Si existe entonces regresa
+        if(iRes==1)
+            return;
+        
+        /*Inserta la nueva clasificación en la base de datos*/
+        try 
+        {                
+            sQ = "INSERT INTO clasprov(cod,              descrip,                 sucu,                   nocaj,                 estac) "
+                       + "VALUES('" + sCod + "','" +    sDescrip + "', '" +      Star.sSucu + "', '" +   Star.sNoCaj + "', '" + Login.sUsrG + "') ";                    
+            st = con.createStatement();
+            st.executeUpdate(sQ);
+         }
+         catch(SQLException | HeadlessException e) 
+         { 
+            /*Esconde el loading*/
+            if(Star.lCargGral!=null)
+                Star.lCargGral.setVisible(false);
+            
+            //Cierra la base de datos y regresa
+            if(Star.iCierrBas(con)==-1)                                
+                return;
+             
+            /*Coloca la bandera de error*/
+            bErr    = true;
+            
+            /*Agrega en el log y mensajea*/
+            Login.vLog(e.getMessage());           
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, null);             
+         }    
+            
+    }/*Fin de private void vCreClas(Connection con, String sS1)*/
     
     /*Si la zona no existe entonces creala*/
     private void vCreZon(Connection con, String sS1)
@@ -13000,6 +13456,77 @@ public class Princip extends javax.swing.JFrame
             
     }/*Fin de private void vCreZon(Connection con, String sS1)*/
     
+    /*Si el giro no existe entonces creala*/
+    private void vCreRubr(Connection con, String sS1)
+    {
+        /*Obtiene el código y la descricipción*/
+        java.util.StringTokenizer stk = new java.util.StringTokenizer(sS1,",");
+        String sCod         = stk.nextToken();
+        String sDescrip     = stk.nextToken();
+        
+        /*Declara variables de la base de datos*/
+        Statement   st;
+        ResultSet   rs;        
+        String      sQ              = ""; 
+                                        
+        /*Comprueba si el giro existe*/        
+        try
+        {
+            sQ = "SELECT cod FROM rubr WHERE cod = '" + sCod + "'";	
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            /*Si hay datos entonces regresa por que ya existe*/
+            if(rs.next())            
+                return;            
+        }
+        catch(SQLException e)
+        {                        
+            /*Esconde el loading*/
+            if(Star.lCargGral!=null)
+                Star.lCargGral.setVisible(false);                     
+            
+            /*Coloca la bandera de error*/
+            bErr    = true;
+            
+            //Cierra la base de datos y regresa
+            if(Star.iCierrBas(con)==-1)                                
+                return;
+            
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+            
+	    /*Mensajea y regresa*/
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, null); 
+            return;
+        }
+        
+        /*Inserta el nuevo giro en la base de datos*/
+        try 
+        {                
+            sQ = "INSERT INTO rubr(cod,             descrip,              sucu,                   nocaj,                 estac) "
+                   + "VALUES('" + sCod + "','" +    sDescrip + "', '" +      Star.sSucu + "', '" +   Star.sNoCaj + "', '" + Login.sUsrG + "') ";                    
+            st = con.createStatement();
+            st.executeUpdate(sQ);
+         }
+         catch(SQLException | HeadlessException e) 
+         {                         
+            /*Esconde el loading*/
+            if(Star.lCargGral!=null)
+                Star.lCargGral.setVisible(false);
+           
+            //Cierra la base de datos y regresa
+            if(Star.iCierrBas(con)==-1)                                
+                return;
+            
+            /*Coloca la bandera de error*/
+            bErr    = true;
+            
+            /*Agrega en el log y mensajea*/
+            Login.vLog(e.getMessage());           
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, null);             
+         }    
+            
+    }
     
     /*Si el giro no existe entonces creala*/
     private void vCreGir(Connection con, String sS1)
@@ -13034,7 +13561,7 @@ public class Princip extends javax.swing.JFrame
         /*Inserta el nuevo giro en la base de datos*/
         try 
         {                
-            sQ = "INSERT INTO giro(gir,             girdescrip,              sucu,                   nocaj,                 estac) "
+            sQ = "INSERT INTO giro(gir,             descrip,              sucu,                   nocaj,                 estac) "
                    + "VALUES('" + sCod + "','" +    sDescrip + "', '" +      Star.sSucu + "', '" +   Star.sNoCaj + "', '" + Login.sUsrG + "') ";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -13370,6 +13897,71 @@ public class Princip extends javax.swing.JFrame
     private javax.swing.JPanel jP1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+
+    private String quitaDoble(String sIn) {
+        Double d = Double.parseDouble(sIn);
+        
+        return d.intValue()+"";
+    }
+
+    private String regresaConsecutivo(String sSer, String tipo, Connection con) {
+        String sQ = "";
+        Statement st;
+        ResultSet rs;
+        try
+        {
+            sQ = "SELECT ser, consec FROM consecs WHERE tip = '"+tipo+"' AND ser = '" + sSer + "'";
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            /*Si hay datos entonces obtiene el resultado*/
+            if(rs.next()){
+                                
+                /*Aumenta uno el consecutivo del cliente*/
+                try 
+                {            
+                    sQ = "UPDATE consecs SET "
+                            + "consec       = consec + 1, "
+                            + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
+                            + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
+                            + "WHERE tip    = 'EMP' AND ser = '" + sSer.replace("'", "''") + "'";                    
+                    st = con.createStatement();
+                    st.executeUpdate(sQ);
+                 }
+                 catch(SQLException ex) 
+                 { 
+                     //Cierra la base de datos
+                    if(Star.iCierrBas(con)==-1)
+                        return "-1";
+
+                    /*Agrega en el log*/
+                    Login.vLog(ex.getMessage());
+
+                    /*Mensajea y regresa error*/
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+                    return "-1";
+                 }
+                //regresa el consecutivo
+                return  rs.getString("consec");   
+            }
+                
+        }
+        catch(SQLException e)
+        {
+            //Cierra la base de datos
+            if(Star.iCierrBas(con)==-1)
+                return "-1";
+            
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Mensajea y regresa error*/
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+            return "-1";
+        } 
+        return "-1";
+    }
+
+    
     
         
 }/*Fin de public class Princip extends javax.swing.JFrame */

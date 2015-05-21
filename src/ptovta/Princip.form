@@ -980,7 +980,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/imgs/easyconve.png"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Easy convertirdor"/>
+                    <Property name="text" type="java.lang.String" value="Easy convertidor"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMEasConActionPerformed"/>

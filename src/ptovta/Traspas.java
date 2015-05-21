@@ -1513,7 +1513,7 @@ public class Traspas extends javax.swing.JFrame
         }   
         
         //Comprueba si el concepto eiste en la base de datos
-        int iRes    = Star.iExistConcep(con, jTConcep.getText().trim());
+        int iRes    = Star.iExiste(con, jTConcep.getText().trim(), "conceps", "concep");
         
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -2195,7 +2195,7 @@ public class Traspas extends javax.swing.JFrame
             return;
         
         //Comprueba si el concepto eiste en la base de datos
-        int iRes    = Star.iExistConcep(con, sConcep.trim());
+        int iRes    = Star.iExiste(con, sConcep.trim(), "conceps", "concep");
         
         //Si hubo error entonces regresa
         if(iRes==-1)

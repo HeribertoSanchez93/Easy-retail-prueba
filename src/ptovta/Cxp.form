@@ -186,8 +186,8 @@
                     <Column editable="false" title="No." type="java.lang.Object"/>
                     <Column editable="true" title="Folio" type="java.lang.Object"/>
                     <Column editable="true" title="Serie" type="java.lang.Object"/>
-                    <Column editable="true" title="Compra" type="java.lang.Object"/>
                     <Column editable="true" title="Proveedor" type="java.lang.Object"/>
+                    <Column editable="true" title="Nombre del Proveedor" type="java.lang.Object"/>
                     <Column editable="true" title="Subtotal" type="java.lang.Object"/>
                     <Column editable="true" title="Impuesto" type="java.lang.Object"/>
                     <Column editable="true" title="Total" type="java.lang.Object"/>

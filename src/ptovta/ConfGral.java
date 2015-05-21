@@ -3352,7 +3352,8 @@ public class ConfGral extends javax.swing.JFrame
             rs = st.executeQuery(sQ);
             /*Si hay datos entonces colocalo en el control*/
             if(rs.next())
-                jTUsrCump.setText(rs.getString("estac"));                            
+                jTUsrCump.setText(rs.getString("estac"));     
+
         }
         catch(SQLException expnSQL)
         {
@@ -3371,7 +3372,7 @@ public class ConfGral extends javax.swing.JFrame
             if(rs.next())
             {
                 jTDias.setText      (rs.getString("manddia"));                            
-                jTUsrAgra.setText   (rs.getString("estac"));                            
+                jTUsrAgra.setText   (rs.getString("estac"));
             }
         }
         catch(SQLException expnSQL)
@@ -3381,6 +3382,42 @@ public class ConfGral extends javax.swing.JFrame
             return;
         }
         
+        try
+        {
+            sQ  = "SELECT extr, asun FROM confgral WHERE clasif = 'sist' and conf ='cumple'";                        
+            st  = con.createStatement();
+            rs  = st.executeQuery(sQ);
+            /*Si hay datos*/
+            if(rs.next())
+            {
+                jTCumple.setText    (rs.getString("extr"));                            
+                jTAsun.setText      (rs.getString("asun"));
+            }
+        }
+        catch(SQLException expnSQL)
+        {
+            //Procesa el error y regresa
+            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
+            return;
+        }
+        try
+        {
+            sQ  = "SELECT extr, asun FROM confgral WHERE clasif = 'sist' and conf ='agrad'";                        
+            st  = con.createStatement();
+            rs  = st.executeQuery(sQ);
+            /*Si hay datos*/
+            if(rs.next())
+            {
+                jTCuerAgra.setText    (rs.getString("extr"));                            
+                jTAsunAgra.setText    (rs.getString("asun"));
+            }
+        }
+        catch(SQLException expnSQL)
+        {
+            //Procesa el error y regresa
+            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
+            return;
+        }
         /*Obtiene las configuraciones del sistema*/
         try
         {
@@ -4143,7 +4180,7 @@ public class ConfGral extends javax.swing.JFrame
             return;
         
         /*Checa si el código del almacén ya existe en la base de datos*/        
-        int iRes        = Star.iExistAlma(con, jTAlma.getText().trim());
+        int iRes        = Star.iExiste(con, jTAlma.getText().trim(), "almas", "alma");
         
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -4172,7 +4209,7 @@ public class ConfGral extends javax.swing.JFrame
         if(jTAlmaVta.getText().trim().compareTo("")!=0)
         {
             /*Checa si el código del almacén ya existe en la base de datos*/        
-            iRes        = Star.iExistAlma(con, jTAlmaVta.getText().trim());
+            iRes        = Star.iExiste(con, jTAlmaVta.getText().trim(), "almas", "alma");
 
             //Si hubo error entonces regresa
             if(iRes==-1)
@@ -4203,7 +4240,7 @@ public class ConfGral extends javax.swing.JFrame
         if(jTAlmaCot.getText().trim().compareTo("")!=0)
         {
             /*Checa si el código del almacén ya existe en la base de datos*/        
-            iRes        = Star.iExistAlma(con, jTAlmaCot.getText().trim());
+            iRes        = Star.iExiste(con, jTAlmaCot.getText().trim(), "almas", "alma");
 
             //Si hubo error entonces regresa
             if(iRes==-1)
@@ -10678,15 +10715,32 @@ public class ConfGral extends javax.swing.JFrame
             //Procesa el error
             Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                            
         }
-        
-        /*Actualiza la ruta a la aplicación favorita*/        
+        /*Actualiza la ruta al cuaderno*/        
         try 
         {                        
             sQ = "UPDATE confgral SET "
-                    + "extr         = '" + jTRutAp.getText().replace("\\", "\\\\").replace("'", "''") + "', "
+                    + "extr         = '" + jTRutCuade.getText().replace("\\", "\\\\").replace("'", "''") + "', "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
                     + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
-                    + "WHERE clasif = 'sist' AND conf = 'apfavo'";                    
+                    + "WHERE clasif = 'sist' AND conf = 'cuader'";                    
+            st = con.createStatement();
+            st.executeUpdate(sQ);
+         }
+         catch(SQLException expnSQL) 
+         { 
+            /*Coloca la bandera de error*/
+            bErr    = true;
+            
+            //Procesa el error
+            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                            
+        }
+        /*Actualiza cumple*/        
+        try 
+        {                        
+            sQ = "UPDATE confgral SET "
+                    + "extr         = '" +jTCumple.getText().replace("'", "''") + "', "
+                    + "asun         = '" +jTAsun.getText().replace("'", "''") + "' "
+                    + "WHERE clasif = 'sist' AND conf = 'cumple'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
          }
@@ -10699,7 +10753,25 @@ public class ConfGral extends javax.swing.JFrame
             Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
             return;
         }
-        
+        /*Actualiza agradecimiento*/        
+        try 
+        {                        
+            sQ = "UPDATE confgral SET "
+                    + "extr         = '" +jTCuerAgra.getText().replace("'", "''") + "', "
+                    + "asun         = '" +jTAsunAgra.getText().replace("'", "''") + "' "
+                    + "WHERE clasif = 'sist' AND conf = 'agrad'";                    
+            st = con.createStatement();
+            st.executeUpdate(sQ);
+         }
+         catch(SQLException expnSQL) 
+         { 
+            /*Coloca la bandera de error*/
+            bErr    = true;
+            
+            //Procesa el error y regresa
+            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
+            return;
+        }
         /*Variable para todas las condiciones posibles*/
         String sVal;
         

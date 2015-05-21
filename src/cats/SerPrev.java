@@ -509,7 +509,7 @@ public class SerPrev extends javax.swing.JFrame
         });
         jP1.add(jBNew, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 30, 90, 20));
 
-        jTConsec.setText("0");
+        jTConsec.setText("1");
         jTConsec.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTConsec.setNextFocusableComponent(jTDescrip);
         jTConsec.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -518,6 +518,11 @@ public class SerPrev extends javax.swing.JFrame
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTConsecFocusLost(evt);
+            }
+        });
+        jTConsec.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTConsecActionPerformed(evt);
             }
         });
         jTConsec.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1621,6 +1626,10 @@ public class SerPrev extends javax.swing.JFrame
             jTBusc.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(204,204,255)));
         
     }//GEN-LAST:event_jTBuscFocusLost
+
+    private void jTConsecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTConsecActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTConsecActionPerformed
        
     
     /*Función escalable para cuando se presiona una tecla en el módulo*/

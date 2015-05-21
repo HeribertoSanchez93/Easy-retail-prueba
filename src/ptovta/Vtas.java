@@ -213,18 +213,6 @@ public class Vtas extends javax.swing.JFrame
         jTab1.getColumnModel().getColumn(24).setPreferredWidth(145);
         jTab1.getColumnModel().getColumn(25).setPreferredWidth(145);        
         jTab1.getColumnModel().getColumn(26).setPreferredWidth(280);
-        jTab1.getColumnModel().getColumn(27).setPreferredWidth(250);
-        jTab1.getColumnModel().getColumn(28).setPreferredWidth(130);
-        jTab1.getColumnModel().getColumn(29).setPreferredWidth(150);
-        jTab1.getColumnModel().getColumn(30).setPreferredWidth(150);
-        jTab1.getColumnModel().getColumn(31).setPreferredWidth(150);
-        jTab1.getColumnModel().getColumn(32).setPreferredWidth(150);
-        jTab1.getColumnModel().getColumn(33).setPreferredWidth(150);
-        jTab1.getColumnModel().getColumn(34).setPreferredWidth(250);
-        jTab1.getColumnModel().getColumn(35).setPreferredWidth(250);
-        jTab1.getColumnModel().getColumn(36).setPreferredWidth(250);
-        jTab1.getColumnModel().getColumn(37).setPreferredWidth(250);
-        jTab1.getColumnModel().getColumn(38).setPreferredWidth(150);
                 
         /*Establece el tamaño de las columnas de la tabla de partidas de la venta*/
         jTab2.getColumnModel().getColumn(5).setPreferredWidth(400);
@@ -325,19 +313,7 @@ public class Vtas extends javax.swing.JFrame
                         sTimOri        = jTab1.getValueAt(jTab1.getSelectedRow(), 22).toString();
                         sCodCotOri     = jTab1.getValueAt(jTab1.getSelectedRow(), 23).toString();
                         sVtaDevOri     = jTab1.getValueAt(jTab1.getSelectedRow(), 25).toString();
-                        sFolFiscOri    = jTab1.getValueAt(jTab1.getSelectedRow(), 26).toString();
-                        sAutRecibOri   = jTab1.getValueAt(jTab1.getSelectedRow(), 27).toString();
-                        sAutMarcOri    = jTab1.getValueAt(jTab1.getSelectedRow(), 28).toString();
-                        sAutModOri     = jTab1.getValueAt(jTab1.getSelectedRow(), 29).toString();
-                        sAutColoOri    = jTab1.getValueAt(jTab1.getSelectedRow(), 30).toString();
-                        sAutPlacOri    = jTab1.getValueAt(jTab1.getSelectedRow(), 31).toString();
-                        sAutNomOri     = jTab1.getValueAt(jTab1.getSelectedRow(), 32).toString();
-                        sAutNoCircOri  = jTab1.getValueAt(jTab1.getSelectedRow(), 33).toString();
-                        sAutNoLicOri   = jTab1.getValueAt(jTab1.getSelectedRow(), 34).toString();
-                        sAutTelOri     = jTab1.getValueAt(jTab1.getSelectedRow(), 35).toString();
-                        sAutDirPartOri = jTab1.getValueAt(jTab1.getSelectedRow(), 36).toString();
-                        sAutDirOficOri = jTab1.getValueAt(jTab1.getSelectedRow(), 37).toString();
-                        sAutTelOfiOri  = jTab1.getValueAt(jTab1.getSelectedRow(), 38).toString();                       
+                        sFolFiscOri    = jTab1.getValueAt(jTab1.getSelectedRow(), 26).toString();                       
                         
                         /*Aumenta el contador para saber que va de salida*/
                         ++iContCellEd;
@@ -370,19 +346,7 @@ public class Vtas extends javax.swing.JFrame
                         jTab1.setValueAt(sTimOri,           jTab1.getSelectedRow(), 22);
                         jTab1.setValueAt(sCodCotOri,        jTab1.getSelectedRow(), 23);
                         jTab1.setValueAt(sVtaDevOri,        jTab1.getSelectedRow(), 25);
-                        jTab1.setValueAt(sFolFiscOri,       jTab1.getSelectedRow(), 26);
-                        jTab1.setValueAt(sAutRecibOri,      jTab1.getSelectedRow(), 27);
-                        jTab1.setValueAt(sAutMarcOri,       jTab1.getSelectedRow(), 28);
-                        jTab1.setValueAt(sAutModOri,        jTab1.getSelectedRow(), 29);
-                        jTab1.setValueAt(sAutColoOri,       jTab1.getSelectedRow(), 30);
-                        jTab1.setValueAt(sAutPlacOri,       jTab1.getSelectedRow(), 31);
-                        jTab1.setValueAt(sAutNomOri,        jTab1.getSelectedRow(), 32);
-                        jTab1.setValueAt(sAutNoCircOri,     jTab1.getSelectedRow(), 33);
-                        jTab1.setValueAt(sAutNoLicOri,      jTab1.getSelectedRow(), 34);
-                        jTab1.setValueAt(sAutTelOri,        jTab1.getSelectedRow(), 35);
-                        jTab1.setValueAt(sAutDirPartOri,    jTab1.getSelectedRow(), 36);
-                        jTab1.setValueAt(sAutDirOficOri,    jTab1.getSelectedRow(), 37);
-                        jTab1.setValueAt(sAutTelOfiOri,     jTab1.getSelectedRow(), 38);                        
+                        jTab1.setValueAt(sFolFiscOri,       jTab1.getSelectedRow(), 26);                        
                         
                         /*Resetea el celleditor*/
                         iContCellEd = 1;
@@ -640,11 +604,11 @@ public class Vtas extends javax.swing.JFrame
 
             },
             new String [] {
-                "No.", "Venta", "Folio", "Serie", "Cliente", "Total", "Total Descuento", "Total Costo", "Fecha Creación", "Fecha Documento", "Última Modificación", "Vencimiento", "Asignada N.C.", "Pago N.C.", "Estado", "Usuario", "Motivo", "Tipo Documento", "Observaciones", "Sucursal", "No. Caja", "Nombre Usuario", "Timbrada", "Cod.Cotización", "Venta Devolución", "id", "Fol.Fiscal", "Auto recibí de", "Auto marca", "Auto modelo", "Auto color", "Auto placas", "Auto nombre", "Auto No.T.Circ.", "Auto No.Lic.", "Auto tel.", "Auto dir.part.", "Aut dir.ofic.", "Auto tel.ofic."
+                "No.", "Venta", "Folio", "Serie", "Cliente", "Total", "Total Descuento", "Total Costo", "Fecha Creación", "Fecha Documento", "Última Modificación", "Vencimiento", "Asignada N.C.", "Pago N.C.", "Estado", "Usuario", "Motivo", "Tipo Documento", "Observaciones", "Sucursal", "No. Caja", "Nombre Usuario", "Timbrada", "Cod.Cotización", "Venta Devolución", "id", "Fol.Fiscal"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true
+                false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -2189,7 +2153,7 @@ public class Vtas extends javax.swing.JFrame
         if(sAlma.compareTo("")!=0)
         {
             /*Checa si el código del almacén ya existe en la base de datos*/        
-            int iRes    = Star.iExistAlma(con, sAlma.trim());
+            int iRes    = Star.iExiste(con, sAlma.trim(), "almas", "alma");
 
             //Si hubo error entonces regresa
             if(iRes==-1)
@@ -7044,7 +7008,8 @@ public class Vtas extends javax.swing.JFrame
             solAcu.setToken(facCli.createSolicitudAcuseToken(sNewTok));
             solAcu.setTransaccionID(Long.parseLong(sTransId));
             solAcu.setUUID(sTID);
-
+            
+            System.out.println("sip");
             /*Pide al WS el acuse*/
             wscance.RespuestaRecuperarAcuse wsResp;
             try
@@ -7057,7 +7022,8 @@ public class Vtas extends javax.swing.JFrame
                 Star.iErrProc(this.getClass().getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC, expnWSPAC.getStackTrace());                                                       
                 continue;                
             }
-                        
+            
+            System.out.println("sip2");
             /*Completa la ruta donde se guardara el acuse*/
             String sRut = sCarp + "\\ACU-" + sRFCLoc + "-" + sSerFac + "-" + sFol + ".xml";
             

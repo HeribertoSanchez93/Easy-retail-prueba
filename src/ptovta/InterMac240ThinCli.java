@@ -49,6 +49,8 @@ public class InterMac240ThinCli extends javax.swing.JFrame
         /*Inicaliza los componentes gráficos*/
         initComponents();
         
+        Star.lCargGral=null;
+        
         /*Establece el listener del tabbed para controlar el foco del tecldo en cada pestaña*/
         javax.swing.event.ChangeListener chList = new javax.swing.event.ChangeListener() 
         {
@@ -27579,7 +27581,7 @@ public class InterMac240ThinCli extends javax.swing.JFrame
         
 
         //Comprueba si el concepto eiste en la base de datos
-        int iRes    = Star.iExistConcep(con, sConcep.trim());
+        int iRes    = Star.iExiste(con, sConcep.trim(), "conceps", "concep");
         
         //Si hubo error entonces regresa
         if(iRes==-1)

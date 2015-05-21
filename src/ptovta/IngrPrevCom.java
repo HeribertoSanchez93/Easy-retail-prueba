@@ -139,6 +139,8 @@ public class IngrPrevCom extends javax.swing.JFrame
         /*Inicaliza los componentes gráficos*/
         initComponents();
         
+        Star.lCargGral=null;
+        
         sTipoG = sConf;
                 
         //Si es una visualizacion
@@ -3373,9 +3375,9 @@ public class IngrPrevCom extends javax.swing.JFrame
           JOptionPane.showMessageDialog(null, "No se enviará el previo de compra por correo electrónico por que no se a seleccionado ningún correo del Proveedor.", "Correo Electrónico",  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                    
 
         /*Si no se a mostrado el mensaje de correo y si se tiene que mandar a algún correo pero es cadena vacia entonces*/
-        if(!bNoMan && (jCCo1.isSelected() && jCCo2.isSelected() && jCCo3.isSelected()))
+        if(!bNoMan && (jCCo1.isSelected() || jCCo2.isSelected() || jCCo3.isSelected()))
         {
-            JOptionPane.showMessageDialog(null, "No se enviará el previo de compra por correo electrónico  en donde hay cadena vacia de los campos de correo.", "Correo Electrónico",  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            JOptionPane.showMessageDialog(null, "Aviso: No se enviará el previo de compra por correo electrónico si el campo correo es vacio.", "Correo Electrónico",  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
             bNoMan = true;
         }
         
@@ -3964,7 +3966,7 @@ public class IngrPrevCom extends javax.swing.JFrame
                 sQ = "UPDATE provs SET "
                         + "co1                              = '" + jTCo1.getText().replace("'", "''").trim() + "', "
                         + "co2                              = '" + jTCo2.getText().replace("'", "''").trim() + "', "
-                        + "co3                              = '" + jTCo3.getText().replace("'", "''").trim() + "',  "
+                        + "co3                              = '" + jTCo3.getText().replace("'", "''").trim() + "' "
                         + "WHERE CONCAT_WS('', ser, prov)   = '" + jTProv.getText().replace("'", "''").trim() + "'";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -4193,7 +4195,7 @@ public class IngrPrevCom extends javax.swing.JFrame
         final String sImpLetFi      = sTotLet;
         final boolean bBimp         = bImp;       
         final boolean bMostA        = true;
-        System.out.println(sNomLoc);
+        System.out.println(sCo1Fi);
         /*Thread para quitar carga*/
         (new Thread()
         {

@@ -744,7 +744,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel9">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="*Asunto/Cuerpo Rcordatorio 3 CXC:"/>
+                    <Property name="text" type="java.lang.String" value="*Asunto/Cuerpo Recordatorio 3 CXC:"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -834,7 +834,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="jTAsunCot">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Env&#xed;o de cotizaci&#xf2;n."/>
+                    <Property name="text" type="java.lang.String" value="Env&#xed;o de cotizaci&#xf3;n."/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder>
@@ -860,7 +860,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="jTAsunContra">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Env&#xed;o de contrarecibo."/>
+                    <Property name="text" type="java.lang.String" value="Env&#xed;o de contra recibo."/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder>
@@ -961,7 +961,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="jTCuerContr">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Contrarecibo."/>
+                    <Property name="text" type="java.lang.String" value="Contra recibo."/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder>
@@ -1042,7 +1042,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel14">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="*Asunto/Cuerpo Rcordatorio 1 CXC:"/>
+                    <Property name="text" type="java.lang.String" value="*Asunto/Cuerpo Recordatorio 1 CXC:"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -1052,7 +1052,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel15">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="*Asunto/Cuerpo Rcordatorio 2 CXC:"/>
+                    <Property name="text" type="java.lang.String" value="*Asunto/Cuerpo Recordatorio 2 CXC:"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">

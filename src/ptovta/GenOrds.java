@@ -3822,7 +3822,7 @@ public class GenOrds extends javax.swing.JFrame
             props.put("mail.smtp.port", sSMTPPort);
             props.put("mail.store.protocol", "pop3");
             props.put("mail.transport.protocol", "smtp");
-            final String username = sUsr;
+            final String username = sUser;
             final String password = sContra;
             Session session = Session.getDefaultInstance(props,
                     new Authenticator() {
@@ -3970,6 +3970,7 @@ public class GenOrds extends javax.swing.JFrame
                 }
                 
                 /*Crea el usr y la contraseña como final para que el thead valide si son válidos o no*/                
+                final String sUser      = sUsr;
                 final String sContra    = sContrasenia;
                 
                 /*Si el primer correo no es null entonces*/
@@ -3987,7 +3988,7 @@ public class GenOrds extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
+                        final String username = sUser;
                         final String password = sContra;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
@@ -3998,7 +3999,7 @@ public class GenOrds extends javax.swing.JFrame
                                 });
 
                         MimeMessage  msj        = new MimeMessage(session);
-                        msj.setFrom             (new InternetAddress(sUsr));
+                        msj.setFrom             (new InternetAddress(sUser));
                         msj.setRecipients       (Message.RecipientType.TO,InternetAddress.parse(sCo1));
                         msj.setSubject          (sAsunOrd + "\"" + sNoDoc + "\"");
                         String msg              = sCuerOrd;
@@ -4076,7 +4077,7 @@ public class GenOrds extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
+                        final String username = sUser;
                         final String password = sContra;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
@@ -4087,7 +4088,7 @@ public class GenOrds extends javax.swing.JFrame
                                 });
 
                         MimeMessage  msj    = new MimeMessage(session);
-                        msj.setFrom         (new InternetAddress(sUsr));
+                        msj.setFrom         (new InternetAddress(sUser));
                         msj.setRecipients   (Message.RecipientType.TO,InternetAddress.parse(sCo2));
                         msj.setSubject      (sAsunOrd + "\"" + sNoDoc + "\"");
                         String msg           = sCuerOrd;
@@ -4165,7 +4166,7 @@ public class GenOrds extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
+                        final String username = sUser;
                         final String password = sContra;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
@@ -4176,7 +4177,7 @@ public class GenOrds extends javax.swing.JFrame
                                 });
                         
                         MimeMessage  msj    = new MimeMessage(session);
-                        msj.setFrom         (new InternetAddress(sUsr));
+                        msj.setFrom         (new InternetAddress(sUser));
                         msj.setRecipients   (Message.RecipientType.TO,InternetAddress.parse(sCo3));
                         msj.setSubject      (sAsunOrd + "\"" + sNoDoc + "\"");
                         String msg           = sCuerOrd;

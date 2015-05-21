@@ -32,7 +32,9 @@ public class InterCI extends javax.swing.JDialog
     {
         /*Inicaliza los componentes gráficos*/
         initComponents();
-            
+        
+        Star.lCargGral=null;
+        
         /*Establece el botón por default*/
         this.getRootPane().setDefaultButton(jBSinc);
         

@@ -3,14 +3,19 @@ package ptovta;
 
 //Importaciones
 import static ptovta.Princip.bIdle;
+import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.swing.ImageIcon;
@@ -32,8 +37,8 @@ public class Loadin extends javax.swing.JFrame
     /*Bandera para saber cuando hay error*/
     private boolean         bErr;
     
-    /*Este es el thread principal*/
-    private Thread          th;
+//    /*Este es el thread principal*/
+//    private Thread          th;
     
     
     
@@ -118,7 +123,8 @@ public class Loadin extends javax.swing.JFrame
         /*Contiene el método de costeo de la empresa local*/
         String sMetCost = "";
 
-        //Declara variables de la base de datos
+        /*Declara variables de la base de datos*/
+        PreparedStatement pst;
         Statement       st;                
         String          sQInsert;                
         String          sQ; 
@@ -178,732 +184,492 @@ public class Loadin extends javax.swing.JFrame
         vDelProds(con);
 
         /*Contador de fila*/
-        int iConta              = 1;               
+        int iConta = 0;
 
+        /*Inicializa el contador de la celda por cada fila*/
+        int iContCell;
+        
         /*Recorre todas las hojas de excel*/
         Iterator<Row> rowIt     = sheet.iterator();
+        
         while(rowIt.hasNext())
         {
-            /*Inicializa el contador de la celda por cada fila*/
-            int iContCell           = 1;
+            
+            producto:{
+                /*Recorre todas columnas del archivo*/
+                Row row             = rowIt.next();
 
-            /*Recorre todas columnas del archivo*/
-            Row row             = rowIt.next();
-            Iterator<Cell> cellIterator = row.cellIterator();
-
-            /*Si el contador es igual a uno entonces continua ya que no quiero leer la primera fila de encabezados y que continue*/
-            if(iConta == 1)
-            {
-                ++iConta;
-                continue;
-            }
-
-            /*Variable para leer las celdas*/
-            String sIn;
-
-            /*Inicializa la consulta*/
-            sQInsert    = "INSERT INTO prods(prod, prodop1, prodop2, codmed, med, descrip, descripcort, lin, marc, fab, colo, pes, pesman, prelist1, prelist2, prelist3, prelist4, prelist5, prelist6, prelist7, prelist8, prelist9, prelist10, cost, costre, unid, anaq, lug, descprov, infor, min, max, compue, impue, invent, bajcost, esvta, servi, tip, sucu,  nocaj, estac, falt, exist, metcost) VALUES('";                    
-
-            /*Cadena que contendrá lo que se mostrará al usuario*/
-            String sCadFin  = "";
-
-            /*Aqui se almacenará el código del producto que se esta importando para el log*/
-            String sCodProd = "";    
-
-            /*Aquí se almacenará la descripción del producto para el log*/
-            String sDescrip = "";
-
-            /*Recorre todas las celdas de la fila*/
-            while(cellIterator.hasNext())
-            {
-                /*Obtiene el objeto de la celda*/
-                Cell cell       = cellIterator.next();                 
-
-                /*Determina el tipo de celda que es*/
-                switch(cell.getCellType())
+                /*Si el contador es igual a uno entonces continua ya que no quiero leer la primera fila de encabezados y que continue*/
+                if(iConta < 1)
                 {
-                    /*En caso de que sea de tipo string entonces*/
-                    case Cell.CELL_TYPE_STRING:
+                    ++iConta;
+                    continue;
+                }
 
-                        /*Obtiene el valor de la celda*/
-                        sIn         = cell.getStringCellValue();                                                            
+                /*Variable para leer las celdas*/
+                String sIn;
 
-                        /*Código del producto: Si el contador de celda es igual a uno entonces la lectura esta en la fila después de los encabezados*/
-                        if(iContCell == 1)
-                        {       
-                            /*Si el producto contiene elguno de los carácteres no permitidos entonces*/
-                            if(sIn.contains("/") || sIn.contains("\\") || sIn.contains("\"") || sIn.contains("?") || sIn.contains(":") || sIn.contains("|") || sIn.contains("*"))
-                            {
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
+                /*Inicializa la consulta*/
+                sQInsert    = "INSERT INTO prods(prod,  unid, servi, invent, metcost, descripcort, descrip,lin, tip, fab, marc, mode, codmed, med, pes, pesman, colo,codext, impue, infor, descprov, prodop1, prodop2, garan, cost, costre, prelist1,prelist2, prelist3, prelist4, prelist5, prelist6, prelist7, prelist8, prelist9, prelist10, esvta, solmaxmin,  min, max,bajcost, lotped, solser, exist, sucu,  nocaj, estac) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";                    
 
-                                /*Cierra la forma*/
-                                this.dispose();
+                //Contiene los valores que van en el query dentro de VALUES
+                java.util.ArrayList<String> valores = new java.util.ArrayList<>();
 
-                                /*Mensajea y regresa*/
-                                JOptionPane.showMessageDialog(null, "El código de producto: " + sIn + " tiene algún carácter no permitidos: /\\:?*\"| y no se puede hacer la importación.", "Productos", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                                                                     
-                                return;
+                /*Cadena que contendrá lo que se mostrará al usuario*/
+                String sCadFin  = "";
 
-                            }/*Fin de if(sIn.contains("/\\\"?:|*"))*/
+                /*Aqui se almacenará el código del producto que se esta importando para el log*/
+                String sCodProd = "";    
 
-                            /*Ve creando la cadena a mostrar con el código del producto*/
-                            sCadFin     += sIn + "  ";
+                /*Aquí se almacenará la descripción del producto para el log*/
+                String sDescrip = "";
 
-                            /*Si el código del producto es este símbolo entonces*/
-                            if(sIn.compareTo("%")==0)
-                            {
-                                /*Genera la clave automáticamente para el código del producto y agregalos a la cadena*/
-                                String sCod = Star.sGenClavDia() + "%";
-                                sQInsert   += sCod + "','";                                                                                                                                                                                    
-                                
-                                /*Duerme el thread 1 segundo para la próxima clave del día*/
-                                try
-                                {
-                                    Thread.sleep(1000);
-                                }
-                                catch(InterruptedException expnInterru)
-                                {                                    
-                                }
-                                
-                                /*Guarda el código del producto en la variable*/
-                                sCodProd    = sCod;                                                                        
+                //Uso la variable para hacer entero el list
+                Double d;
+                
+                //Uso para guardar tipo de celda
+                int tipo;
+
+                /*Recorre todas las celdas de la fila*/
+                for(iContCell=1; iContCell <= 43; iContCell++) 
+                {
+                    /*Obtiene el objeto de la celda*/
+                    Cell cell = row.getCell(iContCell, Row.CREATE_NULL_AS_BLANK);
+
+                    //Obtengo el dato de la celda y lo convierto a string, en caso necesario
+                    if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
+                        sIn = cell.getNumericCellValue()+"";  
+                    else
+                        sIn = cell.getStringCellValue();               
+
+                    tipo = cell.getCellType();
+                    /*Determina el tipo de celda que es*/
+                    switch(iContCell)
+                    {
+                        case 1:{//codigo de producto
+                            
+                            //checa que la longitud de la cadena no sobrepase los limites del dato en la BD
+                            sIn = Star.checaLongitud(255, sIn);
+                            //si esta vacio o no tiene el formato permitido se brinca,los datos obligatorios no pueden ser vacios
+                            if(!sIn.matches("[a-zA-Z\\d\\-]+") || Star.iExistProd(con, sIn) == 1) 
+                                break producto;
+                            else{
+                                /*Ve creando la cadena a mostrar con el código del producto*/
+                                sCadFin     += sIn + "  ";
+                                valores.add(sIn);
                             }
-                            /*Else if si es el fin del archivo entonces*/
-                            else if(sIn.compareTo("FINARCHIVO")==0)
-                            {
-                                //Termina la transacción
-                                if(Star.iTermTransCon(con)==-1)
-                                    return;
+                        }break;
 
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
-
-                                /*Cierra la forma*/
-                                this.dispose();
-
-                                /*Mensajea y regresa*/
-                                JOptionPane.showMessageDialog(null, "Exito en la importación de " + (iConta - 1) + " productos.", "Productos", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                                                                     
-                                return;
-                            }
-                            else
-                            {
-                                /*Obtiene el código producto que escribió el cliente*/
-                                sCodProd    = cell.getStringCellValue();
-                                sQInsert   += sCodProd + "','";
-                            }                                                                                                                                                
-                        }  
-                        /*Else if: Código opcional 1  entonces completa la consulta con todas las celdas*/
-                        else if(iContCell == 2)
-                            sQInsert   += sIn.replace("'", "''") + "','"; 
-                        /*Else if: Código opcional 2  entonces completa la consulta con todas las celdas*/
-                        else if(iContCell == 3)
-                            sQInsert   += sIn.replace("'", "''") + "','"; 
-                        /*Else if: Código de medida*/
-                        else if(iContCell == 4)
+                        
+                        case 2:/*Código de la unidad*/
                         {
-                            /*Comprueba si el código de la medida existe, si no existe entonces la crea con su descripción*/
-                            vCreMed(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));
+                            sIn = Star.checaLongitud(30, sIn);
+                             //si esta vacio o no tiene el formato permitido se brinca,los datos obligatorios no pueden ser vacios
+                            if(!sIn.matches("[\\w\\-/]+,.+")) 
+                                break producto;
+                            
+                            /*Comprueba si el código de la unidad existe, si no existe entonces la crea con su descripción*/
+                            vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "unids", "logunid", "cod", "descrip", "cod", "descrip");
 
-                            /*Si hubo error entonces cierra la forma y regresa*/
-                            if(bErr)
-                            {
-                                dispose();                                    
-                                return; 
+                           //Checa si hubo errores y si no, agrega el valor
+                            valores = agregaValor(sIn, valores, con);
+                            /*Si hubo error entonces*/
+                            if(bErr) return;    
+                        }break;
+                        case 3: case 4:  //Servicio e inventariable
+                            //si el tipo de datos es numerico, se convierte en double con este metodo le quita los decimales a los numeros que pudiran haber escrito
+                            if(tipo == 0 && !sIn.isEmpty())
+                                sIn = quitaDoble(sIn);
+                            
+                            if (!sIn.matches("0|1")){
+                                if (iContCell == 4 && valores.get(2).equals("0"))//si estoy en inventariable y servicio esta en falso
+                                    valores.add("1");
+                                else
+                                    valores.add("0");
                             }
+                            else{//si estoy en inventariable y servicio ya esta marcado, lo pongo en falso
+                                if(iContCell == 4 ){
+                                    if (valores.get(2).equals("1"))
+                                        valores.add("0");
+                                    else//si no esta marcado lo pongo en verdadero 
+                                        valores.add("1");
+                                }
+                                else
+                                    valores.add(sIn);
+                            }
+                                
+                            break;
+                        case 5:
+                            sIn = Star.checaLongitud(7, sIn);
+                            if(!sIn.trim().matches("peps|ueps|ultcost|prom")) 
+                                break producto;  
+                            valores.add(sIn);
+                            break;
+                        case 6:{//Descripción larga
+                        sIn = Star.checaLongitud(2100, sIn);
 
-                            /*Obtiene solo el código*/
-                            StringTokenizer str = new StringTokenizer(sIn, ",");
-                            sIn         = str.nextToken().trim().toUpperCase();
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        }
-                        /*Else if: Descripción larga*/
-                        else if(iContCell == 6)
-                        {
-                            /*Si es cadena vacia entonces que sea cadena vacia*/
-                            if(sIn.compareTo(".")==0)
-                                sIn     = "";
-
-                            /*Obtiene la descripción del producto*/
+                        //si esta vacio o no tiene el formato permitido 
+                        if(!sIn.matches("[a-zA-Z\\d\\- ]+")) 
+                            valores.add("");
+                        else{
+                        /*Obtiene la descripción del producto*/
                             sDescrip    = sIn;
 
                             /*Ve creando la cadena a mostrar con la descripción del producto*/
                             sCadFin     += sDescrip + "  ";
 
                             /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
+                            valores.add(sIn.replace("'", "''")); 
                         }
-                        /*Else if: Descripción corta*/
-                        else if(iContCell == 7)
-                        {
-                            /*Si es cadena vacia entonces que sea cadena vacia*/
-                            if(sIn.compareTo(".")==0)
-                                sIn     = "";
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        }
-                        /*Else if: Código de línea*/
-                        else if(iContCell == 8)
-                        {
-                            /*Comprueba si el código de la línea existe, si no existe entonces la crea con su descripción*/
-                            vCreLin(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));
-
-                            /*Si hubo error entonces*/
-                            if(bErr)
-                            {
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
-                                /*Cierra y regresa*/
-                                dispose();                                    
-                                return; 
-                            }
-
-                            /*Obtiene solo el código*/
-                            StringTokenizer str = new StringTokenizer(sIn, ",");
-                            sIn         = str.nextToken().trim().toUpperCase();
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        }
-                        /*Else if: Código de la marca*/
-                        else if(iContCell == 9)
-                        {
-                            /*Comprueba si el código de la línea marca, si no existe entonces la crea con su descripción*/
-                            vCreMarc(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));                                                                
-
-                            /*Si hubo error entonces*/
-                            if(bErr)
-                            {
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
-
-                                /*Cierra la forma y regresa*/
-                                dispose();                                    
-                                return; 
-                            }
-
-                            /*Obtiene solo el código*/
-                            StringTokenizer str = new StringTokenizer(sIn, ",");
-                            sIn         = str.nextToken().trim().toUpperCase();
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        }   
-                        /*Else if: Código del fabricante*/
-                        else if(iContCell == 10)
-                        {
-                            /*Comprueba si el código del fabricante existe, si no existe entonces la crea con su descripción*/
-                            vCreFab(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));
-
-                            /*Si hubo error entonces*/
-                            if(bErr)
-                            {
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
-                                
-                                /*Cierra y regresa*/
-                                dispose();                                    
-                                return; 
-                            }
-
-                            /*Obtiene solo el código*/
-                            StringTokenizer str = new StringTokenizer(sIn, ",");
-                            sIn         = str.nextToken().trim().toUpperCase();
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        }   
-                        /*Else if: Código del color*/
-                        else if(iContCell == 11)
-                        {
-                            /*Comprueba si el código del color existe, si no existe entonces la crea con su descripción*/
-                            vCreColo(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));
-
-                            /*Si hubo error entonces*/
-                            if(bErr)
-                            {
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
-
-                                /*Cierra la forma y rgeresa*/
-                                dispose();                                    
-                                return; 
-                            }
-
-                            /*Obtiene solo el código*/
-                            StringTokenizer str = new StringTokenizer(sIn, ",");
-                            sIn         = str.nextToken().trim().toUpperCase();
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        }  
-                        /*Else if: Código del peso*/
-                        else if(iContCell == 12)
-                        {
-                            /*Comprueba si el código del pes existe, si no existe entonces la crea con su descripción*/
-                            vCrePes(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));
-
-                            /*Si hubo error entonces cierra la forma y regresa*/
-                            if(bErr)
-                            {
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
-
-                                /*Cierra la forma y regresa*/
-                                dispose();                                    
-                                return; 
-                            }
-
-                            /*Obtiene solo el código*/
-                            StringTokenizer str = new StringTokenizer(sIn, ",");
-                            sIn         = str.nextToken().trim().toUpperCase();
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        } 
-                        /*Else if: Peso entonces completa la ruta*/
-                        else if(iContCell == 13)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Precio lista 1 entonces completa la ruta*/
-                        else if(iContCell == 14)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Precio lista 2 entonces completa la ruta*/
-                        else if(iContCell == 15)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Precio lista 3 entonces completa la ruta*/
-                        else if(iContCell == 16)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Precio lista 4 entonces completa la ruta*/
-                        else if(iContCell == 17)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Precio lista 5 entonces completa la ruta*/
-                        else if(iContCell == 18)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Precio lista 6 entonces completa la ruta*/
-                        else if(iContCell == 19)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Precio lista 7 entonces completa la ruta*/
-                        else if(iContCell == 20)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Precio lista 8 entonces completa la ruta*/
-                        else if(iContCell == 21)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Precio lista 9 entonces completa la ruta*/
-                        else if(iContCell == 22)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Precio lista 10 entonces completa la ruta*/
-                        else if(iContCell == 23)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Costo entonces completa la ruta*/
-                        else if(iContCell == 24)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                  
-                        /*Else if: Costo recoger entonces completa la ruta*/
-                        else if(iContCell == 25)
-                            sQInsert   += sIn.replace("'", "''") + "','";                                                          
-                        /*Else if: Código de la unidad*/
-                        else if(iContCell == 26)
-                        {
-                            /*Comprueba si el código de la unidad existe, si no existe entonces la crea con su descripción*/
-                            vCreUnid(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));
-
-                            /*Si hubo error entonces cierra la forma y regresa*/
-                            if(bErr)
-                            {
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
-
-                                /*Cierra la forma y regresa*/
-                                dispose();                                    
-                                return; 
-                            }
-
-                            /*Obtiene solo el código*/
-                            StringTokenizer str = new StringTokenizer(sIn, ",");
-                            sIn         = str.nextToken().trim().toUpperCase();
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        } 
-                        /*Else if: Código del anaquel*/
-                        else if(iContCell == 27)
-                        {
-                            /*Comprueba si el código del anaquel existe, si no existe entonces la crea con su descripción*/
-                            vCreAnaq(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));
-
-                            /*Si hubo error entonces cierra la forma y regresa*/
-                            if(bErr)
-                            {
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
-                                
-                                /*Cierra la forma y regresa*/
-                                dispose();                                    
-                                return; 
-                            }
-
-                            /*Obtiene solo el código*/
-                            StringTokenizer str = new StringTokenizer(sIn, ",");
-                            sIn         = str.nextToken().trim().toUpperCase();
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        } 
-                        /*Else if: Código del lugar*/
-                        else if(iContCell == 28)
-                        {
-                            /*Comprueba si el código del lugar existe, si no existe entonces la crea con su descripción*/
-                            vCreLug(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));
-
-                            /*Si hubo error entonces cierra la forma y regresa*/
-                            if(bErr)
-                            {
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
-
-                                /*Cierra la forma y regresa*/
-                                dispose();                                    
-                                return; 
-                            }
-
-                            /*Obtiene solo el código*/
-                            StringTokenizer str = new StringTokenizer(sIn, ",");
-                            sIn         = str.nextToken().trim().toUpperCase();
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        }                      
-                        /*Else if: Anotaciones*/
-                        else if(iContCell == 29)
-                        {
-                            /*Si es cadena vacia entonces que sea cadena vacia*/
-                            if(sIn.compareTo(".")==0)
-                                sIn     = "";
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        } 
-
-                        /*Else if: Información*/
-                        else if(iContCell == 30)
-                        {
-                            /*Si es cadena vacia entonces que sea cadena vacia*/
-                            if(sIn.compareTo(".")==0)
-                                sIn     = "";
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        }  
-                        /*Else if: Impuesto*/
-                        else if(iContCell == 34)
-                        {                      
-                            /*Si el impuesto no es punto entonces*/
-                            if(sIn.compareTo(".")!=0)
-                            {                                    
-                                /*Comprueba si el código del impuesto existe, si no existe entonces crea con su descripción*/
-                                vCreImpue(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));
-
+                        }break;
+                        case 7://nombre (descripcion corta)
+                            sIn = Star.checaLongitud(255, sIn);
+                            valores.add(sIn.replace("'", "''"));
+                            break;
+                        case 8:{//Código de línea
+                            sIn = Star.checaLongitud(30, sIn);
+                             //si esta vacio o no tiene el formato permitido 
+                            if(!sIn.matches("[a-zA-Z\\d]+,.+")) 
+                                valores.add("");
+                            else{
+                                /*Comprueba si el código de la línea existe, si no existe entonces la crea con su descripción*/
+                                vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "lins", "loglins", "cod", "descrip", "cod", "descrip");
+                                //Checa si hubo errores y si no, agrega el valor
+                                valores = agregaValor(sIn, valores, con);
                                 /*Si hubo error entonces*/
-                                if(bErr)
-                                {
-                                    //Cierra la base de datos y sal de la aplicación
-                                    if(Star.iCierrBas(con)==-1)
-                                        return;
-                                
-                                    /*Cierra la forma y regresa*/
-                                    dispose();                                    
-                                    return; 
-                                }
-
-                                /*Obtiene solo el código*/
-                                StringTokenizer str = new StringTokenizer(sIn, ",");
-                                sIn         = str.nextToken().trim().toUpperCase();
-
-                            }/*Fin de if(sIn.compareTo(".")!=0)*/
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''").replace(".", "") + "','";     
-                        } 
-                        /*Else if: Tipo*/
-                        else if(iContCell == 39)
-                        {                                
-                            /*Comprueba si el código del tipo existe, si no existe entonces crealo con su descripción*/
-                            vCreTip(sIn, con, Integer.toString(iConta), Integer.toString(iContCell));
-
-                            /*Si hubo error entonces*/
-                            if(bErr)
-                            {
-                                //Cierra la base de datos y sal de la aplicación
-                                if(Star.iCierrBas(con)==-1)
-                                    return;
-                                
-                                /*Cierra la forma y regresa*/
-                                dispose();                                    
-                                return; 
+                                if(bErr) return;  
                             }
+                            }break;
+                        case 9:/*Tipo*/
+                            {             
+                                sIn = Star.checaLongitud(30, sIn);
+                                //si esta vacio o no tiene el formato permitido 
+                               if(!sIn.matches("[a-zA-Z\\d]+,.+")) 
+                                   valores.add("");
+                                else{
+                            
+                                    sIn = Star.checaLongitud(30, sIn);
+                                    /*Comprueba si el código del tipo existe, si no existe entonces crealo con su descripción*/
+                                    vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "tips", "logtip",  "cod", "descrip", "cod", "descrip");
 
-                            /*Obtiene solo el código*/
-                            StringTokenizer str = new StringTokenizer(sIn, ",");
-                            sIn         = str.nextToken().trim().toUpperCase();
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += sIn.replace("'", "''") + "','";     
-                        }                             
-
-                    break;
-
-                    /*En caso de que sea de tipo númerico*/
-                    case Cell.CELL_TYPE_NUMERIC:
-
-                        /*If: Medida*/
-                        if(iContCell == 5)
+                                    //Checa si hubo errores y si no, agrega el valor
+                                    valores = agregaValor(sIn, valores, con);
+                                    /*Si hubo error entonces*/
+                                    if(bErr) return;     
+                               }
+                            }break;
+                        case 10:/*Código del fabricante*/
                         {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
+                            sIn = Star.checaLongitud(30, sIn);
+                             //si esta vacio o no tiene el formato permitido 
+                            if(!sIn.matches("[a-zA-Z\\d]+,.+"))
+                                valores.add("");
+                            else{
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        }   
-                        /*Else if: Peso*/
-                        else if(iContCell == 13)
+                                /*Comprueba si el código del fabricante existe, si no existe entonces la crea con su descripción*/
+                                vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell),"fabs", "logfabs",  "cod", "descrip", "cod", "descrip");
+
+                                //Checa si hubo errores y si no, agrega el valor
+                                valores = agregaValor(sIn, valores, con);
+                                /*Si hubo error entonces*/
+                                if(bErr) return;
+                            }
+                        }break;
+                        case 11:/*Código de la marca*/
+                            {
+                                sIn = Star.checaLongitud(30, sIn);
+                                //si esta vacio o no tiene el formato permitido 
+                               if( !sIn.matches("[a-zA-Z\\d]+,.+"))
+                                   valores.add("");
+                               else{
+
+                                    /*Comprueba si el código de la línea marca, si no existe entonces la crea con su descripción*/
+                                    vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "marcs", "logmarc",  "cod", "descrip", "cod", "descrip");                                                                
+
+                                    //Checa si hubo errores y si no, agrega el valor
+                                    valores = agregaValor(sIn, valores, con);
+                                    /*Si hubo error entonces*/
+                                    if(bErr) return;     
+                               }
+                            } break;
+                        case 12:{//modelo
+                            sIn = Star.checaLongitud(30, sIn);
+                             //si esta vacio o no tiene el formato permitido 
+                            if( !sIn.matches("[a-zA-Z\\d]+,.+"))
+                                valores.add("");
+                            else{
+                                /*Comprueba si el código del modelo existe, si no existe entonces la crea con su descripción*/
+                               vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "model", "logmod",  "cod", "descrip", "cod", "descrip");
+
+                               //Checa si hubo errores y si no, agrega el valor
+                               valores = agregaValor(sIn, valores, con);
+                               /*Si hubo error entonces*/
+                               if(bErr) return;
+                            }
+                        }break;
+                        case 13:  { //Código de medida
+                            sIn = Star.checaLongitud(30, sIn);
+                             //si esta vacio o no tiene el formato permitido 
+                            if( !sIn.matches("[a-zA-Z]+,.+"))
+                                valores.add("");
+                            else{
+
+                                /*Comprueba si el código de la medida existe, si no existe entonces la crea con su descripción*/
+                                vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell),"meds", "logmed",  "cod", "descrip", "cod", "descrip");
+
+                                //Checa si hubo errores y si no, agrega el valor
+                                valores = agregaValor(sIn, valores, con);
+                                /*Si hubo error entonces*/
+                                if(bErr) return;
+                            }
+                        }break;
+                        case 14: case 16:
+                             //si esta vacio o no tiene el formato permitido se brinca,los datos obligatorios no pueden ser vacios
+                            if(!sIn.matches("(\\d+)?(\\.\\d{1,6})?")) 
+                                valores.add("");
+                            else
+                                valores.add(sIn); 
+                            break;
+                        case 15:/*Código del peso*/
                         {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
+                            sIn = Star.checaLongitud(30, sIn);
+                             //si esta vacio o no tiene el formato permitido 
+                            if(!sIn.matches("[a-zA-Z]+,.+"))
+                                valores.add("");
+                            else{
+                                /*Comprueba si el código del pes existe, si no existe entonces la crea con su descripción*/
+                                vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "pes", "logpes",  "cod", "descrip", "cod", "descrip");
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Precio lista 1*/
-                        else if(iContCell == 14)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert    = sQInsert.substring(0, sQInsert.length() - 1);
+                                //Checa si hubo errores y si no, agrega el valor
+                                valores = agregaValor(sIn, valores, con);
+                                /*Si hubo error entonces*/
+                                if(bErr) return;  
+                            }
+                        }break;
+                        case 17:/*Código del color*/
+                            {
+                                sIn = Star.checaLongitud(30, sIn);
+                                //si esta vacio o no tiene el formato permitido s
+                               if(!sIn.matches("[\\w\\-/]+,.+"))
+                                   valores.add("");
+                               else{
+                                    /*Comprueba si el código del color existe, si no existe entonces la crea con su descripción*/
+                                    vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "colos", "logcolo",  "cod", "descrip", "cod", "descrip");
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Precio lista 2*/
-                        else if(iContCell == 15)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert    = sQInsert.substring(0, sQInsert.length() - 1);
+                                    //Checa si hubo errores y si no, agrega el valor
+                                    valores = agregaValor(sIn, valores, con);
+                                    /*Si hubo error entonces*/
+                                    if(bErr) return;    
+                               }
+                            }break;
+                        case 18:/*Clasificacion extra*/
+                        {                         
+                            sIn = Star.checaLongitud(30, sIn);
+                            if(sIn.isEmpty())
+                                valores.add("");
+                            else{
+                                /*Comprueba si el código del impuesto existe, si no existe entonces crea con su descripción*/
+                                vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "clasprod", "logprods",  "cod", "descrip", "cod", "descrip");
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Precio lista 3*/
-                        else if(iContCell == 16)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert    = sQInsert.substring(0, sQInsert.length() - 1);
+                                //Checa si hubo errores y si no, agrega el valor
+                                valores = agregaValor(sIn, valores, con);
+                                /*Si hubo error entonces*/
+                                if(bErr) return;   
+                            }
+                        }break;
+                        case 19:/*Impuesto*/
+                            {                      
+                                sIn = Star.checaLongitud(30, sIn);
+                                //si esta vacio o no tiene el formato permitido 
+                               if( !sIn.matches("[a-zA-Z]+,(\\d+)?(\\.\\d{1,2})?")) 
+                                    valores.add("");
+                                else{
+                                    /*Comprueba si el código del impuesto existe, si no existe entonces crea con su descripción*/
+                                    vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "impues", "logimpues", "codimpue", "impueval", "cod", "val");
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Precio lista 4*/
-                        else if(iContCell == 17)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert    = sQInsert.substring(0, sQInsert.length() - 1);
+                                    //Checa si hubo errores y si no, agrega el valor
+                                    valores = agregaValor(sIn, valores, con);
+                                    /*Si hubo error entonces*/
+                                    if(bErr) return;    
+                               }
+                            }break;
+                        case 20: case 21://Informacion, anotaciones
+                            if(iContCell == 20)
+                                sIn = Star.checaLongitud(255, sIn);
+                            else
+                                sIn = Star.checaLongitud(100, sIn);
+                            valores.add(sIn.replace("'", "''")); 
+                            break;
+                        case 22: case 23:
+                            sIn = Star.checaLongitud(30, sIn);
+                            //si esta vacio o no tiene el formato permitido se brinca,los datos obligatorios no pueden ser vacios
+                            if( !sIn.matches("[a-zA-Z\\d\\-]+")) 
+                                valores.add("");
+                            else
+                                valores.add(sIn.replace("'", "''")); 
+                            break;
+                        case 24:/*Garantia*/
+                            {                             
+                                sIn = Star.checaLongitud(30, sIn);
+                                //si esta vacio o no tiene el formato permitido se brinca,los datos obligatorios no pueden ser vacios
+                               if( !sIn.matches("[a-zA-Z\\d]+,.+"))
+                                   valores.add("");
+                                else{
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Precio lista 5*/
-                        else if(iContCell == 18)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
+                                    /*Comprueba si el código del impuesto existe, si no existe entonces crea con su descripción*/
+                                    vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "garan", "loggara", "gara", "descrip", "cod", "descrip");
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Precio lista 6*/
-                        else if(iContCell == 19)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert    = sQInsert.substring(0, sQInsert.length() - 1);
+                                    //Checa si hubo errores y si no, agrega el valor
+                                    valores = agregaValor(sIn, valores, con);
+                                    /*Si hubo error entonces*/
+                                    if(bErr) return; 
+                                }
+                            }break;
+                        
+                         case 25: case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36: 
+                             //si el tipo de datos es numerico, se convierte en double con este metodo le quita los decimales a los numeros que pudiran haber escrito
+                            if(tipo == 0 && !sIn.isEmpty())
+                                sIn = quitaDoble(sIn);
+                            
+                             if( !sIn.matches("(\\d+)?(\\.\\d{1,2})?")) 
+                                 valores.add("0");
+                             else
+                             {
+                                 if(sIn.isEmpty())
+                                    valores.add("0");
+                                 else
+                                    valores.add(sIn);
+                             }
+                            break;
+                             
+                            //Casos con valor de tipo BIT
+                        case 37: case 38: case 41: case 42: case 43:
+                            //si el tipo de datos es numerico, se convierte en double con este metodo le quita los decimales a los numeros que pudiran haber escrito
+                            if(tipo == 0 && !sIn.isEmpty())
+                                sIn = quitaDoble(sIn);
+                            
+                            if (!sIn.matches("0|1")) 
+                            {
+                                if(iContCell == 38 || iContCell == 37)
+                                    valores.add("1");
+                                else
+                                    valores.add("0"); 
+                            }
+                               
+                           else
+                               valores.add(sIn);
+                            break;
+                        case 39: case 40://maximos y minimos
+                            //Si No solicitar maximos y minimos esta marcado los pone en 1
+                            if(Integer.parseInt(valores.get(37)) == 1)
+                                valores.add("0");
+                            else{
+                                //si el tipo de datos es numerico, se convierte en double con este metodo le quita los decimales a los numeros que pudiran haber escrito
+                                if(tipo == 0 && !sIn.isEmpty())
+                                    sIn = quitaDoble(sIn);
+                            
+                                if (!sIn.matches("[\\d]+"))
+                                {
+                                    if(iContCell==39)
+                                    valores.add("1");
+                                    else
+                                        valores.add(Integer.parseInt(valores.get(valores.size()-1))+1+"");
+                                }
+                                else
+                                    valores.add(sIn);
+                            }
+                            break;
+                            
+                        default: valores.add(sIn.replace("'", "''")); 
+                    }                                                           
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Precio lista 7*/
-                        else if(iContCell == 20)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
+                    /*Aumenta en uno el contador de la celda*/
+    //                ++iContCell;
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Precio lista 8*/
-                        else if(iContCell == 21)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
+                }/*Fin de while (cellIterator.hasNext())*/
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Precio lista 9*/
-                        else if(iContCell == 22)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
+                /*Coloca en el campo para que sea visible que código se esta procesando*/
+                jTInf.setText(sCadFin);                    
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Precio lista 10*/
-                        else if(iContCell == 23)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
+               /*Inserta en la base de datos el registro*/
+                try
+                {
+                    //(codemp, ser, nom, list, calle, col, noext, cp, ciu, estad, pai, rfc, co1, codclas, estac, sucu, nocaj)
+                    pst = con.prepareStatement(sQInsert );      
 
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Costo*/
-                        else if(iContCell == 24)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Costo recoger*/
-                        else if(iContCell == 25)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Mínimo*/
-                        else if(iContCell == 31)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Máximo*/
-                        else if(iContCell == 32)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        } 
-                        /*Else if: Compuesto*/
-                        else if(iContCell == 33)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        }                                 
-                        /*Else if: Inventariable*/
-                        else if(iContCell == 35)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        }                                 
-                        /*Else if: Vender abajo del cost*/
-                        else if(iContCell == 36)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        }                                                                 
-                        /*Else if: Es para venta*/
-                        else if(iContCell == 37)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
-                        }                      
-                        /*Else if es servicio*/
-                        else if(iContCell == 38)
-                        {
-                            /*Quita la última coma*/
-                            sQInsert = sQInsert.substring(0, sQInsert.length() - 1);
-
-                            /*Completa la consulta con todas las celdas*/
-                            sQInsert   += Double.toString(cell.getNumericCellValue()) + ",'";                                
+                    //recorro todo el array y agrega los valores
+                    for (int i = 0; i < valores.size(); i++) {
+                        switch(i){
+                            case 38: case 39:
+                                //casos especiales, donde el tipo de dato es integer
+                                if(!valores.get(i).isEmpty())
+                                    pst.setInt(i + 1, Integer.parseInt(valores.get(i))); break;
+                            case 13: case 15: case 24: case 25: case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 35:
+                                //casos especiales, donde el tipo de dato es flotante
+                                if(!valores.get(i).isEmpty())
+                                    pst.setFloat(i + 1,Float.parseFloat(valores.get(i))); break;
+                            case 2: case 3: case 36: case 37: case 40:  case 41: case 42:
+                                //casos especiales, donde el tipo de dato es boolean
+                                if(!valores.get(i).isEmpty())
+                                    pst.setBoolean(i + 1, (Integer.parseInt(valores.get(i)) == (1))); break;
+                            default: pst.setString(i + 1,valores.get(i));
                         }
+                    }    
+                    pst.setString(44,"0");
+                    pst.setString(45,Login.sUsrG);  //agrego estac 
+                    pst.setString(46,Star.sSucu);  //agrego sucu
+                    pst.setString(47,Star.sNoCaj); //agrego nocaj
 
-                    break;
-                }                                                           
+                    pst.executeUpdate();
+                }
+                catch(SQLException | HeadlessException e)
+                {                        
 
-                /*Aumenta en uno el contador de la celda*/
-                ++iContCell;
+                    /*Esconde el loading*/
+                    if(Star.lCargGral!=null)
+                        Star.lCargGral.setVisible(false);
 
-            }/*Fin de while (cellIterator.hasNext())*/
+                    //Cierra la base de datos y regresa
+                    if(Star.iCierrBas(con)==-1)                                
+                        return;
 
-            /*Coloca en el campo para que sea visible que código se esta procesando*/
-            jTInf.setText(sCadFin);                    
+                    /*Agrega en el log*/
+                    Login.vLog(e.getMessage());
 
-            /*Quita los últimos carácteres inválidos*/
-            sQInsert        = sQInsert.substring(0, sQInsert.length() - 2);
+                    /*Llama al recolector de basura y mensajea*/
+                    System.gc();                       
 
-            /*Agrega el terminador de la consulta*/
-            sQInsert        += ",'" + Star.sSucu + "','" + Star.sNoCaj + "', '" + Login.sUsrG + "', now(), 0, '" + sMetCost + "')";
+                    /*Mensajea y regresa*/
+                    JOptionPane.showMessageDialog(null, "Error en fila: "  + iConta + " celda: " + iContCell + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));                    
+                    return;
+                } 
+
+                /*Inserta en log de productos*/
+                try 
+                {            
+                    sQ = "INSERT INTO logprods( cod,                                        descrip,        accio,             estac,                                       sucu,                                     nocaj,                                falt) " + 
+                                  "VALUES('" +  sCodProd.replace("'", "''") + "','" +       sDescrip + "',  'AGREGAR', '" +    Login.sUsrG.replace("'", "''") + "','" +     Star.sSucu.replace("'", "''") + "','" +   Star.sNoCaj.replace("'", "''") + "',  now())";                                
+                    st = con.createStatement();
+                    st.executeUpdate(sQ);
+                 }
+                catch(SQLException ex) 
+                { 
+                    //Cierra la base de datos y sal de la aplicación
+                    if(Star.iCierrBas(con)==-1)
+                        return;
+
+                    /*Agrega en el log*/
+                    Login.vLog(ex.getMessage());
+
+
+                    /*Mensajea y cierra la forma*/
+                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                 
+                    this.dispose();                        
+                 }
+            }//fin del label producto:
             
-            /*Inserta en la base de datos el registro*/
-            try
-            {
-                st = con.createStatement();                        
-                st.executeUpdate(sQInsert);
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                        
-            }
-
-            /*Inserta en log de productos*/
-            try 
-            {            
-                sQ = "INSERT INTO logprods( cod,                                        descrip,        accio,             estac,                                       sucu,                                     nocaj,                                falt) " + 
-                              "VALUES('" +  sCodProd.replace("'", "''") + "','" +       sDescrip + "',  'AGREGAR', '" +    Login.sUsrG.replace("'", "''") + "','" +     Star.sSucu.replace("'", "''") + "','" +   Star.sNoCaj.replace("'", "''") + "',  now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-             }
-            catch(SQLException expnSQL) 
-            { 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                                                        
-             }
-
-            /*Aumenta el contador de filas*/
-            ++iConta;
-
+            
+            
         }/*Fin de while (rowIt.hasNext())*/
 
         /*Cierra el fichero*/
@@ -911,35 +677,84 @@ public class Loadin extends javax.swing.JFrame
         {
             file.close();       
         }
-        catch(IOException expnIO)
+        catch(Exception e)
         {
-            //Procesa el error
-            Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace());                                                                   
+            /*Llama al recolector de basura*/
+            System.gc();
+
+            /*Cierra la forma*/
+            this.dispose();
+
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Llama al recolector de basura*/
+            System.gc();
+
+            /*Mensajea y cierra la forma*/
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                 
+            this.dispose();                        
         }            
-                    
+        this.dispose();
     }/*Fin de private void vImpBD*/
   
-    
-    /*Comprueba si el código de la medida existe, si no existe entonces la crea con su descripción*/
-    private void vCreMed(String sVal, Connection con, String sCont, String sContCell)
+    // (meds, logmed), (lins, loglins), (marcs, logmarcs), (models, logmod), (fabs, logfabs), (pes, logpes), (colos, logcolo), (unids, logunid), (clasprod, logprods), (tips, logtip)
+    /*Comprueba si el código de la med, lins, marcs, models, pes,colos, unids, clasprod, tips  existe, si no existe entonces la crea con su descripción*/
+    private void vCrea(String sVal, Connection con, String sCont, String sContCell, String tabla, String tablaLog, String colCod, String colDescrip, String colCodLog, String colDescripLog)
     {
-        //Obtiene el código
+        /*Tokeniza*/
         StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-                
-        //Obtiene la descricpión
-        String sDescrip     = str.nextToken().trim().toUpperCase();  
+        String sCod;
+        
+        /*Separa el código*/
+        try
+        {
+            sCod            = str.nextToken().trim().toUpperCase();
+        }
+        catch(Exception e)
+        {
+            /*Coloca la bandera para saber que hubo error*/
+            bErr            = true;
+            
+            //Cierra la base de datos y sal de la aplicación
+            if(Star.iCierrBas(con)==-1)
+                return;
+
+            /*Mensajea y regresa*/
+            JOptionPane.showMessageDialog(null, "Error en fila: " + sCont + " celda: " + sContCell + " por " + e.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+            return;
+        }        
+        
+        /*Separa la descripción*/
+        String sDescrip;
+        try
+        {
+            sDescrip     = str.nextToken().trim().toUpperCase();  
+        }
+        catch(Exception e)
+        {
+            //Cierra la base de datos y sal de la aplicación
+            if(Star.iCierrBas(con)==-1)
+                return;
+            
+            /*Coloca la bandera para saber que hubo error*/
+            bErr            = true;
+            
+            /*Mensajea y regresa*/
+            JOptionPane.showMessageDialog(null, "Error en fila: " + sCont + " celda: " + sContCell + " por " + e.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+            return;
+        }         
         
         /*Si la descripción es un punto entonces que sea cadena vacia*/
         if(sDescrip.compareTo(".")==0)
             sDescrip        = "";
         
-        //Declara variables de la base de datos
-        Statement   st;        
-        String      sQ; 
+        /*Declara variables de la base de datos*/
+        Statement   st;      
+        String      sQ              = ""; 
         
         //Comprueba si la medida existe
-        int iRes    = Star.iExistMed(con, sCod.trim());
+        int iRes    = Star.iExiste(con, sCod.trim(), tabla, colCod);
                 
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -956,717 +771,61 @@ public class Loadin extends javax.swing.JFrame
             /*Inserta el código en la base de datos*/
             try 
             {                
-                sQ      = "INSERT INTO meds(cod,                                estac,                                      descrip,                            falt,   fmod,           sucu,                                           nocaj) " + 
+                sQ      = "INSERT INTO "+tabla+"("+colCod+",                                estac,                   "+colDescrip+",                            falt,   fmod,           sucu,                                           nocaj) " + 
                                "VALUES('" + sCod.replace("'", "''") + "', '" +  Login.sUsrG.replace("'", "''") + "', '" +   sDescrip.replace("'", "''") + "',   now(),  now(), '" +     Star.sSucu.replace("'", "''") + "','" +   Star.sNoCaj.replace("'", "''") + "')";                                       
                 st      = con.createStatement();
                 st.executeUpdate(sQ);
              }
-             catch(SQLException expnSQL) 
+             catch(SQLException | HeadlessException e) 
              { 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                        
+                 //Cierra la base de datos y sal de la aplicación
+                if(Star.iCierrBas(con)==-1)
+                    return;
+
+                /*Agrega en el log*/
+                Login.vLog(e.getMessage());                    
+                
+                /*Coloca la bandera para saber que hubo error*/
+                bErr            = true;
+            
+                /*Mensajea y regresa*/
+                JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));                  
+                return;                   
              }
 
             /*Inserta en log de meds*/
             try 
             {            
-                sQ = "INSERT INTO logmeds(cod,                                      descrip,                            accio,          estac,    sucu,      nocaj,    falt) " + 
+                sQ = "INSERT INTO "+tablaLog+"("+colCodLog+",              "+colDescripLog+",                            accio,          estac,    sucu,      nocaj,    falt) " + 
                              "VALUES('" + sCod.replace("'", "''") + "', '" +        sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             }
-            catch(SQLException expnSQL) 
+            catch(SQLException ex) 
             { 
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                       
+                //Cierra la base de datos y sal de la aplicación
+                if(Star.iCierrBas(con)==-1)
+                    return;
+
+                /*Coloca la bandera para saber que hubo error*/
+                bErr            = true;
+            
+                /*Agrega en el log y mensajea*/
+                Login.vLog(ex.getMessage());                                
+                JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));                                
             }
                         
         }/*if(!bSi)*/
                 
-    }/*Fin de private void vCreMed(String sMed)*/
-
-    
-    /*Comprueba si el código de la línea existe, si no existe entonces la crea con su descripción*/
-    private void vCreLin(String sVal, Connection con, String sCont, String sContCell)
-    {
-        //Ontiene el código
-        StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-        
-        //Obtiene la descripción
-        String sDescrip     = str.nextToken().trim().toUpperCase();  
-        
-        /*Si la descripción es un punto entonces que sea cadena vacia*/
-        if(sDescrip.compareTo(".")==0)
-            sDescrip        = "";
-        
-        //Declara variables de la base de datos
-        Statement   st;        
-        String      sQ; 
-        
-        //Comprueba si existe una línea
-        int iRes        = Star.iExistLin(con, sCod.trim());
-        
-        //Si hubo error entonces regresa
-        if(iRes==-1)
-            return;
-        
-        //Si existe la línea entonces coloca la bandera
-        boolean bSi = false;
-        if(iRes==1)
-            bSi     = true;
-        
-        /*Si el código no existe entonces*/
-        if(!bSi)
-        {
-            /*Inserta el registro en la base de datos*/
-            try 
-            {                
-                sQ = "INSERT INTO lins(  cod,                                   estac,                                      descrip,                            falt,   fmod,       sucu,                                           nocaj) " + 
-                       "VALUES('" +      sCod.replace("'", "''") + "', '" +     Login.sUsrG.replace("'", "''") + "', '" +   sDescrip.replace("'", "''") + "',   now(),  now(), '" + Star.sSucu.replace("'", "''") + "','" +   Star.sNoCaj.replace("'", "''") + "')";                                       
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-             }
-             catch(SQLException expnSQL) 
-             { 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                        
-             } 
-
-            /*Inserta en log de líneas*/
-            try 
-            {            
-                sQ = "INSERT INTO loglins(cod,                                      descrip,                            accio,          estac,    sucu,      nocaj,    falt) " + 
-                             "VALUES('" + sCod.replace("'", "''") + "', '" +        sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            { 
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                                                       
-            }
-                        
-        }/*if(!bSi)*/              
-
-    }/*Fin de private void vCreLin(String sMed)*/
-
-    
-    /*Comprueba si el código de la marca existe, si no existe entonces la crea con su descripción*/
-    private void vCreMarc(String sVal, Connection con, String sCont, String sContCell)
-    {
-        //Obtiene el código
-        StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-        
-        //Obtiene la descripción
-        String sDescrip     = str.nextToken().trim().toUpperCase();  
-        
-        /*Si la descripción es un punto entonces que sea cadena vacia*/
-        if(sDescrip.compareTo(".")==0)
-            sDescrip        = "";
-        
-        //Declara variables de la base de datos
-        Statement   st;        
-        String      sQ; 
-        
-        //Comprueba si la marca existe
-        int iRes    = Star.iExistMarc(con, sCod);
-        
-        //Si hubo error entonces regreas
-        if(iRes==-1)
-            return;
-        
-        //Si la marca existe entonces coloca la bandera
-        boolean bSi = false;
-        if(iRes==1)
-            bSi     = true;
-        
-        /*Si el código no existe entonces*/
-        if(!bSi)
-        {
-            /*Inserta el registro en la base de datos*/
-            try 
-            {                
-                sQ = "INSERT INTO marcs(cod,                                estac,                                      descrip,                                falt,      fmod,                sucu,                                           nocaj) " + 
-                           "VALUES('" + sCod.replace("'", "''") + "', '" +  Login.sUsrG.replace("'", "''") + "', '" +   sDescrip.replace("'", "''") + "',       now(),     now(), '" +          Star.sSucu.replace("'", "''") + "','" +    Star.sNoCaj.replace("'", "''") + "')";                                       
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-             }
-             catch(SQLException expnSQL) 
-             { 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                        
-             }    
-            
-            /*Inserta en log de marcs*/
-            try 
-            {            
-                sQ = "INSERT INTO logmarc(cod,                                  descrip,                            accio,          estac,    sucu,      nocaj,    falt) " + 
-                            "VALUES('" + sCod.replace("'", "''") + "', '" +     sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            {    
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                                                       
-            }
-            
-        }/*if(!bSi)*/
-               
-    }/*Fin de private void vCreMarc(String sMed)*/
-    
-    
-    /*Comprueba si el código del fabricante existe, si no existe entonces la crea con su descripción*/
-    private void vCreFab(String sVal, Connection con, String sCont, String sContCell)
-    {
-        //Obtiene el código
-        StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-        
-        //Obtiene la descripción
-        String sDescrip     = str.nextToken().trim().toUpperCase();  
-        
-        /*Si la descripción es un punto entonces que sea cadena vacia*/
-        if(sDescrip.compareTo(".")==0)
-            sDescrip        = "";
-        
-        //Declara variables de la base de datos
-        Statement   st;      
-        String      sQ; 
-        
-        //Comprueba si el fabricante existe
-        int iRes    = Star.iExistFab(con, sCod.trim());
-                
-        //Si hubo error entonces regresa
-        if(iRes==-1)
-            return;
-        
-        //Si el fabricante existe entonces coloca la bandera
-        boolean bSi = false;
-        if(iRes==1)
-            bSi     = true;
-        
-        /*Si el código no existe entonces*/
-        if(!bSi)
-        {
-            /*Inserta el registro en la base de datos*/
-            try 
-            {                
-                sQ = "INSERT INTO fabs(cod,                                 estac,                                      descrip,                                falt,      fmod,                   sucu,                                                nocaj) " + 
-                          "VALUES('" + sCod.replace("'", "''") + "', '" +   Login.sUsrG.replace("'", "''") + "', '" +   sDescrip.replace("'", "''") + "',       now(),     now(), '" +             Star.sSucu.replace("'", "''") + "','" +        Star.sNoCaj.replace("'", "''") + "')";                                       
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-             }
-             catch(SQLException expnSQL) 
-             { 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                                                        
-             }                        
-
-            /*Inserta en log de fabs*/
-            try 
-            {            
-                sQ = "INSERT INTO logfabs(cod,                                      descrip,                            accio,          estac,    sucu,      nocaj,    falt) " + 
-                             "VALUES('" + sCod.replace("'", "''") + "', '" +        sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            {    
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                                                       
-            }
-                        
-        }/*Fin de if(!bSi)*/                
-
-    }/*Fin de private void vCreFab(String sMed)*/
-    
-    
-    /*Comprueba si el código del color existe, si no existe entonces la crea con su descripción*/
-    private void vCreColo(String sVal, Connection con, String sCont, String sContCell)
-    {
-        //Obtiene el código
-        StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-        
-        //Obtiene la descripción
-        String sDescrip     = str.nextToken().trim().toUpperCase();  
-        
-        /*Si la descripción es un punto entonces que sea cadena vacia*/
-        if(sDescrip.compareTo(".")==0)
-            sDescrip        = "";
-        
-        //Declara variables de la base de datos
-        Statement   st;        
-        String      sQ; 
-        
-        //Inicialmente no existe el color
-        boolean bSi = false;        
-        
-        //Comprueba si existe el color                
-        int iRes    = Star.iExisColo(con, sCod);
-        
-        //Si hubo error entonces regresa
-        if(iRes==-1)
-            return;
-        
-        //Determina si existe o no
-        if(iRes==1)
-            bSi     = true;
-                
-        /*Si el código no existe entonces*/
-        if(!bSi)
-        {
-            /*Inserta el registro en la base de datos*/
-            try 
-            {
-                sQ = "INSERT INTO colos(cod,                                estac,                                      descrip,                                falt,      fmod,           sucu,                                            nocaj) " + 
-                           "VALUES('" + sCod.replace("'", "''") + "', '" +  Login.sUsrG.replace("'", "''") + "', '" +   sDescrip.replace("'", "''") + "',       now(),     now(), '" +     Star.sSucu.replace("'", "''") + "','" +    Star.sNoCaj.replace("'", "''") + "')";                                       
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-             }
-             catch(SQLException expnSQL) 
-             { 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                                                        
-             }  
-            
-            /*Inserta en log de colos*/
-            try 
-            {            
-                sQ = "INSERT INTO logcolo(cod,                                  descrip,                            accio,          estac,    sucu,      nocaj,    falt) " + 
-                            "VALUES('" + sCod.replace("'", "''") + "', '" +     sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            {    
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                                                       
-            }
-                        
-        }/*Fin de if(!bSi)*/                
-
-    }/*Fin de private void vCreColo(String sMed)*/
-    
-    
-    /*Comprueba si el código del pes existe, si no existe entonces la crea con su descripción*/
-    private void vCrePes(String sVal, Connection con, String sCont, String sContCell)
-    {
-        //Obtiene el código
-        StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-        
-        //Obtiene la descripción
-        String sDescrip     = str.nextToken().trim().toUpperCase();  
-        
-        /*Si la descripción es un punto entonces que sea cadena vacia*/
-        if(sDescrip.compareTo(".")==0)
-            sDescrip        = "";
-        
-        //Declara variables de la base de datos
-        Statement   st;        
-        String      sQ; 
-        
-        //Comprueba si el peso existe
-        int iRes        = Star.iExistPes(con, sCod.trim());
-        
-        //Si hubo error entonces regresa
-        if(iRes==-1)
-            return;
-                
-        //Si existe el peso entonces coloca la bandera
-        boolean bSi = false;
-        if(iRes==1)
-            bSi     = true;
-        
-        /*Si el código no existe entonces*/
-        if(!bSi)
-        {
-            /*Inserta el registro en la base de datos*/
-            try 
-            {                
-                sQ = "INSERT INTO pes(cod,                                  estac,                                      descrip,                                falt,      fmod,              sucu,                                             nocaj) " + 
-                         "VALUES('" + sCod.replace("'", "''") + "', '" +    Login.sUsrG.replace("'", "''") + "', '" +   sDescrip.replace("'", "''") + "',       now(),     now(), '" +        Star.sSucu.replace("'", "''") + "','" +     Star.sNoCaj.replace("'", "''") + "')";                                       
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            {                 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                                                        
-             }
-
-            /*Inserta en log de pess*/
-            try 
-            {            
-                sQ = "INSERT INTO logpes(cod,                                   descrip,                            accio,          estac,    sucu,      nocaj,    falt) " + 
-                            "VALUES('" + sCod.replace("'", "''") + "', '" +     sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            { 
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                                                       
-            }
-                        
-        }/*Fin de if(!bSi)*/               
-
-    }/*Fin de private void vCrePes(String sMed)*/
-    
-    
-    /*Comprueba si el código de la unidad existe, si no existe entonces la crea con su descripción*/
-    private void vCreUnid(String sVal, Connection con, String sCont, String sContCell)
-    {
-        //Obtiene el código
-        StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-        
-        //Separa la descripción
-        String sDescrip     = str.nextToken().trim().toUpperCase();  ;
-        
-        /*Si la descripción es un punto entonces que sea cadena vacia*/
-        if(sDescrip.compareTo(".")==0)
-            sDescrip        = "";
-        
-        //Declara variables de la base de datos
-        Statement   st;        
-        String      sQ; 
-        
-        //Comprueba si la unidad existe
-        int iRes        = Star.iExistUnid(con, sCod.trim());
-        
-        //Si hubo error entonces regresa
-        if(iRes==-1)
-            return;
-        
-        //Si existe la unidad entonces coloca la bandera
-        boolean bSi = false;
-        if(iRes==1)
-            bSi     = true;
-        
-        /*Si el código no existe entonces*/
-        if(!bSi)
-        {                        
-            /*Inserta el registro en la base de datos*/
-            try 
-            {                
-                sQ = "INSERT INTO unids(cod,                                estac,                 descrip,                                 falt,   fmod,           sucu,                                           nocaj) " + 
-                           "VALUES('" + sCod.replace("'", "''") + "', '" +  Login.sUsrG + "', '" + sDescrip.replace("'", "''") + "',        now(),  now(), '" +     Star.sSucu.replace("'", "''") + "','" +   Star.sNoCaj.replace("'", "''") + "')";                                       
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-             }
-             catch(SQLException expnSQL) 
-             {  
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                                                        
-             }
-
-            /*Inserta en log de unidaes*/
-            try 
-            {            
-                sQ = "INSERT INTO logunid(cod,                                      descrip,                            accio,          estac,    sucu,      nocaj,    falt) " + 
-                             "VALUES('" + sCod.replace("'", "''") + "', '" +        sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            { 
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                                                       
-            }
-                        
-        }/*Fin de if(!bSi)*/              
-
-    }/*Fin de private void vCreUnid(String sMed)*/
-    
-    
-    /*Comprueba si el código del anaquel existe, si no existe entonces la crea con su descripción*/
-    private void vCreAnaq(String sVal, Connection con, String sCont, String sContCell)
-    {
-        /*Tokeniza*/
-        StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-        
-        //Obtiene la descripción
-        String sDescrip     = str.nextToken().trim().toUpperCase();  
-        
-        /*Si la descripción es un punto entonces que sea cadena vacia*/
-        if(sDescrip.compareTo(".")==0)
-            sDescrip        = "";
-        
-        //Declara variables de la base de datos
-        Statement   st;        
-        String      sQ; 
-        
-        //Comprueba si existe el anaquel
-        int iRes    = Star.iExistAnaq(con, sCod.trim());
-        
-        //Si hubo error entonces regresa
-        if(iRes==-1)
-            return;
-        
-        //Si existe netonces coloca la bandera
-        boolean bSi = false;
-        if(iRes==1)
-            bSi     = true;
-        
-        /*Si el código no existe entonces*/
-        if(!bSi)
-        {
-            /*Inserta el registro en la base de datos*/
-            try 
-            {                
-                sQ = "INSERT INTO anaqs(cod,                                estac,                                      descrip,                                falt,       fmod,           sucu,                                           nocaj) " + 
-                          "VALUES('" + sCod.replace("'", "''") + "', '" +   Login.sUsrG.replace("'", "''") + "', '" +   sDescrip.replace("'", "''") + "',       now(),      now(), '" +     Star.sSucu.replace("'", "''") + "','" +   Star.sNoCaj.replace("'", "''") + "')";                                       
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-             }
-             catch(SQLException expnSQL) 
-             { 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                                                        
-             }
-
-            /*Inserta en log de anaqs*/
-            try 
-            {            
-                sQ = "INSERT INTO loganaq(cod,                                  descrip,                            accio,          estac,    sucu,      nocaj,    falt) " + 
-                            "VALUES('" + sCod.replace("'", "''") + "', '" +     sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            { 
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                                                       
-            }            
-            
-        }/*Fin de if(!bSi)*/
-                
-    }/*Fin de private void vCreAnaq(String sMed)*/
-    
-    
-    /*Comprueba si el código del lugar existe, si no existe entonces la crea con su descripción*/
-    private void vCreLug(String sVal, Connection con, String sCont, String sContCell)
-    {
-        //Obtiene el código
-        StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-        
-        //Obtiene la descripción
-        String sDescrip     = str.nextToken().trim().toUpperCase();  
-        
-        /*Si la descripción es un punto entonces que sea cadena vacia*/
-        if(sDescrip.compareTo(".")==0)
-            sDescrip        = "";
-        
-        //Declara variables de la base de datos
-        Statement   st;        
-        String      sQ; 
-        
-        //Comprueba si el lugar existe
-        int iRes    = Star.iExistLug(con, sCod.trim());
-        
-        //Si hubo error entonces regresa
-        if(iRes==-1)
-            return;
-        
-        //Si el lugar existe entonces colcoa la bandera
-        boolean bSi = false;
-        if(iRes==1)
-            bSi     = true;
-        
-        /*Si el código no existe entonces*/
-        if(!bSi)
-        {
-            /*Inserta el registro en la base de datos*/
-            try 
-            {                
-                sQ = "INSERT INTO lugs(cod,                                 estac,                                      descrip,                                falt,       fmod,               sucu,                                           nocaj) " + 
-                         "VALUES('" + sCod.replace("'", "''") + "', '" +    Login.sUsrG.replace("'", "''") + "', '" +   sDescrip.replace("'", "''") + "',       now(),      now(), '" +         Star.sSucu.replace("'", "''") + "','" +   Star.sNoCaj.replace("'", "''") + "')";                                       
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-             }
-             catch(SQLException expnSQL) 
-             { 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                                                        
-             }
-            
-            /*Inserta en log de lugs*/
-            try 
-            {            
-                sQ = "INSERT INTO loglugs(cod,                                  descrip,                            accio,          estac,    sucu,      nocaj,    falt) " + 
-                           "VALUES('" + sCod.replace("'", "''") + "', '" +      sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            { 
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                                                       
-            }
-                                    
-        }/*Fin de if(!bSi)*/
-                
-    }/*Fin de private void vCreLug(String sMed)*/
-            
-    
-    /*Comprueba si el código del impue existe, si no existe entonces la crea con su descripción*/
-    private void vCreImpue(String sVal, Connection con, String sCont, String sContCell)
-    {
-        //Obtiene el código
-        StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-                
-        //Obtiene la descripción
-        String sDescrip     = str.nextToken().trim().toUpperCase();  
-        
-        //Declara variables de la base de datos
-        Statement   st;        
-        String      sQ; 
-        
-        //Comprueba si el impuesto ya existe en la base de datos
-        int iRes        = Star.iExistImpue(con, sCod.trim());
-        
-        //Si hubo error entonces regresa
-        if(iRes==-1)
-            return;
-        
-        //Si el impuesto ya existe entonces coloca la bandera
-        boolean bSi = false;
-        if(iRes==1)
-            bSi     = true;
-        
-        /*Si el código no existe entonces*/
-        if(!bSi)
-        {
-            /*Inserta el registro en la base de datos*/
-            try 
-            {                
-                sQ = "INSERT INTO impues(codimpue,                          estac,                                          impueval,                           falt,   fmod,           sucu,                                               nocaj) " + 
-                            "VALUES('" + sCod.replace("'", "''") + "', '" + Login.sUsrG.replace("'", "''") + "', '" +   sVal.replace("'", "''") + "',       now(),  now(), '" +     Star.sSucu.replace("'", "''") + "','" +       Star.sNoCaj.replace("'", "''") + "')";                                       
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-             }
-             catch(SQLException expnSQL) 
-             { 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                                                        
-             }
-                        
-            /*Inserta en log de impues*/
-            try 
-            {            
-                sQ = "INSERT INTO logimpue(impue,                                   descrip,                            accio,          estac,    sucu,      nocaj,    falt) " + 
-                             "VALUES('" + sCod.replace("'", "''") + "', '" +        sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            { 
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                       
-            }
-            
-        }/*Fin de if(!bSi)*/              
-
-    }/*Fin de private void vCreImpue(String sMed)*/
-    
-        
-    /*Comprueba si el código del tipo existe, si no existe entonces crealo con su descripción*/
-    private void vCreTip(String sVal, Connection con, String sCont, String sContCell)
-    {
-        /*Tokeniza*/
-        StringTokenizer str = new StringTokenizer(sVal, ",");
-        String sCod         = str.nextToken().trim().toUpperCase();
-        
-        /*Separa la descripción*/
-        String sDescrip     = str.nextToken().trim().toUpperCase();  
-        
-        //Declara variables de la base de datos
-        Statement   st;
-        ResultSet   rs;        
-        String      sQ; 
-        
-        /*Comprueba si el el código existe*/
-        boolean bSi = false;
-        try
-        {
-            sQ = "SELECT cod FROM tips WHERE cod = '" + sCod + "'";                        
-            st = con.createStatement();
-            rs = st.executeQuery(sQ);
-            /*Si hay datos entonces coloca la bandera*/
-            if(rs.next())
-                bSi = true;                                                                        
-        }
-        catch(SQLException expnSQL)
-        {
-            //Procesa el error y regresa
-            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-            return;                                                   
-        }  
-	  
-        /*Si el código no existe entonces*/
-        if(!bSi)
-        {
-            /*Inserta el registro en la base de datos*/
-            try 
-            {                
-                sQ = "INSERT INTO tips(cod,                                 estac,                                      descrip,                            falt,   fmod,           sucu,                                         nocaj) " + 
-                          "VALUES('" + sCod.replace("'", "''") + "', '" +   Login.sUsrG.replace("'", "''") + "', '" +   sVal.replace("'", "''") + "',       now(),  now(), '" +     Star.sSucu.replace("'", "''") + "','" +       Star.sNoCaj.replace("'", "''") + "')";                                       
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-             }
-             catch(SQLException expnSQL) 
-             { 
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                       
-                return;                                                       
-             }
-                        
-            /*Inserta en log de tipos*/
-            try 
-            {            
-                sQ = "INSERT INTO logtip(cod,                                       descrip,                         accio,          estac,    sucu,      nocaj,    falt) " + 
-                             "VALUES('" + sCod.replace("'", "''") + "', '" +        sDescrip.replace("'", "''") + "',   'AGREGAR',      'INICIAL','INICIAL','INICIAL', now())";                                
-                st = con.createStatement();
-                st.executeUpdate(sQ);
-            }
-            catch(SQLException expnSQL) 
-            { 
-                //Procesa el error
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                                                       
-            }
-            
-        }/*Fin de if(!bSi)*/              
-
-    }/*Fin de private void vCreTip(String sVal, Connection con, String sCont, String sContCell)*/
+    }// fin de un metodo que se ahorra mas de 1000 lineas,exito (yn)
     
         
     /*Borra todos los registros de los prods*/
     private void vDelProds(Connection con)
     {
-        //Declara variables de la base de datos
+        /*Declara variables de la base de datos*/
         Statement   st;                
-        String      sQ; 
-
-
-
+        String      sQ              = ""; 
 
         /*Borra todos los registros de la base de datos de los prods*/
         try 
@@ -1675,10 +834,15 @@ public class Loadin extends javax.swing.JFrame
             st = con.createStatement();
             st.executeUpdate(sQ);
          }
-         catch(SQLException expnSQL) 
-         {              
-            //Procesa el error
-            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                              
+         catch(SQLException | HeadlessException e) 
+         { 
+            //Cierra la base de datos y sal de la aplicación    
+            if(Star.iCierrBas(con)==-1)
+                return;
+
+            /*Agrega en el log y mensajea*/
+            Login.vLog(e.getMessage());                        
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));             
          }
 	        
     }/*Fin de private void vDelProds()*/
@@ -1715,15 +879,15 @@ public class Loadin extends javax.swing.JFrame
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         
         /*Función que realiza la importación de los prods a la base de datos*/
-        th = new Thread()
-        {
-            @Override
-            public void run()
-            {
+//        th = new Thread()
+//        {
+//            @Override
+//            public void run()
+//            {
                 vImpBD();
-            }            
-        };
-        th.start();       
+//            }            
+//        };
+//        th.start();       
         
     }//GEN-LAST:event_formWindowActivated
   
@@ -1731,4 +895,31 @@ public class Loadin extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField jTInf;
     // End of variables declaration//GEN-END:variables
+
+    private ArrayList<String> agregaValor(String sIn, ArrayList<String> valores, Connection con) {
+        if(bErr)
+        {
+            //Cierra la base de datos y sal de la aplicación
+            if(Star.iCierrBas(con)==-1)
+                return valores;
+
+            /*Cierra y regresa*/
+            dispose();                                    
+            return valores; 
+        }
+
+        /*Obtiene solo el código*/
+        StringTokenizer str = new StringTokenizer(sIn, ",");
+
+        /*Completa la consulta con todas las celdas*/
+        valores.add(str.nextToken().trim().toUpperCase().replace("'", "''")); 
+        return valores;
+    }
+    
+    private String quitaDoble(String sIn) {
+        Double d = Double.parseDouble(sIn);
+        
+        return d.intValue()+"";
+    }
+    
 }

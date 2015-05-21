@@ -61,7 +61,7 @@ public class Almas extends javax.swing.JFrame
     {                
         /*Inicaliza los componentes gráficos*/
         initComponents();
-        
+        Star.lCargGral=null;
         /*Para que la tabla tengan scroll horisontal*/
         jTab.setAutoResizeMode(0);
         
@@ -92,7 +92,7 @@ public class Almas extends javax.swing.JFrame
             setIconImage(new ImageIcon(getClass().getResource(Star.sIconDef)).getImage());
         
         /*Establece el titulo del ventana con el usuario, la fecha y hora*/                
-        this.setTitle("Almacenes, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
+        this.setTitle("Catálogo de almacenes, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
         
         /*Inicializa en uno el contador de las filas*/
         iContFi      = 1;
@@ -1197,7 +1197,7 @@ public class Almas extends javax.swing.JFrame
         }
                 
         /*Checa si el código del almacén ya existe en la base de datos*/        
-        iRes        = Star.iExistAlma(con, jTCod.getText().replace(" ", "").trim());
+        iRes        = Star.iExiste(con, jTCod.getText().replace(" ", "").trim(), "almas", "alma");
         
         //Si hubo error entonces regresa
         if(iRes==-1)

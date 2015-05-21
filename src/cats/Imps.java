@@ -70,7 +70,7 @@ public class Imps extends javax.swing.JFrame
         bSel        = false;
         
         /*Establece el titulo de la ventana con El usuario, la fecha y hora*/                
-        this.setTitle("Impuestos, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
+        this.setTitle("Catálogo de impuestos, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
         
         /*Inicializa el contador de filas en uno*/
         iContFi          = 1;
@@ -992,8 +992,28 @@ public class Imps extends javax.swing.JFrame
             /*Pon el foco del teclado en el campo de edición y regresa*/
             jTVal.grabFocus();            
             return;            
+        }else
+        {
+            int contador=0;
+            String test=jTVal.getText();
+            for(int z=0;z<test.length();z++)
+            {
+                if(test.charAt(z)=='.')
+                    contador++;
+            }
+            if(contador>1)
+            {
+            /*Coloca el borde rojo*/                               
+            jTVal.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            
+            /*Mensajea*/
+            JOptionPane.showMessageDialog(null, "El campo de valor de impuesto no puede tener mas de un punto decimal.", "Decimal", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            
+            /*Pon el foco del teclado en el campo de edición y regresa*/
+            jTVal.grabFocus();            
+            return;
+            }   
         }
-        
         /*Pregunta al usuario si están bien los datos*/                
         Object[] op = {"Si","No"};
         int iRes    = JOptionPane.showOptionDialog(this, "¿Seguro que están bien los datos?", "Agregar impuesto", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
@@ -1008,7 +1028,7 @@ public class Imps extends javax.swing.JFrame
             return;
         
         //Comprueba si el impuesto ya existe en la base de datos
-        iRes        = Star.iExistImpue(con, jTCod.getText().replace(" ", "").trim());
+        iRes        = Star.iExiste(con, jTCod.getText().replace(" ", "").trim(), "impues", "codimpue");
         
         //Si hubo error entonces regresa
         if(iRes==-1)

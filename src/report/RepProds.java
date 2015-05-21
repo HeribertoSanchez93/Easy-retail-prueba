@@ -1409,7 +1409,7 @@ public class RepProds extends javax.swing.JFrame
         }
                 
         //Comprueba si existe el anaquel
-        iRes    = Star.iExistAnaq(con, jTAna.getText().trim());
+        iRes    = Star.iExiste(con, jTAna.getText().trim(), "anaqs", "cod");
         
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -1434,7 +1434,7 @@ public class RepProds extends javax.swing.JFrame
         }
         
         //Comprueba si el lugar existe
-        iRes        = Star.iExistLug(con, jTLug.getText().trim());
+        iRes        = Star.iExiste(con, jTLug.getText().trim(), "lugs", "cod");
         
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -1459,7 +1459,7 @@ public class RepProds extends javax.swing.JFrame
         }
         
         //Compreuba si la ubicacion existe
-        iRes        = Star.iExistUbiAd(con, jTUbiAd.getText().trim());
+        iRes        = Star.iExiste(con, jTUbiAd.getText().trim(), "ubiad", "cod");
         
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -1484,7 +1484,7 @@ public class RepProds extends javax.swing.JFrame
         }
         
         //Comprueba si la marca existe
-        iRes        = Star.iExistMarc(con, jTMarc.getText().trim());
+        iRes        = Star.iExiste(con, jTMarc.getText().trim(), "marcs", "cod");
         
         //Si hubo error entonces regreas
         if(iRes==-1)
@@ -1509,7 +1509,7 @@ public class RepProds extends javax.swing.JFrame
         }
         
         //Comprueba si la medida existe
-        iRes        = Star.iExistMed(con, jTMed.getText().trim());
+        iRes        = Star.iExiste(con, jTMed.getText().trim(), "meds", "cod");
                 
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -1534,7 +1534,7 @@ public class RepProds extends javax.swing.JFrame
         }
         
         //Comprueba si existe una línea
-        iRes            = Star.iExistLin(con, jTLin.getText().trim());
+        iRes            = Star.iExiste(con, jTLin.getText().trim(), "lins", "cod");
         
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -1559,7 +1559,7 @@ public class RepProds extends javax.swing.JFrame
         }
         
         //Comprueba si el impuesto ya existe en la base de datos
-        iRes        = Star.iExistImpue(con, jTImp.getText().trim());
+        iRes        = Star.iExiste(con, jTImp.getText().trim(), "impues", "codimpue");
         
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -1584,7 +1584,7 @@ public class RepProds extends javax.swing.JFrame
         }
         
         //Comprueba si la clasificación del producto ya existe
-        iRes        = Star.iExistClasProd(con, jTClas.getText().trim());
+        iRes        = Star.iExiste(con, jTClas.getText().trim(), "clasprod", "cod");
                 
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -1609,7 +1609,7 @@ public class RepProds extends javax.swing.JFrame
         }
         
         //Comprueba si la unidad existe
-        iRes        = Star.iExistUnid(con, jTUni.getText().trim());
+        iRes        = Star.iExiste(con, jTUni.getText().trim(), "unids", "cod");
         
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -1634,7 +1634,7 @@ public class RepProds extends javax.swing.JFrame
         }
         
         //Comprueba si el peso existe
-        iRes        = Star.iExistPes(con, jTPes.getText().trim());
+        iRes        = Star.iExiste(con, jTPes.getText().trim(), "pes", "cod");
         
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -1659,7 +1659,7 @@ public class RepProds extends javax.swing.JFrame
         }
                 
         //Comprueba si existe el color                
-        iRes        = Star.iExisColo(con, jTColo.getText().trim());
+        iRes        = Star.iExiste(con, jTColo.getText().trim(), "colos", "cod");
         
         //Si hubo error entonces regresa
         if(iRes==-1)
@@ -1733,7 +1733,7 @@ public class RepProds extends javax.swing.JFrame
         }                                
         
         //Comprueba si existe el almacén
-        iRes        = Star.iExistAlma(con, jTAlma.getText().trim());
+        iRes        = Star.iExiste(con, jTAlma.getText().trim(), "almas", "alma");
         
         //Si hubo error entonces regresa
         if(iRes==-1)

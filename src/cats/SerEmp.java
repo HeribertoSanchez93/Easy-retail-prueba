@@ -181,7 +181,7 @@ public class SerEmp extends javax.swing.JFrame
                         if(sConsec.compareTo(sConsecOriG)!=0)
                         {
                             //Comprueba si el folio ya esta usado en algún cliente                                    
-                            int iRes    = Star.iExistCli(con, sSerOriG + sConsec);
+                            int iRes    = Star.iExistCliProv(con, sSerOriG + sConsec, true);
 
                             //Si hubo error entonces regresa
                             if(iRes==-1)
@@ -453,7 +453,7 @@ public class SerEmp extends javax.swing.JFrame
         });
         jP1.add(jBNew, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 30, 90, 20));
 
-        jTConsec.setText("0");
+        jTConsec.setText("1");
         jTConsec.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTConsec.setNextFocusableComponent(jTDescrip);
         jTConsec.addFocusListener(new java.awt.event.FocusAdapter() {

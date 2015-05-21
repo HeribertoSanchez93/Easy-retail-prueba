@@ -678,7 +678,7 @@ public class RepCXC extends javax.swing.JFrame
             }
             
             //Comprueba si el cliente existe
-            int iRes    = Star.iExistCli(null, jTCli.getText().trim());
+            int iRes    = Star.iExistCliProv(null, jTCli.getText().trim(), true);
             
             //Si hubo error regresa
             if(iRes==-1)

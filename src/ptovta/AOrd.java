@@ -3864,7 +3864,7 @@ public class AOrd extends javax.swing.JFrame
                         return;
 
                     /*Si la carpeta de easy reatail no existe entonces creala*/
-                    sCarp += "\\Easy Retail®";
+                    sCarp += "\\Easy Retail® Admin";
                     if(!new File(sCarp).exists())
                         new File(sCarp).mkdir();
 
@@ -4010,7 +4010,7 @@ public class AOrd extends javax.swing.JFrame
             props.put("mail.smtp.port", sSMTPPort);
             props.put("mail.store.protocol", "pop3");
             props.put("mail.transport.protocol", "smtp");
-            final String username = sUsr;
+            final String username = sUser;
             final String password = sContra;
             Session session = Session.getDefaultInstance(props,
                     new Authenticator() {
@@ -4158,7 +4158,7 @@ public class AOrd extends javax.swing.JFrame
                 
                 /*Crea el usuario y la contraseña como final para que el thead valide si son válidos o no*/
                 final String sContra    = sContrasenia;
-                
+                final String username = sUsr;
                 /*Si el primer correo no es null entonces*/
                 if(sCo1!=null)
                 {
@@ -4173,7 +4173,6 @@ public class AOrd extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
                         final String password = sContra;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
@@ -4184,7 +4183,7 @@ public class AOrd extends javax.swing.JFrame
                                 });
                     
                         MimeMessage  msj        = new MimeMessage(session);
-                        msj.setFrom             (new InternetAddress(sUsr));
+                        msj.setFrom             (new InternetAddress(username));
                         msj.setRecipients       (Message.RecipientType.TO,InternetAddress.parse(sCo1));
                         msj.setSubject          (sAsunOrd + "\"" + sNoDoc + "\"");
                         String msg              = sCuerOrd;
@@ -4266,7 +4265,6 @@ public class AOrd extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
                         final String password = sContra;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
@@ -4277,7 +4275,7 @@ public class AOrd extends javax.swing.JFrame
                                 });
 
                         MimeMessage  msj    = new MimeMessage(session);
-                        msj.setFrom         (new InternetAddress(sUsr));
+                        msj.setFrom         (new InternetAddress(username));
                         msj.setRecipients   (Message.RecipientType.TO,InternetAddress.parse(sCo2));
                         msj.setSubject      (sAsunOrd + "\"" + sNoDoc + "\"");
                         String msg           = sCuerOrd;
@@ -4360,7 +4358,6 @@ public class AOrd extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
                         final String password = sContra;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
@@ -4371,7 +4368,7 @@ public class AOrd extends javax.swing.JFrame
                                 });
 
                         MimeMessage  msj    = new MimeMessage(session);
-                        msj.setFrom         (new InternetAddress(sUsr));
+                        msj.setFrom         (new InternetAddress(username));
                         msj.setRecipients   (Message.RecipientType.TO,InternetAddress.parse(sCo3));
                         msj.setSubject      (sAsunOrd + "\"" + sNoDoc + "\"");
                         String msg           = sCuerOrd;

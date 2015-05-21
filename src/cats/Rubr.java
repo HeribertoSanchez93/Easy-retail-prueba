@@ -63,7 +63,7 @@ public class Rubr extends javax.swing.JFrame
         this.setLocationRelativeTo(null);
         
         /*Establece el titulo de la ventana con El usuario, la fecha y hora*/                
-        this.setTitle("Rubros, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
+        this.setTitle("Catálogo clasificación rubros, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
 
         /*Inicialmente esta deseleccionada la tabla*/
         bSel        = false;

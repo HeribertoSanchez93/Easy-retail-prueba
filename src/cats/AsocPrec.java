@@ -1178,7 +1178,7 @@ public class AsocPrec extends javax.swing.JFrame
             return -1;
         
         //Checa si  el cliente existe en la base de datos
-        int iRes    = Star.iExistCli(con, jTCli.getText().trim());
+        int iRes    = Star.iExistCliProv(con, jTCli.getText().trim(), true);
         
         //Si hubo error entonces regresa error
         if(iRes==-1)

@@ -553,7 +553,7 @@ public class RepLogClasExt extends javax.swing.JFrame
         }            
         
         //Comprueba si la clasificación del producto ya existe
-        int iRes    = Star.iExistClasProd(con, jTClas.getText().trim());
+        int iRes    = Star.iExiste(con, jTClas.getText().trim(), "clasprod", "cod");
                 
         //Si hubo error entonces regresa
         if(iRes==-1)

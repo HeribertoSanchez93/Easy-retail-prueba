@@ -212,6 +212,11 @@ public class RepPrevCom extends javax.swing.JFrame
                 jTEmpFocusLost(evt);
             }
         });
+        jTEmp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTEmpActionPerformed(evt);
+            }
+        });
         jTEmp.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTEmpKeyPressed(evt);
@@ -317,6 +322,11 @@ public class RepPrevCom extends javax.swing.JFrame
 
         jTSer.setEditable(false);
         jTSer.setFocusable(false);
+        jTSer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTSerActionPerformed(evt);
+            }
+        });
         jP1.add(jTSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 30, -1));
 
         jTSucu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
@@ -1222,7 +1232,7 @@ public class RepPrevCom extends javax.swing.JFrame
         /*Comprueba si el proveedor existe*/        
         try
         {
-            sQ = "SELECT prov FROM provs WHERE prov = '" + jTEmp.getText().replaceAll("[^\\d.]", "") + "' AND ser = '" + jTEmp.getText().replaceAll("\\d+.*", "") + "'";                      
+            sQ = "SELECT prov FROM provs WHERE prov = '" + jTEmp.getText().replace(jTSer.getText(), "") + "' AND ser = '" + jTSer.getText() + "'";                      
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos*/
@@ -1659,7 +1669,7 @@ public class RepPrevCom extends javax.swing.JFrame
         final String sSucuFi        = jTSucu.getText();
         
         /*Declara variables final para el thread*/
-        final String sEmpFi          = jTEmp.getText().replace(jTSer.getText(), "");
+        final String sEmpFi          = jTEmp.getText();
         final String sFDeFi          = sFDe;
         final String sFAFi           = sFA;
         final String sProdFi         = jTProd.getText();        
@@ -1808,7 +1818,7 @@ public class RepPrevCom extends javax.swing.JFrame
     private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscActionPerformed
         
         /*Llama al otro formulario de búsqueda y pasale lo que el usuario escribió*/
-        Busc b = new Busc(this, jTEmp.getText(), 3, jTEmp, null, null, "", null);
+        Busc b = new Busc(this, jTEmp.getText(), 3, jTEmp, jTSer, jTSer, "", null);
         b.setVisible(true);
         
     }//GEN-LAST:event_jBBuscActionPerformed
@@ -3340,6 +3350,14 @@ public class RepPrevCom extends javax.swing.JFrame
         jTCaj.setCaretPosition(0);
         
     }//GEN-LAST:event_jTCajFocusLost
+
+    private void jTSerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTSerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTSerActionPerformed
+
+    private void jTEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTEmpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTEmpActionPerformed
                            
        
     /*Función escalable para cuando se presiona una tecla en el módulo*/

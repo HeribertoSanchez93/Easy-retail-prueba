@@ -421,7 +421,7 @@ public class RepBack extends javax.swing.JFrame
         if(jComTip.getSelectedItem().toString().compareTo("Entregar")==0)
         {
             //Comprueba si el cliente no existe                    
-            int iRes    = Star.iExistCli(con, jTCliProv.getText().trim());
+            int iRes    = Star.iExistCliProv(con, jTCliProv.getText().trim(), true);
 
             //Si hubo error entonces regresa
             if(iRes==-1)

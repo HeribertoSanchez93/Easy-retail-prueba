@@ -78,6 +78,8 @@ public class SerPrevComp extends javax.swing.JFrame
     {
         /*Inicaliza los componentes gráficos*/
         initComponents();
+        
+        Star.lCargGral=null;
             
         //Se toma la cotización
         sCotG=sCot;

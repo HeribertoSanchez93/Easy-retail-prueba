@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd http://www.sat.gob.mx/nomina http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina11.xsd" 
+version="3.2" fecha="2015-05-20T11:13:47.0" 
+ sello = "eNvwov3ZuMShdc176BPK10lutwWidCXneKb17gry7p3s+Hg+NCrh776TaJd7Q7LuPbm3kMCVpkK4rPpf9VJiNd3qntp7tMso0xDNR3AoHxc6f83Y4kuwgODKvfrOFFQncGTn15tieW5csXSwl/BazIZ9hnV9+uY3beRnv4Sfh60=" 
+formaDePago="Pago en una sola exhibición" noCertificado="20001000000200001428" 
+certificado="MIIEYTCCA0mgAwIBAgIUMjAwMDEwMDAwMDAyMDAwMDE0MjgwDQYJKoZIhvcNAQEFBQAwggFcMRowGAYDVQQDDBFBLkMuIDIgZGUgcHJ1ZWJhczEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMSkwJwYJKoZIhvcNAQkBFhphc2lzbmV0QHBydWViYXMuc2F0LmdvYi5teDEmMCQGA1UECQwdQXYuIEhpZGFsZ28gNzcsIENvbC4gR3VlcnJlcm8xDjAMBgNVBBEMBTA2MzAwMQswCQYDVQQGEwJNWDEZMBcGA1UECAwQRGlzdHJpdG8gRmVkZXJhbDESMBAGA1UEBwwJQ295b2Fjw6FuMTQwMgYJKoZIhvcNAQkCDCVSZXNwb25zYWJsZTogQXJhY2VsaSBHYW5kYXJhIEJhdXRpc3RhMB4XDTEzMDUwNzE2MDEyOVoXDTE3MDUwNzE2MDEyOVowgdsxKTAnBgNVBAMTIEFDQ0VNIFNFUlZJQ0lPUyBFTVBSRVNBUklBTEVTIFNDMSkwJwYDVQQpEyBBQ0NFTSBTRVJWSUNJT1MgRU1QUkVTQVJJQUxFUyBTQzEpMCcGA1UEChMgQUNDRU0gU0VSVklDSU9TIEVNUFJFU0FSSUFMRVMgU0MxJTAjBgNVBC0THEFBQTAxMDEwMUFBQSAvIEhFR1Q3NjEwMDM0UzIxHjAcBgNVBAUTFSAvIEhFR1Q3NjEwMDNNREZOU1IwODERMA8GA1UECxMIcHJvZHVjdG8wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKS/beUVy6E3aODaNuLd2S3PXaQre0tGxmYTeUxa55x2t/7919ttgOpKF6hPF5KvlYh4ztqQqP4yEV+HjH7yy/2d/+e7t+J61jTrbdLqT3WD0+s5fCL6JOrF4hqy//EGdfvYftdGRNrZH+dAjWWml2S/hrN9aUxraS5qqO1b7btlAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBBQUAA4IBAQACPXAWZX2DuKiZVv35RS1WFKgT2ubUO9C+byfZapV6ZzYNOiA4KmpkqHU/bkZHqKjR+R59hoYhVdn+ClUIliZf2ChHh8s0a0vBRNJ3IHfA1akWdzocYZLXjz3m0Er31BY+uS3qWUtPsONGVDyZL6IUBBUlFoecQhP9AO39er8zIbeU2b0MMBJxCt4vbDKFvT9i3V0Puoo+kmmkf15D2rBGR+drd8H8Yg8TDGFKf2zKmRsgT7nIeou6WpfYp570WIvLJQY+fsMp334D05Up5ykYSAxUGa30RdUzA4rxN5hT+W9whWVGD88TD33Nw55uNRUcRO3ZUVHmdWRG+GjhlfsD" 
+subTotal="10.00" descuento="0" total="10.00" 
+tipoDeComprobante="ingreso" metodoDePago="Efectivo" LugarExpedicion="aqui" NumCtaPago="0000" Moneda="PESOS" TipoCambio="1"> 
+<cfdi:Emisor nombre="PRUEBA" rfc="AAA010101AAA">
+
+<cfdi:DomicilioFiscal codigoPostal="45054" pais="mexico" estado="jalisco" municipio="zapopan" colonia="mirador del sol" noExterior="4770" calle="tolov 4770"/>
+
+<cfdi:RegimenFiscal Regimen="yes"/>
+
+</cfdi:Emisor>
+
+<cfdi:Receptor nombre="Cliente1" rfc="FEVJ930629DL4">
+
+<cfdi:Domicilio pais="mexico" estado="sonora" municipio="obregon" colonia="san rafael" calle="kadi" localidad="obregon"/>
+
+</cfdi:Receptor>
+
+<cfdi:Conceptos>
+
+<cfdi:Concepto importe="10" valorUnitario="10" descripcion="prueba" unidad="CAJA" cantidad="1"/>
+
+</cfdi:Conceptos>
+<cfdi:Impuestos totalImpuestosTrasladados="0.00">
+
+<cfdi:Traslados>
+
+<cfdi:Traslado importe="0.0" tasa="0" impuesto=""/>
+</cfdi:Traslados>
+
+</cfdi:Impuestos>
+
+<cfdi:Complemento> </cfdi:Complemento>
+
+</cfdi:Comprobante>

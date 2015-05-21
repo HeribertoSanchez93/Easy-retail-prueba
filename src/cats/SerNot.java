@@ -472,6 +472,11 @@ public class SerNot extends javax.swing.JFrame
                 jTConsecFocusLost(evt);
             }
         });
+        jTConsec.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTConsecActionPerformed(evt);
+            }
+        });
         jTConsec.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTConsecKeyPressed(evt);
@@ -1496,6 +1501,10 @@ public class SerNot extends javax.swing.JFrame
             jTBusc.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(204,204,255)));
         
     }//GEN-LAST:event_jTBuscFocusLost
+
+    private void jTConsecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTConsecActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTConsecActionPerformed
        
     
     /*Función escalable para cuando se presiona una tecla en el módulo*/

@@ -684,7 +684,7 @@ public class ProdMarc extends javax.swing.JFrame
             return;
         
         //Comprueba si la marca existe
-        int iRes    = Star.iExistMarc(con, jTCod.getText().replace(" ", "").trim());
+        int iRes    = Star.iExiste(con, jTCod.getText().replace(" ", "").trim(),"marcs", "cod");
         
         //Si hubo error entonces regreas
         if(iRes==-1)

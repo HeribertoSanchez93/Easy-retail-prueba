@@ -3318,7 +3318,13 @@ public class Compr extends javax.swing.JFrame
             /*Determina donde buscar, si es por compra entonces búsca en compras*/
             String sRutF            = "";
             if(sBuscEn.compareTo("COMP")==0)
-                sRutF               = sCarp + "\\Compras\\" + Login.sCodEmpBD +"\\" + jTab1.getValueAt(iSel[x], 2).toString() + ".pdf";
+            {
+                JOptionPane.showMessageDialog(null, "Selecciono una Compra seleciona Generar para ver su PDF.", "Ver PDF", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+                /*Pon el foco del teclado en la tabla y regresa*/
+                jTab1.grabFocus();           
+                return;
+            }
             /*Else, buscara en facturas*/
             else if(sBuscEn.compareTo("ORD")==0)
                 sRutF               = sCarp + "\\Ordenes\\" + Login.sCodEmpBD + "\\" + jTab1.getValueAt(iSel[x], 2).toString() + ".pdf";

@@ -66,7 +66,7 @@ public class ClasCli extends javax.swing.JFrame
         this.setLocationRelativeTo(null);
         
         /*Establece el titulo de la ventana con El usuario, la fecha y hora*/                
-        this.setTitle("Clasificación clientes, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
+        this.setTitle("Catálogo de clasificaciones clientes, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
         
         //Establece el ícono de la forma
         Star.vSetIconFram(this);

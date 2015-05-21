@@ -879,7 +879,7 @@ public class Cxp extends javax.swing.JFrame
 
             },
             new String [] {
-                "No.", "Folio", "Serie", "Compra", "Proveedor", "Subtotal", "Impuesto", "Total", "Total Abonos", "Pendiente Liquidar", "Fecha", "Fecha Vencimiento", "Sucursal", "Caja", "Usuario", "Nombre de Usuario", "Estado", "id"
+                "No.", "Folio", "Serie", "Proveedor", "Nombre del Proveedor", "Subtotal", "Impuesto", "Total", "Total Abonos", "Pendiente Liquidar", "Fecha", "Fecha Vencimiento", "Sucursal", "Caja", "Usuario", "Nombre de Usuario", "Estado", "id"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -2365,7 +2365,7 @@ public class Cxp extends javax.swing.JFrame
                 return;
 
             //Comprueba si el proveedor existe
-            int iResp   = Star.iExisProv(con, jTProv.getText().trim());
+            int iResp   = Star.iExistCliProv(con, jTProv.getText().trim(), false);
 
             //Si hubo error entonces regresa
             if(iResp==-1)
@@ -3091,7 +3091,7 @@ public class Cxp extends javax.swing.JFrame
             return;
         
         //Comprueba si el proveedor existe
-        iRes    = Star.iExisProv(con, jTProv.getText().trim());
+        iRes    = Star.iExistCliProv(con, jTProv.getText().trim(), false);
         
         //Si hubo error entonces regresa
         if(iRes==-1)

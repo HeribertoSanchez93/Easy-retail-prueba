@@ -65,7 +65,7 @@ public class ClasExtProd extends javax.swing.JFrame
         bSel        = false;
         
         /*Establece el titulo de la ventana con El usuario, la fecha y hora*/                
-        this.setTitle("Clasificaciones extra productos, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
+        this.setTitle("Catálogo de clasificación extra, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
        
         //Establece el ícono de la forma
         Star.vSetIconFram(this);
@@ -935,7 +935,7 @@ public class ClasExtProd extends javax.swing.JFrame
             return;
         
         //Comprueba si la clasificación del producto ya existe
-        iRes        = Star.iExistClasProd(con, jTCod.getText().replace(" ", "").trim());
+        iRes        = Star.iExiste(con, jTCod.getText().replace(" ", "").trim(), "clasprod", "cod");
                 
         //Si hubo error entonces regresa
         if(iRes==-1)

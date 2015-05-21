@@ -1051,7 +1051,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,     ser,         Descrip,             consec,       estac,      sucu,      nocaj) "
-                                    + "VALUES(  'PREV',   'PREV',      'PREVIOS DE COMPRA', 0,           'INICIAL', 'INICIAL', 'INICIAL')";
+                                    + "VALUES(  'PREV',   'PREV',      'PREVIOS DE COMPRA', 1,           'INICIAL', 'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             }
@@ -1076,7 +1076,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,   ser,        Descrip,                    consec,      estac,      sucu,      nocaj) "
-                                    + "VALUES(  'NOTC',  'NOTC',     'NOTAS DE CRÉDITO CLIENTES', 0,           'INICIAL', 'INICIAL', 'INICIAL')";
+                                    + "VALUES(  'NOTC',  'NOTC',     'NOTAS DE CRÉDITO CLIENTES', 1,           'INICIAL', 'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             }
@@ -1101,7 +1101,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,   ser,        Descrip,                         consec,      estac,      sucu,      nocaj) "
-                                    + "VALUES(  'NOTP',  'NOTP',     'NOTAS DE CRÉDITO PROVEEDORES',  0,           'INICIAL', 'INICIAL', 'INICIAL')";
+                                    + "VALUES(  'NOTP',  'NOTP',     'NOTAS DE CRÉDITO PROVEEDORES',  1,           'INICIAL', 'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             }
@@ -1126,7 +1126,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,   ser,        Descrip,       consec,      estac,      sucu,      nocaj) "
-                        + "VALUES(  'FAC', 'FAC',     'FACTURAS',     0,           'INICIAL', 'INICIAL', 'INICIAL')";
+                        + "VALUES(              'FAC', 'FAC',     'FACTURAS',      1,           'INICIAL', 'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             }
@@ -1151,7 +1151,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,   ser,        descrip,       consec,     estac,       sucu,       nocaj) "
-                        + "VALUES(      'TIK', 'TIK',     'TICKETS',      0,          'INICIAL',   'INICIAL', 'INICIAL')";
+                        + "VALUES(              'TIK', 'TIK',     'TICKETS',      1,          'INICIAL',   'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             }
@@ -1176,7 +1176,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,   ser,        descrip,       consec,     estac,       sucu,       nocaj) "
-                        + "VALUES(      'COT', 'COT',     'COTIZACIONES',0,          'INICIAL',   'INICIAL', 'INICIAL')";
+                        + "VALUES(      'COT', 'COT',     'COTIZACIONES',1,          'INICIAL',   'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             } 
@@ -1201,7 +1201,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,   ser,        descrip,         consec,    estac,    sucu,      nocaj) "
-                        + "VALUES(  'EMP', 'EMP',     'EMPRESAS',    0,           'INICIAL', 'INICIAL', 'INICIAL')";
+                        + "VALUES(  'EMP', 'EMP',     'EMPRESAS',    1,           'INICIAL', 'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             }
@@ -1226,7 +1226,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,    ser,       descrip,        consec,         estac,      sucu,      nocaj) "
-                                    + "VALUES(  'PROV', 'PROV',     'PROVEEDORES',  0,             'INICIAL',  'INICIAL', 'INICIAL')";
+                                    + "VALUES(  'PROV', 'PROV',     'PROVEEDORES',  1,             'INICIAL',  'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             } 
@@ -1251,7 +1251,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,    ser,       descrip,      consec,      estac,      sucu,      nocaj) "
-                        + "VALUES(  'REM',  'REM',     'REMISIONES',  0,          'INICIAL',  'INICIAL', 'INICIAL')";
+                        + "VALUES(  'REM',  'REM',     'REMISIONES',  1,          'INICIAL',  'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             } 
@@ -1276,7 +1276,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,    ser,       descrip,    consec,      estac,      sucu,      nocaj) "
-                        + "VALUES(  'COMP', 'COMP',    'COMPRAS',  0,           'INICIAL',  'INICIAL', 'INICIAL')";
+                        + "VALUES(  'COMP', 'COMP',    'COMPRAS',  1,           'INICIAL',  'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             }
@@ -1301,7 +1301,7 @@ public class LoadinBD extends javax.swing.JDialog {
             try 
             {
                 sQ = "INSERT INTO " + sTabl + "( tip,    ser,       descrip,            consec,      estac,      sucu,      nocaj) "
-                        + "VALUES(  'ORDC', 'ORDC',    'ORDENES COMPRA',   0,           'INICIAL',  'INICIAL', 'INICIAL')";
+                        + "VALUES(  'ORDC', 'ORDC',    'ORDENES COMPRA',   1,           'INICIAL',  'INICIAL', 'INICIAL')";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
             }
@@ -13078,7 +13078,7 @@ public class LoadinBD extends javax.swing.JDialog {
             }
 
             /*Si la ruta del directorio inicial no existe que lo cree*/
-            String sRutA = "\\\\\\\\" + sNam + System.getProperty("user.dir").substring(2).replace("\\", "\\\\") + "\\\\Easy Retail®";
+            String sRutA = "\\\\\\\\" + sNam + System.getProperty("user.dir").substring(2).replace("\\", "\\\\") + "\\\\Easy Retail® Admin";
             if(!new File(sRutA).exists())             
                 new File(sRutA).mkdir();            
 
@@ -15536,7 +15536,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`falt`                 TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`fmod`                 TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
-                        + "UNIQUE KEY `prov_UNIQUE` (`prov`), KEY `prov` (`prov`), KEY `ser` (`ser`)\n"
+                        + "KEY `prov` (`prov`), KEY `ser` (`ser`)\n"
                         + ")";
                 st = con.createStatement();
                 st.executeUpdate(sQ);

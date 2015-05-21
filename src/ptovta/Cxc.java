@@ -1984,7 +1984,7 @@ public class Cxc extends javax.swing.JFrame
         }//Fin if(jTFolBanc.getText().trim().compareTo("")!=0)
         
         //Comprueba si el cliente existe
-        int iResp   = Star.iExistCli(con, jTCli.getText().trim());
+        int iResp   = Star.iExistCliProv(con, jTCli.getText().trim(), true);
         
         //Si hubo error entonces regresa
         if(iResp==-1)
@@ -2489,7 +2489,7 @@ public class Cxc extends javax.swing.JFrame
                 return;
         
             //Comprueba si el cliente existe
-            int iResp   = Star.iExistCli(con, jTCli.getText().trim());
+            int iResp   = Star.iExistCliProv(con, jTCli.getText().trim(), true);
 
             //Si hubo error entonces regresa
             if(iResp==-1)
@@ -3119,7 +3119,7 @@ public class Cxc extends javax.swing.JFrame
         
         /*Declara algunas variables como final*/
         final String sUsrFi     = sUsr;        
-                            
+        final String sContraFi  = sContra;
         /*Recorre todo el arreglo de clientes*/
         for (String sEmp : sEmps) 
         {
@@ -3157,8 +3157,8 @@ public class Cxc extends javax.swing.JFrame
                 props.put("mail.smtp.port", sSMTPPort);
                 props.put("mail.store.protocol", "pop3");
                 props.put("mail.transport.protocol", "smtp");
-                final String username = sUsr;
-                final String password = sContra;
+                final String username = sUsrFi;
+                final String password = sContraFi;
                 Session session = Session.getDefaultInstance(props,
                         new Authenticator() {
                             @Override
@@ -3720,7 +3720,7 @@ public class Cxc extends javax.swing.JFrame
             return;
                         
         //Comprueba si el cliente existe
-        iRes    = Star.iExistCli(con, jTCli.getText().trim());
+        iRes    = Star.iExistCliProv(con, jTCli.getText().trim(), true);
         
         //Si hubo error entonces regresa
         if(iRes==-1)

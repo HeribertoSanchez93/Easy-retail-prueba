@@ -63,7 +63,7 @@ public class UbiAd extends javax.swing.JFrame
         this.setLocationRelativeTo(null);
         
         /*Establece el titulo de la ventana con El usuario, la fecha y hora*/                
-        this.setTitle("Ubicaciones adicionales, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
+        this.setTitle("Catálogo de ubicaciones adicionales, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);        
         
         /*Inicialmente esta deseleccionada la tabla*/
         bSel        = false;
@@ -932,9 +932,9 @@ public class UbiAd extends javax.swing.JFrame
         //Si hubo error entonces regresa
         if(con==null)
             return;
-        
-        //Compreuba si la ubicacion existe
-        int iRes    = Star.iExistUbiAd(con, jTCod.getText().replace(" ", "").trim());
+                
+        //Compreuba si la ubicacion adicional existe
+        int iRes    = Star.iExiste(con, jTCod.getText().replace(" ", "").trim(),"ubiad", "cod");
         
         //Si hubo error entonces regresa
         if(iRes==-1)

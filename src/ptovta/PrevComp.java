@@ -114,6 +114,8 @@ public class PrevComp extends javax.swing.JFrame
         /*Inicaliza los componentes gráficos*/
         initComponents();
         
+        Star.lCargGral=null;
+        
         //se saca acomoda los componentes dependiendo de la resolucion
         vMyLayout();
         
@@ -513,11 +515,11 @@ public class PrevComp extends javax.swing.JFrame
             {                
                 /*Coloca el label rojo el estado de la cotización*/
                 if(rs.getString("estado").compareTo("CO")==0)                
-                    jLNot.setText("COTIZACION: CONFIRMADA");
+                    jLNot.setText("PREVIO DE COMPRA: CONFIRMADA");
                 else if(rs.getString("estado").compareTo("CA")==0)                
-                    jLNot.setText("COTIZACION: CANCELADA");
+                    jLNot.setText("PREVIO DE COMPRA: CANCELADA");
                 else if(rs.getString("estado").compareTo("PE")==0)                
-                    jLNot.setText("COTIZACION: PENDIENTE");
+                    jLNot.setText("PREVIO DE COMPRA: PENDIENTE");
             }                        
         }
         catch(SQLException e)
@@ -603,7 +605,7 @@ public class PrevComp extends javax.swing.JFrame
                 sCost           = n.format(dCant);
                 
                 //Se verifica si algun elemento que deba llevar serie tenga
-                if(rs.getString("serprod").trim().compareTo("")==0 && Star.iProdSolSer(con, rs.getString("prod").trim())==1 && jLNot.getText().trim().compareTo("COTIZACION: PENDIENTE")==0)
+                if(rs.getString("serprod").trim().compareTo("")==0 && Star.iProdSolSer(con, rs.getString("prod").trim())==1 && jLNot.getText().trim().compareTo("PREVIO DE COMPRA: PENDIENTE")==0)
                     jMostFalSer.setText("Faltan series en este previo de compra");
                          
                 
@@ -1440,7 +1442,7 @@ public class PrevComp extends javax.swing.JFrame
         if(row==-1)
         {
             /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "Selecciona por lo menos una cotización de la tabla.", "Cotizaciones", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+            JOptionPane.showMessageDialog(null, "Selecciona por lo menos un previo de compra de la tabla.", "Previo de Compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
             
             /*Pon el foco del teclado en la tabla y regresa*/
             jTab1.grabFocus();                        
@@ -1669,9 +1671,9 @@ public class PrevComp extends javax.swing.JFrame
         if(bAltP)
         {
             if(jTab1.getSelectedRowCount()<1)
-                JOptionPane.showMessageDialog(null, "Selecciona una cotización primero.", "Cotizaciones", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                JOptionPane.showMessageDialog(null, "Selecciona un Previo de Compra primero.", "Previo de Compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
             else if(jTab1.getSelectedRowCount()>1)
-                JOptionPane.showMessageDialog(null, "Solo selecciona una cotización.", "Cotizaciones", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                JOptionPane.showMessageDialog(null, "Solo selecciona un Previo de Compra.", "Previo de Compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
 
             else
                 vAbrPrevComp(jTab1, iContFi, jTab1.getValueAt(jTab1.getSelectedRow(), 1).toString().trim(), false,"0");
@@ -1963,7 +1965,7 @@ public class PrevComp extends javax.swing.JFrame
         if(iSel.length==0)
         {
             /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "Selecciona por lo menos una cotización para abrir.", "Cotizaciones", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+            JOptionPane.showMessageDialog(null, "Selecciona por lo menos un Previo de Compra para abrir.", "Previo de Compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
             
             /*Coloca el foco del teclado en la tabla y regresa*/
             jTab1.grabFocus();
@@ -2580,7 +2582,7 @@ public class PrevComp extends javax.swing.JFrame
         if(jTab1.getSelectedRow()==-1)
         {
             /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "Selecciona por lo menos una cotización para cancelar.", "Cancelación", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            JOptionPane.showMessageDialog(null, "Selecciona por lo menos un Previo de Compra para cancelar.", "Cancelación", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
             
             /*Pon el foco del teclado en la tabla de facturas y regresa*/
             jTab1.grabFocus();                        
@@ -2672,7 +2674,7 @@ public class PrevComp extends javax.swing.JFrame
             if(sEstad.compareTo("CO")== 0)
             {
                 /*Mensajea y continua*/
-                JOptionPane.showMessageDialog(null, "La cotización " + jTab1.getValueAt(iSel[x], 1).toString() + " esta confirmada.", "Cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                
+                JOptionPane.showMessageDialog(null, "el Previo de Compra: " + jTab1.getValueAt(iSel[x], 1).toString() + " esta confirmada.", "Previo de Compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                
                 continue;
             }
 
@@ -2680,7 +2682,7 @@ public class PrevComp extends javax.swing.JFrame
             if(sEstad.compareTo("CA")== 0)
             {
                 /*Mensajea y continua*/
-                JOptionPane.showMessageDialog(null, "La cotización " + jTab1.getValueAt(iSel[x], 1).toString() + " esta cancelada.", "Cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                JOptionPane.showMessageDialog(null, "el Previo de Compra: " + jTab1.getValueAt(iSel[x], 1).toString() + " esta cancelada.", "Previo de Compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
                 continue;
             }
 
@@ -2732,7 +2734,7 @@ public class PrevComp extends javax.swing.JFrame
         
         /*Mensajea si hubo alguna cancelación*/
         if(bCan)
-            JOptionPane.showMessageDialog(null, "Cotización(es) cancelada(s) con éxito.", "Cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            JOptionPane.showMessageDialog(null, "Previo de Compra(s) cancelada(s) con éxito.", "Previo de Compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
         
     }//GEN-LAST:event_jBCanActionPerformed
      
@@ -2771,7 +2773,7 @@ public class PrevComp extends javax.swing.JFrame
         if(jTab1.getSelectedRow()==-1)
         {
             /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "Selecciona por lo menos una cotización.", "Generar PDF", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            JOptionPane.showMessageDialog(null, "Selecciona por lo menos una Previo de Compra.", "Generar PDF", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
 
             /*Pon el foco del teclado en la tabla y regresa*/
             jTab1.grabFocus();
@@ -3074,7 +3076,7 @@ public class PrevComp extends javax.swing.JFrame
         if(iSel.length==0)
         {
             /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "Selecciona por lo menos una cotización para abrir.", "Cotizaciones", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            JOptionPane.showMessageDialog(null, "Selecciona por lo menos un Previo de Compra para abrir.", "Previo de Compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
 
             /*Coloca el foco del teclado en la tabla y regresa*/
             jTab1.grabFocus();

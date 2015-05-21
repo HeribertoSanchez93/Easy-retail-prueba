@@ -193,7 +193,7 @@ public class CorrElecs extends javax.swing.JFrame
                         jTAsunCXC1.setCaretPosition     (0);
                         jTAsunCXC2.setText              (rs.getString("asunrec2"));                        
                         jTAsunCXC2.setCaretPosition     (0);
-                        jTAsunCXC3.setText              (rs.getString("asunrec2"));                        
+                        jTAsunCXC3.setText              (rs.getString("asunrec3"));                        
                         jTAsunCXC3.setCaretPosition      (0);
                         
                         /*Coloca todos los cuerpos en su lugar*/
@@ -1001,7 +1001,7 @@ public class CorrElecs extends javax.swing.JFrame
         });
         jPan1.add(jBUsr, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 290, 30, 20));
 
-        jLabel9.setText("*Asunto/Cuerpo Rcordatorio 3 CXC:");
+        jLabel9.setText("*Asunto/Cuerpo Recordatorio 3 CXC:");
         jPan1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 200, 20));
 
         jLabel10.setText("*Asunto/Cuerpo Factura:");
@@ -1049,7 +1049,7 @@ public class CorrElecs extends javax.swing.JFrame
         });
         jPan1.add(jTCuerOrd, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 210, 280, 20));
 
-        jTAsunCot.setText("Envío de cotizaciòn.");
+        jTAsunCot.setText("Envío de cotización.");
         jTAsunCot.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTAsunCot.setNextFocusableComponent(jTCuerCot);
         jTAsunCot.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -1072,7 +1072,7 @@ public class CorrElecs extends javax.swing.JFrame
         });
         jPan1.add(jTAsunCot, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 170, 250, 20));
 
-        jTAsunContra.setText("Envío de contrarecibo.");
+        jTAsunContra.setText("Envío de contra recibo.");
         jTAsunContra.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTAsunContra.setNextFocusableComponent(jTCuerContr);
         jTAsunContra.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -1149,7 +1149,7 @@ public class CorrElecs extends javax.swing.JFrame
         });
         jPan1.add(jTCuerCot, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 170, 280, 20));
 
-        jTCuerContr.setText("Contrarecibo.");
+        jTCuerContr.setText("Contra recibo.");
         jTCuerContr.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTCuerContr.setNextFocusableComponent(jTAsunOrd);
         jTCuerContr.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -1210,10 +1210,10 @@ public class CorrElecs extends javax.swing.JFrame
         jLabel13.setText("*Asunto/Cuerpo Orden Compra:");
         jPan1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 200, 20));
 
-        jLabel14.setText("*Asunto/Cuerpo Rcordatorio 1 CXC:");
+        jLabel14.setText("*Asunto/Cuerpo Recordatorio 1 CXC:");
         jPan1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 200, 20));
 
-        jLabel15.setText("*Asunto/Cuerpo Rcordatorio 2 CXC:");
+        jLabel15.setText("*Asunto/Cuerpo Recordatorio 2 CXC:");
         jPan1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, 200, 20));
 
         jTAsunCXC3.setText("Envío de recordatorio de pago tercer aviso.");
@@ -2241,7 +2241,10 @@ public class CorrElecs extends javax.swing.JFrame
             jPContra.grabFocus();                        
             return;
         }
-                
+        System.out.println(sUsr);
+        System.out.println(sContra);
+                final String username = sUsr;
+                final String password = sContra;
         /*Manda un correo de pruebas para saber que la conexion esta bien en un thread*/
         (new Thread()
         {
@@ -2259,21 +2262,19 @@ public class CorrElecs extends javax.swing.JFrame
                     props.put("mail.smtp.port", sSMTPort);
                     props.put("mail.store.protocol", "pop3");
                     props.put("mail.transport.protocol", "smtp");
-                    final String username = sUsr;
-                    final String password = sContra;
                     Session session = Session.getDefaultInstance(props,
                             new Authenticator() {
                                 @Override
                                 protected PasswordAuthentication getPasswordAuthentication() {
-                                    return new PasswordAuthentication(username, password);
+                                    return new PasswordAuthentication(username,password);
                                 }
                             });
 
                     // -- Create a new message --
                     Message msg = new MimeMessage(session);                    
-                    msg.setFrom(new InternetAddress(sUsr));
+                    msg.setFrom(new InternetAddress(username));
                     msg.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse(sUsr, false));
+                            InternetAddress.parse(username, false));
                     msg.setSubject("Prueba");
                     msg.setContent("<h1>Prueba exitosa</h1>", "text/html");
                     msg.setSentDate(new java.util.Date());

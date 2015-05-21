@@ -197,7 +197,7 @@ public class Contras extends javax.swing.JFrame
         };        
         
         /*Establece el listener para la tabla 2*/
-        jTab2.addPropertyChangeListener(pro);
+        jTab1.addPropertyChangeListener(pro);
         
         /*Crea el listener para cuando se cambia de selección en la tabla 2*/
         pro = new PropertyChangeListener() 
@@ -960,7 +960,7 @@ public class Contras extends javax.swing.JFrame
         //Obtiene los datos de la empresa local
         try
         {                  
-            sQ = "SELECT nom, call, tel, col, cp, ciu, estad FROM basdats WHERE codemp = '" + Login.sCodEmpBD + "'";
+            sQ = "SELECT nom, calle, tel, col, cp, ciu, estad FROM basdats WHERE codemp = '" + Login.sCodEmpBD + "'";
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos*/
@@ -968,7 +968,7 @@ public class Contras extends javax.swing.JFrame
             {
                 /*Obtiene todos los datos de la consulta*/
                 sNom                    = rs.getString("nom");                                    
-                sCall                   = rs.getString("call");                                    
+                sCall                   = rs.getString("calle");                                    
                 sTel                    = rs.getString("tel");                                    
                 sCol                    = rs.getString("col");                                    
                 sCP                     = rs.getString("cp");                                                    

@@ -25,7 +25,22 @@
 	<parameter name="MED" class="java.lang.String"/>
 	<parameter name="LOG" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT prevcomprs.PROV, prevcomprs.NOSER, provs.NOM, prevcomprs.FALT, prevcomprs.SUCU, prevcomprs.NOCAJ, prevcomprs.ESTAC, prevcomprs.TOT FROM prevcomprs LEFT OUTER JOIN partprevcomprs ON partprevcomprs.CODCOM = prevcomprs.codprevcomp LEFT OUTER JOIN prods ON prods.PROD = partprevcomprs.PROD LEFT OUTER JOIN provs ON CONCAT_WS('', provs.SER, provs.PROV)= prevcomprs.PROV WHERE 1=1 AND CASE WHEN '$P!{NOCAJ}' = '' THEN prevcomprs.codprevcomp = prevcomprs.codprevcomp ELSE CONCAT_WS('', prevcomprs.SER, prevcomprs.codprevcomp) = '$P!{EMP}' END AND CASE WHEN '$P!{ANAQ}' = '' THEN prods.ANAQ = prods.ANAQ ELSE prods.ANAQ = '$P!{ANAQ}' END AND CASE WHEN '$P!{LUG}' = '' THEN prods.LUG = prods.LUG ELSE prods.LUG = '$P!{LUG}' END AND CASE WHEN '$P!{LIN}' = '' THEN prods.LIN = prods.LIN ELSE prods.LIN = '$P!{LIN}' END AND CASE WHEN '$P!{MARC}' = '' THEN prods.MARC = prods.MARC ELSE prods.MARC = '$P!{MARC}' END AND CASE WHEN '$P!{IMP}' = '' THEN prods.IMPUE = prods.IMPUE ELSE prods.IMPUE = '$P!{IMP}' END AND CASE WHEN '$P!{CLAS}' = '' THEN prods.CODEXT = prods.CODEXT ELSE prods.CODEXT = '$P!{CLAS}' END ORDER BY prevcomprs.ID_ID]]>
+		<![CDATA[SELECT prevcomprs.PROV, prevcomprs.NOSER, provs.NOM, prevcomprs.FALT, prevcomprs.SUCU, prevcomprs.NOCAJ, prevcomprs.ESTAC, prevcomprs.TOT FROM prevcomprs LEFT OUTER JOIN partprevcomprs ON partprevcomprs.CODCOM = prevcomprs.codprevcomp LEFT OUTER JOIN prods ON prods.PROD = partprevcomprs.PROD LEFT OUTER JOIN provs ON CONCAT_WS('', provs.SER, provs.PROV)= prevcomprs.PROV WHERE 1=1 AND CASE WHEN '$P!{NOCAJ}' = '' THEN 1=1 ELSE prevcomprs.NOCAJ = '$P!{NOCAJ}' END 
+AND CASE WHEN '$P!{PROD}' = '' THEN 1=1 ELSE partprevcomprs.PROD = '$P!{PROD}' END
+AND CASE WHEN '$P!{ALMA}' = '' THEN 1=1 ELSE prods.ALMA = '$P!{ALMA}' END 
+AND CASE WHEN '$P!{MED}' = '' THEN prods.CODMED = prods.CODMED ELSE prods.MED = '$P!{MED}' END 
+AND CASE WHEN '$P!{SUCU}' = '' THEN 1=1 ELSE prevcomprs.SUCU = '$P!{SUCU}' END 
+AND CASE WHEN '$P!{UBIAD}' = '' THEN prods.CODUBI = prods.CODUBI ELSE prods.CODUBI = '$P!{UBIAD}' END 
+AND CASE WHEN '$P!{ESTAC}' = '' THEN 1=1 ELSE prevcomprs.ESTAC = '$P!{ESTAC}' END 
+AND CASE WHEN '$P!{F_D}'= '' THEN prevcomprs.FALT = prevcomprs.FALT ELSE DATE(prevcomprs.FALT) >= '$P!{F_D}' END 
+AND CASE WHEN '$P!{F_A}' = '' THEN prevcomprs.FALT  = prevcomprs.FALT ELSE DATE(prevcomprs.FALT) <= '$P!{F_A}' END 
+AND CASE WHEN '$P!{EMP}' = '' THEN prevcomprs.PROV = prevcomprs.PROV ELSE prevcomprs.PROV = '$P!{EMP}' END 
+AND CASE WHEN '$P!{ANAQ}' = '' THEN prods.ANAQ = prods.ANAQ ELSE prods.ANAQ = '$P!{ANAQ}' END 
+AND CASE WHEN '$P!{LUG}' = '' THEN prods.LUG = prods.LUG ELSE prods.LUG = '$P!{LUG}' END 
+AND CASE WHEN '$P!{LIN}' = '' THEN prods.LIN = prods.LIN ELSE prods.LIN = '$P!{LIN}' END 
+AND CASE WHEN '$P!{MARC}' = '' THEN prods.MARC = prods.MARC ELSE prods.MARC = '$P!{MARC}' END 
+AND CASE WHEN '$P!{IMP}' = '' THEN prods.IMPUE = prods.IMPUE ELSE prods.IMPUE = '$P!{IMP}' END 
+AND CASE WHEN '$P!{CLAS}' = '' THEN prods.CODEXT = prods.CODEXT ELSE prods.CODEXT = '$P!{CLAS}' END ORDER BY prevcomprs.ID_ID]]>
 	</queryString>
 	<field name="PROV" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

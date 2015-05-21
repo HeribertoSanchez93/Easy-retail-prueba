@@ -126,8 +126,12 @@ public class IngrCom extends javax.swing.JFrame
     {                
         /*Inicaliza los componentes gráficos*/
         initComponents();
+        Star.lCargGral=null;
+        
         sCodi=sCod;
+        
         System.out.println(sTipo);
+        
         //Se bloque dependiendo del tipo que sea
         if(sTipo!="")
         {

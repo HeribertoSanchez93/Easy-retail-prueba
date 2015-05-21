@@ -457,7 +457,7 @@ public class SerTik extends javax.swing.JFrame
         });
         jP1.add(jBNew, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 30, 90, 20));
 
-        jTConsec.setText("0");
+        jTConsec.setText("1");
         jTConsec.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTConsec.setNextFocusableComponent(jTDescrip);
         jTConsec.addFocusListener(new java.awt.event.FocusAdapter() {

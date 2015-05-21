@@ -10,6 +10,12 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 //Importaciones
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
@@ -64,6 +70,7 @@ import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -1034,7 +1041,7 @@ public class Star
         
         /*Declara algunas variables como final*/
         final String sUsrFi     = sUsr;        
-                            
+        final String sContraFi  = sContra;
         /*Recorre todo el arreglo de cliente*/
         for (String sEmp : sEmps) 
         {
@@ -1074,8 +1081,8 @@ public class Star
                 props.put("mail.smtp.port", sSMTPPort);
                 props.put("mail.store.protocol", "pop3");
                 props.put("mail.transport.protocol", "smtp");
-                final String username = sUsr;
-                final String password = sContra;
+                final String username = sUsrFi;
+                final String password = sContraFi;
                 Session session = Session.getDefaultInstance(props,
                         new Authenticator() {
                             @Override
@@ -1356,7 +1363,7 @@ public class Star
         
         /*Declara algunas variables como final*/
         final String sUsrFi     = sUsr;        
-        
+        final String sContraFi  = sContra;
         /*Recorre todo el arreglo de cliente*/
         for (String sEmp : sEmps) 
         {
@@ -1394,8 +1401,8 @@ public class Star
                 props.put("mail.smtp.port", sSMTPPort);
                 props.put("mail.store.protocol", "pop3");
                 props.put("mail.transport.protocol", "smtp");
-                final String username = sUsr;
-                final String password = sContra;
+                final String username = sUsrFi;
+                final String password = sContraFi;
                 Session session = Session.getDefaultInstance(props,
                         new Authenticator() {
                             @Override
@@ -1674,7 +1681,7 @@ public class Star
                 props.put("mail.smtp.port", sSMTPPort);
                 props.put("mail.store.protocol", "pop3");
                 props.put("mail.transport.protocol", "smtp");
-                final String username = sUsr;
+                final String username = sUsrFi;
                 final String password = sContraFi;
                 Session session = Session.getDefaultInstance(props,
                         new Authenticator() {
@@ -1826,7 +1833,7 @@ public class Star
                 props.put("mail.smtp.port", sSMTPPort);
                 props.put("mail.store.protocol", "pop3");
                 props.put("mail.transport.protocol", "smtp");
-                final String username = sUsr;
+                final String username = sUser;
                 final String password = sContra;
                 Session session = Session.getDefaultInstance(props,
                         new Authenticator() {
@@ -2048,7 +2055,7 @@ public class Star
     
         /*Declara variables final para el thread*/        
         final String sContraFi  = sCont;
-        
+        final String sUsrFi     = sUsr;
         /*Manda el correo*/
         try
         {
@@ -2061,7 +2068,7 @@ public class Star
             props.put("mail.smtp.port", sSMTPPort);
             props.put("mail.store.protocol", "pop3");
             props.put("mail.transport.protocol", "smtp");
-            final String username = sUsr;
+            final String username = sUsrFi;
             final String password = sContraFi;
             Session session = Session.getDefaultInstance(props,
                     new Authenticator() {
@@ -2273,7 +2280,7 @@ public class Star
     
         /*Declara variables final para el thread*/        
         final String sContraFi  = sCont;
-        
+        final String sUsrFi     = sUsr;
         /*Manda el correo*/
         try
         {
@@ -2286,7 +2293,7 @@ public class Star
             props.put("mail.smtp.port", sSMTPPort);
             props.put("mail.store.protocol", "pop3");
             props.put("mail.transport.protocol", "smtp");
-            final String username = sUsr;
+            final String username = sUsrFi;
             final String password = sContraFi;
             Session session = Session.getDefaultInstance(props,
                     new Authenticator() {
@@ -2483,7 +2490,7 @@ public class Star
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
+                        final String username = sUser;
                         final String password = sContra;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
@@ -2594,7 +2601,7 @@ public class Star
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
+                        final String username = sUser;
                         final String password = sContra;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
@@ -2698,7 +2705,7 @@ public class Star
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
+                        final String username = sUser;
                         final String password = sContra;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
@@ -2923,7 +2930,7 @@ public class Star
             props.put("mail.smtp.port", sSMTPPort);
             props.put("mail.store.protocol", "pop3");
             props.put("mail.transport.protocol", "smtp");
-            final String username = sUsr;
+            final String username = sUser;
             final String password = sContra;
             Session session = Session.getDefaultInstance(props,
                     new Authenticator() {
@@ -3242,7 +3249,6 @@ public class Star
             //Si la fila no es -1 entonces actualiza en la tabla de que no se timbro
             if(iFil!=-1)            
                 jTab.setValueAt("No", iFil, 22);
-            System.out.println("yep");
             //Coloca la banera del error
             Star.bErr    = true;
             
@@ -3286,7 +3292,6 @@ public class Star
         }
         catch(SQLException expnSQL)
         {
-            System.out.println("1");
             /*Actualiza en la tabla de que no se timbró*/            
             jTab.setValueAt("No", iFil, 22);
             
@@ -3332,7 +3337,6 @@ public class Star
         }
         catch(SQLException expnSQL)
         {
-            System.out.println("2");
             /*Actualiza en la tabla de que no se timbró*/            
             jTab.setValueAt("No", iFil, 22);
             
@@ -3354,7 +3358,6 @@ public class Star
         }
         catch(SQLException expnSQL)
         {
-            System.out.println("3");
             /*Actualiza en la tabla de que no se timbró*/                
             jTab.setValueAt("No", iFil, 22);
 
@@ -3398,7 +3401,6 @@ public class Star
             }
             catch(SQLException expnSQL)
             {
-                System.out.println("4");
                 //Procesa el error y regresa
                 Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
                 return;                            
@@ -3454,7 +3456,6 @@ public class Star
         }
         catch(SQLException expnSQL)
         {
-            System.out.println("5");
             //Procesa el error y regresa
             Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
             return;                        
@@ -3474,10 +3475,8 @@ public class Star
         if(sCert==null)
             return;
         
-        System.out.println("1");
         /*Crea el encabezado del xml*/
         String sXml = sCreEncaXML(sCta, sCiuLoc, sMon, sTipCam, sMetPag, sTot.replace(",", "").replace("$", ""), sTotDescu.replace(",", "").replace("$", ""), sSubTot.replace(",", "").replace("$", ""), sNumCert, sFormPag, sTipDocS, sFDoc, sCert, "",sNomLoc, sRFCLoc, sCPLoc, sPaiLoc, sEstLoc, sCiuLoc, sColLoc, sNoExtLoc, sCallLoc, sRegFisc, sNomEmp, sRFC, sPai, sEsta, sCiu, sCol, sCall, sCiu, sLugExp);
-        System.out.println("12");
         /*Crea las partidas de la venta*/
         sXml        += sCrePartXML(con, sVta);        
         
@@ -3527,10 +3526,8 @@ public class Star
         
         //Concatena la cadena
         sXml        += sFinCad;
-        
         /*Obtiene el token de sguridad*/
         String sNewTok  = sCreTokEsta(sRFCLoc);
-        
         /*Si hubo error entonces*/
         if(sNewTok==null)
         {
@@ -3543,10 +3540,8 @@ public class Star
         java.util.StringTokenizer stk = new java.util.StringTokenizer(sNewTok, "|");
         sNewTok         = stk.nextToken();
         String sTransId = stk.nextToken();
-        
         /*Crea el object factory para consultar el estatus de una cuenta*/
         wstimb.ObjectFactory facCli = new wstimb.ObjectFactory();
-        
         /*Crea el comprobante XML*/
         wstimb.ComprobanteXML xmlComp= new wstimb.ComprobanteXML();
         xmlComp.setDatosXML(facCli.createComprobanteXMLDatosXML(sXml.replace("&", "&amp;")));
@@ -3557,7 +3552,7 @@ public class Star
         wbPara.setToken                     (facCli.createSolicitudTimbraXMLToken(sNewTok));
         wbPara.setRFC                       (facCli.createSolicitudTimbraXMLRFC(sRFCLoc));
         wbPara.setComprobanteXML            (facCli.createComprobanteXML(xmlComp));
-            
+        
         /*Bandera para saber si se timbro o no*/
         boolean bSiTim                      = true;
         
@@ -3585,17 +3580,17 @@ public class Star
         /*Manda timbrar con el WS*/                        
         wstimb.RespuestaTimbraXML wsResp;
         try
-        {                                            
+        {   
+            System.out.println(wbPara);
             wstimb.Timbrado_Service servicioX   = new wstimb.Timbrado_Service();
             wstimb.Timbrado puertoX             = servicioX.getPuertoTimbrado();
             wsResp                              = puertoX.timbraXML(wbPara);
-            
+           
             /*Obtiene el transid del timbrado*/
-            sTID                                = wsResp.getTransaccionID().toString();
-                    
+            sTID                                = wsResp.getTransaccionID().toString();       
             /*Obtiene el XML del PAC*/
             sXml                                = wsResp.getComprobanteXML().getValue().getDatosXML().getValue();
-                        
+             
             /*Tokeniza el XML en busca el UUID*/
             java.util.StringTokenizer stkXml    = new java.util.StringTokenizer(sXml, " ");
             while(stkXml.hasMoreTokens())
@@ -3603,11 +3598,11 @@ public class Star
                 /*Obtiene el token*/
                 sFolFisc    = stkXml.nextToken();
                 
-                /*Si la cadena comienza con UUID entonces ya lo encontramos*/
+                /*Si la cadena comienza con UUID entonces ya lo encontramos folio fiscal*/
                 if(sFolFisc.startsWith("UUID="))
                     break;
             }
-                            
+                           
             /*Tokeniza el XML en busca del sello dígital del SAT*/
             stkXml    = new java.util.StringTokenizer(sXml, " ");
             while(stkXml.hasMoreTokens())
@@ -3672,7 +3667,7 @@ public class Star
         {   
             System.out.println("6");
             //Procesa el error y regresa
-            Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC, con);                                                                   
+            Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC, null);                                                                   
             return;                        
         }                               
         
@@ -3821,7 +3816,7 @@ public class Star
         /*Si no existe un logo para la empresa entonces será el logo por default del sistema*/
         if(!new File(sRutLog).exists())
             sRutLog             = sRutLoc;
-
+               
         //Declara variables de la base de datos
         Statement   st;
         ResultSet   rs;        
@@ -3848,7 +3843,7 @@ public class Star
             Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
             return;                        
         }
-
+        
         //Declara variables locales
         String sNomLoc      = "";
         String sCallLoc     = "";
@@ -3912,7 +3907,7 @@ public class Star
 
         //Obtiene si el usuario tiene correo asociado
         int iRes    = Star.iUsrCon(con, Login.sUsrG);
-
+        System.out.println("1");
         //Si hubo error entonces regresa
         if(iRes==-1)
             return;
@@ -3925,6 +3920,7 @@ public class Star
         /*Si tiene correo asociado entonces*/
         if(bSi)
         {
+            System.out.println("2");
             /*Determina a que correos se le va a mandar al cliente*/
             if(!bCo1)
                 sC1            = null;
@@ -3932,15 +3928,20 @@ public class Star
                 sC2            = null;
             if(!bCo3)
                 sC3            = null;
-
+            System.out.println("3");
             /*Si por lo menos a un correo se le va a mandar el pdf entonces y si tiene hablitado esa parte entonces manda el PDF*/
             if((bCo1 || bCo2 || bCo3) && bMandCo)
+            {
+            System.out.println("4");
                 Star.vMandPDFEmp(sSerFac + sConFac + ".pdf", sRutPDF, null, null, sC1, sC2, sC3, sSerFac + sConFac, "REM");
+            System.out.println("5");
+            }
         }
+            
         /*Else mensajea*/
         else
             JOptionPane.showMessageDialog(null, "No se envio la remisión con Folio: " + sConFac + " por correo electrónico ya que no se tiene uno configurado para el usuario: " + Login.sUsrG + ".", "Remisión", JOptionPane.INFORMATION_MESSAGE, null);               
-        
+        System.out.println("6");
         //Cierra la base de datos
         if(Star.iCierrBas(con)==-1)                  
             Star.bErr    = true;
@@ -4619,7 +4620,10 @@ public class Star
                 /*Si la carpeta de la aplicación compartida en el servidor no esta definida entonces coloca la bandera*/
                 boolean bCarp   = true;
                 if(sCarp.compareTo("")==0)
+                {
+                    System.out.println("nop");
                     bCarp       = false;
+                }
 
                 /*Obtiene el número de corte ya sea X o Z*/
                 String sCort = "1";
@@ -4856,14 +4860,13 @@ public class Star
                     java.awt.Image newimg = im.getScaledInstance( 600, 350,  java.awt.Image.SCALE_SMOOTH );
 
 
-                    v.setTitle("Reporte de X");
+                    v.setTitle("Reporte de "+sTip);
                     v.setIconImage(newimg);
 
                             v.setVisible(true);
 
-                            /*Si se tiene que guardar y si la carpeta de la aplicación ya esta definida entonces*/
                             if(bCarp && bSiG)
-                            {                                
+                            {
                                 /*Si no existe la carpeta de los cortes X o Z entonces creala*/
                                 String sRut = sCarp + sCarpG;
                                 if(!new File(sRut).exists())
@@ -4877,10 +4880,10 @@ public class Star
                                 /*Completa el nomre del corte con su consecutivo*/
                                 sRut        += "\\" + sCort + ".pdf";
                                 
+                                System.out.println(sRut);
                                 /*Exportalo a la ruta específicada*/
                                 JasperExportManager.exportReportToPdfFile(pr, sRut);
                             }
-                            
                             /*Declara variables*/
                             String  sImpAnt;
                             String  sImp       = "";
@@ -6747,7 +6750,7 @@ public class Star
             try
             {                
                 /*Intenta copiar todo*/
-                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut1O + "\\Easy Retail®"));
+                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut1O + "\\Easy Retail® Admin"));
 
                 /*Inserta en log que todo se copio con éxito*/
                 try 
@@ -6856,7 +6859,7 @@ public class Star
             try
             {
                 /*Intenta copiar todo*/
-                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut2O + "\\Easy Retail®"));
+                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut2O + "\\Easy Retail® Admin"));
 
                 /*Inserta en log que todo se copio con éxito*/
                 try 
@@ -6955,7 +6958,7 @@ public class Star
             try
             {
                 /*Intenta copiar todo*/
-                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut3O + "\\Easy Retail®"));
+                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut3O + "\\Easy Retail® Admin"));
 
                 /*Inserta en log que todo se copio con éxito*/
                 try 
@@ -7143,6 +7146,7 @@ public class Star
         
         /*Declara algunas variables como final*/
         final String sUsrFi     = sUsr;        
+        final String sContraFi  = sContra;
         
         /*Obtiene todos los registros de la tabla de cumpleaños que no han sido enviados para este año*/        
         try
@@ -7183,8 +7187,8 @@ public class Star
                     props.put("mail.smtp.port", sSMTPPort);
                     props.put("mail.store.protocol", "pop3");
                     props.put("mail.transport.protocol", "smtp");
-                    final String username = sUsr;
-                    final String password = sContra;
+                    final String username = sUsrFi;
+                    final String password = sContraFi;
                     Session session = Session.getDefaultInstance(props,
                             new Authenticator() {
                                 @Override
@@ -7923,7 +7927,7 @@ public class Star
                 sTotCost        = n.format(dCant);                
                 
                 /*Agregalos a la tabla*/
-                Object nu[]     = {Star.iContFiVent, rs.getString("vtas.VTA"), rs.getString("vtas.NOREFER"), rs.getString("vtas.NOSER"),rs.getString("codemp"), sTot, sTotDesc, sTotCost, rs.getString("vtas.FALT"), rs.getString("vtas.FEMI"), rs.getString("vtas.FMOD"), rs.getString("vtas.FVENC"), rs.getString("vtas.NOTCRED"), rs.getString("vtas.NOTCREDPAG").replace("|", " "), rs.getString("vtas.ESTAD"), rs.getString("vtas.ESTAC"), rs.getString("vtas.MOTIV"), rs.getString("vtas.TIPDOC"), rs.getString("observ"), rs.getString("vtas.SUCU"), rs.getString("vtas.NOCAJ"), rs.getString("estacs.NOM"), rs.getString("timbr"), rs.getString("codcot"), rs.getString("vtadevp"), "", rs.getString("folfisc"), rs.getString("autrecibde"), rs.getString("autmarc"), rs.getString("autmod"), rs.getString("autcolo"), rs.getString("autplacs"), rs.getString("autnom"), rs.getString("auttarcirc"), rs.getString("autnumlic"), rs.getString("auttel"), rs.getString("autdirpart"), rs.getString("autdirofi"), rs.getString("auttelofi")};
+                Object nu[]     = {Star.iContFiVent, rs.getString("vtas.VTA"), rs.getString("vtas.NOREFER"), rs.getString("vtas.NOSER"),rs.getString("codemp"), sTot, sTotDesc, sTotCost, rs.getString("vtas.FALT"), rs.getString("vtas.FEMI"), rs.getString("vtas.FMOD"), rs.getString("vtas.FVENC"), rs.getString("vtas.NOTCRED"), rs.getString("vtas.NOTCREDPAG").replace("|", " "), rs.getString("vtas.ESTAD"), rs.getString("vtas.ESTAC"), rs.getString("vtas.MOTIV"), rs.getString("vtas.TIPDOC"), rs.getString("observ"), rs.getString("vtas.SUCU"), rs.getString("vtas.NOCAJ"), rs.getString("estacs.NOM"), rs.getString("timbr"), rs.getString("codcot"), rs.getString("vtadevp"), "", rs.getString("folfisc")};
                 te.addRow(nu);
                 
                 /*Aumenta en uno el contador de filas de las compras*/
@@ -9524,25 +9528,51 @@ public class Star
         String sPreReg  = "";
         String sUtilReg = "";
         String sUsar    = "";
-        
-        //Obtiene primeramente la clasificación de los 4
-        boolean bYa     = false;
+        String cProd    = "";
+        String cClien   = "";
+        String cClas    = "";
+        String cClasjera= "";
+        String gListReg[]= new String[9999];
+        String gPreReg[]= new String[9999];
+        String gUtilReg[]= new String[9999];
+        String gUsar[]= new String[9999];
+        String gProd[]= new String[9999];
+        String gClien[]= new String[9999];
+        String gClas[]= new String[9999];
+        String gClasjera[]= new String[9999];
+        int  ban[]= new int [9999];
+        int  ban2[]= new int [9999];
+        int z=0,a,b=0,c=0,x=0;
+        boolean bandera=false;
         try
         {
-            sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE clien = '" + sCli + "' AND clas = '" + sClas + "' AND prod = '" + sProd + "' AND clasjera = '" + sClasJera + "'";                        
+            sQ = "SELECT prod, clien ,clas ,clasjera ,list, prec, util, usar FROM asocdesc ";                        
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             //Si hay datos entonces obtiene los resutlados
-            if(rs.next())
+            while(rs.next())
             {
                 //Obtiene los resultados
+                cProd           = rs.getString("prod");
+                cClien          = rs.getString("clien");
+                cClas           = rs.getString("clas");
+                cClasjera       = rs.getString("clasjera");
                 sListReg        = rs.getString("list");
                 sPreReg         = rs.getString("prec");
                 sUtilReg        = rs.getString("util");
                 sUsar           = rs.getString("usar");
-                
-                //Coloca la bandera para saber que ya encontró coincidencia para que no siga evaluando
-                bYa             = true;
+                if(cProd.equalsIgnoreCase(sProd)==true||cClien.equalsIgnoreCase(sCli)==true||cClas.equalsIgnoreCase(sClas)==true||cClasjera.equalsIgnoreCase(sClasJera)==true)
+                {
+                    gListReg[x]=sListReg;
+                    gPreReg[x]=sPreReg;
+                    gUtilReg[x]=sUtilReg;
+                    gUsar[x]=sUsar;
+                    gProd[x]=cProd;
+                    gClien[x]=cClien;
+                    gClas[x]=cClas;
+                    gClasjera[x]=cClasjera;
+                    x++;
+                }
             }
         }
         catch(SQLException expnSQL)
@@ -9550,315 +9580,100 @@ public class Star
             //Procesa el error y regresa
             Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
             return null;                        
-        }  
-        
-        //Si aun tiene que seguir evaluando entonces
-        if(!bYa)
+        }
+        if(x>0)
         {
-            //Comprueba si existen por cliente y producto
-            try
-            {
-                sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE clien = '" + sCli + "' AND prod = '" + sProd + "'";                        
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                //Si hay datos entonces obtiene los resutlados
-                if(rs.next())
-                {
-                    //Obtiene los resultados
-                    sListReg        = rs.getString("list");
-                    sPreReg         = rs.getString("prec");
-                    sUtilReg        = rs.getString("util");
-                    sUsar           = rs.getString("usar");
-
-                    //Coloca la bandera para saber que ya encontró coincidencia para que no siga evaluando
-                    bYa             = true;
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return null;                
-            }  
+        do{
+            a=0;
+            x--;
             
-        }//Fin de if(!bYa)
+            
+                if(gProd[x].equalsIgnoreCase("")==true)
+                {
+                    gProd[x]=sProd;
+                    a++;
+                }
+                if(gClien[x].equalsIgnoreCase("")==true)
+                {
+                    gClien[x]=sCli;
+                    a++;
+                }
+                if(gClas[x].equalsIgnoreCase("")==true)
+                {
+                    gClas[x]=sClas;
+                    a++;
+                }
+                if(gClasjera[x].equalsIgnoreCase("")==true)
+                {
+                    gClasjera[x]=sClasJera;
+                    a++;
+                }
+                if(gProd[x].equalsIgnoreCase(sProd)==true&&gClien[x].equalsIgnoreCase(sCli)==true&&gClas[x].equalsIgnoreCase(sClas)==true&&gClasjera[x].equalsIgnoreCase(sClasJera)==true)        
+                { 
+                    ban[b]=x;
+                    ban2[b]=a;
+                    b++;
+                    
+                }
+        }while( x>0);
         
-        //Si aun tiene que seguir evaluando entonces
-        if(!bYa)
+        if(z==0)
         {
-            //Comprueba si existen por cliente y clasificación
-            try
+            if(b==0)
             {
-                sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE clien = '" + sCli + "' AND clas = '" + sClas + "'";                        
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                //Si hay datos entonces obtiene los resutlados
-                if(rs.next())
+                
+            }else
+            {
+                if(b==1)
                 {
-                    //Obtiene los resultados
-                    sListReg        = rs.getString("list");
-                    sPreReg         = rs.getString("prec");
-                    sUtilReg        = rs.getString("util");
-                    sUsar           = rs.getString("usar");
-
-                    //Coloca la bandera para saber que ya encontró coincidencia para que no siga evaluando
-                    bYa             = true;
+                    b--;
+                    c=b;
                 }
+                else
+                do{
+                    if(b==0)
+                    {
+                        if(ban2[b]> ban2[c])
+                        c=b;
+                        if(ban2[b]==ban2[c])
+                        {
+       
+                            int seleccion = JOptionPane.showOptionDialog( null,"regla 1: Prod="+gProd[b]+"Cliente="+gClien[b]+"Clas"+gClas[b]+"jerarquia"+gClasjera[b]+"\nregla 2: Prod="+gProd[c]+"Cliente="+gClien[c]+"Clas"+gClas[c]+"jerarquia"+gClasjera[c],"Regla de venta",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "opcion 1", "opcion 2" },"opcion 1");
+      
+                            if(seleccion==0)
+                                c=b;
+                            else
+                            {
+                                c=c;
+                            }
+                        }
+                    }
+                    else
+                    {
+                    b--;
+                    c=b;
+                    b--;
+                    if(ban2[b]> ban2[c])
+                        c=b;
+                    if(ban2[b]==ban2[c])
+                    {
+       
+                        int seleccion = JOptionPane.showOptionDialog( null,"regla 1: Prod="+gProd[b]+"Cliente="+gClien[b]+"Clas"+gClas[b]+"jerarquia"+gClasjera[b]+"\nregla 2: Prod="+gProd[c]+"Cliente="+gClien[c]+"Clas"+gClas[c]+"jerarquia"+gClasjera[c],"Regla de venta",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "opcion 1", "opcion 2" },"opcion 1");
+      
+                        if(seleccion==0)
+                            c=b;
+                        else
+                        {
+                            c=c;
+                        }
+                    }
+                    }
+                    }while( b>0);
+            z= ban[c];
+            bandera=true;
             }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return null;                
-            }  
-            
-        }//Fin de if(!bYa)
-        
-        //Si aun tiene que seguir evaluando entonces
-        if(!bYa)
-        {
-            //Comprueba si existen por cliente y clasificación jerarquica
-            try
-            {
-                sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE clien = '" + sCli + "' AND clasjera = '" + sClasJera + "'";                        
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                //Si hay datos entonces obtiene los resutlados
-                if(rs.next())
-                {
-                    //Obtiene los resultados
-                    sListReg        = rs.getString("list");
-                    sPreReg         = rs.getString("prec");
-                    sUtilReg        = rs.getString("util");
-                    sUsar           = rs.getString("usar");
-
-                    //Coloca la bandera para saber que ya encontró coincidencia para que no siga evaluando
-                    bYa             = true;
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return null;                
-            }  
-            
-        }//Fin de if(!bYa)
-        
-        //Si aun tiene que seguir evaluando entonces
-        if(!bYa)
-        {
-            //Comprueba si existen por producto y clasificación
-            try
-            {
-                sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE prod = '" + sProd + "' AND clas = '" + sClas + "'";                        
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                //Si hay datos entonces obtiene los resutlados
-                if(rs.next())
-                {
-                    //Obtiene los resultados
-                    sListReg        = rs.getString("list");
-                    sPreReg         = rs.getString("prec");
-                    sUtilReg        = rs.getString("util");
-                    sUsar           = rs.getString("usar");
-
-                    //Coloca la bandera para saber que ya encontró coincidencia para que no siga evaluando
-                    bYa             = true;
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return null;                
-            }  
-            
-        }//Fin de if(!bYa)
-        
-        //Si aun tiene que seguir evaluando entonces
-        if(!bYa)
-        {
-            //Comprueba si existen por producto y clasificación jerárquica
-            try
-            {
-                sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE prod = '" + sProd + "' AND clasjera = '" + sClasJera + "'";                        
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                //Si hay datos entonces obtiene los resutlados
-                if(rs.next())
-                {
-                    //Obtiene los resultados
-                    sListReg        = rs.getString("list");
-                    sPreReg         = rs.getString("prec");
-                    sUtilReg        = rs.getString("util");
-                    sUsar           = rs.getString("usar");
-
-                    //Coloca la bandera para saber que ya encontró coincidencia para que no siga evaluando
-                    bYa             = true;
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return null;                
-            }  
-            
-        }//Fin de if(!bYa)
-        
-        //Si aun tiene que seguir evaluando entonces
-        if(!bYa)
-        {
-            //Comprueba si existen por clasificación y clasificación jerárquica
-            try
-            {
-                sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE clas = '" + sClas + "' AND clasjera = '" + sClasJera + "'";                        
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                //Si hay datos entonces obtiene los resutlados
-                if(rs.next())
-                {
-                    //Obtiene los resultados
-                    sListReg        = rs.getString("list");
-                    sPreReg         = rs.getString("prec");
-                    sUtilReg        = rs.getString("util");
-                    sUsar           = rs.getString("usar");
-
-                    //Coloca la bandera para saber que ya encontró coincidencia para que no siga evaluando
-                    bYa             = true;
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return null;                
-            }  
-            
-        }//Fin de if(!bYa)
-        
-        //Si aun tiene que seguir evaluando entonces
-        if(!bYa)
-        {
-            //Comprueba si existe por cliente
-            try
-            {
-                sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE clien = '" + sCli + "' AND prod = '' AND clas = ''";                        
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                //Si hay datos entonces obtiene los resutlados
-                if(rs.next())
-                {
-                    //Obtiene los resultados
-                    sListReg        = rs.getString("list");
-                    sPreReg         = rs.getString("prec");
-                    sUtilReg        = rs.getString("util");
-                    sUsar           = rs.getString("usar");
-
-                    //Coloca la bandera para saber que ya encontró coincidencia para que no siga evaluando
-                    bYa             = true;
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return null;                
-            }  
-            
-        }//Fin de if(!bYa)
-        
-        //Si aun tiene que seguir evaluando entonces
-        if(!bYa)
-        {
-            //Comprueba si existe por producto
-            try
-            {
-                sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE clien = '' AND prod = '" + sProd + "' AND clas = ''";                        
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                //Si hay datos entonces obtiene los resutlados
-                if(rs.next())
-                {
-                    //Obtiene los resultados
-                    sListReg        = rs.getString("list");
-                    sPreReg         = rs.getString("prec");
-                    sUtilReg        = rs.getString("util");
-                    sUsar           = rs.getString("usar");
-
-                    //Coloca la bandera para saber que ya encontró coincidencia para que no siga evaluando
-                    bYa             = true;
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return null;                
-            }  
-            
-        }//Fin de if(!bYa)
-        
-        //Si aun tiene que seguir evaluando entonces
-        if(!bYa)
-        {
-            //Comprueba si existe por clasificación
-            try
-            {
-                sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE clien = '' AND prod = '' AND clas = '" + sClas + "'";                        
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                //Si hay datos entonces obtiene los resutlados
-                if(rs.next())
-                {
-                    //Obtiene los resultados
-                    sListReg        = rs.getString("list");
-                    sPreReg         = rs.getString("prec");
-                    sUtilReg        = rs.getString("util");
-                    sUsar           = rs.getString("usar");
-
-                    //Coloca la bandera para saber que ya encontró coincidencia para que no siga evaluando
-                    bYa             = true;
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return null;
-            }  
-            
-        }//Fin de if(!bYa)
-
-        //Si aun tiene que seguir evaluando entonces
-        if(!bYa)
-        {
-            //Comprueba si existe por clasificación jerárquica
-            try
-            {
-                sQ = "SELECT list, prec, util, usar FROM asocdesc WHERE clasjera = '" + sClasJera + "'";                        
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                //Si hay datos entonces obtiene los resutlados
-                if(rs.next())
-                {
-                    //Obtiene los resultados
-                    sListReg        = rs.getString("list");
-                    sPreReg         = rs.getString("prec");
-                    sUtilReg        = rs.getString("util");
-                    sUsar           = rs.getString("usar");                   
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return null;                
-            }  
-            
-        }//Fin de if(!bYa)
-        
+        }
+        }
         /*Comprueba si esta habilitado usar el precio de lista del cliente*/
         boolean bSi = false;
         try
@@ -9905,12 +9720,11 @@ public class Star
         
         /*Si la regla de negocio dice que lista de precios entonces la lista será esta*/
         if(sUsar.compareTo("list")==0)
-            sList           = sListReg;
+            sList           = gListReg[z];
         
         /*Contiene el precio de la lista específica y la utilidad de venta*/
         String sPreMen      = "";
         String sUtilVta     = "";
-        
         /*Obtiene el precio y la utildiad de venta del producto*/        
         try
         {
@@ -9932,8 +9746,8 @@ public class Star
         }  
                              
         /*Si la regla dice que será por utilidad entonces la utilidad de la venta será esta*/
-        if(sUsar.compareTo("util")==0)
-            sUtilVta    = sUtilReg;
+        if(sUsar.compareTo("util")==0&&bandera==true)
+            sUtilVta    = gUtilReg[z];
         
         /*Si la utilidad de venta es mayor a 0 entonces obtiene el precio de venta correcto*/
         if(Double.parseDouble(sUtilVta)>0)
@@ -9944,8 +9758,8 @@ public class Star
             return null;                                 
 
         /*Si la regla dice que es por precio entonces el precio será ese*/
-        if(sUsar.compareTo("prec")==0)
-            sPreMen     = sPreReg;
+        if(sUsar.compareTo("prec")==0&&bandera==true)
+            sPreMen     = gPreReg[z];
         
         /*Devuelve el resultado*/
         return sPreMen + "|" + sList;
@@ -10637,7 +10451,7 @@ public class Star
             props.put("mail.smtp.port", sSMTPPort);
             props.put("mail.store.protocol", "pop3");
             props.put("mail.transport.protocol", "smtp");
-            final String username = sUsr;
+            final String username = sUser;
             final String password = sContra;
             Session session = Session.getDefaultInstance(props,
                     new Authenticator() {
@@ -10782,8 +10596,11 @@ public class Star
                     //Procesa el error y regresa
                     Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
                     return;                    
-                }                                            
-                 
+                }                               
+                if(sTipoDoc=="Previo de compra")
+                {sAsunCot="Previo de Compra";
+                sCuerCot="Previo de Compra";
+                }
                 /*Si el primer correo no es null entonces*/
                 if(sCo1!=null)
                 {
@@ -11967,6 +11784,118 @@ public class Star
         return sCarp;
         
     }//Fin de public static String sGetRutCarp(Connection con)
+    
+                                   //anaqs,  almas,    lugs,  ubiad,                marcs, meds, model,     lins, fabs,         clasprod,               unids,   pes
+    //MÃ©todo para saber si existe un anaquel, almacen, lugar, ubicacion adicional, marca, medida, modelos, linea, fabricante, clasificacion de producto, unidad, peso
+    public static int iExiste(Connection con, String sCod, String tabla, String colCod)
+    {
+        /*Declara variables de la base de datos*/
+        Statement   st;
+        ResultSet   rs;        
+        String      sQ      = ""; 
+
+        //Comprueba si el almacÃ©n especÃ­fico ya existe en la base de datos
+        int iRes            = 0;
+        try
+        {
+            sQ = "SELECT "+colCod+" FROM "+ tabla +" WHERE "+colCod+" = '" + sCod.trim() + "'";                        
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            //Si hay datos entonces coloca la bandera para saber que si existe
+            if(rs.next())
+                iRes        = 1;
+        }
+        catch(SQLException e)
+        {
+            //Cierra la base de datos
+            if(Star.iCierrBas(con)==-1)                  
+                return -1;
+
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Mensajea y regresa error*/
+            JOptionPane.showMessageDialog(null, Star.class.getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(Star.class.getResource(Star.sRutIconEr))); 
+            return -1;
+        }  
+
+        //Regresa el resutlado
+        return iRes;
+        
+    }// Fin de un metodo que reemplazo 1000 lineas por menos de 40, exito (yn)
+    
+    //MÃ©todo para comprobar si un cliente existe
+    public static int iExistCliProv(Connection con, String sCliProv, boolean esCliente)
+    {
+        //Si la conexiÃ³n es nula entonces
+        boolean bSi = false;
+        if(con==null)
+        {
+            //Coloca la bandera para saber que es nula la conexiÃ³n
+            bSi = true;
+            
+            /*Abre la base de datos*/                   
+            try 
+            {
+                con = DriverManager.getConnection("jdbc:mysql://" + Star.sInstancia + ":" + Star.sPort + "/" + Star.sBD + "?user=" + Star.sUsuario + "&password=" + Star.sContrasenia );               
+            } 
+            catch(SQLException ex) 
+            {    
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                //Mensajea y regresa error
+                JOptionPane.showMessageDialog(null, Star.class + " Error por " + ex.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(Star.class.getClass().getResource(Star.sRutIconEr))); 
+                return -1;
+            }
+        }
+
+        /*Declara variables de la base de datos*/
+        Statement   st;
+        ResultSet   rs;        
+        String      sQ      = ""; 
+        
+        //Comprueba si existe el cliente
+        int iExis           = 0;
+        try
+        {
+            if (esCliente)
+                sQ = "SELECT codemp FROM emps WHERE CONCAT_WS('', ser, codemp) = '" + sCliProv.trim() + "'";                        
+            else
+                sQ = "SELECT prov FROM provs WHERE CONCAT_WS('', ser, prov) = '" + sCliProv.trim() + "'";           
+            
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            //Si hay datos entonces coloca la bandera de que si existe
+            if(rs.next())
+                iExis       = 1;
+        }
+        catch(SQLException e)
+        {
+            //Cierra la base de datos
+            if(Star.iCierrBas(con)==-1)                  
+                return -1;
+            
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Mensajea y regresa error*/
+            JOptionPane.showMessageDialog(null, Star.class.getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(Star.class.getResource(Star.sRutIconEr))); 
+            return -1;
+        } 
+        
+        //Si la conexiÃ³n es nula entonces
+        if(bSi)
+        {
+            //Cierra la base de datos
+            if(Star.iCierrBas(con)==-1)                  
+                return -1;                       
+        }
+        
+        //Regresa el resultado
+        return iExis;
+        
+    }//Fin de public static int iExistCliProv
     
     
     //Método para comprobar si el tipo de pago existe
@@ -13906,7 +13835,6 @@ public class Star
                     //Devuelve que no esta conectado
                     return 0;
                 }                    
-
                 /*Declara objetos para poder mandarle mensaje al servidor*/
                 java.io.OutputStream        outS;
                 java.io.DataOutputStream    out;
@@ -13933,7 +13861,7 @@ public class Star
                     Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
                     return -1;
                 }
-
+                
                 //Declara objetos para poder recibir mensajes del servidor
                 java.io.InputStream         inS;
                 java.io.DataInputStream     in;
@@ -13948,20 +13876,20 @@ public class Star
                     Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
                     return -1;
                 }
-
                 //Recibe mensajes del servidor
-                String sMsj;
-                try
-                {
-                    sMsj    = in.readUTF();
-                }
-                catch(IOException expnIO)
-                {
-                    //Procesa el error y regresa error
-                    Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
-                    return -1;
-                }
-
+                String sMsj="1";
+//                try
+//                {
+//                    System.out.println("1");
+//                    sMsj    = in.readUTF();
+//                    System.out.println("2");
+//                }
+//                catch(Exception e){
+//                    System.out.println("error");
+//                return -1;
+//                 }
+//                
+//                System.out.println("6");
                 /*Cerra el socket*/
                 try
                 {
@@ -14751,6 +14679,74 @@ public class Star
         return iRes;
         
     }//Fin de public static int iExistImpue(Connection con, String sImpue)
+    
+    public static int iExistClasProv(Connection con, String sClas)
+    {
+        //Si la conexión es nula entonces
+        boolean bSi = false;
+        if(con==null)
+        {
+            //Coloca la bandera para saber que es nula la conexión
+            bSi = true;
+            
+            /*Abre la base de datos*/                   
+            try 
+            {
+                con = DriverManager.getConnection("jdbc:mysql://" + Star.sInstancia + ":" + Star.sPort + "/" + Star.sBD + "?user=" + Star.sUsuario + "&password=" + Star.sContrasenia );               
+            } 
+            catch(SQLException ex) 
+            {    
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                //Mensajea y regresa error
+                JOptionPane.showMessageDialog(null, Star.class + " Error por " + ex.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(Star.class.getClass().getResource(Star.sRutIconEr))); 
+                return -1;
+            }
+        }
+
+        /*Declara variables de la base de datos*/
+        Statement   st;
+        ResultSet   rs;        
+        String      sQ      = ""; 
+        
+        //Comprueba si existe la clasificación
+        int iExis           = 0;
+        try
+        {
+            sQ = "SELECT cod FROM clasprov WHERE cod = '" + sClas.trim() + "'";                        
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            //Si hay datos entonces coloca la bandera de que si existe
+            if(rs.next())
+                iExis       = 1;
+        }
+        catch(SQLException e)
+        {
+            //Cierra la base de datos
+            if(Star.iCierrBas(con)==-1)                  
+                return -1;
+
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Mensajea y regresa error*/
+            JOptionPane.showMessageDialog(null, Star.class.getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(Star.class.getResource(Star.sRutIconEr))); 
+            return -1;
+        } 
+        
+        //Si la conexión es nula entonces
+        if(bSi)
+        {
+            //Cierra la base de datos
+            if(Star.iCierrBas(con)==-1)                  
+                return -1;           
+        }
+        
+        //Regresa el resultado
+        return iExis;
+        
+    }//Fin de public static int iExistClasCli(Connection con, String sClas)
     
     
     //Método para saber si la clasificación del producto existe
@@ -16895,6 +16891,43 @@ public class Star
         return sExistSer;
     }//Fin public static String iCantSer(String sSer,Connection con,String sProd, String sAlma)
     
+    public static int iExisteRFC(Connection con, String rfc, String tabla){
+        Statement   st;
+        ResultSet   rs;        
+        String      sQ      = ""; 
+        
+        try
+            {
+                sQ  = "SELECT nom FROM "+tabla+" WHERE rfc = '" + rfc + "'";                
+                st  = con.createStatement();
+                rs  = st.executeQuery(sQ);
+                /*Si hay datos*/
+                if(rs.next())
+                {        
+                    return 1;
+                }
+            }
+            catch(SQLException | HeadlessException e)
+            {
+                //Cierra la base de datos
+                if(Star.iCierrBas(con)==-1)
+                    return -1;
+
+                /*Agrega en el log*/
+                Login.vLog(e.getMessage());
+                
+                return -1;
+            } 
+        return 0;
+    }
+    
+    //Checa que la longitud sea la correcta, sino trunca la cadena
+    static String checaLongitud(int longi, String cad) {
+        if (cad.length() > longi)
+            cad = cad.substring(0, longi);
+        
+        return cad;
+    }
 }/*Fin de public class Star*/
     
 

@@ -72,7 +72,7 @@ public class SelCorr extends javax.swing.JFrame
         initComponents();
 
         //Que la forma sea modal
-        this.setAlwaysOnTop(true);
+        //this.setAlwaysOnTop(true);
         
         /*Establece el botón por default*/
         this.getRootPane().setDefaultButton(jBEnvi);
@@ -501,7 +501,7 @@ public class SelCorr extends javax.swing.JFrame
         jBEnvi.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jBEnvi.setForeground(new java.awt.Color(0, 102, 0));
         jBEnvi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/corrs.png"))); // NOI18N
-        jBEnvi.setText("ENTER");
+        jBEnvi.setText("Enviar");
         jBEnvi.setToolTipText("Enviar");
         jBEnvi.setNextFocusableComponent(jBSal);
         jBEnvi.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -637,16 +637,7 @@ public class SelCorr extends javax.swing.JFrame
     /*Método para mandar todo el proceso de las facturas*/
     private void vMandFac()
     {        
-        /*Si no hay selección en la tabla no puede seguir*/
-        if(jTab.getSelectedRow()==-1)
-        {
-            /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "No has seleccionado un correo del que se reenviara.", "Reenviar Factura", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-
-            /*Coloca el foco del teclado en la tabla y regresa*/
-            jTab.grabFocus();            
-            return;
-        }
+        
 
         //Declara variables locales
         final String      sID;                                        
@@ -784,7 +775,7 @@ public class SelCorr extends javax.swing.JFrame
 
                 /*Crea el usr y la contraseña como final para que el th valide si son válidos o no*/
                 final String sUser          = sUsr;                
-
+                final String sContraFi        = sContra;
                 /*Si el primer correo no es null entonces*/
                 if(sCo1!=null)
                 {
@@ -799,8 +790,8 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
-                        final String password = sContra;
+                        final String username = sUser;
+                        final String password = sContraFi;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
                                     @Override
@@ -898,8 +889,8 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
-                        final String password = sContra;
+                        final String username = sUser;
+                        final String password = sContraFi;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
                                     @Override
@@ -997,8 +988,8 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
-                        final String password = sContra;
+                        final String username = sUser;
+                        final String password = sContraFi;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
                                     @Override
@@ -1104,16 +1095,7 @@ public class SelCorr extends javax.swing.JFrame
                         
                 
         
-        /*Si no hay selección en la tabla no puede seguir*/
-        if(jTab.getSelectedRow()==-1)
-        {
-            /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "No has seleccionado un correo del que se reenviara.", "Reenviar cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-                        
-            /*Coloca el foco del teclado en la tabla y regresa*/
-            jTab.grabFocus();           
-            return;            
-        }
+        
         
         /*Si ninguno de los checkbox esta seleccionado entonces*/
         if(!jCCo1.isSelected() && !jCCo2.isSelected() && !jCCo3.isSelected())
@@ -1252,7 +1234,7 @@ public class SelCorr extends javax.swing.JFrame
                 
                 /*Crea el usuario y la contraseña como final para que el thread valide si son válidos o no*/
                 final String sUser          = sUsr;                
-                
+                final String sContraFi      = sContra;
                 /*Si el primer corr no es null entonces*/
                 if(sCo1!=null)
                 {
@@ -1268,8 +1250,8 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
-                        final String password = sContra;
+                        final String username = sUser;
+                        final String password = sContraFi;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
                                     @Override
@@ -1361,8 +1343,8 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
-                        final String password = sContra;
+                        final String username = sUser;
+                        final String password = sContraFi;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
                                     @Override
@@ -1454,8 +1436,8 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
-                        final String username = sUsr;
-                        final String password = sContra;
+                        final String username = sUser;
+                        final String password = sContraFi;
                         Session session = Session.getDefaultInstance(props,
                                 new Authenticator() {
                                     @Override
@@ -1548,6 +1530,18 @@ public class SelCorr extends javax.swing.JFrame
     /*Cuando se presiona el botón de enviar*/
     private void jBEnviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEnviActionPerformed
 
+        /*Si no hay selección en la tabla no puede seguir*/
+        int test=jTab.getSelectedRow();
+        System.out.println(test);
+        if(test==-1)
+        {
+//            /*Mensajea*/
+           JOptionPane.showMessageDialog(null, "No has seleccionado un correo del que se reenviara.", "Reenviar Factura", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//
+//            /*Coloca el foco del teclado en la tabla y regresa*/
+            jTab.grabFocus();            
+            return;
+        }
         /*Si no a escrito un correo entonces*/
         if(jTCo1.getText().compareTo("")==0 && jTCo2.getText().compareTo("")==0 && jTCo3.getText().compareTo("")==0)
         {
