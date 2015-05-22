@@ -641,13 +641,14 @@ public class CanVtas extends javax.swing.JFrame
                 /*Si se tiene que pedir la clave de administrador entonces*/
                 if(rs.getString("val").compareTo("1")==0)                                   
                 {
-                    /*Pide clave de administrador*/            
-                    ClavMast cl = new ClavMast(this, 1);
-                    cl.setVisible(true);
-
+                    
                     /*Si la clave que ingreso el usuario fue incorrecta entonces*/
                     if(!ClavMast.bSi)
                     {
+                        /*Pide clave de administrador*/            
+                       ClavMast cl = new ClavMast(this, 1);
+                     cl.setVisible(true);
+
                         //Cierra la base de datos
                         if(Star.iCierrBas(con)==-1)
                             return;

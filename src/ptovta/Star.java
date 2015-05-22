@@ -3526,8 +3526,17 @@ public class Star
         
         //Concatena la cadena
         sXml        += sFinCad;
+        //crea la cadena de nuevo token
+        String sNewTok;
         /*Obtiene el token de sguridad*/
-        String sNewTok  = sCreTokEsta(sRFCLoc);
+        System.out.println(sRFCLoc);
+        if(sRFCLoc.compareTo("AAA010101AAA")==0)
+        {
+            System.out.println("Pruebas");
+            sNewTok  = sCreTokEstaP(sRFCLoc);
+        }
+        else
+        sNewTok  = sCreTokEsta(sRFCLoc);
         /*Si hubo error entonces*/
         if(sNewTok==null)
         {
@@ -3535,24 +3544,6 @@ public class Star
             Star.iCierrBas(con);
             return;
         }
-    
-        /*Tokeniza para obtener el token y el id de transacción*/
-        java.util.StringTokenizer stk = new java.util.StringTokenizer(sNewTok, "|");
-        sNewTok         = stk.nextToken();
-        String sTransId = stk.nextToken();
-        /*Crea el object factory para consultar el estatus de una cuenta*/
-        wstimb.ObjectFactory facCli = new wstimb.ObjectFactory();
-        /*Crea el comprobante XML*/
-        wstimb.ComprobanteXML xmlComp= new wstimb.ComprobanteXML();
-        xmlComp.setDatosXML(facCli.createComprobanteXMLDatosXML(sXml.replace("&", "&amp;")));
-        
-        /*Crea el objeto para solicitar timbrado en el web service*/
-        wstimb.SolicitudTimbraXML wbPara    = new wstimb.SolicitudTimbraXML();         
-        wbPara.setTransaccionID             (Long.parseLong(sTransId));
-        wbPara.setToken                     (facCli.createSolicitudTimbraXMLToken(sNewTok));
-        wbPara.setRFC                       (facCli.createSolicitudTimbraXMLRFC(sRFCLoc));
-        wbPara.setComprobanteXML            (facCli.createComprobanteXML(xmlComp));
-        
         /*Bandera para saber si se timbro o no*/
         boolean bSiTim                      = true;
         
@@ -3577,6 +3568,135 @@ public class Star
         /*Contiene la fecha de timbrado*/
         String sFTimb                       = "";
         
+    
+        /*Tokeniza para obtener el token y el id de transacción*/
+        java.util.StringTokenizer stk = new java.util.StringTokenizer(sNewTok, "|");
+        sNewTok         = stk.nextToken();
+        String sTransId = stk.nextToken();
+        if(sRFCLoc.compareTo("AAA010101AAA")==0)
+        {
+            /*Crea el object factory para consultar el estatus de una cuenta*/
+            pRuebasEcodexTimbrado.ObjectFactory facCli = new pRuebasEcodexTimbrado.ObjectFactory();
+            /*Crea el comprobante XML*/
+            pRuebasEcodexTimbrado.ComprobanteXML xmlComp= new pRuebasEcodexTimbrado.ComprobanteXML();
+            xmlComp.setDatosXML(facCli.createComprobanteXMLDatosXML(sXml.replace("&", "&amp;")));
+        
+            /*Crea el objeto para solicitar timbrado en el web service*/
+            pRuebasEcodexTimbrado.SolicitudTimbraXML wbPara    = new pRuebasEcodexTimbrado.SolicitudTimbraXML();         
+            wbPara.setTransaccionID             (Long.parseLong(sTransId));
+            wbPara.setToken                     (facCli.createSolicitudTimbraXMLToken(sNewTok));
+            wbPara.setRFC                       (facCli.createSolicitudTimbraXMLRFC(sRFCLoc));
+            wbPara.setComprobanteXML            (facCli.createComprobanteXML(xmlComp));
+        
+            pRuebasEcodexTimbrado.RespuestaTimbraXML wsResp;
+         
+            try
+            {   
+                System.out.println(wbPara);
+                pRuebasEcodexTimbrado.Timbrado_Service servicioX   = new pRuebasEcodexTimbrado.Timbrado_Service();
+                pRuebasEcodexTimbrado.Timbrado puertoX             = servicioX.getPuertoTimbrado();
+                wsResp                                             = puertoX.timbraXML(wbPara);
+           
+                /*Obtiene el transid del timbrado*/
+                sTID                                = wsResp.getTransaccionID().toString();       
+                /*Obtiene el XML del PAC*/
+                sXml                                = wsResp.getComprobanteXML().getValue().getDatosXML().getValue();
+            
+                /*Tokeniza el XML en busca el UUID*/
+                java.util.StringTokenizer stkXml    = new java.util.StringTokenizer(sXml, " ");
+                while(stkXml.hasMoreTokens())
+                {
+                    /*Obtiene el token*/
+                    sFolFisc    = stkXml.nextToken();
+                
+                    /*Si la cadena comienza con UUID entonces ya lo encontramos folio fiscal*/
+                    if(sFolFisc.startsWith("UUID="))
+                    break;
+                }
+                           
+                /*Tokeniza el XML en busca del sello dígital del SAT*/
+                stkXml    = new java.util.StringTokenizer(sXml, " ");
+                while(stkXml.hasMoreTokens())
+                {
+                    /*Obtiene el token*/
+                    sSellSAT    = stkXml.nextToken();
+                
+                    /*Si la cadena comienza con UUID entonces ya lo encontramos*/
+                    if(sSellSAT.startsWith("selloSAT="))
+                    break;
+                }
+            
+                /*Tokeniza el XML en busca de la fecha del XML*/
+                stkXml    = new java.util.StringTokenizer(sXml, " ");
+                while(stkXml.hasMoreTokens())
+                {
+                    /*Obtiene el token*/
+                    sFTimb    = stkXml.nextToken();
+                
+                    /*Si la cadena comienza con FechaTimbrado entonces ya lo encontramos*/
+                    if(sFTimb.startsWith("FechaTimbrado="))
+                    break;
+                }
+            
+                /*Tokeniza el XML en busca de la versión*/
+                stkXml      = new java.util.StringTokenizer(sXml, " ");
+                while(stkXml.hasMoreTokens())
+                {
+                    /*Obtiene el token*/
+                    sVer    = stkXml.nextToken();
+                
+                    /*Si la cadena comienza con version entonces ya lo encontramos*/
+                    if(sVer.startsWith("version="))
+                    break;
+                }
+            
+                /*Tokeniza el XML en busca de la versión*/
+                stkXml      = new java.util.StringTokenizer(sXml, " ");
+                while(stkXml.hasMoreTokens())
+                {
+                    /*Obtiene el token*/
+                    sVer    = stkXml.nextToken();
+                
+                    /*Si la cadena comienza con version entonces ya lo encontramos*/
+                    if(sVer.startsWith("version="))
+                    break;
+                }
+            
+                /*Tokeniza el XML en busca del número de certificado del sat*/
+                stkXml      = new java.util.StringTokenizer(sXml, " ");
+                while(stkXml.hasMoreTokens())
+                {
+                    /*Obtiene el token*/
+                    sNoCertSAT       = stkXml.nextToken();
+                
+                    /*Si la cadena comienza con noCertificadoSAT entonces ya lo encontramos*/
+                    if(sNoCertSAT.startsWith("noCertificadoSAT="))
+                    break;
+                }
+            }
+            catch(pRuebasEcodexTimbrado.TimbradoTimbraXMLFallaValidacionFaultFaultMessage | pRuebasEcodexTimbrado.TimbradoTimbraXMLFallaSesionFaultFaultMessage | pRuebasEcodexTimbrado.TimbradoTimbraXMLFallaServicioFaultFaultMessage expnWSPAC)
+            {   
+                System.out.println("6");
+                //Procesa el error y regresa
+                Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC, null);                                                                   
+                return;                        
+            }
+        }
+        else
+        {
+        /*Crea el object factory para consultar el estatus de una cuenta*/
+        wstimb.ObjectFactory facCli = new wstimb.ObjectFactory();
+        /*Crea el comprobante XML*/
+        wstimb.ComprobanteXML xmlComp= new wstimb.ComprobanteXML();
+        xmlComp.setDatosXML(facCli.createComprobanteXMLDatosXML(sXml.replace("&", "&amp;")));
+        
+        /*Crea el objeto para solicitar timbrado en el web service*/
+        wstimb.SolicitudTimbraXML wbPara    = new wstimb.SolicitudTimbraXML();         
+        wbPara.setTransaccionID             (Long.parseLong(sTransId));
+        wbPara.setToken                     (facCli.createSolicitudTimbraXMLToken(sNewTok));
+        wbPara.setRFC                       (facCli.createSolicitudTimbraXMLRFC(sRFCLoc));
+        wbPara.setComprobanteXML            (facCli.createComprobanteXML(xmlComp));
+       
         /*Manda timbrar con el WS*/                        
         wstimb.RespuestaTimbraXML wsResp;
         try
@@ -3590,7 +3710,7 @@ public class Star
             sTID                                = wsResp.getTransaccionID().toString();       
             /*Obtiene el XML del PAC*/
             sXml                                = wsResp.getComprobanteXML().getValue().getDatosXML().getValue();
-             
+            
             /*Tokeniza el XML en busca el UUID*/
             java.util.StringTokenizer stkXml    = new java.util.StringTokenizer(sXml, " ");
             while(stkXml.hasMoreTokens())
@@ -3669,7 +3789,8 @@ public class Star
             //Procesa el error y regresa
             Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC, null);                                                                   
             return;                        
-        }                               
+        }
+        }
         
         /*Reemplaza los caracteres innecesarios de la versión*/
         sVer        = sVer.replace("=", "").replace("version", "").replace("\"", "");
@@ -8275,6 +8396,12 @@ public class Star
         wsseg.Seguridad port = service.getPuertoSeguridad();
         return port.obtenerToken(parameters);
     }
+     private static pRuebasEcodexToken.RespuestaObtenerToken obtenerTokenP(pRuebasEcodexToken.SolicitudObtenerToken parameters) throws pRuebasEcodexToken.SeguridadObtenerTokenFallaSesionFaultFaultMessage, pRuebasEcodexToken.SeguridadObtenerTokenFallaServicioFaultFaultMessage 
+    {
+        pRuebasEcodexToken.Seguridad_Service service = new pRuebasEcodexToken.Seguridad_Service();
+        pRuebasEcodexToken.Seguridad port = service.getPuertoSeguridad();
+        return port.obtenerToken(parameters);
+    }
 
     
     /*Funcion sincronizable para leer o actualizar la bandera de la video llamada en la parte de video*/
@@ -9798,6 +9925,38 @@ public class Star
         return sNewTok + "|" + sol.getTransaccionID();
         
     }/*Fin de public static String sCreTokEsta()*/   
+
+    /*Función para obtener el token de seguridad del WS*/
+    public static String sCreTokEstaP(String sRFC)
+    {
+        /*Declara el objeto factory para el servicio de seguridad*/
+        pRuebasEcodexToken.ObjectFactory fac = new pRuebasEcodexToken.ObjectFactory();
+        
+        /*Declara objeto para mandar solicitud de token con todas su propiedades*/
+        pRuebasEcodexToken.SolicitudObtenerToken sol   = fac.createSolicitudObtenerToken();
+        sol.setRFC(fac.createSolicitudObtenerTokenRFC(sRFC));
+        sol.setTransaccionID(System.currentTimeMillis());
+        
+        /*Obtiene el token de resultado*/                
+        pRuebasEcodexToken.RespuestaObtenerToken resp;
+        try
+        {                                            
+            resp = obtenerTokenP(sol);            
+        }
+        catch(pRuebasEcodexToken.SeguridadObtenerTokenFallaSesionFaultFaultMessage | pRuebasEcodexToken.SeguridadObtenerTokenFallaServicioFaultFaultMessage expnWSPAC)
+        {    
+            //Procesa el error y regresa
+            Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC);                                                                   
+            return null;                        
+        }               
+        
+        /*Crea el token con el id integrador y el símbolo de tuberia*/            
+        String sNewTok = toSHA1((sIDInte + "|" + resp.getToken().getValue()).getBytes());                        
+        
+        /*Devuelve el resultado*/
+        return sNewTok + "|" + sol.getTransaccionID();
+        
+    }/*Fin de public static String sCreTokEstaP()*/   
 
     
     /*Para timbrar una factura*/
