@@ -530,7 +530,7 @@ public class ClavMast extends javax.swing.JFrame
         //Cierra la base de datos
         if(Star.iCierrBas(conInt)==-1)
             return;
-        
+        JOptionPane.showMessageDialog(null, "Ya se puede realizar la transacción. \n Presionar el botón nuevamente.", "Permiso del administrador", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
         System.out.println(bSi);
         /*Llama al recolector de basura*/
         System.gc();

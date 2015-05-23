@@ -1503,16 +1503,27 @@ public class Cobro extends javax.swing.JFrame
             return;
         }                        
         
+        if(sFVenc.compareTo("")==0)
+        {
+            System.out.println("sip");
+            sFVenc="now()";
+        }
+        else
+            sFVenc="'"+sFVenc+"'";
+        
+        
         /*Si tiene que insertar en CXC y es factura entonces*/
         if(bSi && sTip.compareTo("fac")==0)
         {
+            System.out.println(sFVenc);
             //Inserta el CXC del abono
-            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, sTotG, "0", "'" + sFVenc + "'", "'" + sFDoc + "'", "ABON FAC", "", "", "", "","")==-1)
+            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, sTotG, "0", sFVenc , "'" + sFDoc + "'", "ABON FAC", "", "", "", "","")==-1)
                 return;
             if(jRPagad.isSelected())
             {
+                System.out.println("sip");
             //Inserta cxc en la base de datos            
-            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, "'" + sFVenc + "'", "'" + sFDoc + "'", "FAC", "", "0", "", "","")==-1)
+            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, sFVenc , "'" + sFDoc + "'", "FAC", "", "", "", "","")==-1)
             return;
             }
         }
@@ -1523,12 +1534,13 @@ public class Cobro extends javax.swing.JFrame
 //            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, sTotG,"0", "'" + sFVenc + "'", "'" + sFDoc + "'", sTipDoc, "", "", "", "","")==-1)
 //                return;                                
 //            
+            System.out.println(sFVenc);
             //Inserta el CXC del abono
-            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, sTotG, "0", "'" + sFVenc + "'", "'" + sFDoc + "'", sTipDoc, "", "", "", "","")==-1)
+            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, sTotG, "0", sFVenc , "'" + sFDoc + "'", sTipDoc, "", "", "", "","")==-1)
                 return;
             if(jRPagad.isSelected())
             {
-            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, "'" + sFVenc + "'", "'" + sFDoc + "'", "EFE", "", "", "", "","")==-1)
+            if(Star.iInsCXCP(con, "cxc", sConsFac, sSerFR, sCodEmpGlo, sSer, sSubTotG, sImpueG, sTotG, "0", sTotG, sFVenc , "'" + sFDoc + "'", "EFE", "", "", "", "","")==-1)
                 return;
             }
         }

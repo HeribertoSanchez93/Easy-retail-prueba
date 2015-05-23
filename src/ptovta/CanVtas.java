@@ -183,7 +183,9 @@ public class CanVtas extends javax.swing.JFrame
         
         /*Establece el listener para la tabla*/
         jTab.addPropertyChangeListener(pro);
-
+        /*Pide clave de administrador*/            
+        ClavMast cl = new ClavMast(this, 1);
+        cl.setVisible(true);
     }/*Fin de public CanVtas() */
 
     

@@ -2968,6 +2968,12 @@ public class Vtas extends javax.swing.JFrame
                 continue;
             }
 
+            if(sEstad.compareTo("CA")==0)
+            {
+                /*Mensajea y continua*/
+                JOptionPane.showMessageDialog(null, "La venta " + jTab1.getValueAt(iSel[x], 1).toString().trim() + " no se puede cancelar por que fue por devolución parcial.", "Venta de Devolución Parcial", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                continue;
+            }
             /*Si el abono es mayor a 0 entonces*/            
             if(Double.parseDouble(sAbon)>0)
             {
@@ -3099,13 +3105,40 @@ public class Vtas extends javax.swing.JFrame
                 if(Star.iTermTransCon(con)==-1)
                     return;
                 
-            }//Fin de if(sEstad.compareTo("CA")==0)                                
-            
+            }//Fin de if(sEstad.compareTo("CA")==0)
+            String sRFCLocal="";
+            try
+            {                  
+            sQ = "SELECT noint, noext, IFNULL(nom, '') AS nom, IFNULL(calle,'') AS calle, IFNULL(tel,'') AS tel, IFNULL(col,'') AS col, IFNULL(cp,'') AS cp, IFNULL(ciu,'') AS ciu, IFNULL(estad,'') AS estad, IFNULL(pai,'') AS pai, IFNULL(rfc, '' ) AS rfc FROM basdats WHERE codemp = '" + Login.sCodEmpBD + "'";
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            /*Si hay datos entonces obtiene los resultados*/
+                if(rs.next())
+                {                
+                    sRFCLocal             = rs.getString("rfc");                                   
+                                                   
+                }                        
+            }
+            catch(SQLException expnSQL)
+            {
+                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
+                return;                        
+            }
             //Si el folio fiscal existe entonces si timbro con el pack y trata de cancelar con el pack
             if(sFolFisc.compareTo("")!=0)
             {
                 //Cancela el folio fiscal con el PAC
-                if(Star.iCanFac(sFolFisc, sRFCLoc)==-1)
+                if(sRFCLocal.compareTo("AAA010101AAA")==0)
+                {
+                    System.out.println("prueba");
+                    if(Star.iCanFacP(sFolFisc, sRFCLoc)==-1)
+                    {
+                    //Cierra la base de datos y regresa
+                    Star.iCierrBas(con);
+                    return;
+                    }    
+                }
+                else if(Star.iCanFac(sFolFisc, sRFCLoc)==-1)
                 {
                     //Cierra la base de datos y regresa
                     Star.iCierrBas(con);
@@ -3115,7 +3148,7 @@ public class Vtas extends javax.swing.JFrame
             
             /*Coloca la bandera para saber que si hubo una modificación*/
             bSi = true;
-            
+            System.out.println(bSi);
             /*Declara variables final para el thread*/
             final String sVtaFi         = jTab1.getValueAt(iSel[x], 1).toString();
             final boolean bSiVerCanFi   = bSiVerCan;

@@ -3233,7 +3233,7 @@ public class Star
     
     /*Función para hacer el timbrado y generar PDF y XML*/
     public static synchronized void vGenTim(String sTip, String sDirEn, String sConFac, String sVta, String sCatGral, String sFDoc, String sNomEmp, String sPai, String sTel, String sCall, String sCol, String sCP, String sNoExt, String sNoInt, String sCiu, String sEsta, String sRFC, String sCo1, String sTotLet, String sSubTot, String sImp, String sTot, String sSerFac, String sMetPag, String sCta, String sConds, String sRutLoc, java.io.InputStream isRepNam, boolean bVeFac, boolean bImpFac, String sC1, String sC2, String sC3, boolean bCo1, boolean bCo2, boolean bCo3, boolean bMandCo, int iFil, JTable jTab, boolean bBusc, String sMon, String sTotDescu, String sFormPag, String sTipDocS, String sTipCam, String sCtaPred)
-    {                
+    {   
         /*Determina el mensaje que se va a mandar*/        
         String sMsj = "Factura";
         if(sTip.compareTo("notc")==0)
@@ -3474,21 +3474,28 @@ public class Star
         /*Si hubo error entonces regresa*/
         if(sCert==null)
             return;
-        
+        System.out.println(sImp);
         /*Crea el encabezado del xml*/
         String sXml = sCreEncaXML(sCta, sCiuLoc, sMon, sTipCam, sMetPag, sTot.replace(",", "").replace("$", ""), sTotDescu.replace(",", "").replace("$", ""), sSubTot.replace(",", "").replace("$", ""), sNumCert, sFormPag, sTipDocS, sFDoc, sCert, "",sNomLoc, sRFCLoc, sCPLoc, sPaiLoc, sEstLoc, sCiuLoc, sColLoc, sNoExtLoc, sCallLoc, sRegFisc, sNomEmp, sRFC, sPai, sEsta, sCiu, sCol, sCall, sCiu, sLugExp);
         /*Crea las partidas de la venta*/
         sXml        += sCrePartXML(con, sVta);        
-        
+        String sFinCad="<cfdi:Impuestos totalImpuestosTrasladados=\"" + sImp.replace("$", "").replace(",", "") + "\">" + System.getProperty( "line.separator" ) +
+                    "</cfdi:Impuestos>" + System.getProperty( "line.separator" ) +
+                    System.getProperty( "line.separator" ) +
+                    "<cfdi:Complemento> </cfdi:Complemento>" + System.getProperty( "line.separator" ) + 
+                    System.getProperty( "line.separator" ) +
+                    "</cfdi:Comprobante>" + System.getProperty( "line.separator" );
+        if(sImp.compareTo("0")!=0&&sImp.compareTo("$0.00")!=0)
+        {
         //Obtiene el final de la cadena
-        String sFinCad  = sCreFinXML(sImp, Star.sGetValImp(sImp), sImp, sVta);
+        sFinCad  = sCreFinXML(sImp, Star.sGetValImp(sImp), sImp, sVta);
         
         //Si hubo error entonces regresa
         if(sFinCad==null)
             return;
-        
+        }
         /*Agrega el final del comprobante*/
-        sXml        += sFinCad;                
+        sXml        += sFinCad;
         Login.vLog(sXml);
         /*Genera la cadena original*/
         String sCadOri      = Star.sGenCad(sXml.replace("&", "&amp;"));
@@ -3516,20 +3523,22 @@ public class Star
         /*Genera nuevamente el XML pero ya con el sello*/
         sXml        = sCreEncaXML(sCta, sCiuLoc, sMon, sTipCam, sMetPag, sTot.replace(",", "").replace("$", ""), sTotDescu.replace(",", "").replace("$", ""), sSubTot.replace(",", "").replace("$", ""), sNumCert, sFormPag, sTipDocS, sFDoc, sCert, " sello = \"" + sSell + "\"", sNomLoc, sRFCLoc, sCPLoc, sPaiLoc, sEstLoc, sCiuLoc, sColLoc, sNoExtLoc, sCallLoc, sRegFisc, sNomEmp, sRFC, sPai, sEsta, sCiu, sCol, sCall, sCiu, sLugExp);
         sXml        += sCrePartXML(con, sVta);
-        
+        System.out.println(sImp);
+        if(sImp.compareTo("0")!=0&&sImp.compareTo("$0.00")!=0)
+        {
         //Obtiene el final
         sFinCad     = sCreFinXML(sImp, Star.sGetValImp(sImp), sImp, sVta);                        
         
         //Si hubo error entonces regresa
         if(sFinCad==null)
             return;
-        
+        }
         //Concatena la cadena
         sXml        += sFinCad;
+        System.out.println(sXml);
         //crea la cadena de nuevo token
         String sNewTok;
         /*Obtiene el token de sguridad*/
-        System.out.println(sRFCLoc);
         if(sRFCLoc.compareTo("AAA010101AAA")==0)
         {
             System.out.println("Pruebas");
@@ -9951,7 +9960,7 @@ public class Star
         }               
         
         /*Crea el token con el id integrador y el símbolo de tuberia*/            
-        String sNewTok = toSHA1((sIDInte + "|" + resp.getToken().getValue()).getBytes());                        
+        String sNewTok = toSHA1(("2b3a8764-d586-4543-9b7e-82834443f219" + "|" + resp.getToken().getValue()).getBytes());                        
         
         /*Devuelve el resultado*/
         return sNewTok + "|" + sol.getTransaccionID();
@@ -11788,6 +11797,15 @@ public class Star
         return port.estatusTimbrado(parameters);
     }
 
+    /*Método de Prueba para cancelación multiple de comprobantes*/
+    public static pRuebasEcodexCancelacionTimbre.RespuestaCancelaMultiple cancelaMultipleP(pRuebasEcodexCancelacionTimbre.SolicitudCancelaMultiple parameters) throws pRuebasEcodexCancelacionTimbre.CancelacionesCancelaMultipleFallaServicioFaultFaultMessage, pRuebasEcodexCancelacionTimbre.CancelacionesCancelaMultipleFallaSesionFaultFaultMessage 
+    {
+        System.out.println("llego 2");
+        pRuebasEcodexCancelacionTimbre.Cancelaciones_Service service = new pRuebasEcodexCancelacionTimbre.Cancelaciones_Service();
+        pRuebasEcodexCancelacionTimbre.Cancelaciones port = service.getPuertoCancelacionSeguro();
+        System.out.println("salio");
+        return port.cancelaMultiple(parameters);
+    }
     
     /*Método para cancelación multiple de comprobantes*/
     public static RespuestaCancelaMultiple cancelaMultiple(wscance.SolicitudCancelaMultiple parameters) throws CancelacionesCancelaMultipleFallaServicioFaultFaultMessage, CancelacionesCancelaMultipleFallaSesionFaultFaultMessage 
@@ -11824,10 +11842,63 @@ public class Star
         return port.vSerKeyU(sSerU, sKeyU, sMac);
     }
                             
+    //Método para cancelar con el WS una factura
+    public static int iCanFacP(String sFolFisc, String sRFCLoc)
+    {
+        
+        /*Obtiene el token de sguridad*/
+        String sNewTok  = Star.sCreTokEstaP(sRFCLoc);
+
+        /*Si hubo error regresa error*/
+        if(sNewTok==null)
+            return -1;
+
+        /*Tokeniza para obtener el token y el id de transacción*/
+        java.util.StringTokenizer stk2 = new java.util.StringTokenizer(sNewTok, "|");
+        sNewTok         = stk2.nextToken();
+        String sTransId = stk2.nextToken();
+
+        /*Crea el object factory para cancelar el o los comprobante*/
+        pRuebasEcodexCancelacionTimbre.ObjectFactory facCli = new pRuebasEcodexCancelacionTimbre.ObjectFactory();
+
+        /*Crea la lista de los UUDI a cancelar*/
+        pRuebasEcodexCancelacionTimbre.ListaCancelar lstUid = facCli.createListaCancelar();
+        lstUid.getGuid().add(sFolFisc);                  
+
+        /*Crea la solicitud para cancelación multiple*/
+        pRuebasEcodexCancelacionTimbre.SolicitudCancelaMultiple solicitud = new pRuebasEcodexCancelacionTimbre.SolicitudCancelaMultiple();
+        solicitud.setRFC(facCli.createSolicitudCancelaMultipleRFC(sRFCLoc));
+        solicitud.setToken(facCli.createSolicitudCancelaMultipleToken(sNewTok));
+        solicitud.setTransaccionID(Long.parseLong(sTransId));
+        solicitud.setListaCancelar(facCli.createSolicitudCancelaMultipleListaCancelar(lstUid));
+
+        /*Cancela los comprobantes*/
+        pRuebasEcodexCancelacionTimbre.RespuestaCancelaMultiple wsRes;
+        try
+        {
+            System.out.println("llego");
+            pRuebasEcodexCancelacionTimbre.Cancelaciones_Service servicio  = new pRuebasEcodexCancelacionTimbre.Cancelaciones_Service();
+            pRuebasEcodexCancelacionTimbre.Cancelaciones puerto            = servicio.getPuertoCancelacion();
+            //wsRes                                   = puerto.cancelaMultiple(solicitud);  
+            wsRes                                   = Star.cancelaMultipleP(solicitud);
+            System.out.println("salio");
+        }
+        catch(pRuebasEcodexCancelacionTimbre.CancelacionesCancelaMultipleFallaServicioFaultFaultMessage | pRuebasEcodexCancelacionTimbre.CancelacionesCancelaMultipleFallaSesionFaultFaultMessage expnWSPAC)
+        {
+            //Procesa el error y regresa error
+            Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC);                                                                   
+            return -1;                                                    
+        }                        
+                
+        //Regresa que todo fue bien
+        return 0;
+        
+    }//Fin de prublic static iCanFacP(String sFolFisc)
     
     //Método para cancelar con el WS una factura
     public static int iCanFac(String sFolFisc, String sRFCLoc)
     {
+        
         /*Obtiene el token de sguridad*/
         String sNewTok  = Star.sCreTokEsta(sRFCLoc);
 
@@ -15058,7 +15129,7 @@ public class Star
         //Si es un cxc o cxp
         if(sTbl.trim().compareTo("cxp")==0)
             sCampo="prov";
-       
+                    
         /*Inserta cxc el abono en la base de datos*/
         try 
         {                

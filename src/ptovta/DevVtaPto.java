@@ -195,7 +195,9 @@ public class DevVtaPto extends javax.swing.JFrame
         
         /*Establece el listener para la tabla*/
         jTab.addPropertyChangeListener(pro);
-        
+        /*Pide clave de administrador*/            
+        ClavMast cl = new ClavMast(this, 1);
+        cl.setVisible(true);
     }/*Fin de public DevVtaPto() */
 
     
@@ -519,7 +521,7 @@ public class DevVtaPto extends javax.swing.JFrame
                 jBBuscKeyPressed(evt);
             }
         });
-        jP1.add(jBBusc, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 140, 19));
+        jP1.add(jBBusc, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 140, 20));
 
         jTBusc.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTBusc.setNextFocusableComponent(jBMosT);
@@ -1501,7 +1503,7 @@ public class DevVtaPto extends javax.swing.JFrame
         /*Obtiene de la base de datos todoas las ventas*/        
         try
         {       
-            sQ = "SELECT estacs.NOM, vtas.SUCU, vtas.TOTDESCU, vtas.NOCAJ, vtas.ESTAC, vtas.NOSER, vtas.ESTAD, vtas.TIPDOC, vtas.VTA, vtas.NOREFER, emps.NOM, vtas.TOT, vtas.FEMI FROM vtas LEFT OUTER JOIN estacs ON estacs.ESTAC = vtas.ESTAC LEFT OUTER JOIN emps ON CONCAT_WS('', emps.SER, emps.CODEMP ) = vtas.CODEMP WHERE estad = 'CO' " + sCond + " " + sVtaDi + " AND (emps.NOM LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.TIPDOC LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.ESTAD LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.NOREFER LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.TOT LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR estacs.NOM LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.FEMI LIKE('%" + jTBusc.getText().replace(" ", "%") + "%'))ORDER BY vtas.NOREFER DESC";
+            sQ = "SELECT estacs.NOM, vtas.SUCU, vtas.TOTDESCU, vtas.NOCAJ, vtas.ESTAC, vtas.NOSER, vtas.ESTAD, vtas.TIPDOC, vtas.VTA, vtas.NOREFER, emps.NOM, vtas.TOT, vtas.FEMI FROM vtas LEFT OUTER JOIN estacs ON estacs.ESTAC = vtas.ESTAC LEFT OUTER JOIN emps ON CONCAT_WS('', emps.SER, emps.CODEMP ) = vtas.CODEMP WHERE vtas.estad = 'CO' " + sCond + " " + sVtaDi + " AND (emps.NOM LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.TIPDOC LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.ESTAD LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.NOREFER LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.TOT LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR estacs.NOM LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.FEMI LIKE('%" + jTBusc.getText().replace(" ", "%") + "%'))ORDER BY vtas.NOREFER DESC";
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos*/
