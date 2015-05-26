@@ -280,7 +280,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imgs/busc5.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Buscar F3"/>
+            <Property name="text" type="java.lang.String" value="Buscar F3" postCode="jBBusc.setToolTipText(&quot;Se busca por los campos: tipo de documento, folio, serie, nombre de cliente, usuario, nombre de usuario&quot;);"/>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="jTBusc"/>
             </Property>

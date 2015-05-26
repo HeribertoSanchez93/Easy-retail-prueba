@@ -3405,9 +3405,20 @@ public class Star
                 Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
                 return;                            
             }            
-            
-        }/*Fin de if(bBusc)*/            
-                      
+        }/*Fin de if(bBusc)*/
+        if(sNomEmp.compareTo("CLIENTE MOSTRADOR")==0)
+        {
+            sCall       =sCallLoc;                                   
+            sCol        =sColLoc;                                   
+            sCiu        =sCiuLoc;                                   
+            sPai        =sPaiLoc;                                   
+            sEsta       =sEstLoc;
+        }
+        if(sConds==null)
+            sConds="No Identificado";
+        else if(sConds.compareTo("")==0)
+            sConds="No Identificado";
+        
         /*Determina la ruta donde mandar el PDF*/
         String sCa              = "\\Facturas";
         if(sTip.compareTo("notc")==0)
@@ -3473,10 +3484,10 @@ public class Star
         
         /*Si hubo error entonces regresa*/
         if(sCert==null)
-            return;
+            return; 
         System.out.println(sImp);
         /*Crea el encabezado del xml*/
-        String sXml = sCreEncaXML(sCta, sCiuLoc, sMon, sTipCam, sMetPag, sTot.replace(",", "").replace("$", ""), sTotDescu.replace(",", "").replace("$", ""), sSubTot.replace(",", "").replace("$", ""), sNumCert, sFormPag, sTipDocS, sFDoc, sCert, "",sNomLoc, sRFCLoc, sCPLoc, sPaiLoc, sEstLoc, sCiuLoc, sColLoc, sNoExtLoc, sCallLoc, sRegFisc, sNomEmp, sRFC, sPai, sEsta, sCiu, sCol, sCall, sCiu, sLugExp);
+        String sXml = sCreEncaXML(sCta, sCiuLoc, sMon, sTipCam, sConds, sTot.replace(",", "").replace("$", ""), sTotDescu.replace(",", "").replace("$", ""), sSubTot.replace(",", "").replace("$", ""), sNumCert, sFormPag, sTipDocS, sFDoc, sCert, "",sNomLoc, sRFCLoc, sCPLoc, sPaiLoc, sEstLoc, sCiuLoc, sColLoc, sNoExtLoc, sCallLoc, sRegFisc, sNomEmp, sRFC, sPai, sEsta, sCiu, sCol, sCall, sCiu, sLugExp);
         /*Crea las partidas de la venta*/
         sXml        += sCrePartXML(con, sVta);        
         String sFinCad="<cfdi:Impuestos totalImpuestosTrasladados=\"" + sImp.replace("$", "").replace(",", "") + "\">" + System.getProperty( "line.separator" ) +
@@ -3521,7 +3532,7 @@ public class Star
         }
         
         /*Genera nuevamente el XML pero ya con el sello*/
-        sXml        = sCreEncaXML(sCta, sCiuLoc, sMon, sTipCam, sMetPag, sTot.replace(",", "").replace("$", ""), sTotDescu.replace(",", "").replace("$", ""), sSubTot.replace(",", "").replace("$", ""), sNumCert, sFormPag, sTipDocS, sFDoc, sCert, " sello = \"" + sSell + "\"", sNomLoc, sRFCLoc, sCPLoc, sPaiLoc, sEstLoc, sCiuLoc, sColLoc, sNoExtLoc, sCallLoc, sRegFisc, sNomEmp, sRFC, sPai, sEsta, sCiu, sCol, sCall, sCiu, sLugExp);
+        sXml        = sCreEncaXML(sCta, sCiuLoc, sMon, sTipCam, sConds, sTot.replace(",", "").replace("$", ""), sTotDescu.replace(",", "").replace("$", ""), sSubTot.replace(",", "").replace("$", ""), sNumCert, sFormPag, sTipDocS, sFDoc, sCert, " sello = \"" + sSell + "\"", sNomLoc, sRFCLoc, sCPLoc, sPaiLoc, sEstLoc, sCiuLoc, sColLoc, sNoExtLoc, sCallLoc, sRegFisc, sNomEmp, sRFC, sPai, sEsta, sCiu, sCol, sCall, sCiu, sLugExp);
         sXml        += sCrePartXML(con, sVta);
         System.out.println(sImp);
         if(sImp.compareTo("0")!=0&&sImp.compareTo("$0.00")!=0)
@@ -11386,13 +11397,42 @@ public class Star
     
     /*Función para devolver el XML encabezado*/    
     public static String sCreEncaXML(String sCta, String sCiuLo, String sMon, String sTipCam, String sMetPag, String sTot, String sTotDescu, String sSubTot, String sNumCert, String sFormPag, String sTipDocS, String sFDoc, String sCert, String sSell, String sNomLoc, String sRFCLoc, String sCPLoc, String sPaiLoc, String sEstLoc, String sCiuLoc, String sColLoc, String sNoExtLoc, String sCallLoc, String sRegFisc, String sNomEmp, String sRFC, String sPai, String sEsta, String sCiu, String sCol, String sCall, String sCiud, String sLugExp)
-    {                
-        /*Crea el XML para mandarlo timbrar*/
-        String sXml         ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + System.getProperty( "line.separator" ) +
+    {   
+        String sXml="";
+        if(sMetPag.compareTo("Contado")==0)
+            /*Crea el XML para mandarlo timbrar*/
+        sXml                ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + System.getProperty( "line.separator" ) +
                             "<cfdi:Comprobante xmlns:cfdi=\"http://www.sat.gob.mx/cfd/3\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " + System.getProperty( "line.separator" ) + 
                             "xsi:schemaLocation=\"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd http://www.sat.gob.mx/nomina http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina11.xsd\" " + System.getProperty( "line.separator" ) +
                             "version=\"3.2\" fecha=\"" + sFDoc + "\" " + System.getProperty( "line.separator" ) +
                              sSell + " " + System.getProperty( "line.separator" ) +  
+                            "formaDePago=\"" + sFormPag + "\" noCertificado=\"" + sNumCert + "\" " + System.getProperty( "line.separator" ) +
+                            "certificado=\"" + sCert + "\" " + System.getProperty( "line.separator" ) +
+                            "subTotal=\"" + sSubTot + "\" descuento=\"" + sTotDescu + "\" total=\"" + sTot + "\" " + System.getProperty( "line.separator" ) +
+                            "tipoDeComprobante=\"" + sTipDocS + "\" metodoDePago=\"" + sMetPag + "\" LugarExpedicion=\"" + sLugExp + "\" Moneda=\"" + sMon + "\" TipoCambio=\"" + sTipCam + "\"> " + System.getProperty( "line.separator" ) +                                                                                                                                                              
+                            "<cfdi:Emisor nombre=\"" + sNomLoc + "\" rfc=\"" + sRFCLoc + "\">" + System.getProperty( "line.separator" ) +
+                            System.getProperty( "line.separator" ) +
+                            "<cfdi:DomicilioFiscal codigoPostal=\"" + sCPLoc + "\" pais=\"" + sPaiLoc + "\" estado=\"" + sEstLoc + "\" municipio=\"" + sCiuLo + "\" colonia=\"" + sColLoc + "\" noExterior=\"" + sNoExtLoc + "\" calle=\"" + sCallLoc + "\"/>" + System.getProperty( "line.separator" ) +
+                            System.getProperty( "line.separator" ) +
+                            "<cfdi:RegimenFiscal Regimen=\"" + sRegFisc + "\"/>" + System.getProperty( "line.separator" ) +
+                            System.getProperty( "line.separator" ) +
+                            "</cfdi:Emisor>" + System.getProperty( "line.separator" ) +
+                            System.getProperty( "line.separator" ) +                            
+                            "<cfdi:Receptor nombre=\"" + sNomEmp + "\" rfc=\"" + sRFC + "\">" + System.getProperty( "line.separator" ) +
+                            System.getProperty( "line.separator" ) +
+                            "<cfdi:Domicilio pais=\"" + sPai + "\" estado=\"" + sEsta + "\" municipio=\"" + sCiud + "\" colonia=\"" + sCol + "\" calle=\"" + sCall + "\" localidad=\"" + sCiud + "\"/>" + System.getProperty( "line.separator" ) +
+                            System.getProperty( "line.separator" ) +
+                            "</cfdi:Receptor>" + System.getProperty( "line.separator" ) +
+                            System.getProperty( "line.separator" );                                                        
+        
+        /*Devuelve el resultado*/
+        else{
+        /*Crea el XML para mandarlo timbrar*/
+        sXml                ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + System.getProperty( "line.separator" ) +
+                            "<cfdi:Comprobante xmlns:cfdi=\"http://www.sat.gob.mx/cfd/3\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " + System.getProperty( "line.separator" ) + 
+                            "xsi:schemaLocation=\"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd http://www.sat.gob.mx/nomina http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina11.xsd\" " + System.getProperty( "line.separator" ) +
+                            "version=\"3.2\" fecha=\"" + sFDoc + "\" " + System.getProperty( "line.separator" ) +
+                            sSell + " " + System.getProperty( "line.separator" ) +  
                             "formaDePago=\"" + sFormPag + "\" noCertificado=\"" + sNumCert + "\" " + System.getProperty( "line.separator" ) +
                             "certificado=\"" + sCert + "\" " + System.getProperty( "line.separator" ) +
                             "subTotal=\"" + sSubTot + "\" descuento=\"" + sTotDescu + "\" total=\"" + sTot + "\" " + System.getProperty( "line.separator" ) +
@@ -11412,7 +11452,7 @@ public class Star
                             "</cfdi:Receptor>" + System.getProperty( "line.separator" ) +
                             System.getProperty( "line.separator" );                                                        
         
-        /*Devuelve el resultado*/
+                }/*Devuelve el resultado*/
         return sXml;
     }
         

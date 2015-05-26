@@ -763,6 +763,15 @@ public class Clients extends javax.swing.JFrame
         /*Recorre toda la selección del usuario*/                
         for(int x = iSel.length - 1; x >= 0; x--)
         {
+            if(jTab.getValueAt(iSel[x], 1).toString().compareTo("EMPMOS")==0)
+            {
+                /*Mensajea*/
+                JOptionPane.showMessageDialog(null, "No se puede modificar el Publico General.", "Modificar cliente", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+                /*Coloca el foco del teclado en la tabla de provs y continua*/
+                jTab.grabFocus();                        
+                continue;
+            }
             /*Muestra el gráfico de modificar cliente*/
             if(Star.gClient==null)
             {            

@@ -44,6 +44,10 @@ public class ClavCamb extends javax.swing.JFrame
         /*Centra la ventana*/
         this.setLocationRelativeTo(null);
         
+        this.setTitle("Cambiar clave de seguridad");
+
+        //Que sea modal el frame
+        this.setAlwaysOnTop(true);
         //Establece el ícono de la forma
         Star.vSetIconFram(this);
         

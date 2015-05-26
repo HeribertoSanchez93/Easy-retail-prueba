@@ -502,6 +502,7 @@ public class DevVtaPto extends javax.swing.JFrame
         jBBusc.setForeground(new java.awt.Color(0, 102, 0));
         jBBusc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/busc5.png"))); // NOI18N
         jBBusc.setText("Buscar F3");
+        jBBusc.setToolTipText("Se busca por los campos: tipo de documento, folio, serie, nombre de cliente, usuario, nombre de usuario");
         jBBusc.setNextFocusableComponent(jTBusc);
         jBBusc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -1503,7 +1504,7 @@ public class DevVtaPto extends javax.swing.JFrame
         /*Obtiene de la base de datos todoas las ventas*/        
         try
         {       
-            sQ = "SELECT estacs.NOM, vtas.SUCU, vtas.TOTDESCU, vtas.NOCAJ, vtas.ESTAC, vtas.NOSER, vtas.ESTAD, vtas.TIPDOC, vtas.VTA, vtas.NOREFER, emps.NOM, vtas.TOT, vtas.FEMI FROM vtas LEFT OUTER JOIN estacs ON estacs.ESTAC = vtas.ESTAC LEFT OUTER JOIN emps ON CONCAT_WS('', emps.SER, emps.CODEMP ) = vtas.CODEMP WHERE vtas.estad = 'CO' " + sCond + " " + sVtaDi + " AND (emps.NOM LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.TIPDOC LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.ESTAD LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.NOREFER LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.TOT LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR estacs.NOM LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.FEMI LIKE('%" + jTBusc.getText().replace(" ", "%") + "%'))ORDER BY vtas.NOREFER DESC";
+            sQ = "SELECT estacs.NOM, vtas.SUCU, vtas.VTA, vtas.NOREFER, emps.NOM, vtas.TOT, vtas.FEMI, vtas.TIPDOC, vtas.ESTAC, vtas.NOSER, vtas.NOCAJ FROM vtas LEFT OUTER JOIN estacs ON estacs.ESTAC = vtas.ESTAC LEFT OUTER JOIN emps ON CONCAT_WS('', emps.SER, emps.CODEMP ) = vtas.CODEMP WHERE vtas.ESTAD = 'CO' " + sCond + " " + sVtaDi + " AND (vtas.TOT LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR estacs.NOM LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.NOREFER LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.TIPDOC LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.ESTAC LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.NOSER LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR emps.NOM LIKE('%" + jTBusc.getText().replace(" ", "%") + "%') OR vtas.TOT LIKE('%" + jTBusc.getText().replace(" ", "%") + "%')) )ORDER BY vtas.NOREFER DESC";
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos*/

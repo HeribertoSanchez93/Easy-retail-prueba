@@ -253,7 +253,31 @@ public class Princip extends javax.swing.JFrame
         Statement   st;
         ResultSet   rs;        
         String      sQ; 
-
+        
+        String control="1";
+        try
+        {
+            sQ = "SELECT extr1 FROM estacs WHERE estac = 'SUP'";
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            /*Si hay datos*/
+            if(rs.next())
+            {
+                control=rs.getString("extr1");
+            }
+        }
+        catch(SQLException expnSQL)
+        {            
+            //Procesa el error y regresa
+            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
+            return;                        
+        }
+        
+        if(control.compareTo("0")==0)
+        {
+            ClavCamb c = new ClavCamb();
+            c.getObj().setVisible(true);
+        }
         /*Comprueba si esta habilitado el deslogeo por tiempo de inactividad*/        
         try
         {

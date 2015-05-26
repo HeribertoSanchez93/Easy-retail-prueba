@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="255" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="234" leftMargin="1" rightMargin="20" topMargin="0" bottomMargin="20" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="255" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="234" leftMargin="1" rightMargin="20" topMargin="0" bottomMargin="20" whenResourceMissingType="Empty" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="453"/>
+	<property name="ireport.y" value="242"/>
 	<parameter name="COD_EMPRESA" class="java.lang.String"/>
 	<parameter name="FDOC" class="java.lang.String"/>
 	<parameter name="NOMEMP" class="java.lang.String"/>

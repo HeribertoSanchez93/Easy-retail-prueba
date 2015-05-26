@@ -3450,6 +3450,7 @@ public class PtoVtaTou extends javax.swing.JFrame
         /*Obtiene el importe del descuento*/
         String sImpoDesc    = Double.toString(Double.parseDouble(sPre) * (Double.parseDouble(jTDesc.getText()) / 100));
         
+        sPre=Double.toString(Double.parseDouble(sPre)* (Double.parseDouble(jTCant.getText())));
         /*Aplicale al precio unitario el descuento permitido*/
         sPre                = Double.toString(Double.parseDouble(sPre) - (Double.parseDouble(sPre) * (Double.parseDouble(jTDesc.getText()) / 100)));
                 
