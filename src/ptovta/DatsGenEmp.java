@@ -308,6 +308,9 @@ public class DatsGenEmp extends javax.swing.JFrame
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTCallKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTCallKeyTyped(evt);
+            }
         });
         jP1.add(jTCall, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, 220, 20));
 
@@ -328,6 +331,9 @@ public class DatsGenEmp extends javax.swing.JFrame
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTColKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTColKeyTyped(evt);
+            }
         });
         jP1.add(jTCol, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 220, 20));
 
@@ -344,6 +350,9 @@ public class DatsGenEmp extends javax.swing.JFrame
         jTEst.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTEstKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTEstKeyTyped(evt);
             }
         });
         jP1.add(jTEst, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 220, 20));
@@ -368,6 +377,9 @@ public class DatsGenEmp extends javax.swing.JFrame
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTPaiKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTPaiKeyTyped(evt);
+            }
         });
         jP1.add(jTPai, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 220, 20));
 
@@ -384,6 +396,9 @@ public class DatsGenEmp extends javax.swing.JFrame
         jTCiu.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTCiuKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTCiuKeyTyped(evt);
             }
         });
         jP1.add(jTCiu, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 220, 20));
@@ -1615,10 +1630,21 @@ public class DatsGenEmp extends javax.swing.JFrame
         
     /*Cuando se presiona el botón de guardar*/
     private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuarActionPerformed
-        
+        String text;
+        int z;
         //calle existe
         if(jTCall.getText().compareTo("") != 0)
         {
+            text=jTCall.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "Calle de la empresa no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTCall.grabFocus();                   
+                    return ;
+            }
         }
         else
         {   
@@ -1629,6 +1655,16 @@ public class DatsGenEmp extends javax.swing.JFrame
         //colonia existe
         if(jTCol.getText().compareTo("") != 0)
         {
+            text=jTCol.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "Colonia de la empresa no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTCol.grabFocus();                   
+                    return ;
+            }
         }
         else
         {   
@@ -1639,6 +1675,16 @@ public class DatsGenEmp extends javax.swing.JFrame
         //codigo postal existe
         if(jTCP.getText().compareTo("") != 0)
         {
+            text=jTCP.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "Codigo Postal de la empresa no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTCP.grabFocus();                   
+                    return ;
+            }
         }
         else
         {   
@@ -1649,6 +1695,16 @@ public class DatsGenEmp extends javax.swing.JFrame
         //numero de exterior existe
         if(jTNoExt.getText().compareTo("") != 0)
         {
+            text=jTNoExt.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "Numero exterior de la empresa no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTNoExt.grabFocus();                   
+                    return ;
+            }
         }
         else
         {   
@@ -1659,6 +1715,16 @@ public class DatsGenEmp extends javax.swing.JFrame
         //cuidad existe
         if(jTCiu.getText().compareTo("") != 0)
         {
+            text=jTCiu.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "Cuidad de la empresa no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTCiu.grabFocus();                   
+                    return ;
+            }
         }
         else
         {   
@@ -1669,6 +1735,16 @@ public class DatsGenEmp extends javax.swing.JFrame
         // estado existe
         if(jTEst.getText().compareTo("") != 0)
         {
+            text=jTEst.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "Estado de la empresa no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTEst.grabFocus();                   
+                    return ;
+            }
         }
         else
         {   
@@ -1679,6 +1755,16 @@ public class DatsGenEmp extends javax.swing.JFrame
         //pais existe
         if(jTPai.getText().compareTo("") != 0)
         {
+            text=jTPai.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "País de la empresa no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTPai.grabFocus();                   
+                    return ;
+            }
         }
         else
         {   
@@ -1689,6 +1775,7 @@ public class DatsGenEmp extends javax.swing.JFrame
         /*Si el RFC no es cadena vacia entonces*/
         if(jTRFC.getText().compareTo("")!=0)
         {
+            
             /*Si es persona moral entonces*/
             if(jRaMor.isSelected())
             {
@@ -1740,7 +1827,6 @@ public class DatsGenEmp extends javax.swing.JFrame
             jTRFC.grabFocus();                    
             return;
         }
-
         /*Si el nombre de la empresa esta vacio entonces*/
         if(jTNom.getText().compareTo("")==0)
         {
@@ -1753,6 +1839,19 @@ public class DatsGenEmp extends javax.swing.JFrame
             /*Coloca el foco del teclado en el control y regresa*/
             jTNom.grabFocus();                    
             return;
+        }
+        else
+        {
+            text=jTNom.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "Numero exterior de la empresa no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTNom.grabFocus();                   
+                    return ;
+            }
         }
 
         /*Si el CSD fiel tenía datos y ya no los tiene entonces*/
@@ -2725,7 +2824,12 @@ public class DatsGenEmp extends javax.swing.JFrame
         
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
-            evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
+            evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));  
+        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
+        {
+        }
+        else
+            evt.consume();
         
     }//GEN-LAST:event_jTNomKeyTyped
 
@@ -2748,7 +2852,11 @@ public class DatsGenEmp extends javax.swing.JFrame
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
-        
+        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
+        {
+        }
+        else
+            evt.consume();
     }//GEN-LAST:event_jTCPKeyTyped
 
     
@@ -2758,7 +2866,11 @@ public class DatsGenEmp extends javax.swing.JFrame
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
-        
+        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
+        {
+        }
+        else
+            evt.consume();
     }//GEN-LAST:event_jTNoExtKeyTyped
 
     
@@ -4743,6 +4855,49 @@ public class DatsGenEmp extends javax.swing.JFrame
         vKeyPreEsc(evt);
         
     }//GEN-LAST:event_jPaLlavFKeyPressed
+
+    private void jTCallKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCallKeyTyped
+        
+        if((evt.getKeyChar() != '\b') && (evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
+        {
+        }
+        else    
+            evt.consume();
+        
+    }//GEN-LAST:event_jTCallKeyTyped
+
+    private void jTColKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTColKeyTyped
+        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
+        {
+        }
+        else
+            evt.consume();
+    }//GEN-LAST:event_jTColKeyTyped
+
+    private void jTCiuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCiuKeyTyped
+        // TODO add your handling code here:
+        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
+        {
+        }
+        else
+            evt.consume();
+    }//GEN-LAST:event_jTCiuKeyTyped
+
+    private void jTEstKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTEstKeyTyped
+    if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
+        {
+        }
+        else
+            evt.consume();
+    }//GEN-LAST:event_jTEstKeyTyped
+
+    private void jTPaiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTPaiKeyTyped
+        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
+        {
+        }
+        else
+            evt.consume();
+    }//GEN-LAST:event_jTPaiKeyTyped
 
                    
     /*Método para procesar la acción en los radio de física y moral*/

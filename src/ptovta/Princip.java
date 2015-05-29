@@ -272,11 +272,36 @@ public class Princip extends javax.swing.JFrame
             Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
             return;                        
         }
-        
+        if(control==null)
+        {
+        }
+        else
         if(control.compareTo("0")==0)
         {
-            ClavCamb c = new ClavCamb();
+            ClavCamb_1 c = new ClavCamb_1(null,true);
             c.getObj().setVisible(true);
+            if(ClavCamb_1.bSi==true)
+            {
+                try 
+                {            
+                    sQ = "UPDATE estacs SET "
+                        + "extr1       = '1' "
+                        + "WHERE estac = 'SUP'";                    
+                    st = con.createStatement();
+                    st.executeUpdate(sQ);
+                }
+                catch(SQLException expnSQL) 
+                {              
+                    //Procesa el error y regresa
+                    Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
+                    return;
+                }
+            }
+            if(ClavCamb_1.bSi==false)
+            {
+                Star.vExitAp();
+            }
+            
         }
         /*Comprueba si esta habilitado el deslogeo por tiempo de inactividad*/        
         try
@@ -2554,9 +2579,6 @@ public class Princip extends javax.swing.JFrame
         jMenItProdsBajMin = new javax.swing.JMenuItem();
         jMenItProdsArrMax = new javax.swing.JMenuItem();
         jMenItDefEstacs = new javax.swing.JMenuItem();
-        jMenTraspas = new javax.swing.JMenu();
-        jMenItTraspas = new javax.swing.JMenuItem();
-        jMenItIngr = new javax.swing.JMenuItem();
         jMMUbic = new javax.swing.JMenu();
         jMenItAlmas = new javax.swing.JMenuItem();
         jMenIt5 = new javax.swing.JMenuItem();
@@ -2597,6 +2619,9 @@ public class Princip extends javax.swing.JFrame
         jMFlujAct = new javax.swing.JMenuItem();
         jMCatGara = new javax.swing.JMenuItem();
         jMZon = new javax.swing.JMenuItem();
+        jMenTraspas = new javax.swing.JMenu();
+        jMenItTraspas = new javax.swing.JMenuItem();
+        jMenItIngr = new javax.swing.JMenuItem();
         jMGir = new javax.swing.JMenuItem();
         jMenItMons = new javax.swing.JMenuItem();
         jMeItImps = new javax.swing.JMenuItem();
@@ -4823,47 +4848,6 @@ public class Princip extends javax.swing.JFrame
 
         jMInven.add(jMenMaxsMins);
 
-        jMenTraspas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/movalma.png"))); // NOI18N
-        jMenTraspas.setMnemonic('r');
-        jMenTraspas.setText("Movimientos almacenes");
-        jMenTraspas.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jMenTraspasKeyPressed(evt);
-            }
-        });
-
-        jMenItTraspas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/traspas.png"))); // NOI18N
-        jMenItTraspas.setMnemonic('t');
-        jMenItTraspas.setText("Traspasos");
-        jMenItTraspas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenItTraspasActionPerformed(evt);
-            }
-        });
-        jMenItTraspas.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jMenItTraspasKeyPressed(evt);
-            }
-        });
-        jMenTraspas.add(jMenItTraspas);
-
-        jMenItIngr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/ingrsal.png"))); // NOI18N
-        jMenItIngr.setMnemonic('i');
-        jMenItIngr.setText("Entradas/salidas");
-        jMenItIngr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenItIngrActionPerformed(evt);
-            }
-        });
-        jMenItIngr.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jMenItIngrKeyPressed(evt);
-            }
-        });
-        jMenTraspas.add(jMenItIngr);
-
-        jMInven.add(jMenTraspas);
-
         jMMUbic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/ubics.png"))); // NOI18N
         jMMUbic.setMnemonic('i');
         jMMUbic.setText("Ubicaciones");
@@ -5445,6 +5429,47 @@ public class Princip extends javax.swing.JFrame
         });
         jMenInvents.add(jMZon);
 
+        jMenTraspas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/movalma.png"))); // NOI18N
+        jMenTraspas.setMnemonic('r');
+        jMenTraspas.setText("Movimientos almacenes");
+        jMenTraspas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jMenTraspasKeyPressed(evt);
+            }
+        });
+
+        jMenItTraspas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/traspas.png"))); // NOI18N
+        jMenItTraspas.setMnemonic('t');
+        jMenItTraspas.setText("Traspasos");
+        jMenItTraspas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenItTraspasActionPerformed(evt);
+            }
+        });
+        jMenItTraspas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jMenItTraspasKeyPressed(evt);
+            }
+        });
+        jMenTraspas.add(jMenItTraspas);
+
+        jMenItIngr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/ingrsal.png"))); // NOI18N
+        jMenItIngr.setMnemonic('i');
+        jMenItIngr.setText("Entradas/salidas");
+        jMenItIngr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenItIngrActionPerformed(evt);
+            }
+        });
+        jMenItIngr.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jMenItIngrKeyPressed(evt);
+            }
+        });
+        jMenTraspas.add(jMenItIngr);
+
+        jMenInvents.add(jMenTraspas);
+
         jMGir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/gir.png"))); // NOI18N
         jMGir.setMnemonic('g');
         jMGir.setText("Giros");
@@ -5899,7 +5924,7 @@ public class Princip extends javax.swing.JFrame
     private void jMenItCambClavSegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenItCambClavSegActionPerformed
                
         /*Mostrar el gráfico de cambiar clave de seguridad 1*/
-        ClavCamb c = new ClavCamb();
+        ClavCamb c = new ClavCamb(null, true);
         c.getObj().setVisible(true);
         
     }//GEN-LAST:event_jMenItCambClavSegActionPerformed

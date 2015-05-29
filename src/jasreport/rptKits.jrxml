@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="235"/>
 	<parameter name="PROD" class="java.lang.String"/>
 	<parameter name="FECH" class="java.lang.String"/>
 	<parameter name="ANAQ" class="java.lang.String"/>
@@ -43,7 +43,7 @@
 		<groupExpression><![CDATA[$F{codkit}]]></groupExpression>
 		<groupHeader>
 			<band height="14">
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement x="0" y="0" width="101" height="14" uuid="16495a40-a256-45bd-8c8f-704adcfa3ff3"/>
 					<textElement>
 						<font isBold="true"/>
@@ -166,7 +166,7 @@
 				</textElement>
 				<text><![CDATA[TOTAL KITS:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="7" y="29" width="100" height="20" uuid="c795f1b2-d823-476d-8228-101547292843"/>
 				<textFieldExpression><![CDATA[$V{TOT}]]></textFieldExpression>
 			</textField>

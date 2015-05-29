@@ -2743,7 +2743,7 @@ public class CorrElecs extends javax.swing.JFrame
         
         /*Lee el id*/
         sId                   = jTID.getText();
-        
+        System.out.println(sId);
         /*Pregunta al usr si esta seguro de modificar el correo electrónico*/                
         Object[] op = {"Si","No"};
         int iRes    = JOptionPane.showOptionDialog(this, "¿Seguro que están bien los datos?", "Modificar Correo", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
@@ -2785,7 +2785,8 @@ public class CorrElecs extends javax.swing.JFrame
                      "cuerprec3             = '" + jTCuerCXC3.getText().replace("'", "''") + "', " + 
                      "sucu                  = '" + Star.sSucu.replace("'", "''") + "', " +
                      "nocaj                 = '" + Star.sNoCaj.replace("'", "''") + "', " +
-                     "estacglo = '" + Login.sUsrG.replace("'", "''") + "'";                          
+                     "estacglo              = '" + Login.sUsrG.replace("'", "''") + "'"+
+                     "WHERE id_id          = '" +sId+"'";                          
             st = con.createStatement();
             st.executeUpdate(sQ);
          }
@@ -2805,7 +2806,7 @@ public class CorrElecs extends javax.swing.JFrame
         
         /*Agregalos en la tabla de correos electrónicos*/        
         DefaultTableModel tm    = (DefaultTableModel)jTab.getModel();                        
-        Object nu[]             = {sId, sEsta, sNomb, sUsr, sCoAlter};
+        Object nu[]             = {iContFi, sId, sEsta, sNomb, sUsr, sCoAlter};
         tm.addRow(nu);
         
         /*Borralo de la tabla*/

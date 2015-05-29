@@ -254,77 +254,77 @@ ELSE codext = '$P!{CLAS}' END  GROUP BY vtas.VEND, estacs.NOM ORDER BY porcen DE
 	</columnHeader>
 	<detail>
 		<band height="14" splitType="Stretch">
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="57" y="0" width="101" height="14" uuid="0f751292-0fab-41ff-8e8b-501784aefdcf"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NOM}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="57" height="14" uuid="22d84e93-a026-4d70-bd3c-e664f0859bd6"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VEND}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="159" y="0" width="52" height="14" uuid="526e68cb-5fb5-49e1-9d6b-07e35cbf1341"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cant}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="211" y="0" width="54" height="14" uuid="b6432060-deb4-47e7-83c2-05064914280b"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tot}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="###0">
+			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
 				<reportElement x="529" y="0" width="43" height="14" uuid="88257d4a-c4c1-4178-8681-f73704b03130"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{porcen}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="426" y="-1" width="52" height="15" uuid="472b85a9-8ba3-45e9-baa3-d7f6a0341f35"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totcomi}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="477" y="0" width="52" height="14" uuid="3143becb-80a3-47e5-83bd-e071f7fe8e50"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{comi}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="266" y="0" width="41" height="14" uuid="80924418-c3f0-413c-ada6-b8afc7111fa6"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totultcost}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="309" y="0" width="41" height="14" uuid="757ae59c-2142-4f8b-bc68-128dca1df1b5"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totcostprom}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="350" y="0" width="41" height="14" uuid="5419cc2a-2ff4-4001-a8cf-3dcf12e9dcbe"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totpeps}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="391" y="0" width="35" height="14" uuid="b9daddaf-6eee-428f-bd95-419610a07314"/>
 				<textElement>
 					<font size="8"/>
@@ -348,7 +348,7 @@ ELSE codext = '$P!{CLAS}' END  GROUP BY vtas.VEND, estacs.NOM ORDER BY porcen DE
 				</textElement>
 				<text><![CDATA[Qty. Vendedores:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="87" y="58" width="100" height="13" uuid="73caafff-754f-4d9b-8b50-21c78e1b7cc5"/>
 				<textElement>
 					<font size="8"/>
@@ -362,14 +362,14 @@ ELSE codext = '$P!{CLAS}' END  GROUP BY vtas.VEND, estacs.NOM ORDER BY porcen DE
 				</textElement>
 				<text><![CDATA[Totales:]]></text>
 			</staticText>
-			<textField evaluationTime="Report" pattern="¤ #,##0.00" isBlankWhenNull="false">
+			<textField evaluationTime="Report" pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="216" y="28" width="51" height="13" uuid="ad1ba61e-4011-4e6d-b54c-32671afcfe5f"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTVTAS}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0">
+			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement x="159" y="28" width="57" height="13" uuid="8d795f46-852c-4cda-ba34-8d13082c6895"/>
 				<textElement>
 					<font size="8"/>
@@ -383,35 +383,35 @@ ELSE codext = '$P!{CLAS}' END  GROUP BY vtas.VEND, estacs.NOM ORDER BY porcen DE
 				</textElement>
 				<text><![CDATA[%100]]></text>
 			</staticText>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="433" y="28" width="45" height="13" uuid="8ec38d45-dbbf-46be-949c-020c79e5df4c"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTCOMI}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="267" y="28" width="40" height="13" uuid="ac104ff1-a570-475c-a329-3badfe55fe85"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTULTCOST}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="309" y="29" width="41" height="12" uuid="4daa888e-b0fb-4c53-9c6a-d09c62630631"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTPROM}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="350" y="29" width="42" height="12" uuid="3d32c2df-3ea1-4512-94e3-efdb65c1c0b5"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTPEPS}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="392" y="29" width="34" height="12" uuid="011861a0-174a-44e2-b803-52ad73551712"/>
 				<textElement>
 					<font size="8"/>

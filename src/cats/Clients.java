@@ -619,7 +619,7 @@ public class Clients extends javax.swing.JFrame
         for(int x = iSel.length - 1; x >= 0; x--)
         {
             /*Si el código seleccionado por el usuario es el SYS entonces*/
-            if(jTab.getValueAt(iSel[x], 1).toString().compareTo(Star.sCliMostG)==0)
+            if(jTab.getValueAt(iSel[x], 1).toString().compareTo("EMPMOS")==0)
             {
                 /*Mensajea y continua*/
                 JOptionPane.showMessageDialog(null, "No se puede eliminar el cliente publico general.", "Borrar cliente", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));               

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="324"/>
 	<parameter name="F_D" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -87,77 +87,77 @@
 		<groupExpression><![CDATA[$F{CODCOMP}]]></groupExpression>
 		<groupHeader>
 			<band height="17">
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToTallestObject" x="3" y="2" width="46" height="15" uuid="b441c73c-7df3-4231-9be3-e62531e1802e"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{nodoc}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToTallestObject" x="50" y="2" width="54" height="15" uuid="850c6193-f783-4b07-9112-7f08c6bf9f17"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{noser}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToTallestObject" x="106" y="1" width="87" height="15" uuid="aab47527-cea6-4746-9371-e4c81efe9ae2"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PROV}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToTallestObject" x="195" y="2" width="77" height="15" uuid="4b6e45ab-fe8e-4aac-b6ba-e3b00c5c2c81"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{NOM}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToTallestObject" x="271" y="2" width="42" height="15" uuid="3e87e072-a37c-4988-b2a0-d4d9200daa9b"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{FALT}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToTallestObject" x="313" y="2" width="32" height="15" uuid="cc6cf2c9-389d-4496-9837-afe4fff58c12"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{SUCU}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToTallestObject" x="349" y="2" width="37" height="15" uuid="73395cb2-2962-4ad6-b5ac-24d15e79e433"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ESTAC}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToTallestObject" x="389" y="3" width="38" height="14" uuid="f79fc88b-fa1f-4ec8-bfb1-ca0d84af83d2"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{NOCAJ}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToTallestObject" x="427" y="3" width="42" height="14" uuid="14c8e399-4620-43f4-ab28-9d17270b4a1f"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToTallestObject" x="520" y="2" width="34" height="14" uuid="4504abf5-9b6b-4fc5-90ea-447f126c4ecf"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{tot}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00">
+				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 					<reportElement x="471" y="2" width="49" height="14" uuid="c641ff36-0c33-4e33-8e14-38788c3c45c6"/>
 					<textElement>
 						<font size="8" isBold="true"/>
@@ -353,42 +353,42 @@
 	</columnHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="52" y="0" width="53" height="12" forecolor="#006666" uuid="6b42ea01-a3c1-47f5-9458-74ad1818fae7"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PROD}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="203" y="0" width="223" height="12" forecolor="#006666" uuid="d2ae9d9a-7968-4ea0-a79a-29c66ebb324e"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{DESCRIP}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="426" y="0" width="43" height="12" forecolor="#006666" uuid="73a8410d-3adb-4cfe-b264-4ac56053c9b5"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ALMA}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="148" y="0" width="55" height="12" forecolor="#006666" uuid="7bd3fe0c-f9f0-41fe-b190-ddd9fd8a2d5e"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{DEVS}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="106" y="0" width="43" height="13" forecolor="#006666" uuid="3893c45f-b23f-4dbd-9f4c-30ca993eab62"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CANT}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="469" y="0" width="51" height="13" forecolor="#006666" uuid="70a28f93-25ee-4723-a053-f2c0a162c37c"/>
 				<textElement>
 					<font size="8"/>
@@ -422,11 +422,11 @@
 				</textElement>
 				<text><![CDATA[Total Qty. Pendientes:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="136" y="33" width="72" height="13" uuid="a42ed2a2-d150-451b-9720-c64a42d2e2ba"/>
 				<textFieldExpression><![CDATA[$V{pend}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="136" y="20" width="72" height="13" uuid="568eda98-8260-4a1c-a97a-d62ec0d8a1bc"/>
 				<textFieldExpression><![CDATA[$V{entre}]]></textFieldExpression>
 			</textField>

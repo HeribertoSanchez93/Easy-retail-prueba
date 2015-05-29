@@ -539,7 +539,8 @@ public class Provs extends javax.swing.JFrame
         int iSel[] = jTab.getSelectedRows();
         DefaultTableModel tm  = (DefaultTableModel)jTab.getModel();
         for(int x = iSel.length - 1; x >= 0; x--)
-        {            
+        {   
+            
             /*Obtén algunos datos de la filar*/
             sProv   = jTab.getValueAt(iSel[x], 1).toString();                  
             sSer    = jTab.getValueAt(iSel[x], 2).toString();                                          

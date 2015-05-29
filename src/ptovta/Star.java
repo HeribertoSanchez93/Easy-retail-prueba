@@ -3241,8 +3241,9 @@ public class Star
         if(sTip.compareTo("notp")==0)
             sMsj    = "Nota de crédito";
         //Abre la base de datos nuevamente
+        
         Connection con = Star.conAbrBas(true, false);
-
+        
         //Si hubo error entonces regresa
         if(con==null)
         {
@@ -3485,7 +3486,7 @@ public class Star
         /*Si hubo error entonces regresa*/
         if(sCert==null)
             return; 
-        System.out.println(sImp);
+        
         /*Crea el encabezado del xml*/
         String sXml = sCreEncaXML(sCta, sCiuLoc, sMon, sTipCam, sConds, sTot.replace(",", "").replace("$", ""), sTotDescu.replace(",", "").replace("$", ""), sSubTot.replace(",", "").replace("$", ""), sNumCert, sFormPag, sTipDocS, sFDoc, sCert, "",sNomLoc, sRFCLoc, sCPLoc, sPaiLoc, sEstLoc, sCiuLoc, sColLoc, sNoExtLoc, sCallLoc, sRegFisc, sNomEmp, sRFC, sPai, sEsta, sCiu, sCol, sCall, sCiu, sLugExp);
         /*Crea las partidas de la venta*/
@@ -3534,7 +3535,7 @@ public class Star
         /*Genera nuevamente el XML pero ya con el sello*/
         sXml        = sCreEncaXML(sCta, sCiuLoc, sMon, sTipCam, sConds, sTot.replace(",", "").replace("$", ""), sTotDescu.replace(",", "").replace("$", ""), sSubTot.replace(",", "").replace("$", ""), sNumCert, sFormPag, sTipDocS, sFDoc, sCert, " sello = \"" + sSell + "\"", sNomLoc, sRFCLoc, sCPLoc, sPaiLoc, sEstLoc, sCiuLoc, sColLoc, sNoExtLoc, sCallLoc, sRegFisc, sNomEmp, sRFC, sPai, sEsta, sCiu, sCol, sCall, sCiu, sLugExp);
         sXml        += sCrePartXML(con, sVta);
-        System.out.println(sImp);
+        
         if(sImp.compareTo("0")!=0&&sImp.compareTo("$0.00")!=0)
         {
         //Obtiene el final
@@ -4112,9 +4113,9 @@ public class Star
         /*Si es una factura, remisión o nota de crédito entonces*/
         if(iTip==1)
         {                           
-            /*Búcle para completar la cadena del total con 0*/
-            for(int x = sTot.length(); x < 21; x++)
-                sTot        += "0";
+//            /*Búcle para completar la cadena del total con 0*/
+//            for(int x = sTot.length(); x < 21; x++)
+//                sTot        += "0";
             
            /*Búcle para completar la cadena del folio fiscal con 0*/
             for(int x = sFolFisc.length(); x < 40; x++)
@@ -10380,7 +10381,13 @@ public class Star
             
             /*Exportalo a pdf en el directorio completo con el nom del código de la cotización*/
             JasperExportManager.exportReportToPdfFile(pri, sRutPDF);
-
+            if(sCo1.compareTo("")==0)
+                sCo1=null;
+            if(sCo2.compareTo("")==0)
+                sCo2=null;
+            if(sCo3.compareTo("")==0)
+                sCo3=null;
+                
             /*Si se va a mandar el correo entonces que así sea*/
             if((sCo1!=null || sCo2!=null || sCo3!=null) && bMandCo)
                 vManPDFEmp(sCodCot + ".pdf", sRutPDF, sCo1, sCo2, sCo3, sCodCot, "COTIZACIÓN");            
@@ -10534,7 +10541,14 @@ public class Star
             
             /*Exportalo a pdf en el directorio completo con el nom del código de la cotización*/
             JasperExportManager.exportReportToPdfFile(pri, sRutPDF);
-
+            
+            if(sCo1.compareTo("")==0)
+                sCo1=null;
+            if(sCo2.compareTo("")==0)
+                sCo2=null;
+            if(sCo3.compareTo("")==0)
+                sCo3=null;
+            
             /*Si se va a mandar el correo entonces que así sea*/
             if((sCo1!=null || sCo2!=null || sCo3!=null) && bMandCo)
                 vManPDFEmp(sCodCot + ".pdf", sRutPDF, sCo1, sCo2, sCo3, sCodCot, "Previo de compra");            

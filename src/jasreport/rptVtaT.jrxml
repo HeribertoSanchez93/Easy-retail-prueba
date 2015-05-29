@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="194"/>
 	<parameter name="F_D" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -500,7 +500,7 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				</textElement>
 				<text><![CDATA[Tot.Subtotal:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="117" y="64" width="86" height="13" uuid="0a42161e-fe93-4c47-be78-ce0aaff21bdc"/>
 				<textElement>
 					<font size="8"/>
@@ -514,7 +514,7 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				</textElement>
 				<text><![CDATA[Cant.Dev.Parcial:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="118" y="77" width="85" height="13" uuid="6847bc76-4fce-49a9-a3c6-178649b92e64"/>
 				<textElement>
 					<font size="8"/>
@@ -535,14 +535,14 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				</textElement>
 				<text><![CDATA[Tot.Ult.Costo:]]></text>
 			</staticText>
-			<textField pattern="###0">
+			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement x="118" y="25" width="85" height="13" uuid="d1abc313-7914-44cf-b998-6eeb947e6beb"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTREG}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="117" y="51" width="86" height="13" uuid="3dc62763-4c82-4884-afc7-946b6a87d336"/>
 				<textElement>
 					<font size="8"/>
@@ -605,7 +605,7 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				</textElement>
 				<text><![CDATA[Cant.Facturas:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="117" y="38" width="86" height="13" uuid="099291fa-0e0b-4141-a3ea-6a67bc2780c6"/>
 				<textElement>
 					<font size="8"/>
@@ -647,7 +647,7 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				</textElement>
 				<text><![CDATA[Tot.Facturas:]]></text>
 			</staticText>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="455" y="26" width="70" height="12" uuid="ef85fe6a-4906-4d2d-9ef9-ce9442552738"/>
 				<textElement>
 					<font size="8"/>
@@ -668,105 +668,105 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				</textElement>
 				<text><![CDATA[Tot.Crédito:]]></text>
 			</staticText>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="117" y="111" width="86" height="13" uuid="d92dec90-24a9-4204-b87b-e2287299b2e8"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTCRED}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="118" y="98" width="85" height="13" uuid="f0f3a1bd-c665-4aad-9d75-c60883d2b443"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTCONTA}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="281" y="64" width="92" height="13" uuid="e2d09550-d49c-4512-acb3-328500f78e9c"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{CANTDEV}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="281" y="77" width="93" height="13" uuid="d2c7825d-235f-45b8-933f-4a4bb8658b77"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{CANTDEVP}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="280" y="25" width="93" height="13" uuid="e4218ab5-69f3-47c3-853a-56bf7dcfd7ff"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{CANTCA}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="281" y="51" width="92" height="13" uuid="5fe7ee7e-af1c-4352-a3dc-2d42ee5397c2"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{CANTPE}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="278" y="38" width="95" height="13" uuid="2b5371cf-4465-4e16-bcb2-ade9f8546868"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{CANTCO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="455" y="51" width="70" height="13" uuid="caf0e28b-a45a-4118-b2e0-31a7bdee55ef"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTSUBTO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="455" y="38" width="70" height="13" uuid="09135ec0-8808-4294-a24e-b0621f2aa456"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTIMPUE}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="455" y="64" width="70" height="13" uuid="f7340f53-f15b-4e80-b1c0-0e04631360a3"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTCOST}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="456" y="113" width="69" height="13" uuid="99d48e05-1cb6-42ca-959a-cfba0ee1e5d7"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTTIK}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="456" y="126" width="69" height="13" uuid="54983932-1e5d-4cad-8072-bd33c04e116d"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTREM}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="456" y="139" width="69" height="14" uuid="6edf276e-b42e-4412-bc07-42614ff04f05"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTFAC}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="456" y="152" width="69" height="13" uuid="bb0760ba-7017-4b2d-8499-0e1a7f34380a"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTNOT}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="456" y="101" width="67" height="13" uuid="8fc7a441-41f8-4e5e-b45d-c9528e38c3b3"/>
 				<textElement>
 					<font size="8"/>
@@ -780,7 +780,7 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				</textElement>
 				<text><![CDATA[Tot.PEPS:]]></text>
 			</staticText>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="456" y="89" width="67" height="13" uuid="4afccd7f-9ebf-4b0e-bb86-def3a6e735ff"/>
 				<textElement>
 					<font size="8"/>
@@ -794,7 +794,7 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				</textElement>
 				<text><![CDATA[Tot.Prom.Costo:]]></text>
 			</staticText>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="456" y="76" width="67" height="13" uuid="50afcccc-6a49-4572-868f-10100f752158"/>
 				<textElement>
 					<font size="8"/>

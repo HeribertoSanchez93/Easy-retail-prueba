@@ -2977,7 +2977,8 @@ public class NewNot extends javax.swing.JFrame
             SimpleDateFormat sdf= new SimpleDateFormat("yyy-MM-dd hh:mm:ss");
             sCatGral            = sdf.format(fe);      
         }
-        
+        sFDoc   = sFDoc.replace("'", "");
+        System.out.println(sFDoc);
         /*Declara variables final para el thead*/
         final String sConFacFi  = sConFac;    
         final String sVtaFi     = sVta;

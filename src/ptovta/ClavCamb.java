@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import java.sql.Statement;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static ptovta.Login.sUsrG;
 
@@ -17,7 +18,7 @@ import static ptovta.Login.sUsrG;
 
 
 /*Clase para cambiar las passs de seguridad*/
-public class ClavCamb extends javax.swing.JFrame 
+public class ClavCamb extends javax.swing.JDialog 
 {
     /*Declara variables de instancia*/
     private static ClavCamb             obj = null;
@@ -27,8 +28,9 @@ public class ClavCamb extends javax.swing.JFrame
     
     
     /*Consructor sin argumentos*/
-    public ClavCamb() 
+    public ClavCamb(JFrame padre, boolean modal) 
     {
+        super(padre,modal);
         /*Inicializa los componentes gráfcos*/
         initComponents();
         
@@ -42,10 +44,9 @@ public class ClavCamb extends javax.swing.JFrame
         jLAyu.setVisible(false);
         
         /*Centra la ventana*/
-        this.setLocationRelativeTo(null);
-        
         this.setTitle("Cambiar clave de seguridad");
-
+        this.setLocation(540, 70);
+        
         //Que sea modal el frame
         this.setAlwaysOnTop(true);
         //Establece el ícono de la forma
@@ -61,7 +62,7 @@ public class ClavCamb extends javax.swing.JFrame
     {
         /*Si es null entonces crea una nueva instancia*/
         if(obj==null)
-            obj = new ClavCamb();
+            obj = new ClavCamb(null,true);
         
         /*Devuelve el resultado*/
         return obj;
@@ -473,8 +474,8 @@ public class ClavCamb extends javax.swing.JFrame
         try 
         {            
             sQ = "UPDATE estacs SET "
-                    + "pass         = '" + sClaNew.replace("'", "''") + "', "
-                    + "WHERE uso    = '"+ Login.sUsrG.replace("'", "''") + "', ";                    
+                    + "pass         = '" + sClaNew.replace("'", "''") + "' "
+                    + "WHERE estac    = '"+ Login.sUsrG.replace("'", "''") + "'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
          }

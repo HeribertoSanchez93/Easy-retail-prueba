@@ -368,7 +368,7 @@ public class WebcamLock {
 		long now = System.currentTimeMillis();
 		long tsp = read();
 
-		LOG.trace("Lock timestamp {} now {} for {}", tsp, now, webcam);
+		//LOG.trace("Lock timestamp {} now {} for {}", tsp, now, webcam);
 
 		if(tsp > now - INTERVAL * 2) {
 			return true;

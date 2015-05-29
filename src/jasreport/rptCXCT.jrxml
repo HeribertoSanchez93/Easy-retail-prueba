@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="133"/>
 	<parameter name="F_D" class="java.lang.String"/>
 	<parameter name="F_A" class="java.lang.String"/>
 	<parameter name="EMP" class="java.lang.String"/>
@@ -331,7 +331,7 @@ ELSE empre = '$P!{EMP}' END]]>
 				</textElement>
 				<text><![CDATA[Ventas]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="2" y="26" width="61" height="20" uuid="2a59d4d8-42b2-4d0b-a3bb-0625f5e940ac"/>
 				<textElement>
 					<font size="7"/>
@@ -348,21 +348,21 @@ ELSE empre = '$P!{EMP}' END]]>
 				</textElement>
 				<text><![CDATA[Totales:]]></text>
 			</staticText>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="229" y="13" width="41" height="13" uuid="3847f97b-4027-4918-a916-b849a5d33afb"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOT}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="523" y="13" width="32" height="13" uuid="0334556c-53ec-46c4-a5ad-d8af5240720d"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTABON}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="229" y="26" width="41" height="14" uuid="289e3c80-156a-4073-b2d7-b7e3c87feb09"/>
 				<textElement>
 					<font size="7"/>

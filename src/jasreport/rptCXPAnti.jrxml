@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="268"/>
 	<parameter name="F_D" class="java.lang.String"/>
 	<parameter name="EMP" class="java.lang.String"/>
 	<parameter name="LOG" class="java.lang.String"/>
@@ -217,35 +217,35 @@ FROM (SELECT cxp.PROV, SUM(carg) AS carg, SUM(abon) AS abon,DATEDIFF(DATE(NOW())
 			<line>
 				<reportElement stretchType="RelativeToTallestObject" x="3" y="10" width="550" height="1" uuid="f9bea13c-c8a0-41d5-bb3a-8eec85b3a341"/>
 			</line>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="255" y="32" width="76" height="13" uuid="7e976e22-2281-4328-ba69-dda4b8ac693b"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTVEN}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="333" y="32" width="57" height="13" uuid="0ebf0342-b6a0-42db-89f3-6dc1cef196ab"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOT115}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="390" y="32" width="62" height="13" uuid="4a742fb1-0c74-4572-93b8-da77f9620d6a"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOT1630}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="455" y="32" width="46" height="13" uuid="3045e925-fd15-4f50-b2af-a30639945b02"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOT3145}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="501" y="32" width="52" height="13" uuid="ac84bb82-bab6-4b22-9a8c-0782721b73e9"/>
 				<textElement>
 					<font isBold="true"/>

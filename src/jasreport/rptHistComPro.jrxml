@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="e2bb3699-10b2-48e9-bd03-8356a2b16ecb">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="70"/>
 	<parameter name="FechaIni" class="java.util.Date">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -65,7 +65,7 @@ WHERE b.prov=c.prov  AND CASE WHEN $P{PROV}='' THEN 1=1 ELSE $P{PROV}=c.prov END
 					</textElement>
 					<text><![CDATA[Saldo Inicial:]]></text>
 				</staticText>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="100" y="20" width="455" height="20" uuid="e48bde5b-5ef2-4202-bd75-bfa956db1728"/>
 					<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
 				</textField>
@@ -97,7 +97,7 @@ WHERE b.prov=c.prov  AND CASE WHEN $P{PROV}='' THEN 1=1 ELSE $P{PROV}=c.prov END
 					</textElement>
 					<text><![CDATA[Código:]]></text>
 				</staticText>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="100" y="0" width="455" height="20" uuid="a209901b-3546-42cb-b4d3-bf6ae1d76b05"/>
 					<textFieldExpression><![CDATA[$F{prov}]]></textFieldExpression>
 				</textField>
@@ -115,7 +115,7 @@ WHERE b.prov=c.prov  AND CASE WHEN $P{PROV}='' THEN 1=1 ELSE $P{PROV}=c.prov END
 					</textElement>
 					<text><![CDATA[Fol:]]></text>
 				</staticText>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="463" y="40" width="92" height="20" uuid="8aa203e7-cef4-4bce-8d42-ee73abc97a33"/>
 					<textFieldExpression><![CDATA[$F{totalIni}]]></textFieldExpression>
 				</textField>
@@ -144,7 +144,7 @@ WHERE b.prov=c.prov  AND CASE WHEN $P{PROV}='' THEN 1=1 ELSE $P{PROV}=c.prov END
 					</textElement>
 					<text><![CDATA[Saldo a la fecha:]]></text>
 				</staticText>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="461" y="11" width="88" height="20" uuid="dc187d69-b4df-4634-b06f-3b95cac2c073"/>
 					<textFieldExpression><![CDATA[$F{totalFec}]]></textFieldExpression>
 				</textField>

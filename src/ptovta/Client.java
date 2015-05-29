@@ -740,6 +740,11 @@ public class Client extends javax.swing.JFrame
                 jTCallFocusLost(evt);
             }
         });
+        jTCall.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTCallActionPerformed(evt);
+            }
+        });
         jTCall.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTCallKeyPressed(evt);
@@ -6207,6 +6212,10 @@ public class Client extends javax.swing.JFrame
             evt.consume();    
     // TODO add your handling code here:
     }//GEN-LAST:event_jTCelKeyTyped
+
+    private void jTCallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTCallActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTCallActionPerformed
     
     
     /*Función escalable para cuando se presiona una tecla en el módulo*/
