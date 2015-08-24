@@ -48,14 +48,22 @@ public class Clients extends javax.swing.JFrame
     /*Para controlar si seleccionar todo o deseleccionarlo de la tabla*/
     private boolean          bSel;
     
-    
-    
+    //Permiso de modificar
+    private boolean permisoMod;
     
     /*Constructor sin argumentos*/
-    public Clients() 
+    public Clients(java.util.ArrayList<Boolean> permisos) 
     {
         /*Inicaliza los componentes gráficos*/
         initComponents();
+        
+        //Reviso Permisos
+        jBNew.setEnabled(permisos.get(0));
+        if(permisos.get(1) || permisos.get(2)){
+            permisoMod = permisos.get(1);
+        }
+        jBDel.setEnabled(permisos.get(3));
+        jBCorr.setEnabled(permisos.get(4));
         
         /*Obtiene el color original que deben tener los botones*/
         colOri  = jBSal.getBackground();
@@ -728,7 +736,7 @@ public class Clients extends javax.swing.JFrame
         /*Mostrar el formulario de cliente*/        
         if(Star.gClient==null)
         {            
-            Star.gClient = new Client(jTab, "");
+            Star.gClient = new Client(jTab, "", permisoMod);
             Star.gClient.setVisible(true);
         }
         else
@@ -775,7 +783,7 @@ public class Clients extends javax.swing.JFrame
             /*Muestra el gráfico de modificar cliente*/
             if(Star.gClient==null)
             {            
-                Star.gClient = new Client(jTab, jTab.getValueAt(iSel[x], 1).toString());
+                Star.gClient = new Client(jTab, jTab.getValueAt(iSel[x], 1).toString(), permisoMod);
                 Star.gClient.setVisible(true);
             }
             else

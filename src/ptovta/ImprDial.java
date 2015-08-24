@@ -507,7 +507,7 @@ public class ImprDial extends javax.swing.JFrame
 
                                 /*Dales formato de moneda al subtot*/                                
                                 double dCant    = Double.parseDouble(sSubTot);                
-                                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                                 sSubTot         = n.format(dCant);
 
                                 /*Dales formato de moneda al impuesto*/

@@ -491,7 +491,7 @@ public class VOrds extends javax.swing.JFrame
                 sTot            = rs.getString("ords.TOT");                                                   
                 
                 /*Dales formato de moneda a los campos que lo requieren*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sImp);                                
                 sImp            = n.format(dCant);
                 dCant           = Double.parseDouble(sImpue);                                
@@ -999,7 +999,7 @@ public class VOrds extends javax.swing.JFrame
                 String sTot     = rs.getString("ords.TOT");                                                   
                 
                 /*Dales formato de moneda a los campos que lo requieren*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sImp);                                
                 sImp            = n.format(dCant);
                 dCant           = Double.parseDouble(sImpue);                                

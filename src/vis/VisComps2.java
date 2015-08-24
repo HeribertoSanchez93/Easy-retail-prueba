@@ -300,7 +300,7 @@ public class VisComps2 extends javax.swing.JFrame
                 String sImpo    = rs.getString("impo");                
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sPre);                
                 sPre            = n.format(dCant);
                 dCant           = Double.parseDouble(sImpo);                

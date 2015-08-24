@@ -2,6 +2,7 @@
 package ptovta;
 
 //Importaciones
+import java.awt.Color;
 import java.awt.Cursor;
 import static ptovta.Princip.bIdle;
 import java.awt.event.KeyEvent;
@@ -23,6 +24,11 @@ import java.sql.Statement;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+/*26 05 2015*/
+/*Felipe Ruiz Garcia*/
+/*Clases para la expresion regular del correo*/
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 
@@ -47,10 +53,24 @@ public class BDCon extends javax.swing.JDialog
     
     /*Constructor sin argumentos*/
     public BDCon(boolean bS) 
-    {                
+    {          
         /*Inicaliza los componentes gráficos*/
         initComponents();
-     
+      
+        /*25 06 2015 Heriberto Daniel Sanchez Peña*/
+        /*Se añadieron dos radio buttons para indicar si la terminal sera on-line u off-line*/
+        /*Al cargar el formulario se dejan invisibles, ya que estos dependen del check box de estacion de trabajo*/
+        
+        rbOff.setToolTipText("El nombre de la empresa debe de ser el mismo que en el servidor");
+        
+        // 03 Julio 2015 // Heriberto // Configuracion de sistema
+        jTNom.setEnabled(true); 
+        rbOn.setEnabled(false);
+        rbOff.setEnabled(false);
+        rbOn.setSelected(false);
+        rbOff.setSelected(false);
+        jTNom.setToolTipText("");
+           
         //Que sea modal
         this.setModal(true);
         
@@ -170,8 +190,8 @@ public class BDCon extends javax.swing.JDialog
         if(Star.sEstacTrab.compareTo("1")==0)
             jCEstaT.setSelected(true);
         else
-            jCEstaT.setSelected(false);                               
-                
+            jCEstaT.setSelected(false);    
+        
     }/*Fin de public BDCon() */
 
     /*Clase para guardar los datos de la conexión local*/
@@ -196,9 +216,10 @@ public class BDCon extends javax.swing.JDialog
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jP1 = new javax.swing.JPanel();
         jBGua = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        labelEmail = new javax.swing.JLabel();
         jBSal = new javax.swing.JButton();
         jTInst = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -229,6 +250,10 @@ public class BDCon extends javax.swing.JDialog
         jTPort = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jTPortLoc = new javax.swing.JTextField();
+        textEmail = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        rbOff = new javax.swing.JRadioButton();
+        rbOn = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
@@ -291,13 +316,13 @@ public class BDCon extends javax.swing.JDialog
         });
         jP1.add(jBGua, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, 120, 30));
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("*Numero Caja:");
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jP1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 220, -1));
+        labelEmail.setBackground(new java.awt.Color(255, 255, 255));
+        labelEmail.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        labelEmail.setForeground(new java.awt.Color(51, 51, 51));
+        labelEmail.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelEmail.setText("*Correo Electrónico:");
+        labelEmail.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jP1.add(labelEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 330, 220, -1));
 
         jBSal.setBackground(new java.awt.Color(255, 255, 255));
         jBSal.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
@@ -377,6 +402,16 @@ public class BDCon extends javax.swing.JDialog
                 jTBDFocusLost(evt);
             }
         });
+        jTBD.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTBDMouseClicked(evt);
+            }
+        });
+        jTBD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTBDActionPerformed(evt);
+            }
+        });
         jTBD.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTBDKeyPressed(evt);
@@ -442,6 +477,11 @@ public class BDCon extends javax.swing.JDialog
                 jTNomFocusLost(evt);
             }
         });
+        jTNom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTNomActionPerformed(evt);
+            }
+        });
         jTNom.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTNomKeyPressed(evt);
@@ -493,7 +533,7 @@ public class BDCon extends javax.swing.JDialog
                 jCEstaTKeyPressed(evt);
             }
         });
-        jP1.add(jCEstaT, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 160, -1));
+        jP1.add(jCEstaT, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 130, -1));
 
         jCMosC.setBackground(new java.awt.Color(255, 255, 255));
         jCMosC.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -509,7 +549,7 @@ public class BDCon extends javax.swing.JDialog
                 jCMosCKeyPressed(evt);
             }
         });
-        jP1.add(jCMosC, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, 160, -1));
+        jP1.add(jCMosC, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, 140, -1));
 
         jLabel6.setBackground(new java.awt.Color(255, 255, 255));
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -557,6 +597,11 @@ public class BDCon extends javax.swing.JDialog
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTNoCajFocusLost(evt);
+            }
+        });
+        jTNoCaj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTNoCajActionPerformed(evt);
             }
         });
         jTNoCaj.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -685,7 +730,7 @@ public class BDCon extends javax.swing.JDialog
                 jLAyuMouseExited(evt);
             }
         });
-        jP1.add(jLAyu, new org.netbeans.lib.awtextra.AbsoluteConstraints(346, 370, 120, -1));
+        jP1.add(jLAyu, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 400, 120, -1));
 
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -755,6 +800,68 @@ public class BDCon extends javax.swing.JDialog
         });
         jP1.add(jTPortLoc, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 230, 230, 20));
 
+        textEmail.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        textEmail.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
+        textEmail.setNextFocusableComponent(jBGua);
+        textEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                textEmailFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                textEmailFocusLost(evt);
+            }
+        });
+        textEmail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                textEmailMouseClicked(evt);
+            }
+        });
+        textEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textEmailActionPerformed(evt);
+            }
+        });
+        textEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textEmailKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textEmailKeyTyped(evt);
+            }
+        });
+        jP1.add(textEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 350, 220, 20));
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("*Numero Caja:");
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jP1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 220, -1));
+
+        rbOff.setBackground(new java.awt.Color(255, 255, 255));
+        rbOff.setText("Off-line");
+        rbOff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbOffActionPerformed(evt);
+            }
+        });
+        jP1.add(rbOff, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 310, -1, -1));
+
+        rbOn.setBackground(new java.awt.Color(255, 255, 255));
+        rbOn.setText("On-line");
+        rbOn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbOnActionPerformed(evt);
+            }
+        });
+        rbOn.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                rbOnPropertyChange(evt);
+            }
+        });
+        jP1.add(rbOn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 290, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -778,16 +885,37 @@ public class BDCon extends javax.swing.JDialog
     
     /*Cuando se presiona el botón de guardar*/
     private void jBGuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuaActionPerformed
+ /* Felipe Ruiz Garcia 29 05 2015 */
+        /* se activa la alerta al momento de dar click con el mensaje de que es necesario un email valido */
+        /*Mensajea*/
+        JOptionPane.showMessageDialog(null, "Es necesario que proporcione un correo electrónico valido al cual se le enviara la contraseña para que pueda iniciar el sistema", "Atención", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+        
+        // 13 Julio 2015 Felipe Ruiz Garcia
+        // Creacion de la base de datos test
+        // Metodo crea table test
+        Star.vCreaBDTest(jTInstLoc.getText().trim(),  jTPort.getText().trim(), jTUsr.getText().trim(), jPCont.getText().trim());
         
         /*Lee el nombre de la empresa*/
         Star.sNombreEmpresa = jTNom.getText().trim();
+        
+        // THIS IS TEST -- Felipe Ruiz Garcia / Carlos Ramirez Ramirez
+            
+            int z=Star.sNombreEmpresa.length();
+            z--;
+            for(;z>=0;z--)
+            if((Star.sNombreEmpresa.charAt(z) == '|')  || (Star.sNombreEmpresa.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "El nombre de la empresa no puede contener caracteres especiales." + "" + "", "Atención", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTNom.grabFocus();                   
+                    return ;
+            }            
         
         /*Si el checkbox de usuario de trabajo no esta marcado entonces*/
         if(!jCEstaT.isSelected())
         {
             /*Si el campo del nombre de la empresa esta vacio no puede seguir*/
             if(Star.sNombreEmpresa.compareTo("")==0)
-            {
+            { 
                 /*Coloca el borde rojo*/                               
                 jTNom.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
                         
@@ -798,7 +926,23 @@ public class BDCon extends javax.swing.JDialog
                 jTNom.grabFocus();
                 return;
             }
-        }                    
+        }
+        else if(jCEstaT.isSelected()&& rbOff.isSelected())
+        {
+             /*Si el campo del nombre de la empresa esta vacio no puede seguir*/
+            if(Star.sNombreEmpresa.compareTo("")==0)
+            { 
+                /*Coloca el borde rojo*/                               
+                jTNom.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+                        
+                /*Mensajea*/
+                JOptionPane.showMessageDialog(null, "El campo del nombre de la empresa esta vacio.", "Campo vacio", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+                /*Coloca el foco del teclado en el campo y regresa*/
+                jTNom.grabFocus();
+                return;
+            }
+        }
         
         /*Lee la instancia*/
         Star.sInstancia  = jTInst.getText().trim();
@@ -815,6 +959,54 @@ public class BDCon extends javax.swing.JDialog
             /*Coloca el foco del teclado en el campo y regresa*/
             jTInst.grabFocus();           
             return;
+        }
+        
+        /*26 05 2015 Felipe Ruiz Garcia*/
+        /* Obtengo el campo Correo Electronico de la forma y lo guardo */
+        Star.correoRegistro  =  textEmail.getText().trim();
+        
+        /*Si el campo Email esta vacio*/
+        if(Star.correoRegistro.compareTo("")==0)
+        {
+            /*Coloca el borde rojo*/                               
+            textEmail.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            
+            /*Mensajea*/
+            JOptionPane.showMessageDialog(null, "El campo de correo electrónico esta vacio.", "Campo vacio", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            /*Coloca el foco del teclado en el campo*/
+            textEmail.grabFocus();           
+            return;
+        } 
+        /*Si el campo Email no esta vacio analizamos si es valido */
+        else {
+            
+        /*Expresion regular*/ /* felipe.ruiz@sos-soft.com */
+        Pattern pat = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@[A-Za-z0-9|-]+(\\.[A-Za-z0-9|-]+)*(\\.[A-Za-z]{2,})$");
+        Matcher mat = pat.matcher(Star.correoRegistro);
+        
+        /* si el Email NO es valido */
+        /* se le hace saber al usuario */
+        if (!mat.find()) {
+            
+            
+            /*Coloca el borde rojo*/                               
+            textEmail.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            
+            /*Mensajea*/
+            JOptionPane.showMessageDialog(null, "El correo electrónico es invalido.\nPor favor ingresa un correo electrónico valido.", "Correo electrónico invalido", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            /*Coloca el foco del teclado en el campo*/
+            textEmail.grabFocus();           
+            return;   
+            } 
+        /* Si el Email es valido entonces */
+        else {
+            
+            /*Restablecemos color del borde*/
+            textEmail.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(204,204,255)));
+            
+            }   
         }
         
         /*Lee el usuario*/
@@ -959,8 +1151,8 @@ public class BDCon extends javax.swing.JDialog
             return;
         }                           
                 
-        //Si es estación de trabajo entonces
-        if(jCEstaT.isSelected())
+        //Si es estación de trabajo on-line entonces
+        if(jCEstaT.isSelected()&&!rbOff.isSelected())
         {
             //Coloca la bandera
             Star.sEstacTrab  = "1";
@@ -975,7 +1167,7 @@ public class BDCon extends javax.swing.JDialog
             //Cierra la base de datos
             Star.iCierrBas(con);                                 
         }
-        //Else es conexión servidora entonces
+        //Else es conexión servidora o es terminal off-line entonces
         else
         {
             //Coloca la bandera
@@ -1022,19 +1214,78 @@ public class BDCon extends javax.swing.JDialog
                 /*Inicia la MAC*/
                 sMAC    = sb.toString();
             }
-            catch(UnknownHostException expnUnknowHos) 
+            catch(UnknownHostException | SocketException e) 
             {
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnUnknowHos.getMessage(), Star.sErrUnknowHos, expnUnknowHos.getStackTrace());
-                return;                        
-            }                        
-            catch(SocketException expnSock)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSock.getMessage(), Star.sErrSock, expnSock.getStackTrace());
-                return;                        
+                /*Mensajea y regresa*/
+                JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE, null); 
+                return;
             }
-                        
+            System.out.println(sMAC);
+            
+                
+            /*Manda a pedir al servidor la serie, la fecha de instalación y el contador de días de este usuario, ya sea un nuevo registro o no*/
+            String sSer;
+            System.out.println(sMAC);
+            System.out.println(Star.sCadVerif);
+            System.out.println(Star.sNomProd);
+            String test=Star.sEncyMy(sMAC + Star.sCadVerif + Star.sNomProd);
+          
+           
+            System.out.println(test);
+            try
+            {
+                sSer    = vGivMac(test);                                                
+            }
+            catch(Exception e)
+            {                
+                /*Mensajea y regresa*/
+                JOptionPane.showMessageDialog(null, "Se necesita conexión a internet para poder continuar con la instalación. Por favor revisa tu conexión para continuar. Error: " + e.getMessage(), "Instalación", JOptionPane.ERROR_MESSAGE, null); 
+                return;
+            }
+            System.out.println("llego");
+            /*Desencripta la serie recibida*/
+            sSer    = Star.sDencyMy(sSer);
+            
+            /*Si hubo error entonces*/
+            if(sSer.contains("<ERROR>"))
+            {
+                /*Mensajea y regresa*/
+                JOptionPane.showMessageDialog(null, "Error del servidor: " + sSer, "Error Servidor", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                return;
+            }
+            
+            /*Tokeniza la serie para obtener la serie correcta, la fecha de instalación y los días que mando el servidor como contador*/            
+            java.util.StringTokenizer stk = new java.util.StringTokenizer(sSer, "|");
+            sSer        = stk.nextToken();
+            String sCont= stk.nextToken();
+            String sFAlt= stk.nextToken();
+            
+            /*Instancia la clase de validación para serializarla*/               
+            SerVali ser         = new SerVali();
+            ser.sSer            = Star.sEncrip(sSer); 
+            ser.sMac            = Star.sEncrip(sMAC); 
+            ser.sFech           = Star.sEncrip(sFAlt);
+            ser.sCont           = Star.sEncrip(sCont);
+            ser.sKey            = Star.sEncrip("");
+
+            /*Serializa el objeto de validación en un archivo*/
+            try
+            {
+                FileOutputStream fi     = new FileOutputStream(Star.sArchVal);
+                ObjectOutputStream out  = new ObjectOutputStream(fi);
+                out.writeObject(ser);
+                out.close();
+                fi.close();
+            }
+            catch(IOException ex)
+            {
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                /*Mensajea y regresa*/
+                JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + ex.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+                return;
+            }               
             /*Si no es estación de trabajo entonces*/
             if(Star.sEstacTrab.compareTo("0")==0)
             {               
@@ -1104,6 +1355,22 @@ public class BDCon extends javax.swing.JDialog
                     vDelBDLoc   (Star.sBD + "_tmp");
                     return;
                 }
+                
+                /*25 06 2015 Heriberto Daniel Sanchez Peña*/
+                /*Coloca una bandera para indicar si sera un servidor o sera una estacion de trabajo*/
+                /*Si es una estacion de trabajo tambien indica si sera en versión on-line u off-line*/
+                
+                if(jCEstaT.isSelected())
+                {
+                    Star.bEstacTrab = 1;
+                    if(rbOff.isSelected())
+                        Star.tTipoDeEsta=1;
+                }
+                else
+                {
+                    Star.bEstacTrab = 0; 
+                }
+        
                 
                 /*Crea toda la estructura de la base de datos servidora por medio de esta forma*/
                 LoadinBD lo     = new LoadinBD("Iniciando creación de estructura de base de datos servidora...", "Creando estructura de base de datos servidora...", Star.sBD, Star.sInstancia, Star.sUsuario, Star.sContrasenia, Star.sPort);                
@@ -1197,11 +1464,7 @@ public class BDCon extends javax.swing.JDialog
         }   
         
         /*Si es usuario de trabajo entonces marca la bandera del otro formulario*/
-        if(jCEstaT.isSelected())
-            Star.bEstacTrab = true;
-        else
-            Star.bEstacTrab = false;               
-        
+       
         //Si el usuario entro desde la forma principal entonces
         if(!bSal)
         {
@@ -1479,6 +1742,13 @@ public class BDCon extends javax.swing.JDialog
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
         
+        /* 29 05 2015 Felipe Ruiz Garcia / Carlos Ramirez Ramirez */
+        /* No permite la inserccion de los simbolos | ¬  \b */
+        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
+        {}
+        else
+            evt.consume();
+        
     }//GEN-LAST:event_jTNomKeyTyped
 
     
@@ -1503,6 +1773,10 @@ public class BDCon extends javax.swing.JDialog
     
     /*Cuando se presiona el botón de probar conexión*/
     private void jBProbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBProbActionPerformed
+        // 13 Julio 2015 Felipe Ruiz Garcia
+        // Creacion de la base de datos test
+        // Metodo crea table test
+        Star.vCreaBDTest(jTInstLoc.getText().trim(),  jTPort.getText().trim(), jTUsr.getText().trim(), jPCont.getText().trim());
         
         /*Si el campo de instancia esta vacio no puede seguir*/
         if(jTInst.getText().trim().compareTo("")==0)
@@ -1617,9 +1891,20 @@ public class BDCon extends javax.swing.JDialog
         if(jCEstaT.isSelected())
         {
             jTNom.setEnabled(false);
+            rbOn.setEnabled(true);
+            rbOff.setEnabled(true);
+            rbOn.setSelected(true);
         }
         else
-            jTNom.setEnabled(true);
+        {
+           jTNom.setEnabled(true); 
+           rbOn.setEnabled(false);
+           rbOff.setEnabled(false);
+           rbOn.setSelected(false);
+           rbOff.setSelected(false);
+           jTNom.setToolTipText("");
+        }
+            
         
     }//GEN-LAST:event_jCEstaTActionPerformed
 
@@ -1767,7 +2052,11 @@ public class BDCon extends javax.swing.JDialog
     
     /*Cuando se presiona el botón de probar conexión local*/
     private void jBProbLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBProbLocActionPerformed
-
+        // 13 Julio 2015 Felipe Ruiz Garcia
+        // Creacion de la base de datos test
+        // Metodo crea table test
+        Star.vCreaBDTest(jTInstLoc.getText().trim(),  jTPort.getText().trim(), jTUsr.getText().trim(), jPCont.getText().trim());
+        
         /*Si el campo de instancia esta vacio no puede seguir*/
         if(jTInstLoc.getText().trim().compareTo("")==0)
         {
@@ -1936,11 +2225,69 @@ public class BDCon extends javax.swing.JDialog
         jTBD.setCaretPosition(0);
         
         /*Coloca el borde negro si tiene datos, caso contrario de rojo*/                               
-        if(jTBD.getText().compareTo("")!=0)
+        if(jTBD.getText().compareTo("")!=0){
             jTBD.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204,204,255)));
         
+            
+            /* Felipe Ruiz Garcia 29 05 2015 */
+            /* Valida que el nombre de la base de datos no comienze con un numero y no contenga caracteres especiales */
+            
+        String r =  jTBD.getText();
+        
+        if( !analizaInicio(r)){
+    
+            /* mensaje de alerta si el nombre de la base de datos inicia con numero */
+            JOptionPane.showMessageDialog(null, "El nombre base de datos no puede iniciar con números, operadores o caracteres especiales.\n\tPor favor ingrese un nombre valido.", "Base de datos invalida", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            /*Coloca el borde rojo*/                               
+           jTBD.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            
+            /*Coloca el foco del teclado en el campo*/
+            jTBD.grabFocus();    
+            }
+        /*ELSE IF para que muestre un error por intento, y no los dos de una sola vez */
+        else if(!analizaToda(r)){
+            
+            /* mensaje de alerta si el nombre de la base de datos contiene caracteres especiales no permitidos*/
+            JOptionPane.showMessageDialog(null, "El nombre base de datos no puede contener operadores o caracteres especiales.\n\tPor favor ingrese un nombre valido.", "Base de datos invalida", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            
+             /*Coloca el borde rojo*/                               
+           jTBD.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            
+            /*Coloca el foco del teclado en el campo*/
+            jTBD.grabFocus();    
+            
+        }
+        }
     }//GEN-LAST:event_jTBDFocusLost
 
+    /*29 05 2015 Felipe Ruiz Garcia */
+    /*Esta funcion recibe una cadena y analiza si el primer caracter es digito, operador, o caracter especial */
+    /*regresa true si si comienza con letra... *//* de lo contrario regresa false */
+    
+    boolean analizaInicio(String cadena){
+        
+        /* guardamos el primer caracter de la cadena */
+        char x = cadena.charAt(0);
+        
+        /* retornamos false si no es letra */
+        return Character.isLetter(x);
+    }
+    
+    /*29 05 2015 Felipe Ruiz Garcia */
+    /*Esta funcion recibe una cadena y analiza que todos sus caracteres sean letras y numero */
+    /*regresa true si solo contiene letras y numeros ... *//* de lo contrario regresa false */
+    
+    boolean analizaToda(String cadena){
+        
+        /*analizamos toda la cadena*/
+        for( char x : cadena.toCharArray()){
+            if(!Character.isDigit(x) && !Character.isLetter(x)){
+                return false;
+            }
+        }
+        return true;
+    }
     
     /*Cuando se pierde el foco del teclado en el control de sucursal*/
     private void jTSucFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTSucFocusLost
@@ -2161,6 +2508,81 @@ public class BDCon extends javax.swing.JDialog
             evt.consume();
         
     }//GEN-LAST:event_jTPortLocKeyTyped
+
+    private void textEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textEmailFocusGained
+        
+    }//GEN-LAST:event_textEmailFocusGained
+
+    private void textEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textEmailFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textEmailFocusLost
+
+    private void textEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textEmailKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textEmailKeyPressed
+
+    private void textEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textEmailKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textEmailKeyTyped
+
+    private void textEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textEmailActionPerformed
+        
+        
+    }//GEN-LAST:event_textEmailActionPerformed
+
+    private void jTNoCajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTNoCajActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTNoCajActionPerformed
+
+    private void textEmailMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textEmailMouseClicked
+    
+       
+    }//GEN-LAST:event_textEmailMouseClicked
+
+    private void jTBDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBDMouseClicked
+
+
+    }//GEN-LAST:event_jTBDMouseClicked
+
+    private void jTBDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTBDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTBDActionPerformed
+
+    private void jTNomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTNomActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTNomActionPerformed
+
+    private void rbOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbOffActionPerformed
+        if(rbOff.isSelected())
+        {
+            jTNom.setEnabled(true);
+            jTNom.setToolTipText("El nombre de la empresa debe de ser el mismo que en el servidor");
+            rbOn.setSelected(false);
+            
+        }
+        else
+        {
+            rbOff.setSelected(true);
+        }
+    }//GEN-LAST:event_rbOffActionPerformed
+
+    private void rbOnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbOnActionPerformed
+       if(rbOn.isSelected())
+       {
+           jTNom.setEnabled(false);
+           rbOff.setSelected(false);
+           jTNom.setToolTipText("");
+       }
+       else
+       {
+           rbOn.setSelected(true);
+       }
+    }//GEN-LAST:event_rbOnActionPerformed
+
+    private void rbOnPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_rbOnPropertyChange
+        // TODO add your handling code here:
+    
+    }//GEN-LAST:event_rbOnPropertyChange
         
            
     /*Función escalable para cuando se presiona una tecla en el módulo*/
@@ -2251,6 +2673,7 @@ public class BDCon extends javax.swing.JDialog
    
         
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jBGua;
     private javax.swing.JButton jBProb;
     private javax.swing.JButton jBProbLoc;
@@ -2284,6 +2707,10 @@ public class BDCon extends javax.swing.JDialog
     private javax.swing.JTextField jTSuc;
     private javax.swing.JTextField jTUsr;
     private javax.swing.JTextField jTUsrLoc;
+    private javax.swing.JLabel labelEmail;
+    private javax.swing.JRadioButton rbOff;
+    private javax.swing.JRadioButton rbOn;
+    private javax.swing.JTextField textEmail;
     // End of variables declaration//GEN-END:variables
                 
 }/*Fin de public class Clientes extends javax.swing.JFrame */

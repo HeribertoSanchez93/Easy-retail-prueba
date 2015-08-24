@@ -104,10 +104,14 @@ public class Client extends javax.swing.JFrame
     
     
     /*Consructor con argumento*/
-    public Client(JTable jTabEmpsas, String sCli) 
+    public Client(JTable jTabEmpsas, String sCli, final boolean permiso) 
     {        
         /*Inicializa los componentes gráfcos*/
         initComponents();
+        
+        //(Des)habilita el boton guardar
+        jBGuar.setEnabled(permiso);
+        
         if(sCli.compareTo("")==0)
         {
             jComSer.setVisible(true);
@@ -252,6 +256,10 @@ public class Client extends javax.swing.JFrame
         String sMetPag;
         String sCta;
         
+        //Obtiene las formas de pagos y cargalos en el combo
+        if(Star.iCargFormPagCom(con, jComFormPag)==-1)
+            return;
+        
         /*Carga de la base de datos del cliente en base a su código y serie los datos y ponlos en los controles de edición*/
         try
         {
@@ -289,13 +297,13 @@ public class Client extends javax.swing.JFrame
                 if(sLimCred.compareTo("")!=0)
                 {                    
                     double dCant    = Double.parseDouble(sLimCred);                
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     sLimCred        = n.format(dCant);                    
                 }                                
                 
-                /*Si el método de pago es cadena vacia entonces que sea no identificable*/
-                if(sMetPag.compareTo("")==0)
-                    sMetPag         = "No Identificado";
+//                /*Si el método de pago es cadena vacia entonces que sea no identificable*/
+//                if(sMetPag.compareTo("")==0)
+//                    sMetPag         = "No Identificado";
                 
                 /*Si la cuenta de pago es cadena vacia entonces que sea 0000*/
                 if(sCta.compareTo("")==0)
@@ -362,7 +370,7 @@ public class Client extends javax.swing.JFrame
                 jTNoExt.setText     (rs.getString("noext"));
                 jTDCred.setText     (rs.getString("diacred"));
                 jTLimCred.setText   (sLimCred);
-                jTMetPag.setText    (sMetPag);
+                jComFormPag.setSelectedItem(sMetPag);
                 jTCta.setText       (sCta);
                 jComList.setSelectedItem(rs.getString("list"));
                 jTClas.setText      (rs.getString("codclas"));
@@ -611,7 +619,6 @@ public class Client extends javax.swing.JFrame
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jTCta = new javax.swing.JTextField();
-        jTMetPag = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         jTClas = new javax.swing.JTextField();
@@ -668,6 +675,7 @@ public class Client extends javax.swing.JFrame
         jLabel50 = new javax.swing.JLabel();
         jTCtaPred = new javax.swing.JTextField();
         jCBloqCred = new javax.swing.JCheckBox();
+        jComFormPag = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
@@ -720,6 +728,9 @@ public class Client extends javax.swing.JFrame
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTRazSocKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTRazSocKeyTyped(evt);
+            }
         });
         jP1.add(jTRazSoc, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, 230, 20));
 
@@ -749,6 +760,9 @@ public class Client extends javax.swing.JFrame
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTCallKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTCallKeyTyped(evt);
+            }
         });
         jP1.add(jTCall, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 230, 20));
 
@@ -769,6 +783,9 @@ public class Client extends javax.swing.JFrame
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTColKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTColKeyTyped(evt);
+            }
         });
         jP1.add(jTCol, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 230, 20));
 
@@ -785,6 +802,9 @@ public class Client extends javax.swing.JFrame
         jTEstad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTEstadKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTEstadKeyTyped(evt);
             }
         });
         jP1.add(jTEstad, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 290, 230, 20));
@@ -809,6 +829,9 @@ public class Client extends javax.swing.JFrame
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTPaiKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTPaiKeyTyped(evt);
+            }
         });
         jP1.add(jTPai, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, 230, 20));
 
@@ -825,6 +848,9 @@ public class Client extends javax.swing.JFrame
         jTCiu.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTCiuKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTCiuKeyTyped(evt);
             }
         });
         jP1.add(jTCiu, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 270, 230, 20));
@@ -1027,7 +1053,6 @@ public class Client extends javax.swing.JFrame
         jTAObserv.setLineWrap(true);
         jTAObserv.setRows(5);
         jTAObserv.setBorder(null);
-        jTAObserv.setNextFocusableComponent(jTMetPag);
         jTAObserv.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTAObservFocusGained(evt);
@@ -1190,6 +1215,9 @@ public class Client extends javax.swing.JFrame
         jTNoExt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTNoExtKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTNoExtKeyTyped(evt);
             }
         });
         jP1.add(jTNoExt, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 210, 230, 20));
@@ -1466,23 +1494,6 @@ public class Client extends javax.swing.JFrame
             }
         });
         jP1.add(jTCta, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 390, 230, 20));
-
-        jTMetPag.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
-        jTMetPag.setNextFocusableComponent(jTCta);
-        jTMetPag.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTMetPagFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTMetPagFocusLost(evt);
-            }
-        });
-        jTMetPag.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTMetPagKeyPressed(evt);
-            }
-        });
-        jP1.add(jTMetPag, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 370, 230, 20));
 
         jLabel30.setText("Correo1:");
         jP1.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 54, -1, 10));
@@ -2172,6 +2183,23 @@ public class Client extends javax.swing.JFrame
         });
         jP1.add(jCBloqCred, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 130, 20));
 
+        jComFormPag.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jComFormPagFocusLost(evt);
+            }
+        });
+        jComFormPag.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComFormPagActionPerformed(evt);
+            }
+        });
+        jComFormPag.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jComFormPagKeyPressed(evt);
+            }
+        });
+        jP1.add(jComFormPag, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 370, 230, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -2197,6 +2225,8 @@ public class Client extends javax.swing.JFrame
     
     private int iNewCli(Connection con)
     {
+        String text;
+        int z;
         //Declara variables de la base de datos
         Statement   st;
         ResultSet   rs;          
@@ -2270,6 +2300,16 @@ public class Client extends javax.swing.JFrame
         //razon social existe
         if(jTRazSoc.getText().compareTo("") != 0)
         {
+            text=jTRazSoc.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "la razon social del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTRazSoc.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2280,6 +2320,16 @@ public class Client extends javax.swing.JFrame
         //calle existe
         if(jTCall.getText().compareTo("") != 0)
         {
+            text=jTCall.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "la calle del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTCall.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2300,6 +2350,16 @@ public class Client extends javax.swing.JFrame
         //falta numero de exterior
         if(jTNoExt.getText().compareTo("") != 0)
         {
+            text=jTNoExt.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "El numero del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTNoExt.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2310,6 +2370,16 @@ public class Client extends javax.swing.JFrame
         //falta numero de cp
         if(jTCP.getText().compareTo("") != 0)
         {
+            text=jTCP.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "El codigo postal del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTCP.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2320,6 +2390,16 @@ public class Client extends javax.swing.JFrame
         //falta cuidad
         if(jTCiu.getText().compareTo("") != 0)
         {
+            text=jTCiu.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "La cuidad del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTCiu.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2330,6 +2410,16 @@ public class Client extends javax.swing.JFrame
         //falta stado
         if(jTEstad.getText().compareTo("") != 0)
         {
+            text=jTEstad.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "El estado del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTEstad.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2340,6 +2430,16 @@ public class Client extends javax.swing.JFrame
         //falta pais
         if(jTPai.getText().compareTo("") != 0)
         {
+            text=jTPai.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "El país del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTPai.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2572,7 +2672,7 @@ public class Client extends javax.swing.JFrame
         String sEmpTmp  = jTCodEmp.getText();                        
         
         /*Obtiene el método de pago*/
-        String sMetPag  = jTMetPag.getText();
+        String sMetPag  = jComFormPag.getSelectedItem().toString();
         
         /*Si el método de pago es cadena vacia entonces el método de pago será no identificable*/
         if(sMetPag.compareTo("")==0)
@@ -2820,7 +2920,9 @@ public class Client extends javax.swing.JFrame
     /*Función para actualizar un cliente ya existente*/
     private int iActuCli(Connection con)
             
-    {        
+    {    
+        String text;
+        int z;
         //Declara variables de la base de datos
         Statement   st;
         ResultSet   rs;                        
@@ -2829,6 +2931,16 @@ public class Client extends javax.swing.JFrame
         
         if(jTRazSoc.getText().compareTo("") != 0)
         {
+            text=jTRazSoc.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "la razon social del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTRazSoc.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2839,6 +2951,16 @@ public class Client extends javax.swing.JFrame
         //calle existe
         if(jTCall.getText().compareTo("") != 0)
         {
+            text=jTCall.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "la calle del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTCall.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2859,6 +2981,16 @@ public class Client extends javax.swing.JFrame
         //falta numero de exterior
         if(jTNoExt.getText().compareTo("") != 0)
         {
+            text=jTNoExt.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "El numero del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTNoExt.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2869,6 +3001,16 @@ public class Client extends javax.swing.JFrame
         //falta numero de cp
         if(jTCP.getText().compareTo("") != 0)
         {
+            text=jTCP.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "El codigo postal del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTCP.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2879,6 +3021,16 @@ public class Client extends javax.swing.JFrame
         //falta cuidad
         if(jTCiu.getText().compareTo("") != 0)
         {
+            text=jTCiu.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "La cuidad del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTCiu.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2889,6 +3041,16 @@ public class Client extends javax.swing.JFrame
         //falta stado
         if(jTEstad.getText().compareTo("") != 0)
         {
+            text=jTEstad.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "El estado del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTEstad.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -2899,6 +3061,16 @@ public class Client extends javax.swing.JFrame
         //falta pais
         if(jTPai.getText().compareTo("") != 0)
         {
+            text=jTPai.getText();
+            z=text.length();
+            z--;
+            for(;z>=0;z--)
+            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+            {
+                JOptionPane.showMessageDialog(null, "El país del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                jTPai.grabFocus();                   
+                    return -1;
+            }
         }
         else
         {   
@@ -3048,7 +3220,7 @@ public class Client extends javax.swing.JFrame
             sBloq           = "0";
         
         /*Obtiene el método de pago*/
-        String sMetPag      = jTMetPag.getText();
+        String sMetPag      = jComFormPag.getSelectedItem().toString();
         
         /*Si el método de pago es cadena vacia entonces el método de pago será no identificable*/
         if(sMetPag.compareTo("")==0)
@@ -3364,6 +3536,7 @@ public class Client extends javax.swing.JFrame
     
     /*Cuando se presiona el botón de guardar*/
     private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuarActionPerformed
+        
         
         //Abre la base de datos                             
         Connection  con = Star.conAbrBas(false, false);
@@ -4517,7 +4690,7 @@ public class Client extends javax.swing.JFrame
                                         
         /*Formatealo a moneda*/
         double dCant    = Double.parseDouble(sTex);
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTex = n.format(dCant);
         
         /*Colocalo de nu en el campo de texto*/
@@ -4999,7 +5172,7 @@ public class Client extends javax.swing.JFrame
     
     /*Cuando se tipea una tecla en el campo de CP*/
     private void jTCPKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCPKeyTyped
-        
+        Star.noCaracterXML(evt);
         /*Comprueba que el carácter este en los límites permitidos para numeración*/
         if(((evt.getKeyChar() < '0') || (evt.getKeyChar() > '9')) && (evt.getKeyChar() != '\b') && (evt.getKeyChar() != '.'))         
             evt.consume();
@@ -5044,14 +5217,6 @@ public class Client extends javax.swing.JFrame
     }//GEN-LAST:event_jPanel2KeyPressed
 
     
-    /*Cuando se gana el foco del teclado en el campo del método de pago*/
-    private void jTMetPagFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTMetPagFocusGained
-        
-        /*Selecciona todo el texto cuando gana el foco*/
-        jTMetPag.setSelectionStart(0);jTMetPag.setSelectionEnd(jTMetPag.getText().length());        
-        
-    }//GEN-LAST:event_jTMetPagFocusGained
-
     
     /*Cuando se gana el foco del teclado en el campo de cuenta*/
     private void jTCtaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTCtaFocusGained
@@ -5062,14 +5227,6 @@ public class Client extends javax.swing.JFrame
     }//GEN-LAST:event_jTCtaFocusGained
 
     
-    /*Cuando se presiona una tecla en el campo de método de pago*/
-    private void jTMetPagKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTMetPagKeyPressed
-        
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-        
-    }//GEN-LAST:event_jTMetPagKeyPressed
-
     
     /*Cuando se presiona una tecla en el campo de cuenta*/
     private void jTCtaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCtaKeyPressed
@@ -5711,14 +5868,6 @@ public class Client extends javax.swing.JFrame
     }//GEN-LAST:event_jTCelFocusLost
 
     
-    /*Cuando se pierde el foco del teclado en el control*/
-    private void jTMetPagFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTMetPagFocusLost
-        
-        /*Coloca el caret en la posiciòn 0*/
-        jTMetPag.setCaretPosition(0);
-        
-    }//GEN-LAST:event_jTMetPagFocusLost
-
     
     /*Cuando se pierde el foco del teclado en el control*/
     private void jTCtaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTCtaFocusLost
@@ -5993,7 +6142,7 @@ public class Client extends javax.swing.JFrame
         
         /*Formatealo a moneda*/
         double dCant    = Double.parseDouble(jTDepGar.getText().replace("$", "").replace(",", ""));
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         jTDepGar.setText(n.format(dCant));
                 
     }//GEN-LAST:event_jTDepGarFocusLost
@@ -6216,6 +6365,80 @@ public class Client extends javax.swing.JFrame
     private void jTCallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTCallActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTCallActionPerformed
+
+    private void jTRazSocKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTRazSocKeyTyped
+        // TODO add your handling code here:
+        Star.noCaracterXML(evt);
+    }//GEN-LAST:event_jTRazSocKeyTyped
+
+    private void jTCallKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCallKeyTyped
+        // TODO add your handling code here:
+        Star.noCaracterXML(evt);
+    }//GEN-LAST:event_jTCallKeyTyped
+
+    private void jTColKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTColKeyTyped
+        // TODO add your handling code here:
+        Star.noCaracterXML(evt);
+    }//GEN-LAST:event_jTColKeyTyped
+
+    private void jTNoExtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTNoExtKeyTyped
+        // TODO add your handling code here:
+        Star.noCaracterXML(evt);
+    }//GEN-LAST:event_jTNoExtKeyTyped
+
+    private void jTCiuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCiuKeyTyped
+        // TODO add your handling code here:
+        Star.noCaracterXML(evt);
+    }//GEN-LAST:event_jTCiuKeyTyped
+
+    private void jTEstadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTEstadKeyTyped
+        // TODO add your handling code here:
+        Star.noCaracterXML(evt);
+    }//GEN-LAST:event_jTEstadKeyTyped
+
+    private void jTPaiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTPaiKeyTyped
+        // TODO add your handling code here:
+        Star.noCaracterXML(evt);
+    }//GEN-LAST:event_jTPaiKeyTyped
+
+    private void jComFormPagFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jComFormPagFocusLost
+
+    }//GEN-LAST:event_jComFormPagFocusLost
+
+    private void jComFormPagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComFormPagActionPerformed
+
+        /*Si no hay datos entonces regresa*/
+        if(jComFormPag.getSelectedItem()==null)
+        return;
+
+        //Abre la base de datos nuevamente
+        Connection con = Star.conAbrBas(true, false);
+
+        //Si hubo error entonces regresa
+        if(con==null)
+        return;
+
+        //Coloca en el tooltipo la descripción
+        String sDescrip = Star.sGetDescripCamp(con, "descrip", "pags", "WHERE cod = '" + jComFormPag.getSelectedItem().toString().trim() + "'");
+
+        //Si hubo error entonces regresa
+        if(sDescrip==null)
+        return;
+
+        //Coloca la descripción en el control
+        jComFormPag.setToolTipText(sDescrip);
+
+        //Cierra la base de datos
+        Star.iCierrBas(con);
+
+    }//GEN-LAST:event_jComFormPagActionPerformed
+
+    private void jComFormPagKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComFormPagKeyPressed
+
+        //Llama a la función escalable
+        vKeyPreEsc(evt);
+
+    }//GEN-LAST:event_jComFormPagKeyPressed
     
     
     /*Función escalable para cuando se presiona una tecla en el módulo*/
@@ -6250,6 +6473,7 @@ public class Client extends javax.swing.JFrame
     private javax.swing.JCheckBox jCBloqCred;
     private javax.swing.JCheckBox jCCotOtrMon;
     private javax.swing.JCheckBox jCOtraMon;
+    private javax.swing.JComboBox jComFormPag;
     private javax.swing.JComboBox jComList;
     private javax.swing.JComboBox jComSer;
     private com.toedter.calendar.JDateChooser jDCumple;
@@ -6344,7 +6568,6 @@ public class Client extends javax.swing.JFrame
     private javax.swing.JTextField jTJera;
     private javax.swing.JTextField jTLada;
     private javax.swing.JTextField jTLimCred;
-    private javax.swing.JTextField jTMetPag;
     private javax.swing.JTextField jTNoExt;
     private javax.swing.JTextField jTNoInt;
     private javax.swing.JTextField jTPag;

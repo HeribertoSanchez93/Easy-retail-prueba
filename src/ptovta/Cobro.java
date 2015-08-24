@@ -88,7 +88,8 @@ public class Cobro extends javax.swing.JFrame
     private String          sRutRemGlob;    
     private String          sImprFacGlob        = "";
     private String          sImpAntGlob;
-    private String          s52Glob             = "";    
+    private String          s52Glob             = "";
+    private String          sWeb                = "";
 
     /*Bandera para saber si se puede remisionar o no*/
     private boolean         bRem                = true;
@@ -292,7 +293,7 @@ public class Cobro extends javax.swing.JFrame
         /*Obtiene todos los datos de la empresa local*/
         try
         {                  
-            sQ = "SELECT corr, noext, noint, nom, calle, tel, col, cp, ciu, estad, pai, rfc FROM basdats WHERE codemp = '" + Login.sCodEmpBD + "'";
+            sQ = "SELECT corr, noext, noint, nom, calle, tel, col, cp, ciu, estad, pai, rfc, pagweb FROM basdats WHERE codemp = '" + Login.sCodEmpBD + "'";
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos*/
@@ -310,7 +311,8 @@ public class Cobro extends javax.swing.JFrame
                 sNoIntLocGlob           = rs.getString("noint");
                 sEstLocGlob             = rs.getString("estad");                                    
                 sPaiLocGlob             = rs.getString("pai");                                    
-                sRFCLocGlob             = rs.getString("rfc");                                                   
+                sRFCLocGlob             = rs.getString("rfc");
+                sWeb                    = rs.getString("pagweb");
             }                        
         }
         catch(SQLException expnSQL)
@@ -339,7 +341,7 @@ public class Cobro extends javax.swing.JFrame
                 sRFCGlob                = rs.getString("rfc");                                    
                 sCiuGlob                = rs.getString("ciu");   
                 sEstGlob                = rs.getString("estad");   
-                sCo1Glob                = rs.getString("co1");                                                                   
+                sCo1Glob                = rs.getString("co1");
             }                        
         }
         catch(SQLException expnSQL)
@@ -449,6 +451,9 @@ public class Cobro extends javax.swing.JFrame
         jLabel34 = new javax.swing.JLabel();
         jRNoPag = new javax.swing.JRadioButton();
         jRPagad = new javax.swing.JRadioButton();
+        jLabel8 = new javax.swing.JLabel();
+        jTVend = new javax.swing.JTextField();
+        jBVend = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -513,7 +518,7 @@ public class Cobro extends javax.swing.JFrame
                 jBCobKeyPressed(evt);
             }
         });
-        jP1.add(jBCob, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 290, 120, 50));
+        jP1.add(jBCob, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 340, 120, 50));
 
         jBSal.setBackground(new java.awt.Color(255, 255, 255));
         jBSal.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
@@ -540,7 +545,7 @@ public class Cobro extends javax.swing.JFrame
                 jBSalKeyPressed(evt);
             }
         });
-        jP1.add(jBSal, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 290, 120, 50));
+        jP1.add(jBSal, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 340, 120, 50));
 
         jTTot.setEditable(false);
         jTTot.setFont(new java.awt.Font("Tahoma", 1, 21)); // NOI18N
@@ -791,8 +796,8 @@ public class Cobro extends javax.swing.JFrame
         jP1.add(jTTarCredCant, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 140, 150, 30));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel7.setText("Cambio:");
-        jP1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 260, 110, -1));
+        jLabel7.setText("Vendedor:");
+        jP1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 300, 100, -1));
 
         jTAObserv.setColumns(20);
         jTAObserv.setLineWrap(true);
@@ -824,7 +829,7 @@ public class Cobro extends javax.swing.JFrame
                 jLAyuMouseExited(evt);
             }
         });
-        jP1.add(jLAyu, new org.netbeans.lib.awtextra.AbsoluteConstraints(236, 340, 210, 20));
+        jP1.add(jLAyu, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 390, 210, 20));
 
         jRTic.setBackground(new java.awt.Color(255, 255, 255));
         jRTic.setSelected(true);
@@ -920,6 +925,52 @@ public class Cobro extends javax.swing.JFrame
         });
         jP1.add(jRPagad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 70, -1));
 
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel8.setText("Cambio:");
+        jP1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 260, 110, -1));
+
+        jTVend.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
+        jTVend.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTVendFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTVendFocusLost(evt);
+            }
+        });
+        jTVend.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTVendKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTVendKeyTyped(evt);
+            }
+        });
+        jP1.add(jTVend, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 300, 120, 20));
+
+        jBVend.setBackground(new java.awt.Color(255, 255, 255));
+        jBVend.setText("...");
+        jBVend.setToolTipText("Buscar Vendedor(es)");
+        jBVend.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jBVendMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jBVendMouseExited(evt);
+            }
+        });
+        jBVend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBVendActionPerformed(evt);
+            }
+        });
+        jBVend.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBVendKeyPressed(evt);
+            }
+        });
+        jP1.add(jBVend, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 300, 30, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -931,9 +982,9 @@ public class Cobro extends javax.swing.JFrame
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jP1, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                .addComponent(jP1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -952,7 +1003,7 @@ public class Cobro extends javax.swing.JFrame
         {
             /*Dale formato de moneda al saldo*/            
             double dCant    = Double.parseDouble(sSa);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sSa             = n.format(dCant);
 
             /*Mensajea*/
@@ -1341,7 +1392,7 @@ public class Cobro extends javax.swing.JFrame
                     if(Double.parseDouble(sSaldDispo)>=0)
                     {
                         /*Dale formato de moneda al saldo disponible*/                                    
-                        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                         double dCant    = Double.parseDouble(sSaldDispo);                
                         sSaldDispo      = n.format(dCant);
                     }   
@@ -1630,7 +1681,7 @@ public class Cobro extends javax.swing.JFrame
         }                   
 
        //Inserta en la base de datos la nueva venta
-       if(Star.iInsVtas(con, sSerFR, sConsFac, sCodEmpGlo, sSer, sSubTotG.replace("$", "").replace(",", ""), sImpueG.replace("$", "").replace(",", ""), sTotG.replace("$", "").replace(",", ""), "now()", "'" + sFDoc + "'", sCred, "'CO'", "0", "", sTipDoc, sConsCort, sMetPag, sCta, jTAObserv.getText().replace("'", "''"), "0", jTDesc.getText().replace("$", "").replace(",", ""), "1", sFactu, jTTotCost.getText(), Login.sUsrG, sMonG, sTipCam, sFormPag, frmPto.sRecib, frmPto.sMarc, frmPto.sMod, frmPto.sColo, frmPto.sPlacs, frmPto.sNom, frmPto.sTarCirc, frmPto.sNumLic, frmPto.sTel, frmPto.sDirPart, frmPto.sDirOfi, frmPto.sTelOfi, "N", "", "0", "0", "0", "0","")==-1)
+       if(Star.iInsVtas(con, sSerFR, sConsFac, sCodEmpGlo, sSer, sSubTotG.replace("$", "").replace(",", ""), sImpueG.replace("$", "").replace(",", ""), sTotG.replace("$", "").replace(",", ""), "now()", "'" + sFDoc + "'", sCred, "'CO'", "0", "", sTipDoc, sConsCort, sMetPag, sCta, jTAObserv.getText().replace("'", "''"), "0", jTDesc.getText().replace("$", "").replace(",", ""), "1", sFactu, jTTotCost.getText(), Login.sUsrG, sMonG, sTipCam, sFormPag, frmPto.sRecib, frmPto.sMarc, frmPto.sMod, frmPto.sColo, frmPto.sPlacs, frmPto.sNom, frmPto.sTarCirc, frmPto.sNumLic, frmPto.sTel, frmPto.sDirPart, frmPto.sDirOfi, frmPto.sTelOfi, "N", "", "0", "0", "0", "0","",jTVend.getText())==-1)
             return;
        
        /*Obtiene algunos datos de la última venta insertada*/        
@@ -2043,7 +2094,7 @@ public class Cobro extends javax.swing.JFrame
 
         /*Dale formato de moneda otra vez al total*/                
         double dCant    = Double.parseDouble(sTotG);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTotG           = n.format(dCant);
 
         /*Dale formato de moneda otra vez al subtotal*/	
@@ -2390,7 +2441,7 @@ public class Cobro extends javax.swing.JFrame
                     + "consec       = consec + 1, "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
                     + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
-                    + "WHERE ser    = 'TIK'";                    
+                    + "WHERE ser    = '" +sSerTic+ "'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
          }
@@ -2458,7 +2509,7 @@ public class Cobro extends javax.swing.JFrame
             sEstadVta       = "CA";
             
         //Inserta en la base de datos la nueva venta
-       if(Star.iInsVtas(con, sSerTic, sConTic, sCodEmpGlo, sSer, sSubTotG.replace("$", "").replace(",", ""), sImpueG.replace("$", "").replace(",", ""), sTotG.replace("$", "").replace(",", ""), "now()", "'" + sFDoc + "'", "now()", "'" + sEstadVta + "'", "1", "", "TIK", sConsCort, sMetPag, sCta, jTAObserv.getText().replace("'", "''"), "0", jTDesc.getText().replace("$", "").replace(",", ""), "1", "0", jTTotCost.getText(), Login.sUsrG, sMonG, sTipCam, sFormPag, frmPto.sRecib, frmPto.sMarc, frmPto.sMod, frmPto.sColo, frmPto.sPlacs, frmPto.sNom, frmPto.sTarCirc, frmPto.sNumLic, frmPto.sTel, frmPto.sDirPart, frmPto.sDirOfi, frmPto.sTelOfi, "N", "", "0", "0", "0", "0","")==-1)
+       if(Star.iInsVtas(con, sSerTic, sConTic, sCodEmpGlo, sSer, sSubTotG.replace("$", "").replace(",", ""), sImpueG.replace("$", "").replace(",", ""), sTotG.replace("$", "").replace(",", ""), "now()", "'" + sFDoc + "'", "now()", "'" + sEstadVta + "'", "1", "", "TIK", sConsCort, sMetPag, sCta, jTAObserv.getText().replace("'", "''"), "0", jTDesc.getText().replace("$", "").replace(",", ""), "1", "0", jTTotCost.getText(), Login.sUsrG, sMonG, sTipCam, sFormPag, frmPto.sRecib, frmPto.sMarc, frmPto.sMod, frmPto.sColo, frmPto.sPlacs, frmPto.sNom, frmPto.sTarCirc, frmPto.sNumLic, frmPto.sTel, frmPto.sDirPart, frmPto.sDirOfi, frmPto.sTelOfi, "N", "", "0", "0", "0", "0","",jTVend.getText())==-1)
             return;
        
         //Inserta el CXC de la deuda        
@@ -2981,7 +3032,7 @@ public class Cobro extends javax.swing.JFrame
                 sCarp                   += "\\" +  sSerTicFin + "-" + sConTicFin + ".pdf";
                 
                 /*Llama la función para crear el PDF*/
-                Star.vPDF("", sMonFi, sConTicFin, "", sVtaFin, sSerTicFin, sFDocFi, sNomFi, sPaiFi, sTelFi, sCallFi, sColFi, sCPFi, sNoExtFi, sNoIntFi, sCiuFi, sEstFi, sRFCFi, sCoLocFi, Star.sObLet(sTotFi.replace(",", "").replace("$", ""), sMonFi, sSimb, true), sSubTotFi, sImpueFi, sTotFi, "", "", "", sNomLocFi, sTelLocFi, sColLocFi, sCallLocFi, sCPLocFi, sCiuLocFi, sEstLocFi, sPaiLocFi, sRFCLocFi, sRutLog, bSi, true, true, in, null, "", sCarp, 2, true, false, i52, false, "", "", "", "", "", sNoIntLocFi, sNoExtLocFi, "", "", "", "");
+                Star.vPDF("", sMonFi, sConTicFin, "", sVtaFin, sSerTicFin, sFDocFi, sNomFi, sPaiFi, sTelFi, sCallFi, sColFi, sCPFi, sNoExtFi, sNoIntFi, sCiuFi, sEstFi, sRFCFi, sCoLocFi, Star.sObLet(sTotFi.replace(",", "").replace("$", ""), sMonFi, sSimb, true), sSubTotFi, sImpueFi, sTotFi, "", "", "", sNomLocFi, sTelLocFi, sColLocFi, sCallLocFi, sCPLocFi, sCiuLocFi, sEstLocFi, sPaiLocFi, sRFCLocFi, sRutLog, bSi, true, true, in, null, "", sCarp, 2, true, false, i52, false, "", "", "", "", "", sNoIntLocFi, sNoExtLocFi, "", "", "", "", sWeb);
 
             }/*Fin de public void run()*/
             
@@ -3139,7 +3190,7 @@ public class Cobro extends javax.swing.JFrame
             
             /*Dale formato de mon al total*/            
             double dCant    = Double.parseDouble(sTot);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sTot            = n.format(dCant);
 
             /*Coloca el total en el saldo*/
@@ -3219,7 +3270,7 @@ public class Cobro extends javax.swing.JFrame
         if(Double.parseDouble(sSald)==Double.parseDouble(sTot))
         {
             /*Dale formato de moneda al total*/            
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sTot.replace("$", "").replace(",", ""));                
             sTot            = n.format(dCant);
             
@@ -3260,7 +3311,7 @@ public class Cobro extends javax.swing.JFrame
             
             /*Dale formato de mon al efectivo*/            
             double dCant    = Double.parseDouble(sPagEfe);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sPagEfe         = n.format(dCant);
             
             /*Coloca enm el efectivo la cant ya con formato*/
@@ -3276,7 +3327,7 @@ public class Cobro extends javax.swing.JFrame
         {
             /*Dale formato de mon al saldo*/            
             double dCant    = Double.parseDouble(sSald);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sSald           = n.format(dCant);
             
             /*Coloca el saldo correcto*/
@@ -3299,7 +3350,7 @@ public class Cobro extends javax.swing.JFrame
             
             /*Dale formato de mon al cambio*/            
             double dCant    = Double.parseDouble(sCamb);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sCamb           = n.format(dCant);
             
             /*El saldo va a ser 0*/
@@ -3534,7 +3585,7 @@ public class Cobro extends javax.swing.JFrame
             
             /*Dale formato de mon al tot*/            
             double dCant    = Double.parseDouble(sTot);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sTot            = n.format(dCant);
 
             /*Coloca el tot en el saldo*/
@@ -3618,7 +3669,7 @@ public class Cobro extends javax.swing.JFrame
             
             /*Dale formato de mon al pago en débito*/            
             double dCant    = Double.parseDouble(sPagDeb);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sPagDeb         = n.format(dCant);
             
             /*Coloca en el debitola cant ya con formato*/
@@ -3634,7 +3685,7 @@ public class Cobro extends javax.swing.JFrame
         {
             /*Dale formato de mon al saldo*/            
             double dCant    = Double.parseDouble(sSald);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sSald           = n.format(dCant);
             
             /*Coloca el saldo correcto*/
@@ -3657,7 +3708,7 @@ public class Cobro extends javax.swing.JFrame
             
             /*Dale formato de mon al cambio*/            
             double dCant    = Double.parseDouble(sCamb);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sCamb           = n.format(dCant);
             
             /*El saldo va a ser 0*/
@@ -3718,7 +3769,7 @@ public class Cobro extends javax.swing.JFrame
             
             /*Dale formato de mon al tot*/            
             double dCant    = Double.parseDouble(sTot);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sTot            = n.format(dCant);
 
             /*Coloca el tot en el saldo*/
@@ -3800,7 +3851,7 @@ public class Cobro extends javax.swing.JFrame
             
             /*Dale formato de mon al pago en tarjeta de credito*/            
             double dCant    = Double.parseDouble(sPagCred);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sPagCred        = n.format(dCant);
             
             /*Coloca en el pago de tarjeta de crédito la cant ya con formato*/
@@ -3816,7 +3867,7 @@ public class Cobro extends javax.swing.JFrame
         {
             /*Dale formato de mon al saldo*/            
             double dCant    = Double.parseDouble(sSald);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sSald           = n.format(dCant);
             
             /*Coloca el saldo*/
@@ -3839,7 +3890,7 @@ public class Cobro extends javax.swing.JFrame
             
             /*Dale formato de mon al cambio*/            
             double dCant    = Double.parseDouble(sCamb);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sCamb           = n.format(dCant);
             
             /*El saldo va a ser 0*/
@@ -4132,6 +4183,67 @@ public class Cobro extends javax.swing.JFrame
     private void jRRemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRRemActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jRRemActionPerformed
+
+    private void jTVendFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTVendFocusGained
+
+        /*Selecciona todo el texto cuando gana el foco*/
+        jTVend.setSelectionStart(0);jTVend.setSelectionEnd(jTVend.getText().length());
+    }//GEN-LAST:event_jTVendFocusGained
+
+    private void jTVendFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTVendFocusLost
+
+        /*Coloca el caret en la posiciòn 0*/
+        jTVend.setCaretPosition(0);
+
+        /*Coloca el borde negro si tiene datos, caso contrario de rojo*/
+        if(jTVend.getText().compareTo("")!=0)
+        jTVend.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204,204,255)));
+    }//GEN-LAST:event_jTVendFocusLost
+
+    private void jTVendKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTVendKeyPressed
+
+        /*Si se presiona la tecla de abajo entonces presiona el botón de búscar vendedor*/
+        if(evt.getKeyCode() == KeyEvent.VK_DOWN)
+        jBVend.doClick();
+        /*Else, llama a la función para procesarlo normalmente else llama a la función escalable*/
+        else
+        vKeyPreEsc(evt);
+    }//GEN-LAST:event_jTVendKeyPressed
+
+    private void jTVendKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTVendKeyTyped
+
+        /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
+        if(Character.isLowerCase(evt.getKeyChar()))
+        evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
+
+    }//GEN-LAST:event_jTVendKeyTyped
+
+    private void jBVendMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBVendMouseEntered
+
+        /*Cambia el color del fondo del botón*/
+        jBVend.setBackground(Star.colBot);
+
+    }//GEN-LAST:event_jBVendMouseEntered
+
+    private void jBVendMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBVendMouseExited
+
+        /*Cambia el color del fondo del botón al original*/
+        jBVend.setBackground(Star.colOri);
+
+    }//GEN-LAST:event_jBVendMouseExited
+
+    private void jBVendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBVendActionPerformed
+
+        /*Llama al otro formulario de búsqueda y pasale lo que el usr escribió*/
+        Busc b = new Busc(this, jTVend.getText(), 28, jTVend, null, null, "", null);
+        b.setVisible(true);
+    }//GEN-LAST:event_jBVendActionPerformed
+
+    private void jBVendKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBVendKeyPressed
+
+        //Llama a la función escalable
+        vKeyPreEsc(evt);
+    }//GEN-LAST:event_jBVendKeyPressed
         
     
     /*Función escalable para cuando se presiona una tecla en el módulo*/
@@ -4311,6 +4423,7 @@ public class Cobro extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBCob;
     private javax.swing.JButton jBSal;
+    private javax.swing.JButton jBVend;
     private javax.swing.JLabel jLAyu;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel31;
@@ -4321,6 +4434,7 @@ public class Cobro extends javax.swing.JFrame
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jP1;
     private javax.swing.JRadioButton jRFac;
     private javax.swing.JRadioButton jRNoPag;
@@ -4342,6 +4456,7 @@ public class Cobro extends javax.swing.JFrame
     private javax.swing.JTextField jTTarCredCant;
     private javax.swing.JTextField jTTarDescrip;
     private javax.swing.JTextField jTTot;
+    private javax.swing.JTextField jTVend;
     // End of variables declaration//GEN-END:variables
 
 }/*Fin de public class Clientes extends javax.swing.JFrame */

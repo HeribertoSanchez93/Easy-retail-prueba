@@ -321,7 +321,7 @@ public class VVtas extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al total*/                
                 double dCant    = Double.parseDouble(sTot);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sTot            = n.format(dCant);
                 
                 /*Agregalo a la tabla*/
@@ -996,7 +996,7 @@ public class VVtas extends javax.swing.JFrame
                                 
                 /*Dale formato de moneda al total*/                
                 double dCant    = Double.parseDouble(sTot);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sTot            = n.format(dCant);
                 
                 /*Agrega el registro a la tabla en caso de que alla habido una conincidencia*/                

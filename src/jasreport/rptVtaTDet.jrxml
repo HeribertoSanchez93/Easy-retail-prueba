@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="170"/>
+	<property name="ireport.x" value="69"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="F_D" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -721,25 +721,11 @@ vtas.VTA DESC)a]]>
 				<text><![CDATA[Cant.Tickets:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="31" y="47" width="79" height="13" forecolor="#3333FF" uuid="43f189e3-a9b3-40a2-b505-3b5cefd75c5d"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Cant.Remisiones:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="31" y="60" width="79" height="13" forecolor="#3333FF" uuid="879de961-c37f-4035-a5f0-61f02057fb48"/>
+				<reportElement stretchType="RelativeToTallestObject" x="31" y="47" width="79" height="13" forecolor="#3333FF" uuid="879de961-c37f-4035-a5f0-61f02057fb48"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cant.Facturas:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="31" y="73" width="79" height="13" forecolor="#3333FF" uuid="fc6588df-e718-40c1-a070-5c71bdac9fca"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Cant.Notas Crédito:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="196" y="34" width="79" height="13" forecolor="#3333FF" uuid="bb697ed6-3cff-4c79-b49a-082a663cd994"/>
@@ -805,25 +791,11 @@ vtas.VTA DESC)a]]>
 				<text><![CDATA[Tot.Tickets:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="369" y="126" width="79" height="13" forecolor="#3333FF" uuid="d218934c-00ce-498f-902f-d58a7a0593d6"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Tot.Remisiones:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="369" y="139" width="79" height="13" forecolor="#3333FF" uuid="17ac2ebc-027e-417d-b152-8aaec7f48b9e"/>
+				<reportElement stretchType="RelativeToTallestObject" x="369" y="126" width="79" height="13" forecolor="#3333FF" uuid="17ac2ebc-027e-417d-b152-8aaec7f48b9e"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tot.Facturas:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="369" y="153" width="79" height="13" forecolor="#3333FF" uuid="f3cfa27a-4efa-4840-8816-1efd501dcac5"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Tot.Notas Crédito:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="31" y="94" width="79" height="13" forecolor="#3333FF" uuid="3358a9b2-0fd1-47ac-98b0-86cc137c1797"/>
@@ -847,25 +819,11 @@ vtas.VTA DESC)a]]>
 				<textFieldExpression><![CDATA[$V{CANTTIK}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="110" y="47" width="86" height="13" uuid="81a67ccc-ed11-4190-bc47-528deaae191c"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{CANTREM}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="110" y="60" width="86" height="13" uuid="1dbb7dca-ee60-43a6-8a0e-b9740d096c02"/>
+				<reportElement x="111" y="47" width="86" height="13" uuid="1dbb7dca-ee60-43a6-8a0e-b9740d096c02"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{CANTFAC}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="111" y="73" width="85" height="13" uuid="71445a0f-f528-4b3d-a5ec-b0d769085a5f"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{CANTNOT}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="111" y="107" width="85" height="13" uuid="7ead7d5b-8d23-44b6-8947-a3ff76cf001a"/>
@@ -945,25 +903,11 @@ vtas.VTA DESC)a]]>
 				<textFieldExpression><![CDATA[$V{TOTTIK}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="449" y="153" width="68" height="13" uuid="c4079295-b7ff-4d74-a26e-18006a62e44e"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTNOT}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="449" y="139" width="68" height="14" uuid="0025c902-c40e-4ed0-ae11-e98c58df2763"/>
+				<reportElement x="449" y="126" width="68" height="14" uuid="0025c902-c40e-4ed0-ae11-e98c58df2763"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTFAC}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="449" y="126" width="68" height="13" uuid="70b3c137-d3ca-4a6c-8d8e-985c9cd70bc5"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTREM}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="448" y="73" width="69" height="13" uuid="3e89b5e6-e6e1-4f9b-95b0-fbea8a4f84cc"/>

@@ -211,14 +211,6 @@ public class DatsGenEmp extends javax.swing.JFrame
         jPCSD = new javax.swing.JPanel();
         jL1 = new javax.swing.JLabel();
         jLMani = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jTCSDFCer = new javax.swing.JTextField();
-        jBCSDCF = new javax.swing.JButton();
-        jLabel17 = new javax.swing.JLabel();
-        jTCSDFKey = new javax.swing.JTextField();
-        jBCSDKF = new javax.swing.JButton();
-        jLabel18 = new javax.swing.JLabel();
-        jBProbF = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jTCSDCer = new javax.swing.JTextField();
         jBCSDC = new javax.swing.JButton();
@@ -232,7 +224,6 @@ public class DatsGenEmp extends javax.swing.JFrame
         jLabel23 = new javax.swing.JLabel();
         jTLugExp = new javax.swing.JTextField();
         jPaLlav = new javax.swing.JPasswordField();
-        jPaLlavF = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
@@ -1006,7 +997,6 @@ public class DatsGenEmp extends javax.swing.JFrame
         jP1.add(jRUltCost, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 360, 90, -1));
 
         jCApli.setBackground(new java.awt.Color(255, 255, 255));
-        jCApli.setSelected(true);
         jCApli.setText("Aplicar a productos");
         jCApli.setNextFocusableComponent(jBDom);
         jCApli.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1029,12 +1019,10 @@ public class DatsGenEmp extends javax.swing.JFrame
         jPCSD.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jL1.setText("Manifiesto SAT:");
-        jL1.setNextFocusableComponent(jTCSDFCer);
         jPCSD.add(jL1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 140, 20));
 
         jLMani.setForeground(new java.awt.Color(51, 51, 255));
         jLMani.setText("https://manifiesto.ecodex.com.mx");
-        jLMani.setNextFocusableComponent(jTCSDFCer);
         jLMani.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLManiMouseClicked(evt);
@@ -1048,125 +1036,8 @@ public class DatsGenEmp extends javax.swing.JFrame
         });
         jPCSD.add(jLMani, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 230, 20));
 
-        jLabel16.setText("Certificado de Fiel .cer:");
-        jPCSD.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 220, 20));
-
-        jTCSDFCer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
-        jTCSDFCer.setNextFocusableComponent(jBCSDCF);
-        jTCSDFCer.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTCSDFCerFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTCSDFCerFocusLost(evt);
-            }
-        });
-        jTCSDFCer.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTCSDFCerKeyPressed(evt);
-            }
-        });
-        jPCSD.add(jTCSDFCer, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 220, 20));
-
-        jBCSDCF.setBackground(new java.awt.Color(255, 255, 255));
-        jBCSDCF.setText("jButton1");
-        jBCSDCF.setToolTipText("Buscar Ruta a Calculadora");
-        jBCSDCF.setNextFocusableComponent(jTCSDFKey);
-        jBCSDCF.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jBCSDCFMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jBCSDCFMouseExited(evt);
-            }
-        });
-        jBCSDCF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBCSDCFActionPerformed(evt);
-            }
-        });
-        jBCSDCF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jBCSDCFKeyPressed(evt);
-            }
-        });
-        jPCSD.add(jBCSDCF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, 30, 20));
-
-        jLabel17.setText("Llave privada de Fiel .key:");
-        jPCSD.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 220, 20));
-
-        jTCSDFKey.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
-        jTCSDFKey.setNextFocusableComponent(jBCSDKF);
-        jTCSDFKey.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTCSDFKeyFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTCSDFKeyFocusLost(evt);
-            }
-        });
-        jTCSDFKey.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTCSDFKeyKeyPressed(evt);
-            }
-        });
-        jPCSD.add(jTCSDFKey, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 220, 20));
-
-        jBCSDKF.setBackground(new java.awt.Color(255, 255, 255));
-        jBCSDKF.setText("jButton1");
-        jBCSDKF.setToolTipText("Buscar Ruta a Calculadora");
-        jBCSDKF.setNextFocusableComponent(jPaLlavF);
-        jBCSDKF.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jBCSDKFMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jBCSDKFMouseExited(evt);
-            }
-        });
-        jBCSDKF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBCSDKFActionPerformed(evt);
-            }
-        });
-        jBCSDKF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jBCSDKFKeyPressed(evt);
-            }
-        });
-        jPCSD.add(jBCSDKF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 130, 30, 20));
-
-        jLabel18.setText("Contraseña de llave privada Fiel:");
-        jPCSD.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 220, 20));
-
-        jBProbF.setBackground(new java.awt.Color(255, 255, 255));
-        jBProbF.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
-        jBProbF.setForeground(new java.awt.Color(0, 102, 0));
-        jBProbF.setText("Probar");
-        jBProbF.setToolTipText("Probar certificado");
-        jBProbF.setNextFocusableComponent(jTCSDCer);
-        jBProbF.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jBProbFMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jBProbFMouseExited(evt);
-            }
-        });
-        jBProbF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBProbFActionPerformed(evt);
-            }
-        });
-        jBProbF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jBProbFKeyPressed(evt);
-            }
-        });
-        jPCSD.add(jBProbF, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
-
         jLabel11.setText("CSD .cer:");
-        jPCSD.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 140, 20));
+        jPCSD.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 140, 20));
 
         jTCSDCer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTCSDCer.setNextFocusableComponent(jBCSDC);
@@ -1183,7 +1054,7 @@ public class DatsGenEmp extends javax.swing.JFrame
                 jTCSDCerKeyPressed(evt);
             }
         });
-        jPCSD.add(jTCSDCer, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 220, 20));
+        jPCSD.add(jTCSDCer, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 220, 20));
 
         jBCSDC.setBackground(new java.awt.Color(255, 255, 255));
         jBCSDC.setText("jButton1");
@@ -1207,10 +1078,10 @@ public class DatsGenEmp extends javax.swing.JFrame
                 jBCSDCKeyPressed(evt);
             }
         });
-        jPCSD.add(jBCSDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, 30, 20));
+        jPCSD.add(jBCSDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 30, 20));
 
         jLabel14.setText("Llave privada de CSD .key:");
-        jPCSD.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 220, 20));
+        jPCSD.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 220, 20));
 
         jTCSDKey.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTCSDKey.setNextFocusableComponent(jBCSDK);
@@ -1227,7 +1098,7 @@ public class DatsGenEmp extends javax.swing.JFrame
                 jTCSDKeyKeyPressed(evt);
             }
         });
-        jPCSD.add(jTCSDKey, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 220, 20));
+        jPCSD.add(jTCSDKey, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 220, 20));
 
         jBCSDK.setBackground(new java.awt.Color(255, 255, 255));
         jBCSDK.setText("jButton1");
@@ -1251,10 +1122,10 @@ public class DatsGenEmp extends javax.swing.JFrame
                 jBCSDKKeyPressed(evt);
             }
         });
-        jPCSD.add(jBCSDK, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, 30, 20));
+        jPCSD.add(jBCSDK, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, 30, 20));
 
         jLabel19.setText("*Lugar expedición:");
-        jPCSD.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, 140, 20));
+        jPCSD.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 140, 20));
 
         jBProbC.setBackground(new java.awt.Color(255, 255, 255));
         jBProbC.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
@@ -1280,7 +1151,7 @@ public class DatsGenEmp extends javax.swing.JFrame
                 jBProbCKeyPressed(evt);
             }
         });
-        jPCSD.add(jBProbC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, -1, -1));
+        jPCSD.add(jBProbC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, -1, -1));
 
         jTRegFis.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTRegFis.setNextFocusableComponent(jTLugExp);
@@ -1297,13 +1168,13 @@ public class DatsGenEmp extends javax.swing.JFrame
                 jTRegFisKeyPressed(evt);
             }
         });
-        jPCSD.add(jTRegFis, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 220, 20));
+        jPCSD.add(jTRegFis, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 220, 20));
 
         jLabel21.setText("Contraseña de llave privada CSD:");
-        jPCSD.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, 220, 20));
+        jPCSD.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 220, 20));
 
         jLabel23.setText("*Régimen fiscal:");
-        jPCSD.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 140, 20));
+        jPCSD.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 140, 20));
 
         jTLugExp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTLugExp.setNextFocusableComponent(jRaMor);
@@ -1320,7 +1191,7 @@ public class DatsGenEmp extends javax.swing.JFrame
                 jTLugExpKeyPressed(evt);
             }
         });
-        jPCSD.add(jTLugExp, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 220, 20));
+        jPCSD.add(jTLugExp, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, 220, 20));
 
         jPaLlav.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jPaLlav.setNextFocusableComponent(jBProbC);
@@ -1337,26 +1208,9 @@ public class DatsGenEmp extends javax.swing.JFrame
                 jPaLlavKeyPressed(evt);
             }
         });
-        jPCSD.add(jPaLlav, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 220, 20));
+        jPCSD.add(jPaLlav, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 220, 20));
 
-        jPaLlavF.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
-        jPaLlavF.setNextFocusableComponent(jBProbF);
-        jPaLlavF.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jPaLlavFFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jPaLlavFFocusLost(evt);
-            }
-        });
-        jPaLlavF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jPaLlavFKeyPressed(evt);
-            }
-        });
-        jPCSD.add(jPaLlavF, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 220, 20));
-
-        jP1.add(jPCSD, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 270, 470));
+        jP1.add(jPCSD, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 50, 270, 290));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1370,7 +1224,7 @@ public class DatsGenEmp extends javax.swing.JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jP1, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
+                .addComponent(jP1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1446,13 +1300,13 @@ public class DatsGenEmp extends javax.swing.JFrame
                 jTCarp.setText(rs.getString         ("rutap"));  
             
                 /*Coloca los datos de la fiel y CSD*/
-                jTCSDFCer.setText(rs.getString      ("rutcerf"));  
-                jTCSDFKey.setText(rs.getString      ("rutkeyf"));  
+//                jTCSDFCer.setText(rs.getString      ("rutcerf"));  
+//                jTCSDFKey.setText(rs.getString      ("rutkeyf"));  
                 jTCSDCer.setText(rs.getString       ("rutcer")); 
                 jTCSDKey.setText(rs.getString       ("rutkey"));
                 jTRegFis.setText(rs.getString       ("regfisc"));
                 jTLugExp.setText(rs.getString       ("lugexp"));
-                jPaLlavF.setText(Star.sDecryp(      rs.getString("passcerf")));  
+//                jPaLlavF.setText(Star.sDecryp(      rs.getString("passcerf")));  
                 jPaLlav.setText(Star.sDecryp(       rs.getString("passcer")));                  
                 
                 /*Guarda los valores originales de los CSD*/
@@ -1478,11 +1332,11 @@ public class DatsGenEmp extends javax.swing.JFrame
                 jTPag.setCaretPosition              (0);
                 jTEmailCor.setCaretPosition         (0);
                 jTCarp.setCaretPosition             (0);
-                jTCSDFCer.setCaretPosition          (0);  
-                jTCSDFKey.setCaretPosition          (0);  
+//                jTCSDFCer.setCaretPosition          (0);  
+//                jTCSDFKey.setCaretPosition          (0);  
                 jTCSDCer.setCaretPosition           (0); 
                 jTCSDKey.setCaretPosition           (0);  
-                jPaLlavF.setCaretPosition           (0);  
+//                jPaLlavF.setCaretPosition           (0);  
                 jPaLlav.setCaretPosition            (0);  
                                 
                 /*Selecciona el método de costeo correcto para la empresa*/
@@ -1855,23 +1709,23 @@ public class DatsGenEmp extends javax.swing.JFrame
         }
 
         /*Si el CSD fiel tenía datos y ya no los tiene entonces*/
-        if(jTCSDFCer.getText().trim().compareTo("")==0 && sCSDCerFOri.compareTo("")!=0)
-        {            
-            /*Pregunta si esta seguro por que se va a borrar el CSD del disco*/
-            Object[] op = {"Si","No"};
-            if((JOptionPane.showOptionDialog(this, "El CSD fiel se eliminara del disco si continua.¿Desea continuar?", "Guardar datos empresa", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0])) == JOptionPane.NO_OPTION)
-                return;                       
-        }
-        
-        /*Si el CSD key fiel tenía datos y ya no los tiene entonces*/
-        if(jTCSDFKey.getText().trim().compareTo("")==0 && sCSDKeyFOri.compareTo("")!=0)
-        {            
-            /*Pregunta si esta seguro por que se va a borrar el CSD del disco*/
-            Object[] op = {"Si","No"};
-            if((JOptionPane.showOptionDialog(this, "El CSD key fiel se eliminara del disco si continua.¿Desea continuar?", "Guardar datos empresa", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0])) == JOptionPane.NO_OPTION)
-                return;                       
-        }
-        
+//        if(jTCSDFCer.getText().trim().compareTo("")==0 && sCSDCerFOri.compareTo("")!=0)
+//        {            
+//            /*Pregunta si esta seguro por que se va a borrar el CSD del disco*/
+//            Object[] op = {"Si","No"};
+//            if((JOptionPane.showOptionDialog(this, "El CSD fiel se eliminara del disco si continua.¿Desea continuar?", "Guardar datos empresa", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0])) == JOptionPane.NO_OPTION)
+//                return;                       
+//        }
+//        
+//        /*Si el CSD key fiel tenía datos y ya no los tiene entonces*/
+//        if(jTCSDFKey.getText().trim().compareTo("")==0 && sCSDKeyFOri.compareTo("")!=0)
+//        {            
+//            /*Pregunta si esta seguro por que se va a borrar el CSD del disco*/
+//            Object[] op = {"Si","No"};
+//            if((JOptionPane.showOptionDialog(this, "El CSD key fiel se eliminara del disco si continua.¿Desea continuar?", "Guardar datos empresa", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0])) == JOptionPane.NO_OPTION)
+//                return;                       
+//        }
+//        
         /*Si el CSD tenía datos y ya no los tiene entonces*/
         if(jTCSDCer.getText().trim().compareTo("")==0 && sCSDCerOri.compareTo("")!=0)
         {            
@@ -1891,38 +1745,38 @@ public class DatsGenEmp extends javax.swing.JFrame
         }
         
         /*Si esta colocando CSD o fiel entoces*/
-        if(jTCSDFCer.getText().trim().compareTo("")!=0 || jTCSDFKey.getText().trim().compareTo("")==0 || jTCSDCer.getText().trim().compareTo("")==0 || jTCSDKey.getText().trim().compareTo("")==0)        
-        {
-            /*Si no esta definido el regimén fiscal entonces*/
-            if(jTRegFis.getText().trim().compareTo("")==0)
-            {
-                /*Coloca el borde rojo*/                               
-                jTRegFis.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
-
-                /*Mensajea*/
-                JOptionPane.showMessageDialog(null, "El regimén fiscal esta vacio.", "Regimén fiscal", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
-
-                /*Coloca el foco del teclado en el control y regresa*/
-                jTRegFis.grabFocus();                    
-                return;
-            }
-            
-            /*Si no esta definido el lugar de expedición entonces*/
-            if(jTLugExp.getText().trim().compareTo("")==0)
-            {
-                /*Coloca el borde rojo*/                               
-                jTLugExp.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
-
-                /*Mensajea*/
-                JOptionPane.showMessageDialog(null, "El lugar de expedición esta vacio.", "Lugar expedición", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
-
-                /*Coloca el foco del teclado en el control y regresa*/
-                jTLugExp.grabFocus();                    
-                return;
-            }
-            
-        }/*Fin de if(jTCSDFCer.getText().trim().compareTo("")!=0 || jTCSDFKey.getText().trim().compareTo("")==0 || jTCSDCer.getText().trim().compareTo("")==0 || jTCSDKey.getText().trim().compareTo("")==0)        */
-        
+//        if(jTCSDFCer.getText().trim().compareTo("")!=0 || jTCSDFKey.getText().trim().compareTo("")==0 || jTCSDCer.getText().trim().compareTo("")==0 || jTCSDKey.getText().trim().compareTo("")==0)        
+//        {
+//            /*Si no esta definido el regimén fiscal entonces*/
+//            if(jTRegFis.getText().trim().compareTo("")==0)
+//            {
+//                /*Coloca el borde rojo*/                               
+//                jTRegFis.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+//
+//                /*Mensajea*/
+//                JOptionPane.showMessageDialog(null, "El regimén fiscal esta vacio.", "Regimén fiscal", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+//
+//                /*Coloca el foco del teclado en el control y regresa*/
+//                jTRegFis.grabFocus();                    
+//                return;
+//            }
+//            
+//            /*Si no esta definido el lugar de expedición entonces*/
+//            if(jTLugExp.getText().trim().compareTo("")==0)
+//            {
+//                /*Coloca el borde rojo*/                               
+//                jTLugExp.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+//
+//                /*Mensajea*/
+//                JOptionPane.showMessageDialog(null, "El lugar de expedición esta vacio.", "Lugar expedición", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+//
+//                /*Coloca el foco del teclado en el control y regresa*/
+//                jTLugExp.grabFocus();                    
+//                return;
+//            }
+//            
+//        }/*Fin de if(jTCSDFCer.getText().trim().compareTo("")!=0 || jTCSDFKey.getText().trim().compareTo("")==0 || jTCSDCer.getText().trim().compareTo("")==0 || jTCSDKey.getText().trim().compareTo("")==0)        */
+//        
         /*Preguntar al usuario si esta seguro de que están bien los datos*/
         Object[] op = {"Si","No"};
         if((JOptionPane.showOptionDialog(this, "¿Seguro que estan bien los datos?", "Guardar datos empresa", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0])) == JOptionPane.NO_OPTION)
@@ -1937,37 +1791,37 @@ public class DatsGenEmp extends javax.swing.JFrame
         }
         
         /*Si el CSD fiel tenía datos y ya no los tiene entonces*/
-        if(jTCSDFCer.getText().trim().compareTo("")==0 && sCSDCerFOri.compareTo("")!=0)                   
-        {
-            /*Borra lel CSD cer fiel*/
-            try
-            {
-                new File(sCSDCerFOri).delete();                                                                         
-            }
-            catch(SecurityException expnSecuri)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSecuri.getMessage(), Star.sErrSecuri, expnSecuri.getStackTrace());                
-                return;
-            }
-        }
-        
+//        if(jTCSDFCer.getText().trim().compareTo("")==0 && sCSDCerFOri.compareTo("")!=0)                   
+//        {
+//            /*Borra lel CSD cer fiel*/
+//            try
+//            {
+//                new File(sCSDCerFOri).delete();                                                                         
+//            }
+//            catch(SecurityException expnSecuri)
+//            {
+//                //Procesa el error y regresa
+//                Star.iErrProc(this.getClass().getName() + " " + expnSecuri.getMessage(), Star.sErrSecuri, expnSecuri.getStackTrace());                
+//                return;
+//            }
+//        }
+//        
         /*Si el CSD key fiel tenía datos y ya no los tiene entonces*/
-        if(jTCSDFKey.getText().trim().compareTo("")==0 && sCSDKeyFOri.compareTo("")!=0)
-        {           
-            /*Borra lel CSD key fiel*/
-            try
-            {
-                new File(sCSDKeyFOri).delete();                                                                         
-            }
-            catch(SecurityException expnSecuri)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSecuri.getMessage(), Star.sErrSecuri, expnSecuri.getStackTrace());                                
-                return;
-            }
-        }
-        
+//        if(jTCSDFKey.getText().trim().compareTo("")==0 && sCSDKeyFOri.compareTo("")!=0)
+//        {           
+//            /*Borra lel CSD key fiel*/
+//            try
+//            {
+//                new File(sCSDKeyFOri).delete();                                                                         
+//            }
+//            catch(SecurityException expnSecuri)
+//            {
+//                //Procesa el error y regresa
+//                Star.iErrProc(this.getClass().getName() + " " + expnSecuri.getMessage(), Star.sErrSecuri, expnSecuri.getStackTrace());                                
+//                return;
+//            }
+//        }
+//        
         /*Si el CSD tenía datos y ya no los tiene entonces*/
         if(jTCSDCer.getText().trim().compareTo("")==0 && sCSDCerOri.compareTo("")!=0)
         {   
@@ -2070,7 +1924,7 @@ public class DatsGenEmp extends javax.swing.JFrame
         /*Si la ruta original es diferente de la nueva entonces agrega la ruta de easy retail al final*/
         String sCarpAp = jTCarp.getText();
         if(sRutOri.compareTo(jTCarp.getText())!=0)                    
-            sCarpAp         += "\\Easy Retail® Admin";        
+            sCarpAp         += "\\Easy Retail Admin";        
                         
         /*Reemplaza los carácteres de barra invertida por 2 para que la base de datos los pueda guardar*/        
         sCarpAp = sCarpAp.replace("\\", "\\\\");                
@@ -2106,7 +1960,7 @@ public class DatsGenEmp extends javax.swing.JFrame
                             "calle      = '" + jTCall.getText().replace("'", "''") + "', " + 
                             "celen      = '" + sCelEn.replace("'", "''") + "', " + 
                             "metcost    = '" + sMetCost + "', " + 
-                            "passcerf   = '" + Star.sEncrip(jPaLlavF.getText().trim()) + "', " + 
+                            //"passcerf   = '" + Star.sEncrip(jPaLlavF.getText().trim()) + "', " + 
                             "passcer    = '" + Star.sEncrip(jPaLlav.getText().trim()) + "', " + 
                             "calleen    = '" + sCallEn.replace("'", "''") + "', " + 
                             "col        = '" + jTCol.getText().replace("'", "''") + "', " + 
@@ -2130,9 +1984,9 @@ public class DatsGenEmp extends javax.swing.JFrame
                             "nointen    = '" + sIntEn.replace("'", "''") + "', " + 
                             "noext      = '" + jTNoExt.getText().replace("'", "''") + "', " + 
                             "rutcer     = '" + jTCSDCer.getText().trim() + "', " + 
-                            "rutcerf    = '" + jTCSDFCer.getText().trim() + "', " + 
+                            //"rutcerf    = '" + jTCSDFCer.getText().trim() + "', " + 
                             "noextenen  = '" + sNoExtEn.replace("'", "''") + "', " + 
-                            "rutkeyf    = '" + jTCSDFKey.getText().trim() + "', " + 
+                            //"rutkeyf    = '" + jTCSDFKey.getText().trim() + "', " + 
                             "rutkey     = '" + jTCSDKey.getText().trim() + "', " + 
                             "pers       = '" + sPer.replace("'", "''") + "', " + 
                             "estac      = '" + Login.sUsrG.replace("'", "''") + "', " + 
@@ -2208,15 +2062,15 @@ public class DatsGenEmp extends javax.swing.JFrame
         }
                 
         /*Si hay archivo en el certificado de la fiel entonces*/
-        if(jTCSDFCer.getText().trim().compareTo("")!=0)
-        {            
-            /*Si la fiel es valida entonces mueve el archivo de certificado y llave a la carpeta de la empresa*/
-            if(iValCSD(jTCSDFCer, jTCSDFKey, jPaLlavF)==0)
-            {
-                vCopCer(con, jTCSDFCer.getText().trim(), "f", "rutcerf");
-                vCopCer(con, jTCSDFKey.getText().trim(), "f", "rutkeyf");
-            }
-        }                    
+//        if(jTCSDFCer.getText().trim().compareTo("")!=0)
+//        {            
+//            /*Si la fiel es valida entonces mueve el archivo de certificado y llave a la carpeta de la empresa*/
+//            if(iValCSD(jTCSDFCer, jTCSDFKey, jPaLlavF)==0)
+//            {
+//                vCopCer(con, jTCSDFCer.getText().trim(), "f", "rutcerf");
+//                vCopCer(con, jTCSDFKey.getText().trim(), "f", "rutkeyf");
+//            }
+//        }                    
                         
         /*Si hay archivo en el certificado entonces*/
         if(jTCSDCer.getText().trim().compareTo("")!=0)
@@ -2825,11 +2679,7 @@ public class DatsGenEmp extends javax.swing.JFrame
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));  
-        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
-        {
-        }
-        else
-            evt.consume();
+        Star.noCaracterXML(evt);
         
     }//GEN-LAST:event_jTNomKeyTyped
 
@@ -4179,79 +4029,15 @@ public class DatsGenEmp extends javax.swing.JFrame
     
     
     
-    /*Cuando se gana el foco del teclado en el campo del CSD cred fiel*/
-    private void jTCSDFCerFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTCSDFCerFocusGained
-        
-        /*Selecciona todo el texto cuando gana el foco*/
-        jTCSDFCer.setSelectionStart(0);jTCSDFCer.setSelectionEnd(jTCSDFCer.getText().length());        
-        
-    }//GEN-LAST:event_jTCSDFCerFocusGained
-
-    
-    /*Cuando se pierde el foco del teclado en el campo del CSD ser fiel*/
-    private void jTCSDFCerFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTCSDFCerFocusLost
-
-        /*Coloca el cursor al principio del control*/
-        jTCSDFCer.setCaretPosition(0);
-        
-        /*Coloca el borde negro si tiene datos, caso contrario de rojo*/                               
-        if(jTCSDFCer.getText().compareTo("")!=0)
-            jTCSDFCer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204,204,255)));               
-        
-    }//GEN-LAST:event_jTCSDFCerFocusLost
-
-    
-    /*Cuando se presiona una tecla en el campo del CSD cer fiel*/
-    private void jTCSDFCerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCSDFCerKeyPressed
-        
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-        
-    }//GEN-LAST:event_jTCSDFCerKeyPressed
-
-    
-    /*Cuando se gana el foco del teclado en el campo del CSD key fiel*/
-    private void jTCSDFKeyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTCSDFKeyFocusGained
-        
-        /*Selecciona todo el texto cuando gana el foco*/
-        jTCSDFKey.setSelectionStart(0);jTCSDFKey.setSelectionEnd(jTCSDFKey.getText().length());        
-        
-    }//GEN-LAST:event_jTCSDFKeyFocusGained
-
-    
-    /*Cuando se pierde el foco del teclado en el campo del CSD key fiel*/
-    private void jTCSDFKeyFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTCSDFKeyFocusLost
-        
-        /*Coloca el cursor al principio del control*/
-        jTCSDFKey.setCaretPosition(0);
-        
-        /*Coloca el borde negro si tiene datos, caso contrario de rojo*/                               
-        if(jTCSDFKey.getText().compareTo("")!=0)
-            jTCSDFKey.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204,204,255)));               
-        
-    }//GEN-LAST:event_jTCSDFKeyFocusLost
-
-    
-    /*Cuando se presiona una tecla en el campo del CSD key fiel*/
-    private void jTCSDFKeyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCSDFKeyKeyPressed
-        
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-        
-    }//GEN-LAST:event_jTCSDFKeyKeyPressed
-
     
     
     
     
-    /*Cuando se presiona una tecla en el botón de probar fiel*/
-    private void jBProbFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBProbFKeyPressed
-        
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-        
-    }//GEN-LAST:event_jBProbFKeyPressed
-
+    
+    
+    
+    
+    
     
     /*Cuando se presiona el botón de probar CSD*/
     private void jBProbCKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBProbCKeyPressed
@@ -4262,14 +4048,6 @@ public class DatsGenEmp extends javax.swing.JFrame
     }//GEN-LAST:event_jBProbCKeyPressed
 
     
-    /*Cuando el mouse entra en el botón de probar fiel*/
-    private void jBProbFMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBProbFMouseEntered
- 
-        /*Cambia el color del fondo del botón*/
-        jBProbF.setBackground(Star.colBot);
-        
-    }//GEN-LAST:event_jBProbFMouseEntered
-
     
     /*Cuando el mouse entra en el botón de probar CSD*/
     private void jBProbCMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBProbCMouseEntered
@@ -4280,14 +4058,6 @@ public class DatsGenEmp extends javax.swing.JFrame
     }//GEN-LAST:event_jBProbCMouseEntered
 
     
-    /*Cuando el mouse sale del botón de probar fiel*/
-    private void jBProbFMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBProbFMouseExited
-        
-        /*Cambia el color del fondo del botón*/
-        jBProbF.setBackground(colOri);
-        
-    }//GEN-LAST:event_jBProbFMouseExited
-
     
     /*Cuando el mouse sale del botón de probar CSD*/
     private void jBProbCMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBProbCMouseExited
@@ -4467,18 +4237,6 @@ public class DatsGenEmp extends javax.swing.JFrame
     }//GEN-LAST:event_jBProbCActionPerformed
 
     
-    /*Cuando se presiona el botón de probar CSD fiel*/
-    private void jBProbFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBProbFActionPerformed
-        
-        /*Prueba la validez del CSD*/
-        if(iValCSD(jTCSDFCer, jTCSDFKey, jPaLlavF)==-1)
-            return;
-        
-        /*Mensajea de que el certificado es correcto*/
-        JOptionPane.showMessageDialog(null, "El CSD es valido.", "CSD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));        
-        
-    }//GEN-LAST:event_jBProbFActionPerformed
-
     
     /*Cuando se presiona el botón de búscar CSD key*/
     private void jBCSDKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCSDKActionPerformed
@@ -4582,107 +4340,13 @@ public class DatsGenEmp extends javax.swing.JFrame
 
     
     
-    /*Cuando el mouse entra en el botón de CSD key fiel*/
-    private void jBCSDKFMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBCSDKFMouseEntered
-
-        /*Cambia el color del fondo del botón*/
-        jBCSDKF.setBackground(Star.colBot);
-
-    }//GEN-LAST:event_jBCSDKFMouseEntered
-
     
-    /*Cuando el mouse sale del botón de CSD key fiel*/
-    private void jBCSDKFMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBCSDKFMouseExited
-
-        /*Cambia el color del fondo del botón*/
-        jBCSDKF.setBackground(colOri);
-
-    }//GEN-LAST:event_jBCSDKFMouseExited
-
     
-    /*Cuando el botón de búscar CSD key de fiel*/
-    private void jBCSDKFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCSDKFActionPerformed
-
-        /*Configura el file chooser para escoger la ruta del directorio donde esta la calculadora*/
-        final JFileChooser fc   = new JFileChooser  ();
-        fc.setDialogTitle                           ("Buscar CSD.key fiel");
-        fc.setAcceptAllFileFilterUsed               (false);
-
-        /*Si el usuario presiono aceptar entonces*/
-        if(fc.showSaveDialog(this)== JFileChooser.APPROVE_OPTION)
-        {
-            /*Lee la ruta seleccionada*/
-            String sRut         = fc.getCurrentDirectory().getAbsolutePath();
-
-            /*Concatena el exe al final seleccionado*/
-            sRut                += "\\" + fc.getSelectedFile().getName();    
-
-            /*Coloca la ruta en el campo*/
-            jTCSDFKey.setText(sRut);
-        }
-
-    }//GEN-LAST:event_jBCSDKFActionPerformed
-
     
-    /*Cuando se presiona una tecla en el botón de CSD key fiel*/
-    private void jBCSDKFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBCSDKFKeyPressed
-
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-
-    }//GEN-LAST:event_jBCSDKFKeyPressed
-
     
-    /*Cuando el mouse entra en el botón de CSD cer fiel*/
-    private void jBCSDCFMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBCSDCFMouseEntered
-
-        /*Cambia el color del fondo del botón*/
-        jBCSDCF.setBackground(Star.colBot);
-
-    }//GEN-LAST:event_jBCSDCFMouseEntered
-
     
-    /*Cuando el mouse sale del botón de búscar CSD cer fiel*/
-    private void jBCSDCFMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBCSDCFMouseExited
-
-        /*Cambia el color del fondo del botón*/
-        jBCSDCF.setBackground(colOri);
-
-    }//GEN-LAST:event_jBCSDCFMouseExited
-
     
-    /*Cuando se presiona el botón de búscar CSD cer de fiel*/
-    private void jBCSDCFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCSDCFActionPerformed
-
-        /*Configura el file chooser para escoger la ruta del directorio donde esta la calculadora*/
-        final JFileChooser fc   = new JFileChooser  ();
-        fc.setDialogTitle                           ("Buscar CSD.cer fiel");
-        fc.setAcceptAllFileFilterUsed               (false);
-
-        /*Si el usuario presiono aceptar entonces*/
-        if(fc.showSaveDialog(this)== JFileChooser.APPROVE_OPTION)
-        {
-            /*Lee la ruta seleccionada*/
-            String sRut         = fc.getCurrentDirectory().getAbsolutePath();
-
-            /*Concatena el exe al final seleccionado*/
-            sRut                += "\\" + fc.getSelectedFile().getName();    
-
-            /*Coloca la ruta en el campo*/
-            jTCSDFCer.setText(sRut);
-        }
-
-    }//GEN-LAST:event_jBCSDCFActionPerformed
-
     
-    /*Cuando se presiona una tecla en el botón de búscar CSD cer fiel*/
-    private void jBCSDCFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBCSDCFKeyPressed
-
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-
-    }//GEN-LAST:event_jBCSDCFKeyPressed
-
     
     
     
@@ -4795,14 +4459,6 @@ public class DatsGenEmp extends javax.swing.JFrame
     }//GEN-LAST:event_jTLugExpKeyPressed
 
     
-    /*Cuando se gana el foco del teclado en el campo de la contraseña de la llave de la fiel*/
-    private void jPaLlavFFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPaLlavFFocusGained
-        
-        /*Selecciona todo el texto cuando gana el foco*/
-        jPaLlavF.setSelectionStart(0);jPaLlavF.setSelectionEnd(jPaLlavF.getText().length());        
-        
-    }//GEN-LAST:event_jPaLlavFFocusGained
-
     
     /*Cuando se gana el foco del teclado en el campo de la contraseña de la llave de CSD*/
     private void jPaLlavFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPaLlavFocusGained
@@ -4813,18 +4469,6 @@ public class DatsGenEmp extends javax.swing.JFrame
     }//GEN-LAST:event_jPaLlavFocusGained
 
     
-    /*Cuando se pierde el foco del teclado en el campo de la contraseña de la llave fiel*/
-    private void jPaLlavFFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPaLlavFFocusLost
-        
-        /*Coloca el cursor al principio del control*/
-        jPaLlavF.setCaretPosition(0);
-        
-        /*Coloca el borde negro si tiene datos, caso contrario de rojo*/                               
-        if(jPaLlavF.getText().compareTo("")!=0)
-            jPaLlavF.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204,204,255)));               
-        
-    }//GEN-LAST:event_jPaLlavFFocusLost
-
     
     /*Cuando se pierde el foco del teclado en el campo de la contraseña de la llave CSD*/
     private void jPaLlavFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPaLlavFocusLost
@@ -4848,55 +4492,27 @@ public class DatsGenEmp extends javax.swing.JFrame
     }//GEN-LAST:event_jPaLlavKeyPressed
 
     
-    /*Cuando se presiona una tecla en el control de la contraseña de fiel*/
-    private void jPaLlavFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPaLlavFKeyPressed
-        
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-        
-    }//GEN-LAST:event_jPaLlavFKeyPressed
-
     private void jTCallKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCallKeyTyped
         
-        if((evt.getKeyChar() != '\b') && (evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
-        {
-        }
-        else    
-            evt.consume();
+        Star.noCaracterXML(evt);
         
     }//GEN-LAST:event_jTCallKeyTyped
 
     private void jTColKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTColKeyTyped
-        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
-        {
-        }
-        else
-            evt.consume();
+        Star.noCaracterXML(evt);
     }//GEN-LAST:event_jTColKeyTyped
 
     private void jTCiuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCiuKeyTyped
         // TODO add your handling code here:
-        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
-        {
-        }
-        else
-            evt.consume();
+        Star.noCaracterXML(evt);
     }//GEN-LAST:event_jTCiuKeyTyped
 
     private void jTEstKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTEstKeyTyped
-    if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
-        {
-        }
-        else
-            evt.consume();
+    Star.noCaracterXML(evt);
     }//GEN-LAST:event_jTEstKeyTyped
 
     private void jTPaiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTPaiKeyTyped
-        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
-        {
-        }
-        else
-            evt.consume();
+        Star.noCaracterXML(evt);
     }//GEN-LAST:event_jTPaiKeyTyped
 
                    
@@ -4915,7 +4531,7 @@ public class DatsGenEmp extends javax.swing.JFrame
     /*Método para activar o desactivar los controles de física o moral*/
     private void vFisMor(boolean bVal)
     {
-        /*Activa o desactiva los controles de la fiel*/
+        /*Activa o desactiva los controles de la fiel
         jTCSDFCer.setEditable   (bVal);
         jTCSDFCer.setFocusable  (bVal);
         jTCSDFKey.setEditable   (bVal);
@@ -4927,7 +4543,7 @@ public class DatsGenEmp extends javax.swing.JFrame
         jBCSDCF.setEnabled      (bVal);
         jBCSDCF.setFocusable    (bVal);
         jBCSDKF.setEnabled      (bVal);
-        jBCSDKF.setFocusable    (bVal);
+        jBCSDKF.setFocusable    (bVal);*/
     }
     
     
@@ -4949,9 +4565,7 @@ public class DatsGenEmp extends javax.swing.JFrame
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBCSDC;
-    private javax.swing.JButton jBCSDCF;
     private javax.swing.JButton jBCSDK;
-    private javax.swing.JButton jBCSDKF;
     private javax.swing.JButton jBCargCed;
     private javax.swing.JButton jBCargImg;
     private javax.swing.JButton jBDelCed;
@@ -4959,7 +4573,6 @@ public class DatsGenEmp extends javax.swing.JFrame
     private javax.swing.JButton jBDom;
     private javax.swing.JButton jBGuar;
     private javax.swing.JButton jBProbC;
-    private javax.swing.JButton jBProbF;
     private javax.swing.JButton jBSal;
     private javax.swing.JButton jBVeGran1;
     private javax.swing.JButton jBVeGran2;
@@ -4975,9 +4588,6 @@ public class DatsGenEmp extends javax.swing.JFrame
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -4996,7 +4606,6 @@ public class DatsGenEmp extends javax.swing.JFrame
     private javax.swing.JPanel jP1;
     private javax.swing.JPanel jPCSD;
     private javax.swing.JPasswordField jPaLlav;
-    private javax.swing.JPasswordField jPaLlavF;
     private javax.swing.JPanel jPanImg;
     private javax.swing.JPanel jPanImg1;
     private javax.swing.JPanel jPanel2;
@@ -5011,8 +4620,6 @@ public class DatsGenEmp extends javax.swing.JFrame
     private javax.swing.JScrollPane jScrTab;
     private javax.swing.JTextField jTCP;
     private javax.swing.JTextField jTCSDCer;
-    private javax.swing.JTextField jTCSDFCer;
-    private javax.swing.JTextField jTCSDFKey;
     private javax.swing.JTextField jTCSDKey;
     private javax.swing.JTextField jTCall;
     private javax.swing.JTextField jTCarp;

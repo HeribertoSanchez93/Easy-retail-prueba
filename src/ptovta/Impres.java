@@ -132,9 +132,8 @@ public class Impres extends javax.swing.JFrame
                         sEstacOri           = jTab.getValueAt(jTab.getSelectedRow(), 1).toString();
                         sImpreFOri          = jTab.getValueAt(jTab.getSelectedRow(), 2).toString();
                         sImpreTOri          = jTab.getValueAt(jTab.getSelectedRow(), 3).toString();
-                        sEstacOri           = jTab.getValueAt(jTab.getSelectedRow(), 4).toString();
-                        sMMOri              = jTab.getValueAt(jTab.getSelectedRow(), 5).toString();
-                        sCortOri            = jTab.getValueAt(jTab.getSelectedRow(), 6).toString();
+                        sMMOri              = jTab.getValueAt(jTab.getSelectedRow(), 4).toString();
+                        sCortOri            = jTab.getValueAt(jTab.getSelectedRow(), 5).toString();
                         
                         /*Aumenta el contador para saber que va de salida*/
                         ++iContCellEd;
@@ -146,9 +145,8 @@ public class Impres extends javax.swing.JFrame
                         jTab.setValueAt(sEstacOri,          jTab.getSelectedRow(), 1);                        
                         jTab.setValueAt(sImpreFOri,         jTab.getSelectedRow(), 2);                        
                         jTab.setValueAt(sImpreTOri,         jTab.getSelectedRow(), 3);                        
-                        jTab.setValueAt(sEstacOri,          jTab.getSelectedRow(), 4);                        
-                        jTab.setValueAt(sMMOri,             jTab.getSelectedRow(), 5);                        
-                        jTab.setValueAt(sCortOri,           jTab.getSelectedRow(), 6);                        
+                        jTab.setValueAt(sMMOri,             jTab.getSelectedRow(), 4);                        
+                        jTab.setValueAt(sCortOri,           jTab.getSelectedRow(), 5);                        
                         
                         /*Resetea el celleditor*/
                         iContCellEd = 1;

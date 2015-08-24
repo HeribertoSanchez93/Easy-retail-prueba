@@ -418,7 +418,7 @@ public class NewNot extends javax.swing.JFrame
                         }
                         
                         /*Dale formato de moneda al importe*/                        
-                        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                         double dCant    = Double.parseDouble(sImp);                
                         sImp            = n.format(dCant);
                         
@@ -2192,7 +2192,7 @@ public class NewNot extends javax.swing.JFrame
             bSiCred = true;
         
         /*Dale formato de moneda al límite de crédito*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sLimit);                
         sLimit          = n.format(dCant);
 
@@ -2542,7 +2542,7 @@ public class NewNot extends javax.swing.JFrame
                 String sSald    = jTSaldDispo.getText();
 
                 /*Dale formato de moneda al saldo disponible*/                            
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sSald);                
                 sSald           = n.format(dCant);
 
@@ -2798,7 +2798,7 @@ public class NewNot extends javax.swing.JFrame
         }
         sFDoc="'"+sFDoc+"'";
         //Inserta la nota de crédito en la base de datos
-        if(Star.iInsVtas(con, sSerFac.replace("'", "''"), sConFac.replace("'", "''"), jTCli.getText().replace("'", "''"), jTSer.getText().replace("'", "''"), jTSubTot.getText().replace("$", "").replace(",", ""), jTImpue.getText().replace("$", "").replace(",", ""), jTTot.getText().replace("$", "").replace(",", ""), "now()", sFDoc, sFVenc, "'PE'", "0", "", "NOTC", "0", sMetPag.replace("'", "''"), sCta.replace("'", "''"), jTAObserv.getText().replace("'", "''"), "0", "0", "0", "1", jTTotCost.getText().replace("$", "").replace(",", ""), Login.sUsrG, jComMon.getSelectedItem().toString().trim(), sTipCam, "C", "", "", "", "", "", "", "", "", "", "", "", "", "N", "", "0", "0", "0", "0","")==-1)
+        if(Star.iInsVtas(con, sSerFac.replace("'", "''"), sConFac.replace("'", "''"), jTCli.getText().replace("'", "''"), jTSer.getText().replace("'", "''"), jTSubTot.getText().replace("$", "").replace(",", ""), jTImpue.getText().replace("$", "").replace(",", ""), jTTot.getText().replace("$", "").replace(",", ""), "now()", sFDoc, sFVenc, "'PE'", "0", "", "NOTC", "0", sMetPag.replace("'", "''"), sCta.replace("'", "''"), jTAObserv.getText().replace("'", "''"), "0", "0", "0", "1", jTTotCost.getText().replace("$", "").replace(",", ""), Login.sUsrG, jComMon.getSelectedItem().toString().trim(), sTipCam, "C", "", "", "", "", "", "", "", "", "", "", "", "", "N", "", "0", "0", "0", "0","","")==-1)
             return;
         
         /*Contiene las variables para obtener los datos de la venta*/
@@ -2947,7 +2947,7 @@ public class NewNot extends javax.swing.JFrame
         /*Dale formato de moneda al total*/
         String sTot             = jTTot.getText().replace("$", "").replace(",", "");        
         double dCant            = Double.parseDouble                (sTot);                
-        NumberFormat n          = NumberFormat.getCurrencyInstance  (Locale.getDefault());
+        NumberFormat n          = NumberFormat.getCurrencyInstance  (new Locale("es","MX"));
         sTot                    = n.format(dCant);
 
         /*Determina el texto que se va a poner en timbrado*/
@@ -3249,7 +3249,7 @@ public class NewNot extends javax.swing.JFrame
                 String sSald    = jTSaldDispo.getText();
 
                 /*Dale formato de moneda al saldo disponible*/                            
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sSald);                
                 sSald           = n.format(dCant);
 
@@ -3942,7 +3942,7 @@ public class NewNot extends javax.swing.JFrame
             if(rs.next())
             {
                 /*Dale formato de moneda a los totales*/                                
-                NumberFormat n          = NumberFormat.getCurrencyInstance(Locale.getDefault());                                
+                NumberFormat n          = NumberFormat.getCurrencyInstance(new Locale("es","MX"));                                
                 double dCant            = Double.parseDouble(rs.getString("tot"));                                
                 String sTot             = n.format(dCant);
                 dCant                   = Double.parseDouble(rs.getString("subtot"));                                
@@ -5284,7 +5284,7 @@ public class NewNot extends javax.swing.JFrame
         String sImpue   = Double.toString(Double.parseDouble(sTex) - Double.parseDouble(sSubTot));
         
         /*Formatealo a moneda a los totales*/
-        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         double dCant    = Double.parseDouble(sTex);               
         sTex                        = n.format(dCant);
         dCant           = Double.parseDouble(sSubTot);               
@@ -5879,7 +5879,7 @@ public class NewNot extends javax.swing.JFrame
             }
 
             /*Formatea a moneda los totales*/
-            n                               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            n                               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant                    = Double.parseDouble(sSubTot);                        
             sSubTot                         = n.format(dCant);
             dCant                           = Double.parseDouble(sImpue);                        

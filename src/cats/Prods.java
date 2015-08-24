@@ -19,6 +19,7 @@ import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -33,6 +34,7 @@ import ptovta.ImgVis;
 import ptovta.LPrecs;
 import ptovta.Login;
 import static ptovta.Princip.bIdle;
+import ptovta.Scan;
 import vis.VisProds;
 
 
@@ -53,6 +55,9 @@ public class Prods extends javax.swing.JFrame
     
     /*Variable que contiene el borde actual*/
     private Border              bBordOri;
+    
+    /*Variable que llama la ventana que tiene embebida al scaner*/
+    private Scan                pScan;
     
     /*Declara variables de instancia*/
     private static Prods        obj                 = null;
@@ -139,11 +144,18 @@ public class Prods extends javax.swing.JFrame
     
 
     /*Consructor sin argumentos*/
-    public Prods()
+    public Prods(java.util.ArrayList<Boolean> permisos)
     {               
         /*Inicializa los componentes gráfcos*/
         initComponents();
-    
+        
+        //Revisa Permisos
+        if(!permisos.isEmpty()){
+            jBNew.setEnabled(permisos.get(0));
+            jBGuar.setEnabled(permisos.get(1));
+            jBDel.setEnabled(permisos.get(2));
+        }
+        
         /*Crea el grupo de los radio buttons de costeos*/
         bG  = new javax.swing.ButtonGroup();
         bG.add(jRUEPS);
@@ -1615,7 +1627,7 @@ public class Prods extends javax.swing.JFrame
             if(rs.next())
             {
                 /*Declara variables de bloque*/
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         
                 /*Selecciona el método de costeo correcto para el producto*/
                 if(rs.getString("metcost").compareTo("peps")==0)
@@ -2131,7 +2143,7 @@ public class Prods extends javax.swing.JFrame
     {
         /*Si es null entonces crea una nueva instancia*/
         if(obj==null)
-            obj = new Prods();
+            obj = new Prods(new java.util.ArrayList<Boolean>());
 
         /*Devuelve el resultado*/
         return obj;
@@ -2148,7 +2160,6 @@ public class Prods extends javax.swing.JFrame
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jBNew = new javax.swing.JButton();
-        jBSal = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
         jComCol = new javax.swing.JComboBox();
         jComUni = new javax.swing.JComboBox();
@@ -2262,6 +2273,7 @@ public class Prods extends javax.swing.JFrame
         jSImg = new javax.swing.JScrollPane();
         jPanImg = new javax.swing.JPanel();
         jLImg = new javax.swing.JLabel();
+        jBSal = new javax.swing.JButton();
         jTAlmaG = new javax.swing.JTextField();
         jLabel43 = new javax.swing.JLabel();
         jLabel44 = new javax.swing.JLabel();
@@ -2296,6 +2308,7 @@ public class Prods extends javax.swing.JFrame
         jCPed = new javax.swing.JCheckBox();
         jCNoSer = new javax.swing.JCheckBox();
         jBCompMarcMod = new javax.swing.JButton();
+        jBLim1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
@@ -2400,34 +2413,6 @@ public class Prods extends javax.swing.JFrame
             }
         });
         jP1.add(jBNew, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 60, 150, 30));
-
-        jBSal.setBackground(new java.awt.Color(255, 255, 255));
-        jBSal.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
-        jBSal.setForeground(new java.awt.Color(0, 102, 0));
-        jBSal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/sal.png"))); // NOI18N
-        jBSal.setText("Salir");
-        jBSal.setToolTipText("Salir (ESC)");
-        jBSal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jBSal.setNextFocusableComponent(jSImg);
-        jBSal.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jBSalMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jBSalMouseExited(evt);
-            }
-        });
-        jBSal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBSalActionPerformed(evt);
-            }
-        });
-        jBSal.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jBSalKeyPressed(evt);
-            }
-        });
-        jP1.add(jBSal, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 150, 150, 30));
 
         jLabel13.setText("*Nombre:");
         jP1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 120, -1));
@@ -2780,7 +2765,8 @@ public class Prods extends javax.swing.JFrame
                 jBLimKeyPressed(evt);
             }
         });
-        jP1.add(jBLim, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 120, 150, 30));
+        jP1.add(jBLim, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 150, 150, 30));
+        jBLim.getAccessibleContext().setAccessibleName("");
 
         jTLin.setEditable(false);
         jTLin.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -3197,7 +3183,7 @@ public class Prods extends javax.swing.JFrame
                 jBCargImgKeyPressed(evt);
             }
         });
-        jP1.add(jBCargImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 420, -1, -1));
+        jP1.add(jBCargImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 450, -1, -1));
 
         jBDelImg.setBackground(new java.awt.Color(255, 255, 255));
         jBDelImg.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
@@ -3222,7 +3208,7 @@ public class Prods extends javax.swing.JFrame
                 jBDelImgKeyPressed(evt);
             }
         });
-        jP1.add(jBDelImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 420, 59, -1));
+        jP1.add(jBDelImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 450, 59, -1));
 
         jBBusc.setBackground(new java.awt.Color(255, 255, 255));
         jBBusc.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
@@ -3951,7 +3937,7 @@ public class Prods extends javax.swing.JFrame
                 jBVeGranKeyPressed(evt);
             }
         });
-        jP1.add(jBVeGran, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 420, 30, 20));
+        jP1.add(jBVeGran, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 450, 30, 20));
 
         jSImg.setNextFocusableComponent(jBCargImg);
 
@@ -3971,24 +3957,55 @@ public class Prods extends javax.swing.JFrame
             }
         });
 
+        jBSal.setBackground(new java.awt.Color(255, 255, 255));
+        jBSal.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jBSal.setForeground(new java.awt.Color(0, 102, 0));
+        jBSal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/sal.png"))); // NOI18N
+        jBSal.setText("Salir");
+        jBSal.setToolTipText("Salir (ESC)");
+        jBSal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jBSal.setNextFocusableComponent(jSImg);
+        jBSal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jBSalMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jBSalMouseExited(evt);
+            }
+        });
+        jBSal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBSalActionPerformed(evt);
+            }
+        });
+        jBSal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBSalKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanImgLayout = new javax.swing.GroupLayout(jPanImg);
         jPanImg.setLayout(jPanImgLayout);
         jPanImgLayout.setHorizontalGroup(
             jPanImgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanImgLayout.createSequentialGroup()
+                .addComponent(jBSal, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
                 .addComponent(jLImg)
                 .addGap(0, 150, Short.MAX_VALUE))
         );
         jPanImgLayout.setVerticalGroup(
             jPanImgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanImgLayout.createSequentialGroup()
-                .addComponent(jLImg)
+                .addGroup(jPanImgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLImg)
+                    .addComponent(jBSal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(221, Short.MAX_VALUE))
         );
 
         jSImg.setViewportView(jPanImg);
 
-        jP1.add(jSImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 180, 150, 240));
+        jP1.add(jSImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 180, 150, 270));
 
         jTAlmaG.setEditable(false);
         jTAlmaG.setFocusable(false);
@@ -4444,14 +4461,42 @@ public class Prods extends javax.swing.JFrame
         });
         jP1.add(jBCompMarcMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 500, 120, 20));
 
+        jBLim1.setBackground(new java.awt.Color(255, 255, 255));
+        jBLim1.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jBLim1.setForeground(new java.awt.Color(0, 102, 0));
+        jBLim1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Activado-135x35px.png"))); // NOI18N
+        jBLim1.setText("");
+        jBLim1.setToolTipText("Abrir scaner");
+        jBLim1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jBLim1.setNextFocusableComponent(jBSal);
+        jBLim1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jBLim1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jBLim1MouseExited(evt);
+            }
+        });
+        jBLim1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBLim1ActionPerformed(evt);
+            }
+        });
+        jBLim1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBLim1KeyPressed(evt);
+            }
+        });
+        jP1.add(jBLim1, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 120, 150, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jP1, javax.swing.GroupLayout.PREFERRED_SIZE, 1021, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jP1, javax.swing.GroupLayout.PREFERRED_SIZE, 1022, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5152,7 +5197,17 @@ public class Prods extends javax.swing.JFrame
         Star.gProds = null;
         
         /*Cierra el formulario*/
+       try
+        {
+            pScan.cerrarCam();
+            pScan.dispose();
+        }
+        catch(Exception ex)
+        {
+            
+        }
         this.dispose();
+        
         obj = null;
 
     }//GEN-LAST:event_jBSalActionPerformed
@@ -5732,7 +5787,15 @@ public class Prods extends javax.swing.JFrame
         {
             /*Llama al recolector de basura*/
             System.gc();
-        
+          try
+            {
+                pScan.cerrarCam();
+                pScan.dispose();
+            }
+            catch(Exception ex)
+            {
+            
+            }
             this.dispose();
             obj             = null;
             bMostVe         = true;
@@ -7216,7 +7279,7 @@ public class Prods extends javax.swing.JFrame
         JOptionPane.showMessageDialog(null, "Producto: " + jTProd.getText() + " modificado con éxito.", "Éxito al modificar", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
         
         /*Dale formato de moneda a todos los precios de lista y costos nuevamente*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sPre1.replace("$", "").replace(",", ""));                
         sPre1           = n.format(dCant);
         dCant           = Double.parseDouble(sPre2.replace("$", "").replace(",", ""));                
@@ -11076,6 +11139,26 @@ public class Prods extends javax.swing.JFrame
     private void jTMinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTMinActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTMinActionPerformed
+
+    private void jBLim1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBLim1MouseEntered
+       jBLim1.setBackground(Star.colBot);
+    }//GEN-LAST:event_jBLim1MouseEntered
+
+    private void jBLim1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBLim1MouseExited
+         jBLim1.setBackground(colOri);
+    }//GEN-LAST:event_jBLim1MouseExited
+
+    private void jBLim1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBLim1ActionPerformed
+        pScan = new Scan(jTProd,null,jBLim1);
+        SwingUtilities.invokeLater(pScan);
+        jBLim1.setEnabled(false);
+        pScan.setVisible(true);
+        jTProd.requestFocus();
+    }//GEN-LAST:event_jBLim1ActionPerformed
+
+    private void jBLim1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBLim1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBLim1KeyPressed
   
     
     /*Función escalable para cuando se presiona una tecla en el módulo*/
@@ -11140,6 +11223,7 @@ public class Prods extends javax.swing.JFrame
     private javax.swing.JButton jBGuar;
     private javax.swing.JButton jBJera;
     private javax.swing.JButton jBLim;
+    public javax.swing.JButton jBLim1;
     private javax.swing.JButton jBMasMarc;
     private javax.swing.JButton jBMasMod;
     private javax.swing.JButton jBMasSer;

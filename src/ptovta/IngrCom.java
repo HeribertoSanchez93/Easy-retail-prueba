@@ -132,17 +132,7 @@ public class IngrCom extends javax.swing.JFrame
         
         System.out.println(sTipo);
         
-        //Se bloque dependiendo del tipo que sea
-        if(sTipo!="")
-        {
-            if(sTipo.compareTo("orden")==0)
-            {
-                jCOrd.setSelected(true);
-                jLNot.setText("NUEVA ORDEN DE COMPRA");
-            }
-            jCOrd.setEnabled(false);
-                
-        }
+        
         
         //Se toma si es un previo de compra
         sCodPrevG=sCodPrev;
@@ -192,7 +182,18 @@ public class IngrCom extends javax.swing.JFrame
         
         /*Inicialmente es una compra no una órden de compra*/
         vOrdCtrl(false);
-        
+        //Se bloque dependiendo del tipo que sea
+        if(sTipo!="")
+        {
+            if(sTipo.compareTo("orden")==0)
+            {
+                jCOrd.setSelected(true);
+                jLNot.setText("NUEVA ORDEN DE COMPRA");
+                vOrdCtrl(true);
+            }
+            jCOrd.setEnabled(false);
+                
+        }
         /*Selecciona la fecha del día de hoy para la posible de entrega*/
         java.util.Date f = new java.util.Date();
         jDFEnt.setDate(f);  
@@ -236,7 +237,7 @@ public class IngrCom extends javax.swing.JFrame
                     return;
                 
                 //Cierra la base de datos
-                Star.iCierrBas(con);                                                        
+                Star.iCierrBas(con);                                                       
             }
 
             @Override
@@ -877,12 +878,12 @@ public class IngrCom extends javax.swing.JFrame
                         
                         /*Dale formato de moneda al importe*/
                         double dCant                = Double.parseDouble(sImp);                   
-                        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+                        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
                         sImp                        = n.format(dCant);
 
                         /*Dale formato de moneda al cost*/
                         dCant                       = Double.parseDouble(sCost);                   
-                        n                           = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+                        n                           = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
                         sCost                       = n.format(dCant);
 
                         /*Actualiza el importe de la fila en base a la cantidad por el costo*/
@@ -982,7 +983,7 @@ public class IngrCom extends javax.swing.JFrame
                 String sImpue       = rs.getString("prevcomprs.IMPUE");                
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant        = Double.parseDouble(sSubTot);                
                 sSubTot             = n.format(dCant);
                 dCant               = Double.parseDouble(sImpue);                
@@ -1042,7 +1043,7 @@ public class IngrCom extends javax.swing.JFrame
                     sValImp="0";
                 String sImpImpue = Double.toString(Double.parseDouble(sImpo)*Double.parseDouble(sValImp)/100);
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sCost);                
                 sCost           = n.format(dCant);
                 dCant           = Double.parseDouble(sImpo);                
@@ -1107,7 +1108,7 @@ public class IngrCom extends javax.swing.JFrame
                 String sImpue       = rs.getString("comprs.IMPUE");                
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant        = Double.parseDouble(sSubTot);                
                 sSubTot             = n.format(dCant);
                 dCant               = Double.parseDouble(sImpue);                
@@ -1177,7 +1178,7 @@ public class IngrCom extends javax.swing.JFrame
                     sValImp="0";
                 String sImpImpue = Double.toString(Double.parseDouble(sImpo)*Double.parseDouble(sValImp)/100);
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sCost);                
                 sCost           = n.format(dCant);
                 dCant           = Double.parseDouble(sImpo);                
@@ -1279,7 +1280,7 @@ public class IngrCom extends javax.swing.JFrame
             String sSaldTot     = Double.toString(Double.parseDouble(sTot) - Double.parseDouble(sNot));
 
             /*Formatea el saldo a moneda*/            
-            NumberFormat n      = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+            NumberFormat n      = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
             double dCant        = Double.parseDouble(sSaldTot);        
             sSaldTot            = n.format(dCant);
 
@@ -1289,22 +1290,22 @@ public class IngrCom extends javax.swing.JFrame
         
         /*Formatea a moneda el subtotal*/
         double dCant                    = Double.parseDouble(sSubTot);
-        NumberFormat n                  = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        NumberFormat n                  = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sSubTot                         = n.format(dCant);
         
         /*Formatear el impuesto a moneda*/
         dCant                           = Double.parseDouble(sImp);
-        n                               = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        n                               = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sImp                            = n.format(dCant);
         
         /*Formatear el total a moneda*/
         dCant                           = Double.parseDouble(sTot);
-        n                               = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        n                               = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sTot                            = n.format(dCant);
         
         /*Formatear el total a descuento*/
         dCant                           = Double.parseDouble(sDesc);
-        n                               = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        n                               = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sDesc                            = n.format(dCant);
         
         /*Colocalos en sus campos correspondientes*/
@@ -3360,7 +3361,27 @@ public class IngrCom extends javax.swing.JFrame
         String sMsj = "Orden";
         if(!jCOrd.isSelected())
             sMsj    = "Compra";
-
+        if(sMsj=="Orden")
+        {
+            if(jTCo1.getText().trim().compareTo("")==0&&jCCo1.isSelected())
+            {
+                int seleccion = JOptionPane.showOptionDialog(this,"El correo 1 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+                if (seleccion ==0)
+                return;
+            }
+            if(jTCo1.getText().trim().compareTo("")==0&&jCCo2.isSelected())
+            {
+                int seleccion = JOptionPane.showOptionDialog(this,"El correo 2 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+                if (seleccion ==0)
+                return;
+            }
+            if(jTCo3.getText().trim().compareTo("")==0&&jCCo3.isSelected())
+            {
+                int seleccion = JOptionPane.showOptionDialog(this,"El correo 3 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+                if (seleccion ==0)
+                return;
+            }
+        }
         /*Si no se a seleccionado una serie para las compras entonces*/
         if(jComSer.getSelectedItem().toString().compareTo("")==0)
         {
@@ -4212,7 +4233,7 @@ public class IngrCom extends javax.swing.JFrame
         }/*Fin de if(sCarp.compareTo("")==0)*/   
         if(sCodi!=null)
         {/*Dale formato de moneda a los totales*/        
-        java.text.NumberFormat n  = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        java.text.NumberFormat n  = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         double dCant    = Double.parseDouble(sTot);
         sTot            = n.format(dCant);
         dCant           = Double.parseDouble(sSubTot);
@@ -4236,7 +4257,15 @@ public class IngrCom extends javax.swing.JFrame
         /*Si es órden entonces genera el PDF y mandalo por correo*/
         if(jCOrd.isSelected())
             Star.vMandOr(bImp, false, jTCo1.getText(), jTCo2.getText(), jTCo3.getText(), sSer + sNoDoc, jTNom.getText(), jTProv.getText(), sSubTot, sTot, sImpue, sNomLoc, sTelLoc, sColLoc, sCallLoc, sCPLoc, sCiuLoc, sEstLoc, sPaiLoc, bNoMan, sRutLog, jComMon.getSelectedItem().toString().trim());
-
+        
+        //Si es una compra creamos un movimiento de ingreso al inventario
+        if(sTip.compareTo("COMP")==0){ 
+            //Inserta el moviento de ingreso en el inventario
+            Costo costo = Costo.getInstance();
+            
+            costo.insertarMovimientosEntrada("comprs", "partcomprs", sSer.replace("'", "''") + sConsec.replace("'", "''"));
+        }
+        
         /*Si se tiene que imprimir la compra entonces*/
         if(bImp && !jCOrd.isSelected())
             vImpCom(sSer + sConsec, sFDoc, jTNom.getText(), sNoDoc, jTProv.getText(), jTSubTot.getText(), sTot, jTImp.getText(), true, false, jComMon.getSelectedItem().toString().trim());
@@ -4624,7 +4653,7 @@ public class IngrCom extends javax.swing.JFrame
         double dCant    = Double.parseDouble(sTex);
 
         /*Formatealo*/
-        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sTex                        = n.format(dCant);
 
         /*Colocalo de nu en el campo de texto*/
@@ -5382,7 +5411,7 @@ public class IngrCom extends javax.swing.JFrame
         }  
         
         /*Dale formato de moneda al límite de crédito*/
-        java.text.NumberFormat n  = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        java.text.NumberFormat n  = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         double dCant    = Double.parseDouble(sLimit);        
         sLimit          = n.format(dCant);
            
@@ -6552,12 +6581,12 @@ public class IngrCom extends javax.swing.JFrame
 
         /*Dale formato de moneda al importe*/        
         double dCant                    = Double.parseDouble(sImp);
-        java.text.NumberFormat n        = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        java.text.NumberFormat n        = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sImp                            = n.format(dCant);
 
         /*Dale formato de moneda al costo*/
         dCant                           = Double.parseDouble(sCost);
-        n                               = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        n                               = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sCost                           = n.format(dCant);
 
         /*Obtiene la fecha de entrega*/    
@@ -6607,7 +6636,7 @@ public class IngrCom extends javax.swing.JFrame
                 jTab.setValueAt(sImpoImpue, row, 20);
                 
                 /*Vuelve a darle formato al importe*/
-                n                       = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+                n                       = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
                 dCant                   = Double.parseDouble(sImp);
                 sImp                    = n.format(dCant);
 
@@ -8406,6 +8435,19 @@ public class IngrCom extends javax.swing.JFrame
         /*Si esta seleccionado entonces*/
         if(jCOrd.isSelected())
         {
+            /*Haz visible todo lo de órden de compra*/
+            vOrdCtrl(true);
+
+            /*Marca el check de órden*/
+            jCOrd.setSelected(true);   
+
+            /*Coloca el label de nueva compra*/
+            jLNot.setText("NUEVA ORDEN DE COMPRA");     
+        }
+        
+        /*Else no esta marcado entonces*/
+        else
+        {
             /*Haz invisible todo lo de órden de compra*/
             vOrdCtrl(false);
 
@@ -8414,18 +8456,6 @@ public class IngrCom extends javax.swing.JFrame
 
             /*Coloca el label de nueva compra*/
             jLNot.setText("NUEVA COMPRA");
-        }
-        /*Else no esta marcado entonces*/
-        else
-        {
-            /*Haz visible todo lo de órden de compra*/
-            vOrdCtrl(true);
-
-            /*Marca el check de órden*/
-            jCOrd.setSelected(true);   
-
-            /*Coloca el label de nueva compra*/
-            jLNot.setText("NUEVA ORDEN DE COMPRA");
         }
 
         /*Vuelve a cargar el cobmbox de las series*/        

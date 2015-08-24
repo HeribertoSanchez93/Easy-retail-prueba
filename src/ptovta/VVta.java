@@ -149,7 +149,7 @@ public class VVta extends javax.swing.JFrame
                 String sTot             = rs.getString("tot");
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sImpue);                
                 sImpue          = n.format(dCant);
                 dCant           = Double.parseDouble(sSubTot);                
@@ -193,7 +193,7 @@ public class VVta extends javax.swing.JFrame
                 String sImp     = rs.getString("impo");                
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sPre);                
                 sPre            = n.format(dCant);
                 dCant           = Double.parseDouble(sImp);                

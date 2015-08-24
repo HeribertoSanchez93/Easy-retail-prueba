@@ -360,7 +360,7 @@ public class Usrs extends javax.swing.JFrame
             }/*Fin de public void valueChanged(ListSelectionEvent lse) */
             
         });
-    }/*Fin de public Lineas() */
+    }/*Fin de public Usrs() */
 
     
     /*Obtén de la base de datos todos los usuarios y cargalos en la tabla*/
@@ -1648,6 +1648,20 @@ public class Usrs extends javax.swing.JFrame
         {        
             sQ = "INSERT INTO estacs (estac,                                                                    pass,            falt,       estacglo,                                  imptic,                     impfac,             52m,  cort,     descu,                   habdesc,         sucu,                       nocaj,                        nom,                                  calle,                                col,                                 cp,                               tel,                                cel,                                 pai,                                  esta,                                             noint,                               noext,                              admcaj,             vend,           ciu,                          comi,                            ptovta) " + 
                          "VALUES('" + jTEstac.getText().replace(" ", "").replace("'", "''").trim() + "','" +    sCla + "',       now(), '" + Login.sUsrG.replace("'", "''") + "', '" +  se.getName() + "', '" +     se.getName() + "',  0,    '0', " +  jTDesc.getText() + ", " +sHabDesc+ ",'" + Star.sSucu + "','" +  Star.sNoCaj + "', '" +  sNomb.replace("'", "''") + "','" +   sCall.replace("'", "''") + "','" +   sCol.replace("'", "''") + "','" +    sCP.replace("'", "''") + "','" +  sTel.replace("'", "''") + "','" +   sCel.replace("'", "''") + "','" +    sPai.replace("'", "''") + "','" +     jTEstac.getText().replace("'", "''") + "','" +    sNoInt.replace("'", "''") + "','" +  sNoExt.replace("'", "''") + "', " + sAdmCaj + ", " +   sVend + ", '" + jTCiu.getText().replace("'", "''") + "', " + jTComi.getText().trim() + ", " + sPto + ")";                                
+            st = con.createStatement();
+            st.executeUpdate(sQ);
+         }
+         catch(SQLException expnSQL) 
+         { 
+            //Procesa el error y regresa
+            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
+            return;                        
+         }
+        
+        /*Inserta en la tabla de permisos, los permisos del nuevo usuario*/
+        try 
+        {        
+            sQ = "INSERT INTO er_permisos (FKIdUsuario) SELECT id_id FROM estacs WHERE estac='"+jTEstac.getText().replace(" ", "").replace("'", "''").trim()+"'";
             st = con.createStatement();
             st.executeUpdate(sQ);
          }

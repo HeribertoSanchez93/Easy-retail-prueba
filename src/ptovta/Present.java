@@ -17,6 +17,8 @@ public class Present extends javax.swing.JFrame
         /*Inicaliza los componentes gráficos*/
         initComponents();
         
+        //jPanel1.setBackground(new java.awt.Color(0,0,0,0));
+        
         /*Centra la ventana*/
         this.setLocationRelativeTo(null);
         
@@ -57,7 +59,9 @@ public class Present extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
         jP1 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jlImg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -87,10 +91,17 @@ public class Present extends javax.swing.JFrame
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 2, 38)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Versión 1.1");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 450, 220, 70));
+
         jP1.setLayout(new java.awt.BorderLayout());
 
         jlImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/ban.png"))); // NOI18N
-        jP1.add(jlImg, java.awt.BorderLayout.CENTER);
+        jPanel1.add(jlImg);
+
+        jP1.add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
         getContentPane().add(jP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 870, 510));
 
@@ -153,7 +164,9 @@ public class Present extends javax.swing.JFrame
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jP1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel jlImg;
     // End of variables declaration//GEN-END:variables
 

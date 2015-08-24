@@ -21,10 +21,13 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.PopupMenuEvent;
@@ -51,7 +54,8 @@ public class PtoVtaTou extends javax.swing.JFrame
     public String           sDirPart    = "";
     public String           sDirOfi     = "";
     public String           sTelOfi     = "";    
-    
+    /*Variable que abre la ventana que contiene embebido la camara para el scaner*/
+    private Scan            pScan;
     /*Contiene la dirección de la forma para ver imágen en otra vista*/
     private ImgVis          v;
     
@@ -1434,6 +1438,7 @@ public class PtoVtaTou extends javax.swing.JFrame
                 
             }/*Fin de public void run()*/
         };
+       
         tEstCon.start();                                
         
     }/*Fin de public PtoVtaTou() */
@@ -1561,7 +1566,6 @@ public class PtoVtaTou extends javax.swing.JFrame
         jTLot = new javax.swing.JTextField();
         jTPedimen = new javax.swing.JTextField();
         jTCadu = new javax.swing.JTextField();
-        jTCant = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jTTotDesc = new javax.swing.JTextField();
         jTComenSer = new javax.swing.JTextField();
@@ -1586,6 +1590,9 @@ public class PtoVtaTou extends javax.swing.JFrame
         jTDirPart = new javax.swing.JTextField();
         jTDirOfi = new javax.swing.JTextField();
         jTTelOfi = new javax.swing.JTextField();
+        jBScann = new javax.swing.JButton();
+        jTCant = new javax.swing.JTextField();
+        jBSincronizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -1817,7 +1824,7 @@ public class PtoVtaTou extends javax.swing.JFrame
                 jBSalKeyPressed(evt);
             }
         });
-        jPanel1.add(jBSal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 100, 80));
+        jPanel1.add(jBSal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 520, 100, 80));
 
         jTQtyP.setEditable(false);
         jTQtyP.setBackground(new java.awt.Color(255, 255, 255));
@@ -1829,7 +1836,7 @@ public class PtoVtaTou extends javax.swing.JFrame
         jTQtyP.setBorder(null);
         jTQtyP.setFocusable(false);
         jTQtyP.setNextFocusableComponent(jTProd);
-        jPanel1.add(jTQtyP, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, 100, 50));
+        jPanel1.add(jTQtyP, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 660, 100, 50));
 
         jTProd.setBackground(new java.awt.Color(255, 255, 153));
         jTProd.setFont(new java.awt.Font("Tahoma", 0, 21)); // NOI18N
@@ -1838,6 +1845,9 @@ public class PtoVtaTou extends javax.swing.JFrame
         jTProd.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTProdFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTProdFocusLost(evt);
             }
         });
         jTProd.addActionListener(new java.awt.event.ActionListener() {
@@ -1848,6 +1858,9 @@ public class PtoVtaTou extends javax.swing.JFrame
         jTProd.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTProdKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTProdKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTProdKeyTyped(evt);
@@ -2276,7 +2289,7 @@ public class PtoVtaTou extends javax.swing.JFrame
                 .addGap(23, 23, 23))
         );
 
-        jPanel1.add(jPCon, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 100, 50));
+        jPanel1.add(jPCon, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 610, 100, 50));
 
         jTColo.setEditable(false);
         jPanel1.add(jTColo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 710, 10, -1));
@@ -2298,26 +2311,6 @@ public class PtoVtaTou extends javax.swing.JFrame
 
         jTCadu.setEditable(false);
         jPanel1.add(jTCadu, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 710, 10, -1));
-
-        jTCant.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTCant.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTCant.setText("1");
-        jTCant.setToolTipText("Cantidad a Vender");
-        jTCant.setNextFocusableComponent(jTMon);
-        jTCant.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTCantFocusGained(evt);
-            }
-        });
-        jTCant.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTCantKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTCantKeyTyped(evt);
-            }
-        });
-        jPanel1.add(jTCant, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 490, 50, 50));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
         jLabel8.setText("TOTAL:");
@@ -2406,6 +2399,81 @@ public class PtoVtaTou extends javax.swing.JFrame
         jPanel1.add(jTDirOfi, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 730, 10, -1));
         jPanel1.add(jTTelOfi, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 730, 10, -1));
 
+        jBScann.setBackground(new java.awt.Color(255, 255, 255));
+        jBScann.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/activado-2.png"))); // NOI18N
+        jBScann.setToolTipText("Abrir scaner");
+        jBScann.setNextFocusableComponent(jBSal);
+        jBScann.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jBScannMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jBScannMouseExited(evt);
+            }
+        });
+        jBScann.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBScannActionPerformed(evt);
+            }
+        });
+        jBScann.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBScannKeyPressed(evt);
+            }
+        });
+        jPanel1.add(jBScann, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 100, 80));
+
+        jTCant.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTCant.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTCant.setText("1");
+        jTCant.setToolTipText("Cantidad a Vender");
+        jTCant.setNextFocusableComponent(jTMon);
+        jTCant.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTCantFocusGained(evt);
+            }
+        });
+        jTCant.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTCantActionPerformed(evt);
+            }
+        });
+        jTCant.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTCantKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTCantKeyTyped(evt);
+            }
+        });
+        jPanel1.add(jTCant, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 490, 50, 50));
+
+        jBSincronizar.setBackground(new java.awt.Color(255, 255, 255));
+        jBSincronizar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jBSincronizar.setForeground(new java.awt.Color(255, 51, 51));
+        jBSincronizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/sincronizacion.png"))); // NOI18N
+        jBSincronizar.setToolTipText("Salir (ESC)");
+        jBSincronizar.setNextFocusableComponent(jTProd);
+        jBSincronizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jBSincronizarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jBSincronizarMouseExited(evt);
+            }
+        });
+        jBSincronizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBSincronizarActionPerformed(evt);
+            }
+        });
+        jBSincronizar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBSincronizarKeyPressed(evt);
+            }
+        });
+        jPanel1.add(jBSincronizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 100, 80));
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         pack();
@@ -2477,17 +2545,27 @@ public class PtoVtaTou extends javax.swing.JFrame
             return;
 
         /*Cierra el formulario*/
+        try
+        {
+            pScan.cerrarCam();
+            pScan.dispose();
+        }
+        catch(Exception ex)
+        {
+            
+        }
         this.dispose();
-        
         /*Detiene los threads*/
         th.interrupt();
         tEstCon.interrupt();
         //cierra el punto de venta
+       
+        pScan=null;
         Star.gPtoVtaTou = null;
             
         /*Llama al recolector de basura*/
         System.gc();
-                
+           
         /*Si es usurio de punto de venta entonces*/
         if(bUsr)
         {
@@ -2575,7 +2653,7 @@ public class PtoVtaTou extends javax.swing.JFrame
             
     /*Cuando se presiona una tecla en el campo del producto*/
     private void jTProdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTProdKeyPressed
-                
+         
         /*Si se presiona la tecla de abajo entonces*/
         if(evt.getKeyCode() == KeyEvent.VK_DOWN)
         {
@@ -2784,7 +2862,10 @@ public class PtoVtaTou extends javax.swing.JFrame
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
-        
+        String p=jTProd.getText();
+        int t =evt.getKeyCode();
+        if(evt.getKeyCode()!=8&&jTProd.getText().equals("."))
+            jTProd.setText("");       
     }//GEN-LAST:event_jTProdKeyTyped
     
 
@@ -2792,9 +2873,10 @@ public class PtoVtaTou extends javax.swing.JFrame
     private void vFunEsc()
     {
         /*Si el código del producto es cadena vacia entonces*/
+      
         if(jTProd.getText().trim().compareTo("")==0)
             return;
-    
+        busUnid();
         /*Si la unidad es cadena vacia entonces*/
         if(jComUnid.getSelectedItem().toString().compareTo("")==0)
         {
@@ -3292,11 +3374,14 @@ public class PtoVtaTou extends javax.swing.JFrame
             {                
                 /*Obtiene la cantidad, el precio y el valor del impuesto en la tabla*/
                 String sCant        = jTab.getValueAt(x, 0).toString();
-                String sPre         = jTab.getValueAt(x, 5).toString().replace("$", "").replace(",", "");
+                String sPre         = Star.sPreCostVta(jTProd.getText().trim(), jTCli.getText().trim(), "1", "vtas", "pvta");
+                java.util.StringTokenizer stk = new java.util.StringTokenizer(sPre, "|");
+                sPre            = stk.nextToken();
+                String sList    = stk.nextToken();
                 String sV           = jTab.getValueAt(x, 8).toString();                               
 
                 /*Suma la cantidad a la que ya estaba*/
-                sCant               = Integer.toString(Integer.parseInt(sCant) + 1);
+                sCant               = Integer.toString(Integer.parseInt(sCant) + Integer.parseInt(jTCant.getText()));
                                 
                 /*Si no se puede vender con exist baja entonces*/
                 if(bSiExistN && (Double.parseDouble(sCant) > Double.parseDouble(sExist)))
@@ -3373,7 +3458,7 @@ public class PtoVtaTou extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al importe*/                
                 double dCant        = Double.parseDouble(sImp1);                
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sImp1               = n.format(dCant);
                 
                 /*Dale formato de moneda al impuesto total*/                
@@ -3382,6 +3467,7 @@ public class PtoVtaTou extends javax.swing.JFrame
 
                 /*Coloca la cantidad en la fila y el importe nuevo*/
                 jTab.setValueAt(sCant,      x,      0);
+                
                 jTab.setValueAt(sImp1,      x,      6);
                 jTab.setValueAt(sImpTot,    x,      7);
                 
@@ -3391,9 +3477,6 @@ public class PtoVtaTou extends javax.swing.JFrame
                 /*Recalcula los totales*/
                 vRecTot();
                 
-                //Cierra la base de datos
-                if(Star.iCierrBas(con)==-1)
-                    return;
 
                 /*Muestra que esta cargando la imágen*/
                 jLImg.setText("Cargando...");
@@ -3415,8 +3498,7 @@ public class PtoVtaTou extends javax.swing.JFrame
                 /*Llama al contador de partidas*/
                 vContP();
                 
-                /*Regresa para que ya no continue*/
-                return;                
+               return;
         
             }/*Fin de if(sCodProd.compareTo(jTablePartidas.getValueAt(x, 1).toString())==0)*/
             
@@ -3461,7 +3543,7 @@ public class PtoVtaTou extends javax.swing.JFrame
         sPre                = Double.toString((Double.parseDouble(sPre) + Double.parseDouble(sImpueRel)));
         
         /*Dale formato de moneda al precio unitario ya con impuesto*/	        
-        NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant        = Double.parseDouble(sPre);                        
         sPre                = n.format(dCant);
         
@@ -3627,7 +3709,7 @@ public class PtoVtaTou extends javax.swing.JFrame
             String  sImpo   = Double.toString((Double.parseDouble(sPre)) * Double.parseDouble(sCant));
             
             /*Dale formato de moneda al precio*/            
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre);                            
             sPre            = n.format(dCant);
             
@@ -3708,7 +3790,7 @@ public class PtoVtaTou extends javax.swing.JFrame
         sTot                = Double.toString(Star.dRound(Double.parseDouble(sTot), Integer.parseInt(sNumRedo)));
         
         /*Dale formato de moneda a los totales*/	
-        NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant        = Double.parseDouble(sTot);                
         sTot                = n.format(dCant);        
         dCant               = Double.parseDouble(sTotImpue);                
@@ -4012,13 +4094,11 @@ public class PtoVtaTou extends javax.swing.JFrame
             
         /*Dale formato de menda al total nuevamente*/	
         double dCant    = Double.parseDouble(sTot);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTot            = n.format(dCant);
 
         /*Determina la forma de pago*/
-        String sFormPag = "C";
-        if(jLTipVta.getText().trim().compareTo("VENTA DE CONTADO")!=0)
-            sFormPag    = "CR";
+        String sFormPag = "PAGO EN UNA SOLA EXHIBICIÓN";
         
         /*Muestra la forma de cobro*/
         Cobro c         = new Cobro (sTot, jTCli.getText(), jTSer.getText(), jTFec.getText(), jTNomb.getText(), jTab, jTTot, jLImg, jTProd, jTDesc.getText(), jTSubTot.getText(), jTImpue.getText(), jTCli, jTNomb, jTBuscGral.getText(), jTImpue, jTSubTot, jTQtyP, jTTotDesc, jTTotCost, jTMon.getText().trim(), sFormPag, frmMe);
@@ -4339,6 +4419,7 @@ public class PtoVtaTou extends javax.swing.JFrame
     /*Cuando se presiona el botón de cargar prods*/
     private void jBProdsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBProdsActionPerformed
 
+        
         /*Llama al otro formulario de búsqueda y pasale lo que el usuario escribió*/
         Busc b = new Busc       (this, jTProd.getText(), 2, jTProd, null, null, "ptovta", null);
         b.setVisible            (true);        
@@ -4652,7 +4733,11 @@ public class PtoVtaTou extends javax.swing.JFrame
         
     /*Cuando se presiona el botón de teclado en el punto de venta*/
     private void jBTeclaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTeclaActionPerformed
-        // TODO add your handling code here:
+        try {
+            Runtime.getRuntime().exec("cmd /c C:\\Windows\\System32\\osk.exe");
+        } catch (IOException ex) {
+            Logger.getLogger(PtoVtaTou.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBTeclaActionPerformed
 
     
@@ -4660,6 +4745,7 @@ public class PtoVtaTou extends javax.swing.JFrame
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         
         /*Presiona el botón de salir*/
+        
         jBSal.doClick();
         
     }//GEN-LAST:event_formWindowClosing
@@ -5082,33 +5168,8 @@ public class PtoVtaTou extends javax.swing.JFrame
     }//GEN-LAST:event_jPConKeyPressed
 
     
-    /*Cuando se gana el foco del teclado en el campo de la cantidad*/
-    private void jTCantFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTCantFocusGained
-        
-        /*Selecciona todo el texto cuando gana el foco*/
-        jTCant.setSelectionStart(0);jTCant.setSelectionEnd(jTCant.getText().length());        
-        
-    }//GEN-LAST:event_jTCantFocusGained
-
     
-    /*Cuando se tipea una tecla en el campo de la cantidad*/
-    private void jTCantKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCantKeyTyped
-        
-        /*Comprueba que el carácter este en los límites permitidos para numeración*/
-        if(((evt.getKeyChar() < '0') || (evt.getKeyChar() > '9')) && (evt.getKeyChar() != '\b') && (evt.getKeyChar() != '.')) 
-            evt.consume();
-        
-    }//GEN-LAST:event_jTCantKeyTyped
-
     
-    /*Cuando se presiona una tecla en el campo de la cantidad*/
-    private void jTCantKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCantKeyPressed
-        
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-        
-    }//GEN-LAST:event_jTCantKeyPressed
-
     
     /*Cuando se pierde el foco del teclado en el campo de moneda*/
     private void jTMonFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTMonFocusLost
@@ -5150,6 +5211,104 @@ public class PtoVtaTou extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_jTCliActionPerformed
 
+    private void jBScannMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBScannMouseEntered
+         jBScann.setBackground(Star.colBot);
+    }//GEN-LAST:event_jBScannMouseEntered
+
+    private void jBScannMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBScannMouseExited
+       jBScann.setBackground(Star.colOri);
+    }//GEN-LAST:event_jBScannMouseExited
+
+    private void jBScannActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBScannActionPerformed
+        pScan = new Scan(jTProd,jBNew,jBScann);
+        jBScann.setEnabled(false);
+        SwingUtilities.invokeLater(pScan);
+        jTProd.requestFocus();
+    }//GEN-LAST:event_jBScannActionPerformed
+
+    private void jBScannKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBScannKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBScannKeyPressed
+
+    private void jTProdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTProdFocusLost
+        
+        /*Coloca el caret al principio del control*/
+        jTProd.setCaretPosition(0);    
+        busUnid();
+    }//GEN-LAST:event_jTProdFocusLost
+
+    private void jTProdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTProdKeyReleased
+        busUnid();
+       
+        
+       
+    }//GEN-LAST:event_jTProdKeyReleased
+
+    private void jTCantFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTCantFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTCantFocusGained
+
+    private void jTCantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTCantActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTCantActionPerformed
+
+    private void jTCantKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCantKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTCantKeyPressed
+
+    private void jTCantKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCantKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTCantKeyTyped
+
+    private void jBSincronizarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBSincronizarMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBSincronizarMouseEntered
+
+    private void jBSincronizarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBSincronizarMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBSincronizarMouseExited
+
+    private void jBSincronizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSincronizarActionPerformed
+          
+        /*Abre la forma de sincronizar una sola vez*/
+        if(Star.ventanaSincronizar==null)
+        {            
+        Star.ventanaSincronizar = new correoTerminal();
+        Star.ventanaSincronizar.setVisible(true);
+        }
+        else
+        {    
+            /*Si ya esta visible entonces traela al frente*/
+            if(Star.ventanaSincronizar.isVisible())            
+                Star.ventanaSincronizar.toFront();
+            else
+                Star.ventanaSincronizar.setVisible(true);            
+        }      }//GEN-LAST:event_jBSincronizarActionPerformed
+
+    private void jBSincronizarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBSincronizarKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBSincronizarKeyPressed
+
+    public void busUnid()
+    {
+         try
+        {
+             //Abre la base de datos
+            Connection  con = Star.conAbrBas(true, false);
+
+        
+            /*Coloca la unidad del producto en el combobox*/
+            jComUnid.setSelectedItem(Star.sGetUnidProd(con, jTProd.getText().trim()));
+        
+            //Cierra la base de datos
+            Star.iCierrBas(con);
+               
+        }
+        catch(Exception ex)
+        {
+            
+        }
+    }
     
     
                                 
@@ -5281,6 +5440,8 @@ public class PtoVtaTou extends javax.swing.JFrame
     private javax.swing.JButton jBNewVta;
     private javax.swing.JButton jBProds;
     private javax.swing.JButton jBSal;
+    public javax.swing.JButton jBScann;
+    private javax.swing.JButton jBSincronizar;
     private javax.swing.JButton jBTecla;
     private javax.swing.JButton jBVeGran;
     private javax.swing.JComboBox jComUnid;

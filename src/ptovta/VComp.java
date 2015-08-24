@@ -143,7 +143,7 @@ public class VComp extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al costo*/
                 double dCant        = Double.parseDouble(sCost);                
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sCost               = n.format(dCant);
                 
                 /*Obtiene el importe*/
@@ -167,7 +167,7 @@ public class VComp extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al importe*/                
                 dCant               = Double.parseDouble(sImp);                
-                n                   = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                n                   = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sImp                = n.format(dCant);
                 
                 /*Agrega todos los datos obtenidos en la tabla de partidas*/
@@ -184,22 +184,22 @@ public class VComp extends javax.swing.JFrame
             
             /*Dale formato de moneda al subtotal*/                
             double dCant               = Double.parseDouble(sSubTot);                
-            NumberFormat n             = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n             = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sSubTot                    = n.format(dCant);
             
             /*Dale formato de moneda al descuento*/                
             dCant                      = Double.parseDouble(sDesc);                
-            n                          = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            n                          = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sDesc                    = n.format(dCant);
             
             /*Dale formato de moneda al impuesto*/                
             dCant                      = Double.parseDouble(sImpu);                
-            n                          = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            n                          = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sImpu                      = n.format(dCant);
             
             /*Dale formato de moneda al impuesto*/                
             dCant                      = Double.parseDouble(sTot);                
-            n                          = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            n                          = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sTot                      = n.format(dCant);
             
             jTSubTot.setText          (sSubTot);

@@ -386,7 +386,7 @@ public class Viats extends javax.swing.JFrame
                 
                 /*Dale formato de moneda*/                
                 double dCant        = Double.parseDouble(sImp);                
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sImp                = n.format(dCant);
 
                 /*Coloca en la tabla todos los registros*/
@@ -1141,7 +1141,7 @@ public class Viats extends javax.swing.JFrame
 
         /*Dale formato de moneda al importe otra vez*/	
         double dCant    = Double.parseDouble(sImp);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sImp            = n.format(dCant);
         
         /*Agrega el registro en la tabla*/
@@ -1185,7 +1185,7 @@ public class Viats extends javax.swing.JFrame
 
         /*Dale formato de moneda al importe*/        
         double dCant    = Double.parseDouble(sImp);
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sImp            = n.format(dCant);
 
         /*Colocalo nuevamente en el campo ya con formato*/
@@ -1476,7 +1476,7 @@ public class Viats extends javax.swing.JFrame
 
         /*Dale formato de moneda al importe otra vez*/	
         double dCant    = Double.parseDouble(sImp);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sImp            = n.format(dCant);
         
         /*Actualiza los campos en la tabla*/

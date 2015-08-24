@@ -1,3 +1,4 @@
+//agregado de login para saver lo que pasa en el momento de facturar Login.vLog
 //Paquete
 package ptovta;
 
@@ -117,6 +118,7 @@ import net.sf.jasperreports.view.JasperViewer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.xmlbeans.impl.util.Base64;
+import static ptovta.BDCon.vDelBD;
 import static ptovta.Login.sUsrG;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -330,7 +332,10 @@ public class Star
     public static final AudioFormat format  = new AudioFormat(8000.0f, 16, 1, true, true);
     
     /*Para saber si estación de trabajo o no*/
-    public static boolean       bEstacTrab      = false;
+    public static int       bEstacTrab      = 0;
+    
+    /*Para saber si la estación es off-line u on-line*/
+    public static int          tTipoDeEsta     =   0;       
     
     /*Objeto para que sol ose abra una vez la video llamada*/
     public static ImgCam        imgCa           = null;
@@ -382,6 +387,19 @@ public class Star
     public  static String       sEstacTrab;    
     public  static String       sSucu;
     public  static String       sNoCaj;
+    
+    /*26 05 2015 Felipe Ruiz Garcia*/
+    /*Declara variable global de el correo de registro*/
+    public static String correoRegistro;
+    
+    /*27 05 2015 Felipe Ruiz Garcia*/
+    /*Declara variable para contraseña encriptada */
+    public static String contraCorreo;
+    
+    
+    /*01 07 2015 Felipe Ruiz Garcia*/
+    /* Variable para que solo se visualize una ventana para la sincronizacion */
+    public static correoTerminal ventanaSincronizar = null;
     
     /*Objeto que contiene la línea del microfono*/
     public static javax.sound.sampled.TargetDataLine lineMic;
@@ -1076,6 +1094,16 @@ public class Star
                 Properties props = System.getProperties();
                 props.setProperty("mail.smtp.host", sServSMTPSal);
                 props.put("mail.smtp.starttls.enable", sActSSL);
+                if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                 props.put("mail.smtp.auth", "true");
                 props.put("mail.debug", "true");
                 props.put("mail.smtp.port", sSMTPPort);
@@ -1083,7 +1111,7 @@ public class Star
                 props.put("mail.transport.protocol", "smtp");
                 final String username = sUsrFi;
                 final String password = sContraFi;
-                Session session = Session.getDefaultInstance(props,
+                Session session = Session.getInstance(props,
                         new Authenticator() {
                             @Override
                             protected PasswordAuthentication getPasswordAuthentication() {
@@ -1193,6 +1221,49 @@ public class Star
     }/*Fin de public static void vMandCoCump(String sEmps[])*/
     
     
+    // 13 JULIO 2015 Felipe Ruiz Garcia
+    // CREA BASE DE DATOS TEST
+    public static void vCreaBDTest(String instancia, String port, String USER, String PASS){
+        
+        //Abre la base de datos   
+        String sCon = "jdbc:mysql://" + instancia + ":" + port + "/";
+
+        /*Abre la base de datos*/
+        Connection con = null;
+        try 
+        {
+            con = DriverManager.getConnection(sCon, USER, PASS);
+            con.setAutoCommit(false);
+        } 
+        catch(SQLException | HeadlessException e) 
+        {
+            /*Mensajea y sal de la aplicación*/
+            JOptionPane.showMessageDialog(null, "No se pudo conectar a la base de datos.\n", "Error BD", JOptionPane.INFORMATION_MESSAGE);
+            return;             
+        }
+        
+
+        
+         /*Declara variables de la base de datos*/
+        Statement   st;
+        String      sQ = "CREATE DATABASE IF NOT EXISTS TEST";        
+
+        try 
+        {
+        st = con.createStatement();
+        st.executeUpdate(sQ);
+        } 
+        catch(SQLException e) 
+        {
+            //Mensajea
+            JOptionPane.showMessageDialog(null, "No se pudo crear la base de datos test.\n" + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE);
+
+            //Cierra la base de datos y sal de la aplicación
+            Star.iCierrBas(con);            
+        }
+        
+    }
+  
     /*Manda correo de agradecimiento*/
     public static void vMandCoAgra(String sEmps[])
     {
@@ -1396,6 +1467,16 @@ public class Star
                 Properties props = System.getProperties();
                 props.setProperty("mail.smtp.host", sServSMTPSal);
                 props.put("mail.smtp.starttls.enable", sActSSL);
+                if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                 props.put("mail.smtp.auth", "true");
                 props.put("mail.debug", "true");
                 props.put("mail.smtp.port", sSMTPPort);
@@ -1403,7 +1484,7 @@ public class Star
                 props.put("mail.transport.protocol", "smtp");
                 final String username = sUsrFi;
                 final String password = sContraFi;
-                Session session = Session.getDefaultInstance(props,
+                Session session = Session.getInstance(props,
                         new Authenticator() {
                             @Override
                             protected PasswordAuthentication getPasswordAuthentication() {
@@ -1676,6 +1757,16 @@ public class Star
                 Properties props = System.getProperties();
                 props.setProperty("mail.smtp.host", sServSMTPSal);
                 props.put("mail.smtp.starttls.enable", sActSSL);
+                if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                 props.put("mail.smtp.auth", "true");
                 props.put("mail.debug", "true");
                 props.put("mail.smtp.port", sSMTPPort);
@@ -1683,7 +1774,7 @@ public class Star
                 props.put("mail.transport.protocol", "smtp");
                 final String username = sUsrFi;
                 final String password = sContraFi;
-                Session session = Session.getDefaultInstance(props,
+                Session session = Session.getInstance(props,
                         new Authenticator() {
                             @Override
                             protected PasswordAuthentication getPasswordAuthentication() {
@@ -1828,6 +1919,16 @@ public class Star
                 Properties props = System.getProperties();
                 props.setProperty("mail.smtp.host", sServSMTPSal);
                 props.put("mail.smtp.starttls.enable", sActSSL);
+                if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                 props.put("mail.smtp.auth", "true");
                 props.put("mail.debug", "true");
                 props.put("mail.smtp.port", sSMTPPort);
@@ -1835,7 +1936,7 @@ public class Star
                 props.put("mail.transport.protocol", "smtp");
                 final String username = sUser;
                 final String password = sContra;
-                Session session = Session.getDefaultInstance(props,
+                Session session = Session.getInstance(props,
                         new Authenticator() {
                             @Override
                             protected PasswordAuthentication getPasswordAuthentication() {
@@ -2063,6 +2164,16 @@ public class Star
             Properties props = System.getProperties();
             props.setProperty("mail.smtp.host", sServSMTPSal);
             props.put("mail.smtp.starttls.enable", sActSSL);
+            if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
             props.put("mail.smtp.auth", "true");
             props.put("mail.debug", "true");
             props.put("mail.smtp.port", sSMTPPort);
@@ -2070,7 +2181,7 @@ public class Star
             props.put("mail.transport.protocol", "smtp");
             final String username = sUsrFi;
             final String password = sContraFi;
-            Session session = Session.getDefaultInstance(props,
+            Session session = Session.getInstance(props,
                     new Authenticator() {
                         @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
@@ -2288,6 +2399,16 @@ public class Star
             Properties props = System.getProperties();
             props.setProperty("mail.smtp.host", sServSMTPSal);
             props.put("mail.smtp.starttls.enable", sActSSL);
+            if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
             props.put("mail.smtp.auth", "true");
             props.put("mail.debug", "true");
             props.put("mail.smtp.port", sSMTPPort);
@@ -2295,7 +2416,7 @@ public class Star
             props.put("mail.transport.protocol", "smtp");
             final String username = sUsrFi;
             final String password = sContraFi;
-            Session session = Session.getDefaultInstance(props,
+            Session session = Session.getInstance(props,
                     new Authenticator() {
                         @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
@@ -2485,6 +2606,16 @@ public class Star
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sServSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -2492,7 +2623,7 @@ public class Star
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUser;
                         final String password = sContra;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -2596,6 +2727,16 @@ public class Star
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sServSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -2603,7 +2744,7 @@ public class Star
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUser;
                         final String password = sContra;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -2700,6 +2841,16 @@ public class Star
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sServSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -2707,7 +2858,7 @@ public class Star
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUser;
                         final String password = sContra;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -2823,25 +2974,9 @@ public class Star
             byte[] encVal   = c.doFinal(sData.getBytes());
             encrypVal       = new BASE64Encoder().encode(encVal);           
         }
-        catch(NoSuchPaddingException expnNoSuchPad)
+        catch(NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException expnNoSuchPad)
         {
             encrypVal = "Error al encryptar por " + expnNoSuchPad.getMessage();
-        }
-        catch(InvalidKeyException expnInvalKey)
-        {
-            encrypVal = "Error al encryptar por " + expnInvalKey.getMessage();
-        }
-        catch(IllegalBlockSizeException expnIlegSizeBloq)
-        {
-            encrypVal = "Error al encryptar por " + expnIlegSizeBloq.getMessage();
-        }
-        catch(BadPaddingException expnBadPad)
-        {
-            encrypVal = "Error al encryptar por " + expnBadPad.getMessage();
-        }
-        catch(NoSuchAlgorithmException expnNoSuchAlgo)
-        {
-            encrypVal = "Error al encryptar por " + expnNoSuchAlgo.getMessage();
         }
         
         /*Devuelve el resultado*/
@@ -2925,6 +3060,16 @@ public class Star
             Properties props = System.getProperties();
             props.setProperty("mail.smtp.host", sServSMTPSal);
             props.put("mail.smtp.starttls.enable", sActSSL);
+            if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
             props.put("mail.smtp.auth", "true");
             props.put("mail.debug", "true");
             props.put("mail.smtp.port", sSMTPPort);
@@ -2932,7 +3077,7 @@ public class Star
             props.put("mail.transport.protocol", "smtp");
             final String username = sUser;
             final String password = sContra;
-            Session session = Session.getDefaultInstance(props,
+            Session session = Session.getInstance(props,
                     new Authenticator() {
                         @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
@@ -3059,7 +3204,7 @@ public class Star
 
             /*Formatea a moneda el sub total de materiales*/
             dCant                       = Double.parseDouble(sSubTotMat);
-            n                           = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            n                           = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sSubTotMat                  = n.format(dCant);
 
             /*Colocalo en el campo de sub total de materiales*/
@@ -3077,7 +3222,7 @@ public class Star
         
         /*Formatear el subtotal a moneda*/
         dCant                           = Double.parseDouble(sSubTot);
-        n                               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        n                               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sSubTot                         = n.format(dCant);
         
         /*Colocalo en el campo*/
@@ -3143,7 +3288,7 @@ public class Star
                 
         /*Formatea a moneda el sub total*/
         double dCant            = Double.parseDouble(sSubTot);
-        NumberFormat n          = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n          = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sSubTot                 = n.format(dCant);
 
         /*Colocalo en su campo*/
@@ -3151,7 +3296,7 @@ public class Star
                         
         /*Formatear el impuesto a moneda*/
         dCant                   = Double.parseDouble(sImpue);
-        n                       = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        n                       = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sImpue                  = n.format(dCant);
         
         /*Colocalo en su control*/
@@ -3159,7 +3304,7 @@ public class Star
         
         /*Formatear el total a moneda*/
         dCant                   = Double.parseDouble(sTot);
-        n                       = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        n                       = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTot                    = n.format(dCant);
         
         /*Colocalo en su control*/
@@ -3167,7 +3312,7 @@ public class Star
         
         /*Formatear el descuento total a moneda*/
         dCant                   = Double.parseDouble(sTotDesc);
-        n                       = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        n                       = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTotDesc                = n.format(dCant);
         
         /*Colocalo en su control*/
@@ -3313,11 +3458,12 @@ public class Star
         String sRFCLoc      = "";
         String sNoExtLoc    = "";        
         String sNoIntLoc    = "";
+        String sWeb         = "";
         
         /*Obtiene todos los datos de la empresa local*/       
         try
         {                  
-            sQ = "SELECT noint, noext, IFNULL(nom, '') AS nom, IFNULL(calle,'') AS calle, IFNULL(tel,'') AS tel, IFNULL(col,'') AS col, IFNULL(cp,'') AS cp, IFNULL(ciu,'') AS ciu, IFNULL(estad,'') AS estad, IFNULL(pai,'') AS pai, IFNULL(rfc, '' ) AS rfc FROM basdats WHERE codemp = '" + Login.sCodEmpBD + "'";
+            sQ = "SELECT noint, noext, IFNULL(nom, '') AS nom, IFNULL(calle,'') AS calle, IFNULL(tel,'') AS tel, IFNULL(col,'') AS col, IFNULL(cp,'') AS cp, IFNULL(ciu,'') AS ciu, IFNULL(estad,'') AS estad, IFNULL(pai,'') AS pai, IFNULL(rfc, '' ) AS rfc, pagweb FROM basdats WHERE codemp = '" + Login.sCodEmpBD + "'";
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos entonces obtiene los resultados*/
@@ -3333,7 +3479,8 @@ public class Star
                 sPaiLoc             = rs.getString("pai");                                    
                 sRFCLoc             = rs.getString("rfc");                                   
                 sNoExtLoc           = rs.getString("noext");                                   
-                sNoIntLoc           = rs.getString("noint");                                   
+                sNoIntLoc           = rs.getString("noint");
+                sWeb                = rs.getString("pagweb");
             }                        
         }
         catch(SQLException expnSQL)
@@ -3556,8 +3703,7 @@ public class Star
             System.out.println("Pruebas");
             sNewTok  = sCreTokEstaP(sRFCLoc);
         }
-        else
-        sNewTok  = sCreTokEsta(sRFCLoc);
+        else sNewTok  = sCreTokEsta(sRFCLoc);
         /*Si hubo error entonces*/
         if(sNewTok==null)
         {
@@ -3612,18 +3758,29 @@ public class Star
             pRuebasEcodexTimbrado.RespuestaTimbraXML wsResp;
          
             try
-            {   
-                System.out.println(wbPara);
+            {
+                //Carlos Gonzalo Ramirez Ramirez inicio de cambios para agregar log
                 pRuebasEcodexTimbrado.Timbrado_Service servicioX   = new pRuebasEcodexTimbrado.Timbrado_Service();
+                Login.vLog("crea servio de timbrando");
                 pRuebasEcodexTimbrado.Timbrado puertoX             = servicioX.getPuertoTimbrado();
+                Login.vLog("crea puerto para timbrar");
                 wsResp                                             = puertoX.timbraXML(wbPara);
-           
+                Login.vLog("timbro");
                 /*Obtiene el transid del timbrado*/
-                sTID                                = wsResp.getTransaccionID().toString();       
+                sTID                                = wsResp.getTransaccionID().toString();
+                Login.vLog("id de transacion:"+sTID);
                 /*Obtiene el XML del PAC*/
                 sXml                                = wsResp.getComprobanteXML().getValue().getDatosXML().getValue();
-            
-                /*Tokeniza el XML en busca el UUID*/
+                Login.vLog("el XML que recibe del sat: \n"+sXml); 
+            }
+            catch(pRuebasEcodexTimbrado.TimbradoTimbraXMLFallaValidacionFaultFaultMessage | pRuebasEcodexTimbrado.TimbradoTimbraXMLFallaSesionFaultFaultMessage | pRuebasEcodexTimbrado.TimbradoTimbraXMLFallaServicioFaultFaultMessage expnWSPAC)
+            {   
+                Login.vLog(expnWSPAC.toString());
+                //Procesa el error y regresa
+                Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC, null);                                                                   
+                return;                        
+            }
+            /*Tokeniza el XML en busca el UUID*/
                 java.util.StringTokenizer stkXml    = new java.util.StringTokenizer(sXml, " ");
                 while(stkXml.hasMoreTokens())
                 {
@@ -3694,56 +3851,62 @@ public class Star
                     if(sNoCertSAT.startsWith("noCertificadoSAT="))
                     break;
                 }
-            }
-            catch(pRuebasEcodexTimbrado.TimbradoTimbraXMLFallaValidacionFaultFaultMessage | pRuebasEcodexTimbrado.TimbradoTimbraXMLFallaSesionFaultFaultMessage | pRuebasEcodexTimbrado.TimbradoTimbraXMLFallaServicioFaultFaultMessage expnWSPAC)
+        }
+        else
+        {
+            /*Crea el object factory para consultar el estatus de una cuenta*/
+            wstimb.ObjectFactory facCli = new wstimb.ObjectFactory();
+            /*Crea el comprobante XML*/
+            wstimb.ComprobanteXML xmlComp= new wstimb.ComprobanteXML();
+            xmlComp.setDatosXML(facCli.createComprobanteXMLDatosXML(sXml.replace("&", "&amp;")));
+
+            /*Crea el objeto para solicitar timbrado en el web service*/
+            wstimb.SolicitudTimbraXML wbPara    = new wstimb.SolicitudTimbraXML();         
+            wbPara.setTransaccionID             (Long.parseLong(sTransId));
+            wbPara.setToken                     (facCli.createSolicitudTimbraXMLToken(sNewTok));
+            wbPara.setRFC                       (facCli.createSolicitudTimbraXMLRFC(sRFCLoc));
+            wbPara.setComprobanteXML            (facCli.createComprobanteXML(xmlComp));
+
+            /*Manda timbrar con el WS*/                        
+            wstimb.RespuestaTimbraXML wsResp;
+            try
             {   
-                System.out.println("6");
+                wstimb.Timbrado_Service servicioX   = new wstimb.Timbrado_Service();
+                Login.vLog("crea servio de timbrando");
+                wstimb.Timbrado puertoX             = servicioX.getPuertoTimbrado();
+                Login.vLog("crea puerto de timbrando");
+                wsResp                              = puertoX.timbraXML(wbPara);
+                Login.vLog("timbro");
+                /*Obtiene el transid del timbrado*/
+                sTID                                = wsResp.getTransaccionID().toString();
+                Login.vLog("id de transacion:"+sTID);
+                /*Obtiene el XML del PAC*/
+                sXml                                = wsResp.getComprobanteXML().getValue().getDatosXML().getValue();
+
+
+            }
+            catch(wstimb.TimbradoTimbraXMLFallaValidacionFaultFaultMessage | wstimb.TimbradoTimbraXMLFallaSesionFaultFaultMessage | wstimb.TimbradoTimbraXMLFallaServicioFaultFaultMessage expnWSPAC)
+            {   
+                Login.vLog(expnWSPAC.toString());
                 //Procesa el error y regresa
                 Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC, null);                                                                   
                 return;                        
             }
-        }
-        else
-        {
-        /*Crea el object factory para consultar el estatus de una cuenta*/
-        wstimb.ObjectFactory facCli = new wstimb.ObjectFactory();
-        /*Crea el comprobante XML*/
-        wstimb.ComprobanteXML xmlComp= new wstimb.ComprobanteXML();
-        xmlComp.setDatosXML(facCli.createComprobanteXMLDatosXML(sXml.replace("&", "&amp;")));
-        
-        /*Crea el objeto para solicitar timbrado en el web service*/
-        wstimb.SolicitudTimbraXML wbPara    = new wstimb.SolicitudTimbraXML();         
-        wbPara.setTransaccionID             (Long.parseLong(sTransId));
-        wbPara.setToken                     (facCli.createSolicitudTimbraXMLToken(sNewTok));
-        wbPara.setRFC                       (facCli.createSolicitudTimbraXMLRFC(sRFCLoc));
-        wbPara.setComprobanteXML            (facCli.createComprobanteXML(xmlComp));
-       
-        /*Manda timbrar con el WS*/                        
-        wstimb.RespuestaTimbraXML wsResp;
-        try
-        {   
-            System.out.println(wbPara);
-            wstimb.Timbrado_Service servicioX   = new wstimb.Timbrado_Service();
-            wstimb.Timbrado puertoX             = servicioX.getPuertoTimbrado();
-            wsResp                              = puertoX.timbraXML(wbPara);
-           
-            /*Obtiene el transid del timbrado*/
-            sTID                                = wsResp.getTransaccionID().toString();       
-            /*Obtiene el XML del PAC*/
-            sXml                                = wsResp.getComprobanteXML().getValue().getDatosXML().getValue();
-            
-            /*Tokeniza el XML en busca el UUID*/
+        /*Tokeniza el XML en busca el UUID*/
             java.util.StringTokenizer stkXml    = new java.util.StringTokenizer(sXml, " ");
             while(stkXml.hasMoreTokens())
             {
                 /*Obtiene el token*/
                 sFolFisc    = stkXml.nextToken();
                 
-                /*Si la cadena comienza con UUID entonces ya lo encontramos folio fiscal*/
+                /*Si la cadena comienza con UUID entonces ya lo encontramos*/
                 if(sFolFisc.startsWith("UUID="))
+                {
+                    Login.vLog("UUID="+sFolFisc);
                     break;
+                }
             }
-                           
+                            
             /*Tokeniza el XML en busca del sello dígital del SAT*/
             stkXml    = new java.util.StringTokenizer(sXml, " ");
             while(stkXml.hasMoreTokens())
@@ -3753,7 +3916,10 @@ public class Star
                 
                 /*Si la cadena comienza con UUID entonces ya lo encontramos*/
                 if(sSellSAT.startsWith("selloSAT="))
+                {
+                    Login.vLog("selloSAT="+sSellSAT);
                     break;
+                }
             }
             
             /*Tokeniza el XML en busca de la fecha del XML*/
@@ -3765,7 +3931,11 @@ public class Star
                 
                 /*Si la cadena comienza con FechaTimbrado entonces ya lo encontramos*/
                 if(sFTimb.startsWith("FechaTimbrado="))
+                {
+                    Login.vLog("FechaTimbrado="+sFTimb);
                     break;
+                }
+                    
             }
             
             /*Tokeniza el XML en busca de la versión*/
@@ -3777,7 +3947,10 @@ public class Star
                 
                 /*Si la cadena comienza con version entonces ya lo encontramos*/
                 if(sVer.startsWith("version="))
+                {
+                    Login.vLog("version="+sVer);
                     break;
+                }
             }
             
             /*Tokeniza el XML en busca de la versión*/
@@ -3801,18 +3974,12 @@ public class Star
                 
                 /*Si la cadena comienza con noCertificadoSAT entonces ya lo encontramos*/
                 if(sNoCertSAT.startsWith("noCertificadoSAT="))
+                {
+                    Login.vLog("noCertificadoSAT="+sNoCertSAT);
                     break;
+                }
             }
         }
-        catch(wstimb.TimbradoTimbraXMLFallaValidacionFaultFaultMessage | wstimb.TimbradoTimbraXMLFallaSesionFaultFaultMessage | wstimb.TimbradoTimbraXMLFallaServicioFaultFaultMessage expnWSPAC)
-        {   
-            System.out.println("6");
-            //Procesa el error y regresa
-            Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC, null);                                                                   
-            return;                        
-        }
-        }
-        
         /*Reemplaza los caracteres innecesarios de la versión*/
         sVer        = sVer.replace("=", "").replace("version", "").replace("\"", "");
         
@@ -3831,8 +3998,6 @@ public class Star
         /*Genera la cadena original del SAT*/
         sCadOriSAT  = "||" + sVer + "|" + sFolFisc + "|" + sFTimb + "|" + sSellSAT + "|" + sNoCertSAT + "||";        
                 
-        /*Genera reporte y el xml*/
-        Star.vPDF(sDirEn, sMon, sConFac, sCatGral, sVta, sSerFac, sFDoc, sNomEmp, sPai, sTel, sCall, sCol, sCP, sNoExt, sNoInt, sCiu + ", " + sEsta, "", sRFC, sCo1, sTotLet, sSubTot, sImp, sTot, sMetPag, sCta, sConds, sNomLoc, sTelLoc, sColLoc, sCallLoc, sCPLoc, sCiuLoc, sEstLoc, sPaiLoc, sRFCLoc, sRutLog, bSiLog, bVeFac, bImpFac, isRepNam, jTab, sRutXML, sRutPDF, 1, true, true, 0,false, sXml, sFolFisc, sSell, sSellSAT, sCadOriSAT, sNoIntLoc, sNoExtLoc, sNoCertSAT, sLugExp, sRegFisc, sCtaPred);
                 
         /*Si se timbro con éxito entonces*/
         if(bSiTim)
@@ -3853,10 +4018,9 @@ public class Star
                         + "WHERE vta    = " + sVta;                    
                 st = con.createStatement();
                 st.executeUpdate(sQ);
-             }
-             catch(SQLException expnSQL) 
-             {                  
-                 System.out.println("7");
+            }
+            catch(SQLException expnSQL) 
+            {                  
                 //Procesa el error y regresa
                 Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
                 return;
@@ -3868,7 +4032,9 @@ public class Star
                 jTab.setValueAt("Si", iFil, 22);
                 jTab.setValueAt(sFolFisc, iFil, 26);
             }
-
+            /*Genera reporte y el xml*/
+        Star.vPDF(sDirEn, sMon, sConFac, sCatGral, sVta, sSerFac, sFDoc, sNomEmp, sPai, sTel, sCall, sCol, sCP, sNoExt, sNoInt, sCiu + ", " + sEsta, "", sRFC, sCo1, sTotLet, sSubTot, sImp, sTot, sMetPag, sCta, sFormPag, sNomLoc, sTelLoc, sColLoc, sCallLoc, sCPLoc, sCiuLoc, sEstLoc, sPaiLoc, sRFCLoc, sRutLog, bSiLog, bVeFac, bImpFac, isRepNam, jTab, sRutXML, sRutPDF, 1, true, true, 0,false, sXml, sFolFisc, sSell, sSellSAT, sCadOriSAT, sNoIntLoc, sNoExtLoc, sNoCertSAT, sLugExp, sRegFisc, sCtaPred, sWeb);
+        
         }/*Fin de if(bSiTim)*/                    
         
         //Esconde la forma de loading
@@ -3899,7 +4065,6 @@ public class Star
         }
         catch(SQLException expnSQL)
         {
-            System.out.println("8");
             /*Coloca la banera del error*/
             Star.bErr    = true;
 
@@ -3958,7 +4123,7 @@ public class Star
         /*Si no existe un logo para la empresa entonces será el logo por default del sistema*/
         if(!new File(sRutLog).exists())
             sRutLog             = sRutLoc;
-               
+
         //Declara variables de la base de datos
         Statement   st;
         ResultSet   rs;        
@@ -3985,7 +4150,7 @@ public class Star
             Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
             return;                        
         }
-        
+
         //Declara variables locales
         String sNomLoc      = "";
         String sCallLoc     = "";
@@ -4042,14 +4207,14 @@ public class Star
         sRutPDF                 += "\\" + sSerFac + "-" +sConFac + ".pdf";                                        
         
         /*Genera reporte*/
-        Star.vPDF(sDirEn, sMon, sConFac, sCatGral, sVta, sSerFac, sFDoc, sNomEmp, sPai, sTel, sCall, sCol, sCP, sNoExt, sNoInt, sCiu, sEsta, sRFC, sCo1, sTotLet, sSubTot, sImp, sTot, sMetPag, sCta, sConds, sNomLoc, sTelLoc, sColLoc, sCallLoc, sCPLoc, sCiuLoc, sEstLoc, sPaiLoc, sRFCLoc, sRutLog, bSiLog, bVeFac, bImpFac, isRepNam, null, null, sRutPDF, 1, true, false, 0,false, "", "", "", "", "", sNoIntLoc, sNoExtLoc, "", "", "", "");
+        Star.vPDF(sDirEn, sMon, sConFac, sCatGral, sVta, sSerFac, sFDoc, sNomEmp, sPai, sTel, sCall, sCol, sCP, sNoExt, sNoInt, sCiu, sEsta, sRFC, sCo1, sTotLet, sSubTot, sImp, sTot, sMetPag, sCta, sConds, sNomLoc, sTelLoc, sColLoc, sCallLoc, sCPLoc, sCiuLoc, sEstLoc, sPaiLoc, sRFCLoc, sRutLog, bSiLog, bVeFac, bImpFac, isRepNam, null, null, sRutPDF, 1, true, false, 0,false, "", "", "", "", "", sNoIntLoc, sNoExtLoc, "", "", "", "", "");
         
         //Esconde la forma de loading
         Star.vOcultLoadin();
 
         //Obtiene si el usuario tiene correo asociado
         int iRes    = Star.iUsrCon(con, Login.sUsrG);
-        System.out.println("1");
+
         //Si hubo error entonces regresa
         if(iRes==-1)
             return;
@@ -4062,7 +4227,6 @@ public class Star
         /*Si tiene correo asociado entonces*/
         if(bSi)
         {
-            System.out.println("2");
             /*Determina a que correos se le va a mandar al cliente*/
             if(!bCo1)
                 sC1            = null;
@@ -4070,20 +4234,15 @@ public class Star
                 sC2            = null;
             if(!bCo3)
                 sC3            = null;
-            System.out.println("3");
+
             /*Si por lo menos a un correo se le va a mandar el pdf entonces y si tiene hablitado esa parte entonces manda el PDF*/
             if((bCo1 || bCo2 || bCo3) && bMandCo)
-            {
-            System.out.println("4");
                 Star.vMandPDFEmp(sSerFac + sConFac + ".pdf", sRutPDF, null, null, sC1, sC2, sC3, sSerFac + sConFac, "REM");
-            System.out.println("5");
-            }
         }
-            
         /*Else mensajea*/
         else
             JOptionPane.showMessageDialog(null, "No se envio la remisión con Folio: " + sConFac + " por correo electrónico ya que no se tiene uno configurado para el usuario: " + Login.sUsrG + ".", "Remisión", JOptionPane.INFORMATION_MESSAGE, null);               
-        System.out.println("6");
+        
         //Cierra la base de datos
         if(Star.iCierrBas(con)==-1)                  
             Star.bErr    = true;
@@ -4092,7 +4251,7 @@ public class Star
     
     
     /*Genera reporte en PDF*/                                    
-    public static synchronized void vPDF(String sDirEn, String sMon, String sFol, String sCatGral, String sVta, String sSer, String sFDoc, String sNomEmp, String sPai, String sTel, String sCall, String sCol, String sCP, String sNoExt, String sNoInt, String sCiu, String sEsta, String sRFC, String sCo1, String sTotLet, String sSubTot, String sImp, String sTot, String sMetPag, String sCta, String sConds, String sNomLoc, String sTelLoc, String sColLoc, String sCallLoc, String sCPLoc, String sCiuLoc, String sEstLoc, String sPaiLoc, String sRFCLoc, String sRutLog, boolean bSi, boolean bVeFac, boolean bImp, java.io.InputStream isRepNam, JTable jTab, String sRutXML, String sRutPDF, int iTip, boolean bExporP, boolean bExporX, int i52, boolean bMsj, String sXml, String sFolFisc, String sSell, String sSellSAT, String sCadOri, String sNoIntLoc, String sNoExtLoc, String sNoCertSAT, String sLugExp, String sRegFisc, String sCtaPred)
+    public static synchronized void vPDF(String sDirEn, String sMon, String sFol, String sCatGral, String sVta, String sSer, String sFDoc, String sNomEmp, String sPai, String sTel, String sCall, String sCol, String sCP, String sNoExt, String sNoInt, String sCiu, String sEsta, String sRFC, String sCo1, String sTotLet, String sSubTot, String sImp, String sTot, String sMetPag, String sCta, String sFormPag, String sNomLoc, String sTelLoc, String sColLoc, String sCallLoc, String sCPLoc, String sCiuLoc, String sEstLoc, String sPaiLoc, String sRFCLoc, String sRutLog, boolean bSi, boolean bVeFac, boolean bImp, java.io.InputStream isRepNam, JTable jTab, String sRutXML, String sRutPDF, int iTip, boolean bExporP, boolean bExporX, int i52, boolean bMsj, String sXml, String sFolFisc, String sSell, String sSellSAT, String sCadOri, String sNoIntLoc, String sNoExtLoc, String sNoCertSAT, String sLugExp, String sRegFisc, String sCtaPred, String sWeb)
     {                                                  
         //Abre la base de datos nuevamente
         Connection con = Star.conAbrBas(true, false);
@@ -4148,7 +4307,7 @@ public class Star
             para.put("TOT",             sTot);
             para.put("METPAG",          sMetPag);
             para.put("CTA",             sCta);
-            para.put("CONDI",           sConds);
+            para.put("FORMPAG",           sFormPag);
             para.put("EMPLOC",          sNomLoc);
             para.put("TELLOC",          sTelLoc);
             para.put("COLLOC",          sColLoc);
@@ -4352,7 +4511,8 @@ public class Star
             par.put("CIULOC",           sCiuLoc);
             par.put("ESTADLOC",         sEstLoc);
             par.put("MAILLOC",          sCo1);
-            par.put("NOEXTLOC",         sNoExtLoc);            
+            par.put("NOEXTLOC",         sNoExtLoc); 
+            par.put("WEB",              sWeb);
             par.put("PAILOC",           sPaiLoc);
             par.put("RFCLOC",           sRFCLoc);                                                        
             par.put("LOG",              sRutLog);                                                        
@@ -4899,7 +5059,7 @@ public class Star
 
                         /*Dale formato de moneda a la venta total bruta*/                        
                         double dCant            = Double.parseDouble(sVtaTot);
-                        NumberFormat n          = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                        NumberFormat n          = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                         sVtaTot                 = n.format(dCant);
 
                         /*Dale formato de moneda a los descuentos*/
@@ -5969,7 +6129,7 @@ public class Star
             sQ = "UPDATE consecs SET "
                     + "consec       = consec + 1, "
                     + "sucu         = '" + Star.sSucu + "', "
-                    + "nocaj        = '" + Star.sSucu + "' "
+                    + "nocaj        = '" + Star.sNoCaj + "' "
                     + "WHERE ser    = '" + sSerFR + "' AND tip = 'FAC'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -5982,7 +6142,7 @@ public class Star
         }                        
         
         //Inserta en la base de datos la nueva factura
-        if(Star.iInsVtas(con, sSerFR.replace("'", "''"), sConsFac.replace("'", "''"), Star.sCliMostG, Star.sSerMostG, sSubTot, sImpue, sTot, "now()", "now()", "now()", "'CO'", "0", "", "FAC", "0", "EFE", "0000", "CORT Z", "0", sTotDesc, "1", "1", sTotCost, Login.sUsrG, "PESOS", "1", "C", "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "1", sTotUEPS, sTotPEPS, sTotProm,"")==-1)
+        if(Star.iInsVtas(con, sSerFR.replace("'", "''"), sConsFac.replace("'", "''"), Star.sCliMostG, Star.sSerMostG, sSubTot, sImpue, sTot, "now()", "now()", "now()", "'CO'", "0", "", "FAC", "0", "EFE", "0000", "CORT Z", "0", sTotDesc, "1", "1", sTotCost, Login.sUsrG, "PESOS", "1", "C", "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "1", sTotUEPS, sTotPEPS, sTotProm,"","")==-1)
             return;
                 
         /*Declara variables*/
@@ -6083,7 +6243,7 @@ public class Star
         
         /*Dale formato de moneda al total para quitar todos los decimales que por eso falla la función de convertir a letra*/        	
         double dCant                    = Double.parseDouble(sTot);                
-        NumberFormat n                  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n                  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTot                            = n.format(dCant).replace("$", "").replace(",", "");
         
         /*Obtiene el símbolo de la moneda*/
@@ -6209,7 +6369,7 @@ public class Star
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos*/
-            if(rs.next())
+            while(rs.next())
             {
                 /*Inserta en la base de datos las partida de la factura*/
                 try 
@@ -6564,602 +6724,162 @@ public class Star
     /*Función para procesar esta parte*/
     public static void vRespUsr()
     {
-        /*Búcle inifinito*/
-        while(true)
-        {
-            //Abre la base de datos nuevamente
-            Connection con = Star.conAbrBas(true, false);
+        /*Búcle inifinito*/ 
+                while(true){
+                    //Abre la base de datos nuevamente
+                    Connection con = Star.conAbrBas(true, false);
 
-            //Si hubo error entonces
-            if(con==null)
-                return;
+                    //Si hubo error entonces
+                    if(con==null)
+                        return;
 
-            //Declara variables de la base de datos
-            Statement   st;
-            ResultSet   rs;            
-            String      sQ; 
-            
-            /*Comprueba si este usuario es de respaldo o no*/
-            String sHrs;
-            try
-            {
-                sQ = "SELECT hrs FROM resp WHERE estac = '" + Login.sUsrG + "'";	
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                /*Si hay datos entonces obtiene el resultado*/
-                if(rs.next())
-                    sHrs   = rs.getString("hrs");                                    
-                else
-                {
-                    //Cierra la base de datos y regresa
-                    Star.iCierrBas(con);                  
-                    break;
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return;                
-            }
-            
-            //Trae la carpeta compartida de la aplicación y la ruta en el servidor de la base de datos
-            String sCarp    = Star.sGetRutCarp(con);                    
+                    //Declara variables de la base de datos
+                    Statement   st;
+                    ResultSet   rs;            
+                    String      sQ; 
 
-            //Si hubo error entonces regresa
-            if(sCarp==null)
-                return;
-
-            //Declara variables locales
-            String sRut1    = "";
-            String sRut2    = "";
-            String sRut3    = "";
-            String sRutBin  = "";            
-            
-            /*Obtiene las rutas donde esta el bin de mysql, la ruta de donde se respaldaran todos los archvios PDF y las 3 rutas de respaldo del usuario actual*/            
-            try
-            {
-                sQ = "SELECT res1path, res2path, res3path, rutmysq FROM estacs WHERE estac = '" + Login.sUsrG + "'";	
-                st = con.createStatement();
-                rs = st.executeQuery(sQ);
-                /*Si hay datos entonces obtiene los datos*/
-                if(rs.next())
-                {                
-                    sRut1   = rs.getString("res1path");
-                    sRut2   = rs.getString("res2path");
-                    sRut3   = rs.getString("res3path");
-                    sRutBin = rs.getString("rutmysq");            
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                return;                
-            }
-
-            /*Si el exe de mysql no existe en la ruta entonces esta mal definida la ruta*/
-            if(!new File(sRutBin + "\\mysql.exe").exists())
-            {
-                //Cierra la base de datos
-                if(Star.iCierrBas(con)==-1)                  
-                    return;
-
-                /*Mensajea y sal del búcle inifinito*/
-                JOptionPane.showMessageDialog(null, "Respaldo automático: No existe el servidor Mysql.exe en la ruta específicada. " + System.getProperty( "line.separator" ) + "Específica la ruta correcta para poder hacer respaldo automático.", "Directorio BIN", JOptionPane.INFORMATION_MESSAGE, null);                         
-                break;
-            }
-
-            /*Si no existe la ruta 1 de respaldo entonces*/
-            if(!new File(sRut1).exists())
-            {
-                //Cierra la base de datos
-                if(Star.iCierrBas(con)==-1)                  
-                    return;
-
-                /*Mensajea y sal del búcle inifinito*/
-                JOptionPane.showMessageDialog(null, "Respaldo automático: No existe la ruta \"" + sRut1 + "\"" + System.getProperty( "line.separator" ) + "Crea la ruta primero para poder hacer respaldo automático.", "Directorio BIN", JOptionPane.INFORMATION_MESSAGE, null);                         
-                break;
-            }
-            
-            /*Si no existe la ruta 1 de respaldo entonces*/
-            if(!new File(sRut2).exists())
-            {
-                //Cierra la base de datos
-                if(Star.iCierrBas(con)==-1)                  
-                    return;
-
-                /*Mensajea y sal del búcle inifinito*/
-                JOptionPane.showMessageDialog(null, "Respaldo automático: No existe la ruta \"" + sRut1 + "\"" + System.getProperty( "line.separator" ) + "Crea la ruta primero para poder hacer respaldo automático.", "Directorio BIN", JOptionPane.INFORMATION_MESSAGE, null);                         
-                break;
-            }
-            
-            /*Si no existe la ruta 1 de respaldo entonces*/
-            if(!new File(sRut3).exists())
-            {
-                //Cierra la base de datos
-                if(Star.iCierrBas(con)==-1)                  
-                    return;
-
-                /*Mensajea y sal del búcle inifinito*/
-                JOptionPane.showMessageDialog(null, "Respaldo automático: No existe la ruta \"" + sRut1 + "\"" + System.getProperty( "line.separator" ) + "Crea la ruta primero para poder hacer respaldo automático.", "Directorio BIN", JOptionPane.INFORMATION_MESSAGE, null);                         
-                break;
-            }
-            
-            /*Guarda las rutas originales*/
-            String sRut1O   = sRut1;
-            String sRut2O   = sRut2;
-            String sRut3O   = sRut3;
-                        
-            /*Substring para obtener la unidad con todo y la diagonal invertida en todas las rutas*/
-            String sUnid1       = sRut1.substring       (0, 3);
-            String sUnid2       = sRut2.substring       (0, 3);
-            String sUnid3       = sRut3.substring       (0, 3);
-            String sUnidBin     = sRutBin.substring     (0, 3);
-            
-            /*Substring la ruta para ponerles comillas dobles a todos los nombres de archivos para que el bat corra correctamente a todas las rutas*/
-            sRut1               = sRut1.substring       (3, sRut1.length());
-            sRut2               = sRut2.substring       (3, sRut2.length());
-            sRut3               = sRut3.substring       (3, sRut3.length());
-            sRutBin             = sRutBin.substring     (3, sRutBin.length());
-            
-            /*Tokeniza la cadena por la diagonal invertida para poder poner las comillas dobles en cada carpeta de la ruta de respaldo 1*/                                                                
-            StringTokenizer st1 = new StringTokenizer(sRut1,"\\");
-            sRut1 = "\"";
-            while(st1.hasMoreTokens())
-                sRut1 += st1.nextToken() + "\"\\\"";
-
-            /*Tokeniza la cadena por la diagonal invertida para poder poner las comillas dobles en cada carpeta de la ruta de respaldo 2*/                                                                
-            st1 = new StringTokenizer(sRut2,"\\");
-            sRut2 = "\"";
-            while(st1.hasMoreTokens())
-                sRut2 += st1.nextToken() + "\"\\\"";
-            
-            /*Tokeniza la cadena por la diagonal invertida para poder poner las comillas dobles en cada carpeta de la ruta de respaldo 3*/                                                                
-            st1 = new StringTokenizer(sRut3,"\\");
-            sRut3 = "\"";
-            while(st1.hasMoreTokens())
-                sRut3 += st1.nextToken() + "\"\\\"";
-            
-            /*Tokeniza la cadena por la diagonal invertida para poder poner las comillas dobles en cada carpeta de la ruta bin*/                                                                
-            st1 = new StringTokenizer(sRutBin,"\\");
-            sRutBin = "\"";
-            while(st1.hasMoreTokens())
-                sRutBin += st1.nextToken() + "\"\\\"";
-            
-            /*Quita la última diagonal invertida y dobles comillas en todas las rutas*/
-            sRut1    = sRut1.substring      (0, sRut1.length() - 2);
-            sRut2    = sRut2.substring      (0, sRut2.length() - 2);
-            sRut3    = sRut3.substring      (0, sRut3.length() - 2);
-            sRutBin  = sRutBin.substring    (0, sRutBin.length() - 2);
-            
-            /*Junta la unidad con todas las rutas nuevamente*/
-            sRut1    = sUnid1 + sRut1;
-            sRut2    = sUnid2 + sRut2;
-            sRut3    = sUnid3 + sRut3;
-            sRutBin  = sUnidBin + sRutBin;
-            
-            /*Obtiene la fecha y hora del sistema*/
-            java.text.DateFormat dateFormat   = new java.text.SimpleDateFormat("yyyyMMddHHmmss");
-            java.util.Date da                 = new java.util.Date();            
-                    
-            /*Concatena el nombre del archivo a las 3 rutas*/
-            sRut1    += "\\1-" + dateFormat.format(da) + ".sql";     
-            sRut2    += "\\2-" + dateFormat.format(da) + ".sql";     
-            sRut3    += "\\3-" + dateFormat.format(da) + ".sql";     
-            
-            /*Crea la cadena completa que ejecutara la bases de datos de las 3 rutas*/
-            String sCadComp1 = sRutBin + "\\mysqldump --user=" + Star.sUsuario + " --password=" + Star.sContrasenia + " " + Star.sBD + " > " + sRut1;            
-            String sCadComp2 = sRutBin + "\\mysqldump --user=" + Star.sUsuario + " --password=" + Star.sContrasenia + " " + Star.sBD + " > " + sRut2;
-            String sCadComp3 = sRutBin + "\\mysqldump --user=" + Star.sUsuario + " --password=" + Star.sContrasenia + " " + Star.sBD + " > " + sRut3;
-
-            /*Borra los 3 archivos bat si es que existen*/
-            if(new File("resp1.bat").exists())            
-                new File("resp1.bat").delete();
-            if(new File("resp2.bat").exists())            
-                new File("resp2.bat").delete();
-            if(new File("resp3.bat").exists())            
-                new File("resp3.bat").delete();
-            
-            /*Crea las 3 rutas nuevamente*/
-            File fil = new File("resp1.bat");
-            try 
-            {
-                fil.createNewFile();
-            } 
-            catch(IOException expnIO) 
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
-                return;
-            }
-            
-            File fil2 = new File("resp2.bat");
-            try 
-            {
-                fil2.createNewFile();
-            } 
-            catch(IOException expnIO) 
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
-                return;
-            }
-            
-            File fil3 = new File("resp3.bat");
-            try 
-            {
-                fil3.createNewFile();
-            } 
-            catch(IOException expnIO) 
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
-                return;
-            }
-            
-            /*Escribe en el la cadena que ejecutara la base de datos por consola para realizar el respaldo en los 3 archivos*/            
-            try(FileWriter fw = new FileWriter(fil.getAbsoluteFile()); BufferedWriter bw = new BufferedWriter(fw))
-            {                                
-                bw.write(sCadComp1);                
-            } 
-            catch(IOException expnIO) 
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
-                return;
-            }
-            
-            try(FileWriter fw = new FileWriter(fil2.getAbsoluteFile()); BufferedWriter bw = new BufferedWriter(fw))
-            {                                
-                bw.write(sCadComp2);            
-            } 
-            catch(IOException expnIO) 
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
-                return;
-            }
-            
-            try(FileWriter fw = new FileWriter(fil3.getAbsoluteFile()); BufferedWriter bw = new BufferedWriter(fw))
-            {                                
-                bw.write(sCadComp3);            
-            } 
-            catch(IOException expnIO) 
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
-                return;
-            }
-            
-            /*Corre el archivo bat 1*/
-            try 
-            {                             
-                /*Crea el objeto para hacer el respaldo*/
-                Process p = Runtime.getRuntime().exec("cmd /c start /b resp1.bat");
-
-                /*Intenta esperar el proceso de respaldo por consola*/
-                int iE  = -1;
-                try
-                {
-                    iE = p.waitFor();
-                }
-                catch(InterruptedException expnInterru)
-                {                    
-                    /*Inserta en log que algo ha ido mal*/
-                    try 
-                    {                
-                        sQ = "INSERT INTO resplog  (tip,      pathdemysq,                                                           pathamysq,                                                      estac,                                      sucu,                                     nocaj,                                       msj,                                                     `return`) " + 
-                                            "VALUES(1, '" +   sRutBin.replace("\\", "\\\\").replace("'", "''") + "', '" +           sRut1.replace("\\", "\\\\").replace("'", "''") + "', '" +       Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +  Star.sNoCaj.replace("'", "''") + "', '" +    expnInterru.getMessage().replace("'", "''") + "', " +    iE + ")";                    
+                    /*Comprueba si este usuario es de respaldo o no*/
+                    String sHrs;
+                    try
+                    {
+                        sQ = "SELECT hrs FROM resp WHERE estacres = '" + Login.sUsrG + "'";	
                         st = con.createStatement();
-                        st.executeUpdate(sQ);
-                     }
-                     catch(SQLException expnSQL) 
-                     { 
+                        rs = st.executeQuery(sQ);
+                        /*Si hay datos entonces obtiene el resultado*/
+                        if(rs.next())
+                            sHrs   = rs.getString("hrs");                                    
+                        else
+                        {
+                            //Cierra la base de datos y regresa
+                            Star.iCierrBas(con);                  
+                            return;
+                        }
+                    }
+                    catch(SQLException expnSQL)
+                    {
                         //Procesa el error y regresa
                         Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                        return;                       
-                    }    
+                        return;                
+                    }
 
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnInterru.getMessage(), Star.sErrInterru);                                                                   
-                    return;
-                }    
+                    //Trae la carpeta compartida de la aplicación y la ruta en el servidor de la base de datos
+                    String sCarp    = Star.sGetRutCarp(con);                    
 
-                /*Inserta en log que todo fue bien*/
-                try 
-                {                
-                    sQ = "INSERT INTO resplog  (tip,      pathdemysq,                                                       pathamysq,                                                      estac,                                          sucu,                                               nocaj,                                              `return`) " + 
-                                        "VALUES(1, '" +   sRutBin.replace("\\", "\\\\").replace("'", "''") + "', '" +       sRut1.replace("\\", "\\\\").replace("'", "''") + "', '" +       Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +      Star.sNoCaj.replace("'", "''") + "', " +      iE + ")";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException expnSQL) 
-                 { 
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                    return;                    
-                 }    
-            } 
-            catch(IOException expnIO) 
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
-                return;                                
-            }
-            
-            /*Copia todo en la ruta 1*/
-            try
-            {                
-                /*Intenta copiar todo*/
-                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut1O + "\\Easy Retail® Admin"));
+                    //Si hubo error entonces regresa
+                    if(sCarp==null)
+                        return;
 
-                /*Inserta en log que todo se copio con éxito*/
-                try 
-                {                
-                    sQ = "INSERT INTO resplog  (tip,      pathde,                                                      patha,                                                          estac,                                         sucu,                                            nocaj) " + 
-                                        "VALUES(1, '" +   sCarp.replace("\\", "\\\\").replace("'", "''") + "', '" +    sRut1O.replace("\\", "\\\\").replace("'", "''") + "', '" +      Login.sUsrG.replace("'", "''") + "', '" +  Star.sSucu.replace("'", "''") + "', '" +   Star.sNoCaj.replace("'", "''") + "')";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException expnSQL) 
-                 { 
+                    //Declara variables locales
+                    String sRut1    = "";
+                    String sRut2    = "";
+                    String sRut3    = "";
+                    String sRutBin  = "";            
+
+                    /*Obtiene las rutas donde esta el bin de mysql, la ruta de donde se respaldaran todos los archvios PDF y las 3 rutas de respaldo del usuario actual*/            
+                    try
+                    {
+                        sQ = "SELECT res1path, res2path, res3path, rutmysq FROM estacs WHERE estac = '" + Login.sUsrG + "'";	
+                        st = con.createStatement();
+                        rs = st.executeQuery(sQ);
+                        /*Si hay datos entonces obtiene los datos*/
+                        if(rs.next())
+                        {                
+                            sRut1   = rs.getString("res1path");
+                            sRut2   = rs.getString("res2path");
+                            sRut3   = rs.getString("res3path");
+                            sRutBin = rs.getString("rutmysq");            
+                        }
+                    }
+                    catch(SQLException expnSQL)
+                    {
+                        //Procesa el error y regresa
+                        Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
+                        return;                
+                    }
+
+
+                    /*Si el exe de mysql no existe en la ruta entonces esta mal definida la ruta*/
+                    if(!new File(sRutBin + "\\mysql.exe").exists())
+                    {
+                        //Cierra la base de datos
+                        if(Star.iCierrBas(con)==-1)                  
+                            return;
+
+                        /*Mensajea y sal del búcle inifinito*/
+                        JOptionPane.showMessageDialog(null, "Respaldo automático: No existe el servidor Mysql.exe en la ruta específicada. " + System.getProperty( "line.separator" ) + "Específica la ruta correcta para poder hacer respaldo automático.", "Directorio BIN", JOptionPane.INFORMATION_MESSAGE, null);                         
+                        return;
+                    }
+
+                    //Si no hay rutas de respaldo
+                    if(sRut1.isEmpty() && sRut2.isEmpty() && sRut3.isEmpty()){
+                        //Cierra la base de datos
+                        if(Star.iCierrBas(con)==-1)                  
+                            return;
+
+                        /*Mensajea y sal del búcle inifinito*/
+                        JOptionPane.showMessageDialog(null, "Respaldo automático: No existe ruta de respaldo. " + System.getProperty( "line.separator" ) + "Específica la ruta correcta para poder hacer respaldo automático.", "Directorio BIN", JOptionPane.INFORMATION_MESSAGE, null);                         
+                        return;
+                    }
+
+                    /*Si no existe la ruta 1 de respaldo entonces*/
+                    if(!sRut1.isEmpty() && !new File(sRut1).exists())
+                    {
+                        //Cierra la base de datos
+                        if(Star.iCierrBas(con)==-1)                  
+                            return;
+
+                        /*Mensajea y sal del búcle inifinito*/
+                        JOptionPane.showMessageDialog(null, "Respaldo automático: No existe la ruta \"" + sRut1 + "\"" + System.getProperty( "line.separator" ) + "Crea la ruta primero para poder hacer respaldo automático.", "Directorio BIN", JOptionPane.INFORMATION_MESSAGE, null);                         
+                        return;
+                    }
+
+                    /*Si no existe la ruta 2 de respaldo entonces*/
+                    if(!sRut2.isEmpty() && !new File(sRut2).exists())
+                    {
+                        //Cierra la base de datos
+                        if(Star.iCierrBas(con)==-1)                  
+                            return;
+
+                        /*Mensajea y sal del búcle inifinito*/
+                        JOptionPane.showMessageDialog(null, "Respaldo automático: No existe la ruta \"" + sRut2 + "\"" + System.getProperty( "line.separator" ) + "Crea la ruta primero para poder hacer respaldo automático.", "Directorio BIN", JOptionPane.INFORMATION_MESSAGE, null);                         
+                        return;
+                    }
+
+                    /*Si no existe la ruta 3 de respaldo entonces*/
+                    if(!sRut3.isEmpty() && !new File(sRut3).exists())
+                    {
+                        //Cierra la base de datos
+                        if(Star.iCierrBas(con)==-1)                  
+                            return;
+
+                        /*Mensajea y sal del búcle inifinito*/
+                        JOptionPane.showMessageDialog(null, "Respaldo automático: No existe la ruta \"" + sRut3 + "\"" + System.getProperty( "line.separator" ) + "Crea la ruta primero para poder hacer respaldo automático.", "Directorio BIN", JOptionPane.INFORMATION_MESSAGE, null);                         
+                        return;
+                    }
+
+                    if(!sRut1.isEmpty())
+                        respalda(sRut1, sRutBin, sCarp, con);
+                    if(!sRut2.isEmpty())
+                        respalda(sRut2, sRutBin, sCarp, con);
+                    if(!sRut3.isEmpty())
+                        respalda(sRut3, sRutBin, sCarp, con);
+
                     //Cierra la base de datos
                     if(Star.iCierrBas(con)==-1)                  
                         return;
-
-                    /*Agrega en el log*/
-                    Login.vLog(expnSQL.getMessage());
-
-                    /*Mensajea y regresa*/
-                    JOptionPane.showMessageDialog(null, Star.class.getClass().getName() + " Error en " + sQ + " por " + expnSQL.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(Star.class.getClass().getResource(Star.sRutIconEr))); 
-                    return;
-                 }    
-            }
-            catch(IOException ex)
-            {
-                /*Inserta en log de Error por: el cuál no se pudo copiar*/
-                try 
-                {                
-                    sQ = "INSERT INTO resplog  (tip,      pathde,                                                      patha,                                                          estac,                                          sucu,                                           nocaj,                                              msj) " + 
-                                        "VALUES(1, '" +   sCarp.replace("\\", "\\\\").replace("'", "''") + "', '" +    sRut1O.replace("\\", "\\\\").replace("'", "''") + "', '" +      Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +  Star.sNoCaj.replace("'", "''") + "', '" +     ex.getMessage().replace("'", "''") + "')";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException expnSQL) 
-                 { 
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                    return;                                           
-                }    
-
-                /*Agrega en el log*/
-                Login.vLog(ex.getMessage());               
-
-                /*Mensajea y regresa*/
-                JOptionPane.showMessageDialog(null, Star.class.getClass().getName() + " Error en FileUtils.copyDirectory() por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(Star.class.getClass().getResource(Star.sRutIconEr)));                
-                return;
-            }
-
-            /*Corre el archivo bat 2*/
-            try 
-            {                             
-                /*Crea el objeto para hacer el respaldo*/
-                Process p = Runtime.getRuntime().exec("cmd /c start /b resp2.bat");
-
-                /*Intenta esperar el proceso de respaldo por consola*/
-                int iE  = -1;
-                try
-                {
-                    iE = p.waitFor();
+                    /*Duerme el thread los segundos específicados*/
+                    try
+                    {
+                        //Multiplica el numero de horas, por su equivalente a 1 hora en milisegundos
+                        Thread.sleep(Integer.parseInt(sHrs) * 3600000);                
+                    }
+                    catch(NumberFormatException | InterruptedException expnNumForm)
+                    {
+                        /*Sal del búcle infinito*/
+                        return;
+                    }
                 }
-                catch(InterruptedException expnInterru)
-                {
-                    /*Inserta en log que algo ha ido mal*/
-                    try 
-                    {                
-                        sQ = "INSERT INTO resplog  (tip,      pathdemysq,                                                           pathamysq,                                                  estac,                                      sucu,                                     nocaj,                                        msj,                                                    `return`) " + 
-                                            "VALUES(1, '" +   sRutBin.replace("\\", "\\\\").replace("'", "''") + "', '" +           sRut2.replace("\\", "\\\\").replace("'", "''") + "', '" +   Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +  Star.sNoCaj.replace("'", "''") + "', '" +     expnInterru.getMessage().replace("'", "''") + "', " +   iE + ")";                    
-                        st = con.createStatement();
-                        st.executeUpdate(sQ);
-                     }
-                     catch(SQLException expnSQL) 
-                     { 
-                         //Procesa el error y regresa
-                        Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                        return;                                                
-                    }    
-
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnInterru.getMessage(), Star.sErrInterru, con);                                                                   
-                    return;                        
-                }    
-
-                /*Inserta en log que todo fue bien*/
-                try 
-                {                
-                    sQ = "INSERT INTO resplog  (tip,      pathdemysq,                                                       pathamysq,                                                      estac,                                          sucu,                                               nocaj,                                              `return`) " + 
-                                        "VALUES(1, '" +   sRutBin.replace("\\", "\\\\").replace("'", "''") + "', '" +       sRut2.replace("\\", "\\\\").replace("'", "''") + "', '" +       Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +      Star.sNoCaj.replace("'", "''") + "', " +      iE + ")";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException expnSQL) 
-                 { 
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                    return;                                            
-                 }    
-            } 
-            catch(IOException expnIO) 
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO, con);                                                                   
-                return;                                        
-            }
-
-            /*Copia todo en la ruta 2*/
-            try
-            {
-                /*Intenta copiar todo*/
-                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut2O + "\\Easy Retail® Admin"));
-
-                /*Inserta en log que todo se copio con éxito*/
-                try 
-                {                
-                    sQ = "INSERT INTO resplog  (tip,      pathde,                                                      patha,                                                          estac,                                         sucu,                                            nocaj) " + 
-                                        "VALUES(1, '" +   sCarp.replace("\\", "\\\\").replace("'", "''") + "', '" +    sRut2O.replace("\\", "\\\\").replace("'", "''") + "', '" +      Login.sUsrG.replace("'", "''") + "', '" +  Star.sSucu.replace("'", "''") + "', '" +   Star.sNoCaj.replace("'", "''") + "')";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException expnSQL) 
-                 { 
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                    return;                                            
-                 }    
-            }
-            catch(IOException expnIO)
-            {
-                /*Inserta en log de Error por: el cuál no se pudo copiar*/
-                try 
-                {                
-                    sQ = "INSERT INTO resplog  (tip,      pathde,                                                      patha,                                                          estac,                                        sucu,                                     nocaj,                                        msj) " + 
-                                        "VALUES(1, '" +   sCarp.replace("\\", "\\\\").replace("'", "''") + "', '" +    sRut2O.replace("\\", "\\\\").replace("'", "''") + "', '" +      Login.sUsrG.replace("'", "''") + "',    '" +  Star.sSucu.replace("'", "''") + "', '" +  Star.sNoCaj.replace("'", "''") + "', '" +     expnIO.getMessage().replace("'", "''") + "')";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException expnSQL) 
-                 { 
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                    return;                                            
-                }                    
-
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO, con);                                                                   
-                return;                                            
-            }
-            
-            /*Corre el archivo bat 3*/
-            try 
-            {                             
-                /*Crea el objeto para hacer el respaldo*/
-                Process p = Runtime.getRuntime().exec("cmd /c start /b resp3.bat");
-
-                /*Intenta esperar el proceso de respaldo por consola*/
-                int iE  = -1;
-                try
-                {
-                    iE = p.waitFor();
-                }
-                catch(InterruptedException expnInterru)
-                {
-                    /*Inserta en log que algo ha ido mal*/
-                    try 
-                    {                
-                        sQ = "INSERT INTO resplog  (tip,      pathdemysq,                                                           pathamysq,                                                  estac,                                      sucu,                                     nocaj,                                        msj,                                                    `return`) " + 
-                                            "VALUES(1, '" +   sRutBin.replace("\\", "\\\\").replace("'", "''") + "', '" +           sRut3.replace("\\", "\\\\").replace("'", "''") + "', '" +   Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +  Star.sNoCaj.replace("'", "''") + "', '" +     expnInterru.getMessage().replace("'", "''") + "', " +   iE + ")";                    
-                        st = con.createStatement();
-                        st.executeUpdate(sQ);
-                     }
-                     catch(SQLException expnSQL) 
-                     { 
-                        //Procesa el error y regresa
-                        Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                        return;                                                                    
-                    }    
-
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnInterru.getMessage(), Star.sErrInterru, con);                                                                   
-                    return;                                            
-                }    
-
-                /*Inserta en log que todo fue bien*/
-                try 
-                {                
-                    sQ = "INSERT INTO resplog  (tip,      pathdemysq,                                                       pathamysq,                                                      estac,                                          sucu,                                               nocaj,                                              `return`) " + 
-                                        "VALUES(1, '" +   sRutBin.replace("\\", "\\\\").replace("'", "''") + "', '" +       sRut3.replace("\\", "\\\\").replace("'", "''") + "', '" +       Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +      Star.sNoCaj.replace("'", "''") + "', " +      iE + ")";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException expnSQL) 
-                 { 
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                    return;                                                                                    
-                 }    
-            } 
-            catch(IOException expnIO) 
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO, con);                                                                   
-                return;                                            
-            }
-            
-            /*Copia todo en la ruta 3*/
-            try
-            {
-                /*Intenta copiar todo*/
-                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(sRut3O + "\\Easy Retail® Admin"));
-
-                /*Inserta en log que todo se copio con éxito*/
-                try 
-                {                
-                    sQ = "INSERT INTO resplog  (tip,      pathde,                                                      patha,                                                              estac,                                          sucu,                                           nocaj) " + 
-                                        "VALUES(1, '" +   sCarp.replace("\\", "\\\\").replace("'", "''") + "', '" +    sRut3O.replace("\\", "\\\\").replace("'", "''") + "', '" +          Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +  Star.sNoCaj.replace("'", "''") + "')";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException expnSQL) 
-                 { 
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                    return;                                                                                    
-                 }    
-            }
-            catch(IOException expnIO)
-            {
-                /*Inserta en log de Error por: el cuál no se pudo copiar*/
-                try 
-                {                
-                    sQ = "INSERT INTO resplog  (tip,      pathde,                                                      patha,                                                          estac,                                      sucu,                                         nocaj,                                        msj) " + 
-                                        "VALUES(1, '" +   sCarp.replace("\\", "\\\\").replace("'", "''") + "', '" +    sRut3O.replace("\\", "\\\\").replace("'", "''") + "', '" +      Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +      Star.sNoCaj.replace("'", "''") + "', '" +     expnIO.getMessage().replace("'", "''") + "')";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException expnSQL) 
-                 { 
-                    //Procesa el error y regresa
-                    Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-                    return;                                                                                    
-                }                    
-
-                //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO, con);                                                                   
-                return;                                                                                    
-            }
-            
-            //Cierra la base de datos
-            if(Star.iCierrBas(con)==-1)                  
-                return;
-
-            /*Borra los archivos bat*/            
-            new File("resp1.bat").delete();     
-            new File("resp2.bat").delete();     
-            new File("resp3.bat").delete();     
-                    
-            /*Duerme el thread los segundos específicados*/
-            try
-            {
-                Thread.sleep(Integer.parseInt(sHrs) * 60000);                
-            }
-            catch(NumberFormatException | InterruptedException expnNumForm)
-            {
-                /*Sal del búcle infinito*/
-                break;
-            }
-            
-        }/*Fin de while(true)*/                    
+                   
         
     }/*Fin de public static void vRespUsr()*/
 
@@ -7324,6 +7044,16 @@ public class Star
                     Properties props = System.getProperties();
                     props.setProperty("mail.smtp.host", sServSMTPSal);
                     props.put("mail.smtp.starttls.enable", sActSSL);
+                    if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                     props.put("mail.smtp.auth", "true");
                     props.put("mail.debug", "true");
                     props.put("mail.smtp.port", sSMTPPort);
@@ -7331,7 +7061,7 @@ public class Star
                     props.put("mail.transport.protocol", "smtp");
                     final String username = sUsrFi;
                     final String password = sContraFi;
-                    Session session = Session.getDefaultInstance(props,
+                    Session session = Session.getInstance(props,
                             new Authenticator() {
                                 @Override
                                 protected PasswordAuthentication getPasswordAuthentication() {
@@ -7957,7 +7687,7 @@ public class Star
                 
                 /*Dale formato de moneda al tot*/                
                 double dCant    = Double.parseDouble(sTot);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sTot            = n.format(dCant);
                 
                 /*Agregalo a la tabla*/
@@ -8060,7 +7790,7 @@ public class Star
                 dCont           = dCont + rs.getDouble("vtas.TOT");
                         
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sTot);                                
                 sTot            = n.format(dCant);
                 dCant           = Double.parseDouble(sTotDesc);                                
@@ -8093,7 +7823,7 @@ public class Star
         Star.iCierrBas(con);                  
 
         //Dale formato de moneda al total de ventas
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         String sTotVtas = n.format(dCont);
         
         //Coloca el total de ventas y el contador igual
@@ -8135,17 +7865,17 @@ public class Star
         
         /*Dale formato de mon al subtot*/    
         double dCant    = Double.parseDouble(sSubTot);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sSubTot         = n.format(dCant);
         
         /*Dale formato de mon al IVA*/
         dCant           = Double.parseDouble(sIVA);                
-        n               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        n               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sIVA            = n.format(dCant);
         
         /*Dale formato de mon al tot*/
         dCant           = Double.parseDouble(sTot);                
-        n               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        n               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTot            = n.format(dCant);
         
         /*Coloca los tres importes en sus controles correspondientes*/
@@ -8208,7 +7938,7 @@ public class Star
         
         /*Dale formato de moneda a los totales*/
         double dCant                = Double.parseDouble(sSubTot);
-        NumberFormat n              = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n              = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sSubTot                     = n.format(dCant);
         dCant                       = Double.parseDouble(sImpue);            
         sImpue                      = n.format(dCant);
@@ -9516,20 +9246,29 @@ public class Star
     }/*Fin de public String sGetUnidProd(Connection con, String sProd)*/
 
     
-    /*Método para encriptar información con la base de datos*/
+   /*Método para encriptar información con la base de datos*/
     public static String sEncyMy(String sTex)
     {
-        //Abre la base de datos nuevamente
-        Connection con = Star.conAbrBas(true, false);
-
-        //Si hubo error entonces
-        if(con==null)
+        /*Abre la base de datos*/        
+        Connection  con;  
+        try 
+        {
+            con = DriverManager.getConnection("jdbc:mysql://" + Star.sInstancia + ":" + Star.sPort + "/test?user=" + Star.sUsuario + "&password=" + Star.sContrasenia );               
+        } 
+        catch(SQLException ex) 
+        {    
+            /*Agrega en el log*/
+            Login.vLog(ex.getMessage());
+            
+            /*Mensajea y regresa nulo*/
+            JOptionPane.showMessageDialog(null, Star.class + " Error por " + ex.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(Star.class.getClass().getResource(Star.sRutIconEr))); 
             return null;
+        }
         
-        //Declara variables de la base de datos
+        /*Declara variables de la base de datos*/
         Statement   st;
         ResultSet   rs;        
-        String      sQ; 
+        String      sQ      = ""; 
         
         /*Encripta la cadena pasada a la función con MYSQL*/
         String sResul   = "";
@@ -9542,11 +9281,18 @@ public class Star
             if(rs.next())
                 sResul  = rs.getString("result");
         }
-        catch(SQLException expnSQL)
+        catch(SQLException e)
         {
-            //Procesa el error y regresa
-            Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-            return null;                        
+            //Cierra la base de datos
+            if(Star.iCierrBas(con)==-1)                  
+                return null;                                 
+            
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+            
+            /*Mensajea y regresa nulo*/
+            JOptionPane.showMessageDialog(null, Star.class + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(Star.class.getClass().getResource(Star.sRutIconEr))); 
+            return null;
         }
         
         //Cierra la base de datos
@@ -9557,22 +9303,31 @@ public class Star
         return sResul;
         
     }/*Fin de public static String sEncyMy(String sTex)*/    
-    
+     
     
     /*Método para desencriptar información con la base de datos*/
     public static String sDencyMy(String sTex)
     {
-        //Abre la base de datos nuevamente
-        Connection con = Star.conAbrBas(true, false);
-
-        //Si hubo error entonces
-        if(con==null)
+        /*Abre la base de datos*/        
+        Connection  con;  
+        try 
+        {
+            con = DriverManager.getConnection("jdbc:mysql://" + Star.sInstancia + ":" + Star.sPort + "/test?user=" + Star.sUsuario + "&password=" + Star.sContrasenia );               
+        } 
+        catch(SQLException ex) 
+        {    
+            /*Agrega en el log*/
+            Login.vLog(ex.getMessage());
+            
+            /*Mensajea y regresa nulo*/
+            JOptionPane.showMessageDialog(null, Star.class + " Error por " + ex.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(Star.class.getClass().getResource(Star.sRutIconEr))); 
             return null;
-        
-        //Declara variables de la base de datos
+        }
+
+        /*Declara variables de la base de datos*/
         Statement   st;
         ResultSet   rs;        
-        String      sQ; 
+        String      sQ      = ""; 
         
         /*Desencripta la cadena pasada a la función con MYSQL*/
         String sResul   = "";
@@ -9585,11 +9340,18 @@ public class Star
             if(rs.next())
                 sResul  = rs.getString("result");
         }
-        catch(SQLException expnSQL)
+        catch(SQLException e)
         {
-            //Procesa el error y regresa
-            Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
-            return null;                        
+            //Cierra la base de datos
+            if(Star.iCierrBas(con)==-1)                  
+                return null;                                 
+            
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+            
+            /*Mensajea y regresa nulo*/
+            JOptionPane.showMessageDialog(null, Star.class + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(Star.class.getClass().getResource(Star.sRutIconEr))); 
+            return null;
         }
         
         //Cierra la base de datos
@@ -9599,8 +9361,7 @@ public class Star
         /*Devuelve el resultado*/
         return sResul;
         
-    }/*Fin de public static String sDencyMy(String sTex)*/    
-
+    }/*Fin de public static String sDencyMy(String sTex)*/
     
     /*Método para obtener el precio de venta correcto de un producto*/
     public static String sPreCostVta(String sProd, String sCli, String sList, String sClasif, String sTip)
@@ -9670,7 +9431,7 @@ public class Star
             Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
             return null;                        
         }  
-        
+        System.out.println("llego");
         /*Contiene los datos de la regla de negocio*/
         String sListReg = "";
         String sPreReg  = "";
@@ -9787,7 +9548,7 @@ public class Star
                         {
        
                             int seleccion = JOptionPane.showOptionDialog( null,"regla 1: Prod="+gProd[b]+"Cliente="+gClien[b]+"Clas"+gClas[b]+"jerarquia"+gClasjera[b]+"\nregla 2: Prod="+gProd[c]+"Cliente="+gClien[c]+"Clas"+gClas[c]+"jerarquia"+gClasjera[c],"Regla de venta",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "opcion 1", "opcion 2" },"opcion 1");
-      
+                            System.out.println("no debi entrar");
                             if(seleccion==0)
                                 c=b;
                             else
@@ -9807,7 +9568,7 @@ public class Star
                     {
        
                         int seleccion = JOptionPane.showOptionDialog( null,"regla 1: Prod="+gProd[b]+"Cliente="+gClien[b]+"Clas"+gClas[b]+"jerarquia"+gClasjera[b]+"\nregla 2: Prod="+gProd[c]+"Cliente="+gClien[c]+"Clas"+gClas[c]+"jerarquia"+gClasjera[c],"Regla de venta",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "opcion 1", "opcion 2" },"opcion 1");
-      
+                        System.out.println("que ago aqui");
                         if(seleccion==0)
                             c=b;
                         else
@@ -10639,6 +10400,16 @@ public class Star
             Properties props = System.getProperties();
             props.setProperty("mail.smtp.host", sServSMTPSal);
             props.put("mail.smtp.starttls.enable", sActSSL);
+            if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
             props.put("mail.smtp.auth", "true");
             props.put("mail.debug", "true");
             props.put("mail.smtp.port", sSMTPPort);
@@ -10646,7 +10417,7 @@ public class Star
             props.put("mail.transport.protocol", "smtp");
             final String username = sUser;
             final String password = sContra;
-            Session session = Session.getDefaultInstance(props,
+            Session session = Session.getInstance(props,
                     new Authenticator() {
                         @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
@@ -10804,6 +10575,16 @@ public class Star
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sSrvSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sSrvSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -10811,7 +10592,7 @@ public class Star
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUsr;
                         final String password = sContra;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -10906,6 +10687,16 @@ public class Star
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sSrvSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sSrvSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -10913,7 +10704,7 @@ public class Star
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUsr;
                         final String password = sContra;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -11008,6 +10799,16 @@ public class Star
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sSrvSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sSrvSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -11015,7 +10816,7 @@ public class Star
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUsr;
                         final String password = sContra;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -11341,7 +11142,7 @@ public class Star
             rs = st.executeQuery(sQ);
             //Si hay datos entonces recorre los resultados
             while(rs.next())
-            {                
+            {   if(rs.getString("codimpue").compareTo("")!=0)             
                 sCad            +=  System.getProperty( "line.separator" ) + 
                                     "<cfdi:Traslado importe=\"" + Star.dRound(rs.getDouble("totimpue"),2) + "\" tasa=\"" + rs.getString("impue") + "\" impuesto=\"" + rs.getString("codimpue") + "\"/>";                
             }
@@ -11666,47 +11467,47 @@ public class Star
             return -1;
         }
         
-        /*Si es persona física entonces*/
-        if(sFM.compareTo("F")==0)
-        {
-            /*Valida la ruta al certificado fiel*/
-            if(sRutCerF.compareTo("")==0)
-            {
-                //Cierra la base de datos
-                if(Star.iCierrBas(con)==-1)                  
-                    return -1;
-
-                /*Mensajea y regresa error*/
-                JOptionPane.showMessageDialog(null, "La ruta al CSD fiel de la empresa no esta definida.\nIr a datos generales de la empresa.", "CSD de la empresa", JOptionPane.INFORMATION_MESSAGE, null);
-                return -1;
-            }
-            
-            /*Valida la ruta al key fiel*/
-            if(sRutKeyF.compareTo("")==0)
-            {
-                //Cierra la base de datos
-                if(Star.iCierrBas(con)==-1)                  
-                    return -1;
-
-                /*Mensajea y regresa error*/
-                JOptionPane.showMessageDialog(null, "La ruta al key fiel de la empresa no esta definida.\nIr a datos generales de la empresa.", "CSD de la empresa", JOptionPane.INFORMATION_MESSAGE, null);
-                return -1;
-            }
-            
-            /*Valida la contraseña fiel*/
-            if(sPasCerF.compareTo("")==0)
-            {
-                //Cierra la base de datos
-                if(Star.iCierrBas(con)==-1)                  
-                    return -1;
-
-                /*Mensajea y regresa error*/
-                JOptionPane.showMessageDialog(null, "La contraseña del CSD fiel de la empresa no esta definida.\nIr a datos generales de la empresa.", "CSD de la empresa", JOptionPane.INFORMATION_MESSAGE, null);
-                return -1;
-            }
-            
-        }/*Fin de if(sFM.compareTo("F")==0)*/
-        
+//        /*Si es persona física entonces*/
+//        if(sFM.compareTo("F")==0)
+//        {
+//            /*Valida la ruta al certificado fiel*/
+//            if(sRutCerF.compareTo("")==0)
+//            {
+//                //Cierra la base de datos
+//                if(Star.iCierrBas(con)==-1)                  
+//                    return -1;
+//
+//                /*Mensajea y regresa error*/
+//                JOptionPane.showMessageDialog(null, "La ruta al CSD fiel de la empresa no esta definida.\nIr a datos generales de la empresa.", "CSD de la empresa", JOptionPane.INFORMATION_MESSAGE, null);
+//                return -1;
+//            }
+//            
+//            /*Valida la ruta al key fiel*/
+//            if(sRutKeyF.compareTo("")==0)
+//            {
+//                //Cierra la base de datos
+//                if(Star.iCierrBas(con)==-1)                  
+//                    return -1;
+//
+//                /*Mensajea y regresa error*/
+//                JOptionPane.showMessageDialog(null, "La ruta al key fiel de la empresa no esta definida.\nIr a datos generales de la empresa.", "CSD de la empresa", JOptionPane.INFORMATION_MESSAGE, null);
+//                return -1;
+//            }
+//            
+//            /*Valida la contraseña fiel*/
+//            if(sPasCerF.compareTo("")==0)
+//            {
+//                //Cierra la base de datos
+//                if(Star.iCierrBas(con)==-1)                  
+//                    return -1;
+//
+//                /*Mensajea y regresa error*/
+//                JOptionPane.showMessageDialog(null, "La contraseña del CSD fiel de la empresa no esta definida.\nIr a datos generales de la empresa.", "CSD de la empresa", JOptionPane.INFORMATION_MESSAGE, null);
+//                return -1;
+//            }
+//            
+//        }/*Fin de if(sFM.compareTo("F")==0)*/
+//        
         /*Valida la ruta al certificado*/
         if(sRutCer.compareTo("")==0)
         {
@@ -15522,10 +15323,11 @@ public class Star
     
     
     //Método para insertar en ventas
-    public static int iInsVtas(Connection con, String sNoSer, String sNoRefer, String sCli, String sSer, String sSubTot, String sImpue, String sTot, String sFAlt, String sFEmi, String sFVenc, String sEstad, String sTic, String sMotiv, String sTipDoc, String sNoCort, String sMetPag, String sCta, String sObserv, String sTimb, String sTotDescu, String sPtoVta, String sFactu, String sTotCost, String sVend, String sMon, String sTipCam, String sFormPag, String sAutRecibDe, String sAutMarc, String sAutMod, String sAutColo, String sAutPlacs, String sAutNom, String sAutTarCirc, String sAutNumLic, String sAutTel, String sAutDirPart, String sAutDirOfi, String sAutTelOfi, String sCort, String sCodCot, String sCierr, String sTotUeps, String sTotPeps, String sTotCostProm,String Bo)
+    public static int iInsVtas(Connection con, String sNoSer, String sNoRefer, String sCli, String sSer, String sSubTot, String sImpue, String sTot, String sFAlt, String sFEmi, String sFVenc, String sEstad, String sTic, String sMotiv, String sTipDoc, String sNoCort, String sMetPag, String sCta, String sObserv, String sTimb, String sTotDescu, String sPtoVta, String sFactu, String sTotCost, String sVend, String sMon, String sTipCam, String sFormPag, String sAutRecibDe, String sAutMarc, String sAutMod, String sAutColo, String sAutPlacs, String sAutNom, String sAutTarCirc, String sAutNumLic, String sAutTel, String sAutDirPart, String sAutDirOfi, String sAutTelOfi, String sCort, String sCodCot, String sCierr, String sTotUeps, String sTotPeps, String sTotCostProm,String Bo,String vendedor)
     {
         //Si la conexión es nula entonces
         boolean bSi = false;
+        String vend=Login.sUsrG;
         if(con==null)
         {
             //Coloca la bandera para saber que es nula la conexión
@@ -15545,9 +15347,11 @@ public class Star
         
         //Inserta la venta en la base de datos
         try 
-        {   
+        {
+            if(!vendedor.equals(""))
+                vend=vendedor;
             sQ  = "INSERT INTO vtas(   norefer,                       codemp,               ser,                     noser,                         estac,                         femi,                     subtot,                     impue,                    tot,                         estad,                 tic,                falt,                   motiv,                  tipdoc,                           nocort,                   metpag,                     cta,                    observ,                     sucu,                  nocaj,                   timbr,              fvenc,                  totdescu,                   ptovta,             factu,          totcost,                  vend,                     mon,                    tipcam,                     formpag,                    autrecibde,                     autmarc,                    autmod,                     autcolo,                    autplacs,                       autnom,                     auttarcirc,                     autnumlic,                      auttel,                     autdirpart,                     autdirofi,                  auttelofi,                   cort,           cierr,          totueps,          totpeps,          totcostprom,   extr1 ) " + 
-                         "VALUES('" +  sNoRefer.trim() + "','" +      sCli.trim() + "','" + sSer.trim() + "','" +    sNoSer.trim() + "','" +        Login.sUsrG.trim() + "'," +   sFEmi.trim() + ", " +     sSubTot.trim() + ", " +     sImpue.trim() + ", " +    sTot.trim() + ",      " +    sEstad + ",     " +    sTic + ",     " +   sFAlt + ",      '" +    sMotiv + "',     '" +   sTipDoc.trim() + "',  " +         sNoCort.trim() + ", '" +  sMetPag.trim() + "', '" +   sCta.trim() + "', '" +  sObserv.trim() + "','" +    Star.sSucu + "','" +   Star.sNoCaj + "',   " +  sTimb + ",      " + sFVenc.trim() + ", " +  sTotDescu.trim() + ", " +   sPtoVta + ", " +    sFactu + ", " + sTotCost.trim() + ", '" + Login.sUsrG + "', '" +    sMon.trim() + "', " +   sTipCam.trim() + ", '" +    sFormPag.trim() + "', '" +  sAutRecibDe.trim() + "', '" +   sAutMarc.trim() + "', '" +  sAutMod.trim() + "', '" +   sAutColo.trim() + "', '" +  sAutPlacs.trim() + "', '" +     sAutNom.trim() + "', '" +   sAutTarCirc.trim() + "', '" +   sAutNumLic.trim() + "', '" +    sAutTel.trim() + "','" +    sAutDirPart.trim() + "','" +    sAutDirOfi.trim() + "','" + sAutTelOfi.trim() + "', '" + sCort + "', " + sCierr + ", " + sTotUeps + ", " + sTotPeps + ", " + sTotCostProm +",'"+Bo+ "')";                    
+                         "VALUES('" +  sNoRefer.trim() + "','" +      sCli.trim() + "','" + sSer.trim() + "','" +    sNoSer.trim() + "','" +        Login.sUsrG.trim() + "'," +   sFEmi.trim() + ", " +     sSubTot.trim() + ", " +     sImpue.trim() + ", " +    sTot.trim() + ",      " +    sEstad + ",     " +    sTic + ",     " +   sFAlt + ",      '" +    sMotiv + "',     '" +   sTipDoc.trim() + "',  " +         sNoCort.trim() + ", '" +  sMetPag.trim() + "', '" +   sCta.trim() + "', '" +  sObserv.trim() + "','" +    Star.sSucu + "','" +   Star.sNoCaj + "',   " +  sTimb + ",      " + sFVenc.trim() + ", " +  sTotDescu.trim() + ", " +   sPtoVta + ", " +    sFactu + ", " + sTotCost.trim() + ", '" + vend + "', '" +    sMon.trim() + "', " +   sTipCam.trim() + ", '" +    sFormPag.trim() + "', '" +  sAutRecibDe.trim() + "', '" +   sAutMarc.trim() + "', '" +  sAutMod.trim() + "', '" +   sAutColo.trim() + "', '" +  sAutPlacs.trim() + "', '" +     sAutNom.trim() + "', '" +   sAutTarCirc.trim() + "', '" +   sAutNumLic.trim() + "', '" +    sAutTel.trim() + "','" +    sAutDirPart.trim() + "','" +    sAutDirOfi.trim() + "','" + sAutTelOfi.trim() + "', '" + sCort + "', " + sCierr + ", " + sTotUeps + ", " + sTotPeps + ", " + sTotCostProm +",'"+Bo+ "')";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
          }
@@ -15643,7 +15447,7 @@ public class Star
         //Declara variables de bases de datos
         Statement   st;        
         String      sQ; 
-        
+        System.out.println(sTipCam);
         //Inserta la compra en la base de datos
         try 
         {                
@@ -17205,12 +17009,216 @@ public class Star
         return 0;
     }
     
-    //Checa que la longitud sea la correcta, sino trunca la cadena
+    public static void SoloNumeros(java.awt.event.KeyEvent evt){
+        if(((evt.getKeyChar() < '0') || (evt.getKeyChar() > '9')) && (evt.getKeyChar() != '\b') && (evt.getKeyChar() != '-') && (evt.getKeyChar() != ' ') && (evt.getKeyChar() != '(') && (evt.getKeyChar() != ')'))         
+            evt.consume();
+    }
+    
+    public static void noCaracterXML(java.awt.event.KeyEvent evt){
+        
+        if((evt.getKeyChar() != '\b') &&(evt.getKeyChar() != '|') && (evt.getKeyChar() != '¬'))         
+        {
+        }
+        else
+            evt.consume();
+    }
+    
+//Checa que la longitud sea la correcta, sino trunca la cadena
     static String checaLongitud(int longi, String cad) {
         if (cad.length() > longi)
             cad = cad.substring(0, longi);
         
         return cad;
+    }
+    private static void respalda(String ruta, String rutaBin, String sCarp, Connection con) {
+        /*Guarda las rutas originales*/
+            String sRuta   = ruta;
+                
+            /*Substring para obtener la unidad con todo y la diagonal invertida en todas las rutas*/
+            String sUnid1       = ruta.substring       (0, 3);
+            String sUnidBin     = rutaBin.substring     (0, 3);
+            
+            /*Substring la ruta para ponerles comillas dobles a todos los nombres de archivos para que el bat corra correctamente a todas las rutas*/
+            ruta                = ruta.substring       (3, ruta.length());
+            rutaBin             = rutaBin.substring     (3, rutaBin.length());
+            
+            /*Tokeniza la cadena por la diagonal invertida para poder poner las comillas dobles en cada carpeta de la ruta de respaldo 1*/                                                                
+            StringTokenizer st = new StringTokenizer(ruta,"\\");
+            ruta = "\"";
+            while(st.hasMoreTokens())
+                ruta += st.nextToken() + "\"\\\"";
+
+            /*Tokeniza la cadena por la diagonal invertida para poder poner las comillas dobles en cada carpeta de la ruta de respaldo 1*/                                                                
+            st = new StringTokenizer(rutaBin,"\\");
+            rutaBin = "\"";
+            while(st.hasMoreTokens())
+                rutaBin += st.nextToken() + "\"\\\"";
+            
+            /*Quita la última diagonal invertida y dobles comillas en todas las rutas*/
+            ruta    = ruta.substring      (0, ruta.length() - 2);
+            rutaBin  = rutaBin.substring    (0, rutaBin.length() - 2);
+            
+            /*Junta la unidad con todas las rutas nuevamente*/
+            ruta    = sUnid1 + ruta;
+            rutaBin  = sUnidBin + rutaBin;
+            
+            /*Obtiene la fecha y hora del sistema*/
+            java.text.DateFormat dateFormat   = new java.text.SimpleDateFormat("yyyyMMddHHmmss");
+            java.util.Date da                 = new java.util.Date();            
+                    
+            /*Concatena el nombre del archivo a las 3 rutas*/
+            ruta    += "\\1-" + dateFormat.format(da) + ".sql";          
+            
+            /*Crea la cadena completa que ejecutara la bases de datos de las 3 rutas*/
+            String sCadComp1 = rutaBin + "\\mysqldump --user=" + Star.sUsuario + " --password=" + Star.sContrasenia + " " + Star.sBD + " > " + ruta;            
+
+            /*Borra el archivos bat si es que existen*/
+            if(new File("resp.bat").exists())            
+                new File("resp.bat").delete();
+            
+            /*Crea la ruta nuevamente*/
+            File fil = new File("resp.bat");
+            try 
+            {
+                fil.createNewFile();
+            } 
+            catch(IOException expnIO) 
+            {
+                //Procesa el error y regresa
+                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
+                return;
+            }
+            
+            /*Escribe en el la cadena que ejecutara la base de datos por consola para realizar el respaldo en los 3 archivos*/            
+            try(FileWriter fw = new FileWriter(fil.getAbsoluteFile()); BufferedWriter bw = new BufferedWriter(fw))
+            {                                
+                bw.write(sCadComp1);          
+                //bw.close();
+                //fw.close();
+            } 
+            catch(IOException expnIO) 
+            {
+                //Procesa el error y regresa
+                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
+                return;
+            }
+            
+            String sQ;
+            Statement stmt;
+            /*Corre el archivo bat 1*/
+            try 
+            {                             
+                
+                /*Crea el objeto para hacer el respaldo*/
+                Process p = Runtime.getRuntime().exec("cmd /c resp.bat");
+
+                /*Intenta esperar el proceso de respaldo por consola*/
+                
+                int iE  = -1;
+                try
+                {
+                    iE = p.waitFor();
+                }
+                catch(InterruptedException expnInterru)
+                {                    
+                    /*Inserta en log que algo ha ido mal*/
+                    try 
+                    {                
+                        sQ = "INSERT INTO resplog  (tip,      pathdemysq,                                                           pathamysq,                                                      estac,                                      sucu,                                     nocaj,                                       msj,                                                     `return`) " + 
+                                            "VALUES(1, '" +   rutaBin.replace("\\", "\\\\").replace("'", "''") + "', '" +           ruta.replace("\\", "\\\\").replace("'", "''") + "', '" +       Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +  Star.sNoCaj.replace("'", "''") + "', '" +    expnInterru.getMessage().replace("'", "''") + "', " +    iE + ")";                    
+                        stmt = con.createStatement();
+                        stmt.executeUpdate(sQ);
+                     }
+                     catch(SQLException expnSQL) 
+                     { 
+                        //Procesa el error y regresa
+                        Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
+                        return;                       
+                    }    
+
+                    //Procesa el error y regresa
+                    Star.iErrProc(Star.class.getName() + " " + expnInterru.getMessage(), Star.sErrInterru);                                                                   
+                    return;
+                }    
+
+                /*Inserta en log que todo fue bien*/
+                try 
+                {                
+                    sQ = "INSERT INTO resplog  (tip,      pathdemysq,                                                       pathamysq,                                                      estac,                                          sucu,                                               nocaj,                                              `return`) " + 
+                                        "VALUES(1, '" +   rutaBin.replace("\\", "\\\\").replace("'", "''") + "', '" +       ruta.replace("\\", "\\\\").replace("'", "''") + "', '" +       Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +      Star.sNoCaj.replace("'", "''") + "', " +      iE + ")";                    
+                    stmt = con.createStatement();
+                    stmt.executeUpdate(sQ);
+                 }
+                 catch(SQLException expnSQL) 
+                 { 
+                    //Procesa el error y regresa
+                    Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
+                    return;                    
+                 }    
+            } 
+            catch(IOException expnIO) 
+            {
+                //Procesa el error y regresa
+                Star.iErrProc(Star.class.getName() + " " + expnIO.getMessage(), Star.sErrIO);                                                                   
+                return;                                
+            }
+            
+//            /*Copia todo en la ruta 1*/
+//            try
+//            {                
+//                /*Intenta copiar todo*/
+//                org.apache.commons.io.FileUtils.copyDirectory(new File(sCarp), new File(ruta + "\\Easy Retail Admin"));
+//
+//                /*Inserta en log que todo se copio con éxito*/
+//                try 
+//                {                
+//                    sQ = "INSERT INTO resplog  (tip,      pathde,                                                      patha,                                                          estac,                                         sucu,                                            nocaj) " + 
+//                                        "VALUES(1, '" +   sCarp.replace("\\", "\\\\").replace("'", "''") + "', '" +    ruta.replace("\\", "\\\\").replace("'", "''") + "', '" +      Login.sUsrG.replace("'", "''") + "', '" +  Star.sSucu.replace("'", "''") + "', '" +   Star.sNoCaj.replace("'", "''") + "')";                    
+//                    stmt = con.createStatement();
+//                    stmt.executeUpdate(sQ);
+//                 }
+//                 catch(SQLException expnSQL) 
+//                 { 
+//                    //Cierra la base de datos
+//                    if(Star.iCierrBas(con)==-1)                  
+//                        return;
+//
+//                    /*Agrega en el log*/
+//                    Login.vLog(expnSQL.getMessage());
+//
+//                    /*Mensajea y regresa*/
+//                    JOptionPane.showMessageDialog(null, Star.class.getClass().getName() + " Error en " + sQ + " por " + expnSQL.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(Star.class.getClass().getResource(Star.sRutIconEr))); 
+//                    return;
+//                 }    
+//            }
+//            catch(IOException ex)
+//            {
+//                /*Inserta en log de Error por: el cuál no se pudo copiar*/
+//                try 
+//                {                
+//                    sQ = "INSERT INTO resplog  (tip,      pathde,                                                      patha,                                                          estac,                                          sucu,                                           nocaj,                                              msj) " + 
+//                                        "VALUES(1, '" +   sCarp.replace("\\", "\\\\").replace("'", "''") + "', '" +    ruta.replace("\\", "\\\\").replace("'", "''") + "', '" +      Login.sUsrG.replace("'", "''") + "', '" +   Star.sSucu.replace("'", "''") + "', '" +  Star.sNoCaj.replace("'", "''") + "', '" +     ex.getMessage().replace("'", "''") + "')";                    
+//                    stmt = con.createStatement();
+//                    stmt.executeUpdate(sQ);
+//                 }
+//                 catch(SQLException expnSQL) 
+//                 { 
+//                    //Procesa el error y regresa
+//                    Star.iErrProc(Star.class.getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                                                   
+//                    return;                                           
+//                }    
+//
+//                /*Agrega en el log*/
+//                Login.vLog(ex.getMessage());               
+//
+//                /*Mensajea y regresa*/
+//                JOptionPane.showMessageDialog(null, Star.class.getClass().getName() + " Error en FileUtils.copyDirectory() por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(Star.class.getClass().getResource(Star.sRutIconEr)));                
+//                return;
+//            }
+
+            
+            /*Borra los archivos bat*/            
+            new File("resp.bat").delete();        
     }
 }/*Fin de public class Star*/
     

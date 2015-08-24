@@ -366,7 +366,7 @@ public class BuscPre extends javax.swing.JFrame
             if(rs.next())
             {
                 /*Dale formato de moneda al precio 1*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(rs.getString("prelist1"));                
                 String sP1      = n.format(dCant);
 

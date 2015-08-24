@@ -768,7 +768,7 @@ public class VContras extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al total*/                
                 double dCant    = Double.parseDouble(sTot);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sTot            = n.format(dCant);
             
                 /*Agregalo a la tabla*/
@@ -1406,7 +1406,7 @@ public class VContras extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al total*/                
                 double dCant    = Double.parseDouble(sTot);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sTot            = n.format(dCant);
         
                 /*Agregalos a la tabla*/

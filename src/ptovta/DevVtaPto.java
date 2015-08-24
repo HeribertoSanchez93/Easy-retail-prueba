@@ -323,7 +323,7 @@ public class DevVtaPto extends javax.swing.JFrame
                 String sDesc        = rs.getString("vtas.TOTDESCU");
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant        = Double.parseDouble(sTot);                                
                 sTot                = n.format(dCant);
                 dCant               = Double.parseDouble(sDesc);                                
@@ -1172,7 +1172,7 @@ public class DevVtaPto extends javax.swing.JFrame
                     }
 
                     /*Dale formato de moneda a los totales*/                    
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     double dCant    = Double.parseDouble(sSubTot);                
                     sSubTot         = n.format(dCant);
                     dCant           = Double.parseDouble(sImpue);                
@@ -1515,7 +1515,7 @@ public class DevVtaPto extends javax.swing.JFrame
                 String sDesc    = rs.getString      ("vtas.TOTDESCU");
                                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sTot);                                
                 sTot            = n.format(dCant);
                 dCant           = Double.parseDouble(sDesc);                                

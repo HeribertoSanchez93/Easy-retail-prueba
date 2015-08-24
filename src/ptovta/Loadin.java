@@ -4,13 +4,12 @@ package ptovta;
 //Importaciones
 import static ptovta.Princip.bIdle;
 import java.awt.HeadlessException;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,6 +21,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -189,6 +190,9 @@ public class Loadin extends javax.swing.JFrame
         /*Inicializa el contador de la celda por cada fila*/
         int iContCell;
         
+        //Contador de errores
+        int iRows = 0;
+        
         /*Recorre todas las hojas de excel*/
         Iterator<Row> rowIt     = sheet.iterator();
         
@@ -197,7 +201,7 @@ public class Loadin extends javax.swing.JFrame
             
             producto:{
                 /*Recorre todas columnas del archivo*/
-                Row row             = rowIt.next();
+                XSSFRow row  =(XSSFRow) rowIt.next();
 
                 /*Si el contador es igual a uno entonces continua ya que no quiero leer la primera fila de encabezados y que continue*/
                 if(iConta < 1)
@@ -210,7 +214,7 @@ public class Loadin extends javax.swing.JFrame
                 String sIn;
 
                 /*Inicializa la consulta*/
-                sQInsert    = "INSERT INTO prods(prod,  unid, servi, invent, metcost, descripcort, descrip,lin, tip, fab, marc, mode, codmed, med, pes, pesman, colo,codext, impue, infor, descprov, prodop1, prodop2, garan, cost, costre, prelist1,prelist2, prelist3, prelist4, prelist5, prelist6, prelist7, prelist8, prelist9, prelist10, esvta, solmaxmin,  min, max,bajcost, lotped, solser, exist, sucu,  nocaj, estac) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";                    
+                sQInsert    = "INSERT INTO prods(prod,  unid, servi, invent, metcost, descrip, descripcort,lin, tip, fab, marc, mode, codmed, med, pes, pesman, colo,codext, impue, infor, descprov, prodop1, prodop2, garan, cost, costre, prelist1,prelist2, prelist3, prelist4, prelist5, prelist6, prelist7, prelist8, prelist9, prelist10, esvta, solmaxmin,  min, max,bajcost, lotped, solser, exist, sucu,  nocaj, estac) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";                    
 
                 //Contiene los valores que van en el query dentro de VALUES
                 java.util.ArrayList<String> valores = new java.util.ArrayList<>();
@@ -234,7 +238,7 @@ public class Loadin extends javax.swing.JFrame
                 for(iContCell=1; iContCell <= 43; iContCell++) 
                 {
                     /*Obtiene el objeto de la celda*/
-                    Cell cell = row.getCell(iContCell, Row.CREATE_NULL_AS_BLANK);
+                    XSSFCell cell = row.getCell(iContCell, Row.CREATE_NULL_AS_BLANK);
 
                     //Obtengo el dato de la celda y lo convierto a string, en caso necesario
                     if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
@@ -247,12 +251,16 @@ public class Loadin extends javax.swing.JFrame
                     switch(iContCell)
                     {
                         case 1:{//codigo de producto
-                            
+                            //No funcionaba el trim por alguna razon, asi que he hecho esto 
+                            sIn = sIn.trim().replace(" ", "");
                             //checa que la longitud de la cadena no sobrepase los limites del dato en la BD
                             sIn = Star.checaLongitud(255, sIn);
-                            //si esta vacio o no tiene el formato permitido se brinca,los datos obligatorios no pueden ser vacios
-                            if(!sIn.matches("[a-zA-Z\\d\\-]+") || Star.iExistProd(con, sIn) == 1) 
+                            //si esta vacio,no tiene el formato permitido o ya existe se brinca,los datos obligatorios no pueden ser vacios
+                            if(!sIn.matches("[a-zA-Z\\d\\-]+") || Star.iExistProd(con, sIn) == 1){
+                                wkbok = Princip.agregaError(row, wkbok, iRows, iContCell, "Formato invalido o ya existe un producto con este codigo.");
+                                iRows++;
                                 break producto;
+                            } 
                             else{
                                 /*Ve creando la cadena a mostrar con el código del producto*/
                                 sCadFin     += sIn + "  ";
@@ -265,8 +273,11 @@ public class Loadin extends javax.swing.JFrame
                         {
                             sIn = Star.checaLongitud(30, sIn);
                              //si esta vacio o no tiene el formato permitido se brinca,los datos obligatorios no pueden ser vacios
-                            if(!sIn.matches("[\\w\\-/]+,.+")) 
+                            if(!sIn.matches("[\\w\\-/]+,.+")) {
+                                 wkbok = Princip.agregaError(row, wkbok, iRows, iContCell, "Formato invalido.");
+                                iRows++;
                                 break producto;
+                            }
                             
                             /*Comprueba si el código de la unidad existe, si no existe entonces la crea con su descripción*/
                             vCrea(sIn, con, Integer.toString(iConta), Integer.toString(iContCell), "unids", "logunid", "cod", "descrip", "cod", "descrip");
@@ -301,19 +312,25 @@ public class Loadin extends javax.swing.JFrame
                             break;
                         case 5:
                             sIn = Star.checaLongitud(7, sIn);
-                            if(!sIn.trim().matches("peps|ueps|ultcost|prom")) 
-                                break producto;  
+                            if(!sIn.trim().matches("peps|ueps|ultcost|prom")){
+                                wkbok = Princip.agregaError(row, wkbok, iRows, iContCell, "Formato invalido.");
+                                iRows++;
+                                break producto;
+                            }   
                             valores.add(sIn);
                             break;
                         case 6:{//Descripción larga
                         sIn = Star.checaLongitud(2100, sIn);
 
                         //si esta vacio o no tiene el formato permitido 
-                        if(!sIn.matches("[a-zA-Z\\d\\- ]+")) 
-                            valores.add("");
+                        if(sIn.isEmpty()){
+                            wkbok = Princip.agregaError(row, wkbok, iRows, iContCell, "No puede estar vacio.");
+                            iRows++;
+                            break producto;
+                        } 
                         else{
                         /*Obtiene la descripción del producto*/
-                            sDescrip    = sIn;
+                            
 
                             /*Ve creando la cadena a mostrar con la descripción del producto*/
                             sCadFin     += sDescrip + "  ";
@@ -323,8 +340,9 @@ public class Loadin extends javax.swing.JFrame
                         }
                         }break;
                         case 7://nombre (descripcion corta)
-                            sIn = Star.checaLongitud(255, sIn);
-                            valores.add(sIn.replace("'", "''"));
+                            sIn = Star.checaLongitud(255, sIn.replace("'", "''"));
+                            valores.add(sIn);
+                            sDescrip    = sIn;
                             break;
                         case 8:{//Código de línea
                             sIn = Star.checaLongitud(30, sIn);
@@ -695,9 +713,20 @@ public class Loadin extends javax.swing.JFrame
             JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error por " + e.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                 
             this.dispose();                        
         }            
+        if(iRows > 0){
+            try{
+                boolean delete = new File(sRut).delete();
+                FileOutputStream fileOut = new FileOutputStream(sRut);
+                wkbok.write(fileOut);
+                fileOut.close();
+            }catch(Exception e){
+                /*Mensajea y regresa*/
+                JOptionPane.showMessageDialog(null, "Error al escribir los errores encontrados en los registros por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));                    
+            }
+        }
+        
         this.dispose();
     }/*Fin de private void vImpBD*/
-  
     // (meds, logmed), (lins, loglins), (marcs, logmarcs), (models, logmod), (fabs, logfabs), (pes, logpes), (colos, logcolo), (unids, logunid), (clasprod, logprods), (tips, logtip)
     /*Comprueba si el código de la med, lins, marcs, models, pes,colos, unids, clasprod, tips  existe, si no existe entonces la crea con su descripción*/
     private void vCrea(String sVal, Connection con, String sCont, String sContCell, String tabla, String tablaLog, String colCod, String colDescrip, String colCodLog, String colDescripLog)
@@ -823,27 +852,27 @@ public class Loadin extends javax.swing.JFrame
     /*Borra todos los registros de los prods*/
     private void vDelProds(Connection con)
     {
-        /*Declara variables de la base de datos*/
-        Statement   st;                
-        String      sQ              = ""; 
-
-        /*Borra todos los registros de la base de datos de los prods*/
-        try 
-        {            
-            sQ = "DELETE FROM prods";                    
-            st = con.createStatement();
-            st.executeUpdate(sQ);
-         }
-         catch(SQLException | HeadlessException e) 
-         { 
-            //Cierra la base de datos y sal de la aplicación    
-            if(Star.iCierrBas(con)==-1)
-                return;
-
-            /*Agrega en el log y mensajea*/
-            Login.vLog(e.getMessage());                        
-            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));             
-         }
+//        /*Declara variables de la base de datos*/
+//        Statement   st;                
+//        String      sQ              = ""; 
+//
+//        /*Borra todos los registros de la base de datos de los prods*/
+//        try 
+//        {            
+//            sQ = "DELETE FROM prods";                    
+//            st = con.createStatement();
+//            st.executeUpdate(sQ);
+//         }
+//         catch(SQLException | HeadlessException e) 
+//         { 
+//            //Cierra la base de datos y sal de la aplicación    
+//            if(Star.iCierrBas(con)==-1)
+//                return;
+//
+//            /*Agrega en el log y mensajea*/
+//            Login.vLog(e.getMessage());                        
+//            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));             
+//         }
 	        
     }/*Fin de private void vDelProds()*/
             

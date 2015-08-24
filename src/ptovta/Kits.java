@@ -764,7 +764,7 @@ public class Kits extends javax.swing.JFrame
                 String sPre10   = rs.getString("prelist10");
 
                 /*Dale formato de moneda a los precios de lista*/           
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sPre1);                                
                 sPre1           = n.format(dCant);                
                 dCant           = Double.parseDouble(sPre2);                                
@@ -1492,7 +1492,7 @@ public class Kits extends javax.swing.JFrame
                 String sPre10   = rs.getString("prelist10");
 
                 /*Dale formato de moneda a los precios de lista*/           
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sPre1);                                
                 sPre1           = n.format(dCant);                
                 dCant           = Double.parseDouble(sPre2);                                

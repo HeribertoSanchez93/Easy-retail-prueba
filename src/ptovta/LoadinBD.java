@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.swing.ImageIcon;
@@ -364,7 +365,7 @@ public class LoadinBD extends javax.swing.JDialog {
 
         /*Crea la tabla del log usuarios si no existe*/
         vCreLogEstac(sBD, con, "logestac");
-
+        
         /*Muestra en el campo lo que se esta creando en este momento*/
         jTInf.setText("Creando tabla de login de usuarios...");
 
@@ -472,7 +473,29 @@ public class LoadinBD extends javax.swing.JDialog {
 
         /*Crea la tabla de usuarios si no existe*/
         vCreUrs(sBD, con, "estacs");
+        
+        /*  26 05 2015 Felipe Ruiz Garcia*/
+        /*Muestra en el campo lo que se esta creando en este momento*/
+        /*Crea la tabla del log usuarios si no existe*/
+        jTInf.setText("Creando tabla de registro de correo...");
+        registroEmail(sBD, con, "registroEmail");
+        
+        
+        /*  23 06 2015 Felipe Ruiz Garcia*/
+        /* crea la tabla donde se guardaran el correo para el envio de dato de la terminal */
+        /*Crea la tabla del log usuarios si no existe*/
+        _correoTerminal(sBD, con, "correo_terminal");
+        
+        // 16 07 2015 Felipe Ruiz Garcia // SINCRONIZAR VENTAS Y PARTIDAS
+        // CREA LA TABLA QUE CONTROLA LA GENERACION DE XLS 
+        // ESTA TABLA SE CONSULTA CADA VEZ QUE SE VA A GENERAR UN XLS DESDE LA FORMA SINCRONIZAR
+        _ControlCorreoTerminal(sBD, con, "controlExportar");
 
+        jTInf.setText("Creando tabla de permisos...");
+        
+        /*Crea la tabla de usuarios si no existe*/
+        vCrePermisos(sBD, con, "er_permisos");
+        
         /*Muestra en el campo lo que se esta creando en este momento*/
         jTInf.setText("Creando tabla de correos electrónicos...");
 
@@ -932,6 +955,18 @@ public class LoadinBD extends javax.swing.JDialog {
         vCreIng(sBD, con, "ingres");
 
         /*Muestra en el campo lo que se esta creando en este momento*/
+        jTInf.setText("Creando tabla de movientos de inventario");
+        
+        /*Crea la table de movientos de inventario*/
+        this.crearTablaMovtoInventario(con, sBD, "er_movimientos_inventario");
+        
+        /*Muestra en el campo lo que se esta creando en este momento*/
+        jTInf.setText("Creando tabla de ejercicios");
+        
+        /*Crea la table de movientos de inventario*/
+        this.crearTablaEjercicios(con, sBD);
+        
+        /*Muestra en el campo lo que se esta creando en este momento*/
         jTInf.setText("Creando tabla de partidas de cotizaciones de JPS2...");
 
         /*Termina la transacción*/
@@ -1024,8 +1059,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -1387,8 +1422,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`fhoy`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fhoy`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `codemp` (`codemp`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -1497,7 +1532,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -1581,7 +1616,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -1665,7 +1700,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -1749,7 +1784,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -1833,7 +1868,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -1917,7 +1952,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2001,7 +2036,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2085,7 +2120,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2169,7 +2204,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2253,7 +2288,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2337,7 +2372,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2421,7 +2456,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `cod` (`cod`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2504,7 +2539,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`      VARCHAR(255) NULL,\n"
                         + "`extr2`      VARCHAR(255) NULL,\n"
                         + "`extr3`      VARCHAR(255) NULL,\n"
-                        + "`falt`       TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2587,7 +2622,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2670,7 +2705,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2834,7 +2869,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2917,7 +2952,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`      VARCHAR(255) NULL,\n"
                         + "`extr2`      VARCHAR(255) NULL,\n"
                         + "`extr3`      VARCHAR(255) NULL,\n"
-                        + "`falt`       TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -2999,7 +3034,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3082,7 +3117,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3165,7 +3200,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3248,7 +3283,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`      VARCHAR(255) NULL,\n"
                         + "`extr2`      VARCHAR(255) NULL,\n"
                         + "`extr3`      VARCHAR(255) NULL,\n"
-                        + "`falt`       TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3331,7 +3366,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`      VARCHAR(255) NULL,\n"
                         + "`extr2`      VARCHAR(255) NULL,\n"
                         + "`extr3`      VARCHAR(255) NULL,\n"
-                        + "`falt`       TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3414,7 +3449,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`      VARCHAR(255) NULL,\n"
                         + "`extr2`      VARCHAR(255) NULL,\n"
                         + "`extr3`      VARCHAR(255) NULL,\n"
-                        + "`falt`       TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3497,7 +3532,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3580,7 +3615,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3664,7 +3699,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`      VARCHAR(255) NULL,\n"
                         + "`extr2`      VARCHAR(255) NULL,\n"
                         + "`extr3`      VARCHAR(255) NULL,\n"
-                        + "`falt`       TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3746,7 +3781,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`      VARCHAR(255) NULL,\n"
                         + "`extr2`      VARCHAR(255) NULL,\n"
                         + "`extr3`      VARCHAR(255) NULL,\n"
-                        + "`falt`       TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3830,7 +3865,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3913,7 +3948,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -3939,7 +3974,174 @@ public class LoadinBD extends javax.swing.JDialog {
 
     }/*Fin de private void vCreLogProds()*/
 
+    private void crearTablaEjercicios(Connection con,String baseDeDatos){
+        /*Declara variables de la base de datos*/
+        Statement   st;
+        ResultSet   rs;
+        String      sQ = "";
 
+           
+        /*Comprueba si la taba existe*/
+        boolean bSi = false;
+        try 
+        {
+            sQ = "SELECT * FROM information_schema.tables WHERE table_schema = '" + baseDeDatos + "' AND table_name = 'er_ejercicios' LIMIT 1";
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            /*Si hay datos entonces coloca la bandera*/
+            if(rs.next()) 
+                bSi = true;            
+        } 
+        catch(SQLException e) 
+        {
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Borra la base de datos local y servidora*/
+            BDCon.vDelBD(Star.sBD);
+            BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+            //Mensajea
+            JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            //Cierra la base de datos y sal de la aplicación
+            Star.iCierrBas(con);            
+            System.exit(1);
+        }
+
+        /*Si la tabla si no existe entonces*/
+        if(!bSi) 
+        {
+            /*Crea la tabla*/
+            try 
+            {
+                sQ = "CREATE TABLE IF NOT EXISTS `er_ejercicios` (\n" +
+                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                "  `ejercicio` int(4) NOT NULL,\n" +
+                "  `fechaInicio` date NOT NULL,\n" +
+                "  `fechaFin` date DEFAULT NULL,\n" +
+                "  `fechaCreacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n" +
+                "  PRIMARY KEY (`id`)\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+                st = con.createStatement();
+                st.executeUpdate(sQ);
+            } 
+            catch(SQLException ex) 
+            {
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                /*Borra la base de datos local y servidora*/
+                BDCon.vDelBD(Star.sBD);
+                BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+                //Mensajea
+                JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                
+                //Cierra la base de datos y sal de la aplicación
+                Star.iCierrBas(con);            
+                System.exit(1);
+            }
+
+        }/*Fin de if(!bSi)*/
+        
+    }
+    
+    
+    /**
+     * Crea la table de movimientos de inventario.
+     * 
+     * @param con conexion con la base de datos
+     * @param baseDeDatos nombre del schema
+     * @param tabla nombre de la tabla
+     */
+    private void crearTablaMovtoInventario(Connection con,String baseDeDatos,String tabla){
+        /*Declara variables de la base de datos*/
+        Statement   st;
+        ResultSet   rs;
+        String      sQ = "";
+
+           
+        /*Comprueba si la taba existe*/
+        boolean bSi = false;
+        try 
+        {
+            sQ = "SELECT * FROM information_schema.tables WHERE table_schema = '" + baseDeDatos + "' AND table_name = '" + tabla + "' LIMIT 1";
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            /*Si hay datos entonces coloca la bandera*/
+            if(rs.next()) 
+                bSi = true;            
+        } 
+        catch(SQLException e) 
+        {
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Borra la base de datos local y servidora*/
+            BDCon.vDelBD(Star.sBD);
+            BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+            //Mensajea
+            JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            //Cierra la base de datos y sal de la aplicación
+            Star.iCierrBas(con);            
+            System.exit(1);
+        }
+
+        /*Si la tabla si no existe entonces*/
+        if(!bSi) 
+        {
+            /*Crea la tabla*/
+            try 
+            {
+                sQ = "CREATE TABLE `"+baseDeDatos+"`.`"+tabla+"` (\n" +
+                        "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                        "  `idAlmacen` int(11) NOT NULL,\n" +
+                        "  `idMovtoComercial` int(11) NOT NULL,\n" +
+                        "  `idProducto` int(11) NOT NULL,\n" +
+                        "  `tipoMovimiento` bit(1) DEFAULT b'0',\n" +
+                        "  `cantidad` decimal(14,0) DEFAULT '0',\n" +
+                        "  `unidad` varchar(16) DEFAULT NULL,\n" +
+                        "  `costoUnitario` decimal(22,2) DEFAULT '0.00',\n" +
+                        "  `costoPromedio` decimal(22,2) NOT NULL DEFAULT '0.00',\n" +
+                        "  `existActual` decimal(22,2) DEFAULT '0.00',\n" +
+                        "  `fechaMovimiento` date NOT NULL,\n" +
+                        "  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
+                        "  PRIMARY KEY (`id`),\n" +
+                        "  KEY `idProd` (`idProducto`),\n" +
+                        "  KEY `idAlmacen` (`idAlmacen`),\n" +
+                        "  KEY `IdMovtoComercial` (`idMovtoComercial`),\n" +
+                        "  CONSTRAINT `er_movimientos_inventario_ibfk_1` FOREIGN KEY (`idProducto`) REFERENCES `prods` (`id_id`),\n" +
+                        "  CONSTRAINT `er_movimientos_inventario_ibfk_2` FOREIGN KEY (`idAlmacen`) REFERENCES `almas` (`id_id`)\n" +
+                        ") ENGINE=InnoDB AUTO_INCREMENT=36084 DEFAULT CHARSET=utf8;";
+                st = con.createStatement();
+                st.executeUpdate(sQ);
+            } 
+            catch(SQLException ex) 
+            {
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                /*Borra la base de datos local y servidora*/
+                BDCon.vDelBD(Star.sBD);
+                BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+                //Mensajea
+                JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                
+                //Cierra la base de datos y sal de la aplicación
+                Star.iCierrBas(con);            
+                System.exit(1);
+            }
+
+        }/*Fin de if(!bSi)*/
+        
+        
+    }
+    
+    
     /*Crea la tabla de log empresas si no existe*/
     private void vCreLogEmps(String sBD, Connection con, String sTabl) 
     {
@@ -3997,7 +4199,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -4081,7 +4283,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`       VARCHAR(255) NULL,\n"
                         + "`extr2`       VARCHAR(255) NULL,\n"
                         + "`extr3`       VARCHAR(255) NULL,\n"
-                        + "`falt`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`accio`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -4162,10 +4364,10 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "  `val`                INT(11) NOT NULL,\n"
                         + "  `nume`               FLOAT DEFAULT 0,\n"
                         + "  `falt`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
-                        + "  `fmod`               TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',\n"
+                        + "  `fmod`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "  `estac`              VARCHAR(30) NOT NULL,\n"
                         + "  `dia`                INT NULL DEFAULT 0,\n"
-                        + "  `envia`              TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
+                        + "  `envia`              TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
                         + "  `extr`               VARCHAR(1000) NULL DEFAULT '',\n"
                         + "  `asun`               VARCHAR(255) NULL DEFAULT '',\n"
                         + "  `anio`               INT NULL DEFAULT 0,\n"
@@ -4959,11 +5161,11 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                VARCHAR(255) NULL,\n"
                         + "`extr2`                VARCHAR(255) NULL,\n"
                         + "`extr3`                VARCHAR(255) NULL,\n"
-                        + "`fdoc`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fentre`               TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fvenc`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`falt`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fdoc`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fentre`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fvenc`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `codcot_UNIQUE` (`codcot`), KEY `codcot` (`codcot`)\n"
                         + ")";
@@ -5058,7 +5260,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`list`                     INT(11) DEFAULT 1,\n"
                         + "`lot`                      VARCHAR(255) DEFAULT '',\n"
                         + "`pedimen`                  VARCHAR(255) DEFAULT '',\n"
-                        + "`fcadu`                    TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fcadu`                    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`pre`                      FLOAT NOT NULL,\n"
                         + "`pre2`                     FLOAT NOT NULL,\n"
                         + "`desc1`                    FLOAT NOT NULL,\n"
@@ -5077,8 +5279,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                    VARCHAR(255) NULL,\n"
                         + "`extr2`                    VARCHAR(255) NULL,\n"
                         + "`extr3`                    VARCHAR(255) NULL,\n"
-                        + "`falt`                     TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                     TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `codcot` (`codcot`)\n"
                         + ")";
@@ -5169,8 +5371,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`ubic`                 VARCHAR(255) NOT NULL,\n"
                         + "`estad`                VARCHAR(10) NOT NULL,\n"
                         + "`estatu`               INT(11) DEFAULT '0',\n"
-                        + "`iniobr`               TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`termobr`              TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`iniobr`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`termobr`              TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`tiement`              VARCHAR(255) NOT NULL,\n"
                         + "`condpag`              VARCHAR(100) NOT NULL,\n"
                         + "`nompers`              VARCHAR(500) NOT NULL,\n"
@@ -5181,8 +5383,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                VARCHAR(255) NULL,\n"
                         + "`extr2`                VARCHAR(255) NULL,\n"
                         + "`extr3`                VARCHAR(255) NULL,\n"
-                        + "`falt`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`proyvac`              INT(11) DEFAULT '0',\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
@@ -5276,10 +5478,10 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`cta`              VARCHAR(42) DEFAULT '',\n"
                         + "`nodoc`            VARCHAR(50) NOT NULL,\n"
                         + "`fdoc`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
-                        + "`fent`             TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
+                        + "`fent`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
                         + "`subtot`           FLOAT NOT NULL,\n"
                         + "`impue`            FLOAT NOT NULL,\n"
-                        + "`tip`              VARCHAR(30) DEFAULT 'COMP',\n"
+                        + "`tip`              VARCHAR(30),\n"
                         + "`tot`              FLOAT NOT NULL,\n"
                         + "`archpdf`          BIT DEFAULT 0,\n"
                         + "`archxml`          BIT DEFAULT 0,\n"
@@ -5295,9 +5497,9 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr2`            VARCHAR(255) NULL,\n"
                         + "`extr3`            VARCHAR(255) NULL,\n"
                         + "`codord`           VARCHAR(30) NULL DEFAULT '',\n"
-                        + "`falt`             TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`             TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fvenc`            TIMESTAMP NOT NULL,\n"
+                        + "`falt`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fvenc`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `codcomp` (`codcomp`)\n"
                         + ")";
@@ -5399,10 +5601,10 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr2`            VARCHAR(255) NULL,\n"
                         + "`extr3`            VARCHAR(255) NULL,\n"
                         + "`fdoc`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
-                        + "`fent`             TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
-                        + "`falt`             TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`             TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fvenc`            TIMESTAMP NOT NULL,\n"
+                        + "`fent`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
+                        + "`falt`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fvenc`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `codprevcomp` (`codprevcomp`)\n"
                         + ")";
@@ -5492,7 +5694,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`regfisc`              VARCHAR(255) DEFAULT '',\n"
                         + "`cadori`               VARCHAR(2000) DEFAULT '',\n"
                         + "`cort`                 VARCHAR(5) DEFAULT 'N',\n"
-                        + "`formpag`              VARCHAR(10) NOT NULL,\n"
+                        + "`formpag`              VARCHAR(30) NOT NULL,\n"
                         + "`nocort`               INT(11) DEFAULT 0,\n"
                         + "`cierr`                INT(11) DEFAULT 0,\n"
                         + "`vtadevp`              INT(11) DEFAULT 0,\n"
@@ -5541,12 +5743,12 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`sucu`                 VARCHAR(30) NOT NULL,\n"
                         + "`nocaj`                VARCHAR(30) NOT NULL,\n"
                         + "`export`               BIT DEFAULT 0,\n"
-                        + "`extr1`                VARCHAR(255) NULL,\n"
-                        + "`extr2`                VARCHAR(255) NULL,\n"
-                        + "`extr3`                VARCHAR(255) NULL,\n"
-                        + "`fvenc`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`falt`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`extr1`                VARCHAR(255) NULL DEFAULT '',\n"
+                        + "`extr2`                VARCHAR(255) NULL DEFAULT '',\n"
+                        + "`extr3`                VARCHAR(255) NULL DEFAULT '',\n"
+                        + "`fvenc`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`vta`),\n"
                         + "UNIQUE KEY `venta_UNIQUE` (`vta`), KEY `norefer` (`norefer`), KEY `noser` (`noser`)\n"
                         + ")";
@@ -5653,13 +5855,13 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`eskit`                    BIT DEFAULT 0,\n"
                         + "`impo`                     FLOAT NOT NULL,\n"
                         + "`tipcam`                   FLOAT NOT NULL,\n"
-                        + "`flotvenc`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`flotvenc`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`export`                   BIT DEFAULT 0,\n"
                         + "`extr1`                    VARCHAR(255) NULL,\n"
                         + "`extr2`                    VARCHAR(255) NULL,\n"
                         + "`extr3`                    VARCHAR(255) NULL,\n"
-                        + "`falt`                     TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                     TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `codcom` (`codcom`)\n"
                         + ")";
@@ -5766,7 +5968,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`mon`                      VARCHAR(30) NOT NULL,\n"
                         + "`lot`                      VARCHAR(255) DEFAULT '',\n"
                         + "`pedimen`                  VARCHAR(255) DEFAULT '',\n"
-                        + "`fcadu`                    TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fcadu`                    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`impo`                     FLOAT NOT NULL,\n"
                         + "`impue`                    INT(11) NOT NULL,\n"
                         + "`tall`                     VARCHAR(30) DEFAULT '',\n"
@@ -5777,9 +5979,9 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                    VARCHAR(255) NULL,\n"
                         + "`extr2`                    VARCHAR(255) NULL,\n"
                         + "`extr3`                    VARCHAR(255) NULL,\n"                                                
-                        + "`fentre`                   TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`falt`                     TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                     TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fentre`                   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `vta` (`vta`)\n"
                         + ")";
@@ -5872,7 +6074,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                            VARCHAR(255) NULL,\n"
                         + "`extr2`                            VARCHAR(255) NULL,\n"
                         + "`extr3`                            VARCHAR(255) NULL,\n"
-                        + "`falt`                             TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`), KEY `alma` (`alma`)\n"
                         + ") ";
@@ -5962,7 +6164,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                VARCHAR(255) NULL,\n"
                         + "`extr2`                VARCHAR(255) NULL,\n"
                         + "`extr3`                VARCHAR(255) NULL,\n"
-                        + "`falt`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`), KEY `alma` (`alma`)\n"
                         + ") ";
@@ -6051,7 +6253,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                VARCHAR(255) NULL,\n"
                         + "`extr2`                VARCHAR(255) NULL,\n"
                         + "`extr3`                VARCHAR(255) NULL,\n"
-                        + "`falt`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`), KEY `alma` (`alma`)\n"
                         + ") ";
@@ -6136,8 +6338,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`               VARCHAR(255) NULL,\n"
                         + "`extr2`               VARCHAR(255) NULL,\n"
                         + "`extr3`               VARCHAR(255) NULL,\n"
-                        + "`falt`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `fab_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -6274,8 +6476,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`               VARCHAR(255) NULL,\n"
                         + "`extr2`               VARCHAR(255) NULL,\n"
                         + "`extr3`               VARCHAR(255) NULL,\n"
-                        + "`falt`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -6443,8 +6645,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`               VARCHAR(255) NULL,\n"
                         + "`extr2`               VARCHAR(255) NULL,\n"
                         + "`extr3`               VARCHAR(255) NULL,\n"
-                        + "`falt`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -6580,8 +6782,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`               VARCHAR(255) NULL,\n"
                         + "`extr2`               VARCHAR(255) NULL,\n"
                         + "`extr3`               VARCHAR(255) NULL,\n"
-                        + "`falt`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -6750,8 +6952,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`               VARCHAR(255) NULL,\n"
                         + "`extr2`               VARCHAR(255) NULL,\n"
                         + "`extr3`               VARCHAR(255) NULL,\n"
-                        + "`falt`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `mon_UNIQUE` (`mon`), KEY `mon` (`mon`)\n"
                         + ")";
@@ -6966,9 +7168,9 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                VARCHAR(255) NULL,\n"
                         + "`extr2`                VARCHAR(255) NULL,\n"
                         + "`extr3`                VARCHAR(255) NULL,\n"
-                        + "`fcadu`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`falt`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fcadu`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`)\n"
                         + ")";
@@ -7053,8 +7255,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`               VARCHAR(255) NULL,\n"
                         + "`extr2`               VARCHAR(255) NULL,\n"
                         + "`extr3`               VARCHAR(255) NULL,\n"
-                        + "`falt`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -7431,8 +7633,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`               VARCHAR(255) NULL,\n"
                         + "`extr2`               VARCHAR(255) NULL,\n"
                         + "`extr3`               VARCHAR(255) NULL,\n"
-                        + "`falt`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -7608,8 +7810,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`              VARCHAR(255) NULL,\n"
                         + "`extr2`              VARCHAR(255) NULL,\n"
                         + "`extr3`              VARCHAR(255) NULL,\n"
-                        + "`falt`               TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`               TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `lin_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -7743,8 +7945,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`               VARCHAR(255) NULL,\n"
                         + "`extr2`               VARCHAR(255) NULL,\n"
                         + "`extr3`               VARCHAR(255) NULL,\n"
-                        + "`falt`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -7879,8 +8081,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`          VARCHAR(255) NULL,\n"
                         + "`extr2`          VARCHAR(255) NULL,\n"
                         + "`extr3`          VARCHAR(255) NULL,\n"
-                        + "`falt`           TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`           TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -8018,8 +8220,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `codkit` (`codkit`)\n"
                         + ")";
                 st = con.createStatement();
@@ -8103,8 +8305,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`               VARCHAR(255) NULL,\n"
                         + "`extr2`               VARCHAR(255) NULL,\n"
                         + "`extr3`               VARCHAR(255) NULL,\n"
-                        + "`falt`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `estac_UNIQUE` (`estac`), KEY `estac` (`estac`)\n"
                         + ")";
@@ -8189,8 +8391,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                   VARCHAR(255) NULL,\n"
                         + "`extr2`                   VARCHAR(255) NULL,\n"
                         + "`extr3`                   VARCHAR(255) NULL,\n"
-                        + "`falt`                    TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                    TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),    UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `codimpue_UNIQUE` (`codimpue`), KEY `codimpue` (`codimpue`)\n"
                         + ")";
@@ -8339,8 +8541,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                   VARCHAR(255) NULL,\n"
                         + "`extr2`                   VARCHAR(255) NULL,\n"
                         + "`extr3`                   VARCHAR(255) NULL,\n"
-                        + "`falt`                    TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                    TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),    UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `anaq_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -8476,8 +8678,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`              VARCHAR(255) NULL,\n"
                         + "`extr2`              VARCHAR(255) NULL,\n"
                         + "`extr3`              VARCHAR(255) NULL,\n"
-                        + "`falt`               TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`               TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `lug_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -8617,8 +8819,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`              VARCHAR(255) NULL,\n"
                         + "`extr2`              VARCHAR(255) NULL,\n"
                         + "`extr3`              VARCHAR(255) NULL,\n"
-                        + "`falt`               TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`               TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -8755,8 +8957,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`            VARCHAR(255) NULL,\n"
                         + "`extr2`            VARCHAR(255) NULL,\n"
                         + "`extr3`            VARCHAR(255) NULL,\n"
-                        + "`falt`             TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`             TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `nom_UNIQUE` (`nom`), KEY `estac` (`estac`)\n"
                         + ")";
@@ -8841,8 +9043,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`            VARCHAR(255) NULL,\n"
                         + "`extr2`            VARCHAR(255) NULL,\n"
                         + "`extr3`            VARCHAR(255) NULL,\n"
-                        + "`falt`             TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`             TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `estac` (`estac`)"
                         + ")";
                 st = con.createStatement();
@@ -8928,8 +9130,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -9153,7 +9355,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`exter`           BIT NOT NULL,\n"
                         + "`prepag`          BIT NOT NULL,\n"
                         + "`factuya`         BIT NOT NULL,\n"
-                        + "`ffactu`          TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`ffactu`          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`factur`          BIT NOT NULL,\n"
                         + "`tarif`           FLOAT NOT NULL,\n"
                         + "`sucu`            VARCHAR(30) NOT NULL,\n"
@@ -9163,8 +9365,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `cli` (`cli`)\n"                        
                         + ")";
                 st = con.createStatement();
@@ -9245,7 +9447,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`alma`            VARCHAR(30) NOT NULL,\n"
                         + "`lot`             VARCHAR(255) NOT NULL,\n"
                         + "`pedimen`         VARCHAR(255) NOT NULL,\n"
-                        + "`fcadu`           TIMESTAMP NOT NULL,\n"
+                        + "`fcadu`           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`exist`           FLOAT NOT NULL,\n"
                         + "`estac`           VARCHAR(30) NOT NULL,\n"
                         + "`sucu`            VARCHAR(30) NOT NULL,\n"
@@ -9254,8 +9456,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`), KEY `alma` (`alma`)\n"                        
                         + ")";
                 st = con.createStatement();
@@ -9342,8 +9544,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`prod`)\n"                        
                         + ")";
                 st = con.createStatement();
@@ -9429,8 +9631,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `tip_UNIQUE` (`tip`), KEY `tip` (`tip`)\n"
                         + ")";
@@ -9517,8 +9719,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `marc_UNIQUE` (`concep`), KEY `concep` (`concep`)\n"
                         + ")";
@@ -9665,9 +9867,9 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`fultcort`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fultcort`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`)\n"                        
                         + ")";
                 st = con.createStatement();
@@ -9762,11 +9964,11 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`totvalactbaj`    FLOAT DEFAULT 0,\n"
                         + "`totestadbaj`     VARCHAR(30) DEFAULT '',\n"
                         + "`costsal`         FLOAT DEFAULT 0,\n"
-                        + "`fadquisreal`     TIMESTAMP NOT NULL,\n"
-                        + "`fadquisusr`      TIMESTAMP NOT NULL,\n"
-                        + "`finidep`         TIMESTAMP NOT NULL,\n"
-                        + "`ffindep`         TIMESTAMP NOT NULL,\n"
-                        + "`fbajdep`         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fadquisreal`     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fadquisusr`      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`finidep`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`ffindep`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fbajdep`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`estadusr`        VARCHAR(30) NOT NULL,\n"
                         + "`tipact`          VARCHAR(30) NOT NULL,\n"
                         + "`comen`           VARCHAR(1000) DEFAULT '',\n"
@@ -9778,9 +9980,9 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`fbaj`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fbaj`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`)\n"                        
                         + ")";
                 st = con.createStatement();
@@ -9867,8 +10069,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`prod`), KEY `prod` (`prod`)"                       
                         + ")";
                 st = con.createStatement();
@@ -9954,8 +10156,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `concep_UNIQUE` (`concep`), KEY `concep` (`concep`)\n"
                         + ")";
@@ -10092,8 +10294,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `concep_UNIQUE` (`concep`), KEY `concep` (`concep`)\n"
                         + ")";
@@ -10231,8 +10433,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `usrenvi` (`usrenvi`), KEY `usrrecib` (`usrrecib`)\n"                        
                         + ")";
                 st = con.createStatement();
@@ -10318,8 +10520,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `idfluj` (`idfluj`)\n"                        
                         + ")";
                 st = con.createStatement();
@@ -10405,8 +10607,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `clas` (`clas`)\n"                        
                         + ")";
                 st = con.createStatement();
@@ -10492,8 +10694,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `accio` (`clas`)\n"                        
                         + ")";
                 st = con.createStatement();
@@ -10579,8 +10781,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `clas` (`clas`)\n"                        
                         + ")";
                 st = con.createStatement();
@@ -10666,8 +10868,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `gara_UNIQUE` (`gara`), KEY `gara` (`gara`)\n"
                         + ")";
@@ -10754,8 +10956,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -10888,8 +11090,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`)"                        
                         + ")";
                 st = con.createStatement();
@@ -10975,8 +11177,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -11139,8 +11341,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `gir_UNIQUE` (`gir`), KEY `gir` (`gir`)\n"
                         + ")";
@@ -11297,8 +11499,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `clien` (`clien`), KEY `prod` (`prod`), KEY `clas` (`clas`)" 
                         + ")";
                 st = con.createStatement();
@@ -11384,8 +11586,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -11560,8 +11762,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `marc_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -11800,8 +12002,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`), KEY `marc` (`marc`)"                       
                         + ")";
                 st = con.createStatement();
@@ -11887,8 +12089,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`), KEY `part` (`part`)"                       
                         + ")";
                 st = con.createStatement();
@@ -12077,8 +12279,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),KEY `prod` (`prod`),KEY `marc` (`marc`),KEY `model` (`model`)"                       
                         + ")";
                 st = con.createStatement();
@@ -12164,8 +12366,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `marc` (`marc`),KEY `model` (`model`)"                       
                         + ")";
                 st = con.createStatement();
@@ -12254,8 +12456,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`)"                       
                         + ")";
                 st = con.createStatement();
@@ -12341,8 +12543,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`), KEY `compa` (`compa`)"                       
                         + ")";
                 st = con.createStatement();
@@ -12428,8 +12630,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`), KEY `mode` (`mode`)"                       
                         + ")";
                 st = con.createStatement();
@@ -12518,8 +12720,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `prod` (`prod`), KEY `ser` (`ser`)"                       
                         + ")";
                 st = con.createStatement();
@@ -12605,8 +12807,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -12744,8 +12946,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`           VARCHAR(255) NULL,\n"
                         + "`extr2`           VARCHAR(255) NULL,\n"
                         + "`extr3`           VARCHAR(255) NULL,\n"
-                        + "`falt`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`            TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `cod_UNIQUE` (`cod`), KEY `cod` (`cod`)\n"
                         + ")";
@@ -13029,6 +13231,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                VARCHAR(255)    NULL,\n"
                         + "`extr2`                VARCHAR(255)    NULL,\n"
                         + "`extr3`                VARCHAR(255)    NULL,\n"
+                        + "`servOestac`           VARCHAR(30)     NOT NULL,\n"
+                        + "`tipEstac`             VARCHAR(30)     NOT NULL,\n"
                         + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
                         + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
@@ -13078,16 +13282,15 @@ public class LoadinBD extends javax.swing.JDialog {
             }
 
             /*Si la ruta del directorio inicial no existe que lo cree*/
-            String sRutA = "\\\\\\\\" + sNam + System.getProperty("user.dir").substring(2).replace("\\", "\\\\") + "\\\\Easy Retail® Admin";
+            String sRutA = "\\\\\\\\" + sNam + System.getProperty("user.dir").substring(2).replace("\\", "\\\\") + "\\\\Easy Retail Admin";
             if(!new File(sRutA).exists())             
                 new File(sRutA).mkdir();            
 
             /*Inserta en la base de datos los primeros datos de conexión a la base de datos encriptados*/
             try 
             {
-                sQ = "INSERT INTO " + sTabl + "(   codemp,             nom,                  serv,                                    usr,                                   pass,                                      bd,                               estac,        falt,             sucu,       nocaj,         rutap,              rfc,                       usrs,                 metcost)"
-                                    + "VALUES('" + sCodEmpre + "','" + sNombreEmp + "', '" + Star.sEncrip(Star.sInstancia) + "', '" + Star.sEncrip(Star.sUsuario) + "', '" + Star.sEncrip(Star.sContrasenia) + "', '" + Star.sEncrip(Star.sBD) + "',      'INICIAL',    now(),            'INICIAL', 'INICIAL', '" + sRutA + "',    '" + Star.sRFCGen + "', '" +    Star.sEncrip("2") + "', 'prom')";
-                st = con.createStatement();
+                sQ = "INSERT INTO " + sTabl + "(   codemp,             nom,                  serv,                                    usr,                                   pass,                                      bd,                               estac,        falt,             sucu,       nocaj,         rutap,              rfc,                       usrs,                 metcost,          servOestac,     tipEstac)"
+                + "VALUES('" + sCodEmpre + "','" + sNombreEmp + "', '" + Star.sEncrip(Star.sInstancia) + "', '" + Star.sEncrip(Star.sUsuario) + "', '" + Star.sEncrip(Star.sContrasenia) + "', '" + Star.sEncrip(Star.sBD) + "',      'INICIAL',    now(),            'INICIAL', 'INICIAL', '" + sRutA + "',    '" + Star.sRFCGen + "', '" +    Star.sEncrip("2") + "', 'prom', '" + Star.sEncrip(Integer.toString( Star.bEstacTrab))+ "',  '" +Star.sEncrip(Integer.toString( Star.tTipoDeEsta))+ "' )";                st = con.createStatement();
                 st.executeUpdate(sQ);
             } 
             catch(SQLException ex) 
@@ -13222,10 +13425,34 @@ public class LoadinBD extends javax.swing.JDialog {
                 Star.iCierrBas(con);            
                 System.exit(1);
             }
-
-            /*Encripta la clave de supervisor*/
-            String sCla = Star.sEncrip("SUP");
-
+             
+            /*27 05 2015 Felipe Ruiz Garcia */
+            /* Correo que se nos otorgo para el envio de la contraseña */
+            /* en base al correo se genera la passsword */
+            String correo =  Star.correoRegistro;
+            
+            /*generacion de la contraseña en base al correo*/
+            String sCla = Star.sEncrip(correo);
+            
+            /*declaraion del arreglo para determinar la longitud de la password*/
+            char[] tem = new char[9];
+            
+            /*determina la copia de la contraseña con cierta longitud*/
+            sCla.getChars(0, 9, tem, 0);
+            
+            /*Copiamos la contraseña */
+            sCla = String.copyValueOf(tem);
+            
+            // PARA DEBUG
+            /*imprimimos para conocerla / eliminar esta linea al final del proyecto */
+            //System.out.println(sCla);
+                                    
+            /*guardamos la contraseña encriptada en la variable global*/
+            Star.contraCorreo = sCla;
+                        
+            /*Encripta la contraseña de supervisor para guardarla en la base de datos*/
+            sCla = Star.sEncrip(sCla);
+                       
             /*Encripta la clave de ventas*/
             String sClaVta = Star.sEncrip("VENTAS");
 
@@ -13272,6 +13499,7 @@ public class LoadinBD extends javax.swing.JDialog {
             /*Inserta el usuario de respaldos en la base de datos*/
             try 
             {
+                
                 sQ = "INSERT INTO " + sTabl + "(    estac,          52m, descu, habdesc,  imptic,                impfac,          cort,     pass,       estacglo,   sucu,      nocaj,     falt,     fmod, admcaj) "
                                         + "VALUES(  'RESPALDO',     0,   0,     0,   '" + se.getName() + "','" + se.getName() + "',  1,'" + sCla + "',  'INICIAL',  'INICIAL', 'INICIAL', now(),    now(),0)";
                 st = con.createStatement();
@@ -13418,12 +13646,216 @@ public class LoadinBD extends javax.swing.JDialog {
                 Star.iCierrBas(con);            
                 System.exit(1);
             }
+            /*Inserta el usuario CXP en la base de datos*/
+            
             
         }/*Fin de if(!bSi)*/
 
     }/*Fin de private void vCreUrs()*/
 
+    private void vCrePermisos(String sBD, Connection con, String sTabl) 
+    {
+        /*Declara variables de la base de datos*/
+        Statement   st;
+        ResultSet   rs;
+        String      sQ = "";
 
+        
+        
+        
+        /*Comprueba si la tabla de permisos existe*/
+        boolean bSi = false;
+        try 
+        {
+            sQ = "SELECT * FROM information_schema.tables WHERE table_schema = '" + sBD + "' AND table_name = '" + sTabl + "' LIMIT 1";
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            /*Si hay datos entonces coloca la bandera*/
+            if(rs.next()) 
+                bSi = true;
+        } 
+        catch(SQLException e) 
+        {
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Borra la base de datos local y servidora*/
+            BDCon.vDelBD(Star.sBD);
+            BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+            //Mensajea
+            JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            //Cierra la base de datos y sal de la aplicación
+            Star.iCierrBas(con);            
+            System.exit(1);
+        }
+
+        /*Si la tabla de correoselectronicos no existe*/
+        if(!bSi) 
+        {
+            /*Crea la tabla de consecutivos*/
+            try 
+            {
+                sQ = "CREATE TABLE `" + sTabl + "` (\n"
+                        + "`PKId` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                        "  `FKIdUsuario` int(11) NOT NULL,\n" +
+                        "  `permisoConf` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCorreos` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoDatosEmpresa` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoSeries` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoImpresoras` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCambiarIcono` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoConfiguracionesGenerales` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `otorgaPermisosConfig` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoUsuarios` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoUsuariosDefinir` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoUsuariosConectados` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoUsuariosPermisos` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoClaves` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoReparar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoRepararErrores` int(11) NOT NULL DEFAULT '1',\n" +
+                        "  `permisoRepararRestaurar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoBaseDatos` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoBaseDatosConexiones` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoBaseDatosArchivo` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoReportes` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoReportesUsuarios` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoReportesRespaldos` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoReportesLog` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoReportesEstadistica` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoRevocacion` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoActivarSistema` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `otorgaPermisosSistema` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoContabilidad` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoConceptosNC` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCatalogoGarantias` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoZonas` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoGiros` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoMonedas` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoImpuestos` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `otorgaPermisosModulos` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCompras` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoComprasCancelar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoComprasDevolucion` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoComprasParcial` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoComprasNuevo` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoComprasNotCredito` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoComprasVer` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoComprasCargarArchivo` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoComprasBorrarArchivo` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoComprasRecibirOrden` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `otorgaPermisosCompras` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoProvee` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoProveeNuevo` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoProveeModificar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoProveeVer` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoProveeBorrar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `otorgaPermisosProvee` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoPrevio` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoPrevioNueva` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoPrevioAbrir` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoPrevioVer` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoPrevioCancelar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoPrevioSeries` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoPrevioCompra` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `otorgaPermisosPrevio` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoInventario` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoProductos` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoProductosNuevo` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoProductosModificar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisProductosBorrar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `otorgaPermisosInventario` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoClientes` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoClientesNuevo` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoClientesModificar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoClientesVer` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoClientesBorrar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoClientesEnviar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `otorgaPermisosClientes` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentas` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasCancelar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasDevolucion` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasParcial` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasNueva` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasNotCredito` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasVer` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasEnviar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasTimbrar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasEntregar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasComprobar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasAcuse` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasObtenerXml` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasFacturar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasCargarArchivo` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoVentasBorrarArchivo` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `otorgaPermisosVentas` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCotiza` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCotizaNueva` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCotizaAbrir` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCotizaVer` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCotizaCancelar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCotizaReenviar` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `permisoCotizaVenta` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  `otorgaPermisosCotiza` bit(1) NOT NULL DEFAULT b'1',\n" +
+                        "  PRIMARY KEY (`PKId`),\n" +
+                        "  KEY `FKIdUsuario_idx` (`FKIdUsuario`),\n" +
+                        "  CONSTRAINT `FKIdUsuario` FOREIGN KEY (`FKIdUsuario`) REFERENCES `estacs` (`id_id`) ON DELETE CASCADE ON UPDATE CASCADE"
+                        + ")";
+                st = con.createStatement();
+                st.executeUpdate(sQ);
+            } 
+            catch(SQLException ex) 
+            {
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                /*Borra la base de datos local y servidora*/
+                BDCon.vDelBD(Star.sBD);
+                BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+                //Mensajea
+                JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                
+                //Cierra la base de datos y sal de la aplicación
+                Star.iCierrBas(con);            
+                System.exit(1);
+            }
+            
+            try 
+            {
+                sQ = "INSERT INTO er_permisos(FKIdUSuario) VALUES "
+                        + "("+regresaId(con,"CXP")+"),"
+                        + "("+regresaId(con,"CXC")+"),"
+                        +"("+regresaId(con,"CAJA")+"),"
+                        +"("+regresaId(con,"COMPRAS")+"),"
+                        +"("+regresaId(con,"VENTAS")+"),"
+                        +"("+regresaId(con,"RESPALDO")+"),"
+                        +"("+regresaId(con,"SUP")+")";
+                st = con.createStatement();
+                st.executeUpdate(sQ);
+            } 
+            catch(SQLException ex) 
+            {
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                /*Borra la base de datos local y servidora*/
+                BDCon.vDelBD(Star.sBD);
+                BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+                //Mensajea
+                JOptionPane.showMessageDialog(null, "No se crearán los permisos de los usuarios del sistema debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                
+                //Cierra la base de datos y sal de la aplicación
+                Star.iCierrBas(con);            
+                System.exit(1);
+            }
+
+        }/*Fin de if(!bSi)*/
+
+    }/*Fin de private void vCrePermisos()*/
+    
     /*Crea la tabla de empresas si no existe*/
     private void vCreCli(String sBD, Connection con, String sTabl) 
     {
@@ -13583,10 +14015,10 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr2`                VARCHAR(255) NULL,\n"
                         + "`extr3`                VARCHAR(255) NULL,\n"
                         + "`cumple`               VARCHAR(30) NULL DEFAULT '',\n"
-                        + "`agradfec`             TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`agradfec`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`anio`                 VARCHAR(10) NULL DEFAULT '',\n"
-                        + "`falt`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `codemp` (`codemp`), KEY `ser` (`ser`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -13720,8 +14152,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                VARCHAR(255) NULL,\n"
                         + "`extr2`                VARCHAR(255) NULL,\n"
                         + "`extr3`                VARCHAR(255) NULL,\n"
-                        + "`falt`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `estacres` (`estacres`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -13834,8 +14266,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                VARCHAR(255) NULL,\n"
                         + "`extr2`                VARCHAR(255) NULL,\n"
                         + "`extr3`                VARCHAR(255) NULL,\n"
-                        + "`falt`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                 TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `tip` (`tip`))";
                 st = con.createStatement();
                 st.executeUpdate(sQ);
@@ -14006,9 +14438,9 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`concep`               VARCHAR(30) DEFAULT '',\n"
                         + "`folbanc`              VARCHAR(50) DEFAULT '',\n"
                         + "`fvenc`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
-                        + "`fdoc`                 TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',\n"
-                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',\n"
-                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',\n"
+                        + "`fdoc`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`fol`                  INT(11) DEFAULT 0,\n"
                         + "`estac`                VARCHAR(30) NOT NULL,\n"
                         + "`sucu`                 VARCHAR(30) NOT NULL,\n"
@@ -14130,7 +14562,310 @@ public class LoadinBD extends javax.swing.JDialog {
 
     }/*Fin de private void vCreLogEstac()*/
 
+ /*Crea la tabla de log de usuarios si no existe*/
+    private void registroEmail(String sBD, Connection con, String sTabl) 
+    {                
+        /*Declara variables de la base de datos*/
+        Statement   st;
+        ResultSet   rs;
+        String      sQ = "";
+        
+ /*Comprueba si la tabla existe*/
+        boolean iSi = false;
+        
+        try 
+        {
+            sQ = "SELECT * FROM information_schema.tables WHERE table_schema = '" + sBD + "' AND table_name = '" + sTabl + "' LIMIT 1";
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            /*Si hay datos entonces coloca la bandera*/
+            if(rs.next())             
+                iSi = true;            
+        }
+        catch(SQLException e) 
+        {
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
 
+            /*Borra la base de datos local y servidora*/
+            BDCon.vDelBD(Star.sBD);
+            BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+            //Mensajea
+            JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            //Cierra la base de datos y sal de la aplicación
+            Star.iCierrBas(con);            
+            System.exit(1);
+        }
+
+        /*Si la tabla no existe*/
+        if(!iSi) 
+        {
+            /*Crea la tabla*/
+            try 
+            {
+                /*el campo generada_fecha se establece en automatico cuando se crea la fia*/
+                /*el campo cambiada_fecha se actualiza en cada modificacion */
+                sQ = "CREATE TABLE `" + sTabl + "` (\n"
+                        + "`id_id`                INT(11) NOT NULL PRIMARY KEY auto_increment,\n"
+                        + "`correo`                VARCHAR(350) NOT NULL,\n"
+                        + "`contra`                VARCHAR(100) NOT NULL,\n"
+                        + "`generada_fecha`         TIMESTAMP not null default current_timestamp,\n"
+                        + "`cambiada_fecha`         TIMESTAMP not null default current_timestamp on update current_timestamp,\n"
+                        + "`ya_entro_booleano`       INT(3) NOT NULL, \n"
+                        + "`extr1`                VARCHAR(255) NULL,\n"
+                        + "`extr2`                VARCHAR(255) NULL,\n"
+                        + "`extr3`                VARCHAR(255) NULL\n"
+                        + ")";
+                
+                st = con.createStatement();
+                st.executeUpdate(sQ);
+            }
+            catch(SQLException ex) 
+            {
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                /*Borra la base de datos local y servidora*/
+                BDCon.vDelBD(Star.sBD);
+                BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+                //Mensajea
+                JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                
+                //Cierra la base de datos y sal de la aplicación
+                Star.iCierrBas(con);            
+                System.exit(1);
+            }
+            
+            /* 28 / 05 / 2015 Felipe Ruiz Garcia*/ /* Escribe en la base de datos la contraseña encriptada desde la tabla*/
+            /* la contraseña se obtiene desde la tabla estacs */
+            /* Inserta los datos a la base de datos*/
+            
+            try 
+            {   
+                /*preparo la base de datos */
+                sQ = "select pass from estacs where id_id = 1";
+                st = con.createStatement();
+                 rs = st.executeQuery(sQ);
+                
+                if(rs.next()){     
+                  
+                    //sQ = "insert into registroemail (correo, contra, ya_entro_booleano ) values (" + Star.sEncrip(Star.correoRegistro) + " , " + rs.getString("pass") + ", 0)";
+                    sQ = "insert into registroemail (correo, contra, ya_entro_booleano ) values (\"" + Star.sEncrip(Star.correoRegistro) + "\" , \"" + rs.getString("pass") + "\", 0)";
+
+                    st = con.createStatement();
+                    st.executeUpdate(sQ);                
+                } 
+            } 
+            catch(SQLException ex) 
+            {
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                /*Borra la base de datos local y servidora*/
+                BDCon.vDelBD(Star.sBD);
+                BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+                //Mensajea
+                JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                
+                //Cierra la base de datos y sal de la aplicación
+                Star.iCierrBas(con);            
+                System.exit(1);
+            }
+
+        }/*Fin de if(!bSi)*/
+
+    }/*Fin de private void registroEmail()*/
+    
+    private void _ControlCorreoTerminal(String sBD, Connection con, String sTabl){
+        
+        /*Declara variables de la base de datos*/
+        Statement   st;
+        ResultSet   rs;
+        String      sQ = "";
+        
+ /*Comprueba si la tabla existe*/
+        boolean iSi = false;
+        
+        try 
+        {
+            sQ = "SELECT * FROM information_schema.tables WHERE table_schema = '" + sBD + "' AND table_name = '" + sTabl + "' LIMIT 1";
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            /*Si hay datos entonces coloca la bandera*/
+            if(rs.next())             
+                iSi = true;            
+        }
+        catch(SQLException e) 
+        {
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Borra la base de datos local y servidora*/
+            BDCon.vDelBD(Star.sBD);
+            BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+            //Mensajea
+            JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            //Cierra la base de datos y sal de la aplicación
+            Star.iCierrBas(con);            
+            System.exit(1);
+        }
+
+        /*Si la tabla no existe*/
+        if(!iSi) 
+        {
+            /*Crea la tabla*/
+            try 
+            {
+                sQ = "CREATE TABLE "+ sTabl +" ( \n "
+                        + "`id_id` int(11) primary KEY AUTO_INCREMENT,\n"
+                        + "`id_ultimaVentaExpo` int(6) NOT NULL DEFAULT 0, \n"
+                        + "`id_ultimapartidaExpo` int(6) NOT NULL DEFAULT 0, \n"
+                        //+ "`id_ultimaVentaImpo` int(6) NOT NULL DEFAULT 0, \n"
+                        //+ "`id_ultimapartidaImpo` int(6) NOT NULL DEFAULT 0, \n"
+                        + "`fechaExpo` TIMESTAMP not null default current_timestamp on update current_timestamp, \n"
+                        + "`fechaImpo` TIMESTAMP null, \n"
+                        + "`tipo` varchar(255) DEFAULT \" \");";
+                
+                st = con.createStatement();
+                st.executeUpdate(sQ);
+            }
+            catch(SQLException ex) 
+            {
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                /*Borra la base de datos local y servidora*/
+                BDCon.vDelBD(Star.sBD);
+                BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+                //Mensajea
+                JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                
+                //Cierra la base de datos y sal de la aplicación
+                Star.iCierrBas(con);            
+                System.exit(1);
+            }
+            
+            try 
+            {
+                sQ = "INSERT INTO " +sTabl+ "(id_id, id_ultimaVentaExpo) VALUES (NULL, 0);";
+                
+                st = con.createStatement();
+                st.executeUpdate(sQ);
+            }
+            catch(SQLException ex) 
+            {
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                /*Borra la base de datos local y servidora*/
+                BDCon.vDelBD(Star.sBD);
+                BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+                //Mensajea
+                JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                
+                //Cierra la base de datos y sal de la aplicación
+                Star.iCierrBas(con);            
+                System.exit(1);
+            }
+            
+            /* 07 / 07 / 2015 Felipe Ruiz Garcia*/ /*  Tabla para el CONTROL DE LA SINCRONIZACION DE VENTRAS  para el envio de datos */
+           
+        }/*Fin de if(!bSi)*/
+        
+    
+    }
+
+    
+    
+    
+    private void _correoTerminal(String sBD, Connection con, String sTabl) 
+    {                
+        /*Declara variables de la base de datos*/
+        Statement   st;
+        ResultSet   rs;
+        String      sQ = "";
+        
+ /*Comprueba si la tabla existe*/
+        boolean iSi = false;
+        
+        try 
+        {
+            sQ = "SELECT * FROM information_schema.tables WHERE table_schema = '" + sBD + "' AND table_name = '" + sTabl + "' LIMIT 1";
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            /*Si hay datos entonces coloca la bandera*/
+            if(rs.next())             
+                iSi = true;            
+        }
+        catch(SQLException e) 
+        {
+            /*Agrega en el log*/
+            Login.vLog(e.getMessage());
+
+            /*Borra la base de datos local y servidora*/
+            BDCon.vDelBD(Star.sBD);
+            BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+            //Mensajea
+            JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            //Cierra la base de datos y sal de la aplicación
+            Star.iCierrBas(con);            
+            System.exit(1);
+        }
+
+        /*Si la tabla no existe*/
+        if(!iSi) 
+        {
+            /*Crea la tabla*/
+            try 
+            {
+                sQ = "CREATE TABLE "+ sTabl +" ( \n "
+                        + "`id_id` int(11) primary KEY AUTO_INCREMENT,\n"
+                        + "`correo` varchar(350) NOT NULL, \n"
+                        + "`contra` varchar(100) NOT NULL, \n"
+                        +  "`muestracomo` varchar(350) NOT NULL, \n"
+                        + "`direccionserver` varchar(350) NOT NULL, \n"
+                        + "`correoA` varchar(350) NOT NULL, \n"
+                        + "`puerto` int(4) NOT NULL, \n"
+                        + "`ingresocorreo` int(4) DEFAULT 1 NOT NULL, \n"
+                        + "`extr2` varchar(255) DEFAULT NULL, \n"
+                        + "`extr3` varchar(255) DEFAULT NULL);";
+
+
+                st = con.createStatement();
+                st.executeUpdate(sQ);
+            }
+            catch(SQLException ex) 
+            {
+                /*Agrega en el log*/
+                Login.vLog(ex.getMessage());
+
+                /*Borra la base de datos local y servidora*/
+                BDCon.vDelBD(Star.sBD);
+                BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+                //Mensajea
+                JOptionPane.showMessageDialog(null, "No se creará toda la estructura de las tablas ni esquemas en la base de datos debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                
+                //Cierra la base de datos y sal de la aplicación
+                Star.iCierrBas(con);            
+                System.exit(1);
+            }
+            
+            /* 23 / 06 / 2015 Felipe Ruiz Garcia*/ /*  Tabla para el correo de la terminal para el envio de datos */
+           
+        }/*Fin de if(!bSi)*/
+    }/*Fin de private void _correoTerminal()*/
+    
     /*Crea la tabla de log de log de inicio de los usuarios*/
     private void vCreLogIni(String sBD, Connection con, String sTabl) 
     {
@@ -14185,7 +14920,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                VARCHAR(255) NULL,\n"
                         + "`extr2`                VARCHAR(255) NULL,\n"
                         + "`extr3`                VARCHAR(255) NULL,\n"
-                        + "`falt`                 TIMESTAMP NOT NULL ,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`),\n"
                         + "UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `estac` (`estac`)\n"
                         + ")";
@@ -14275,9 +15010,9 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`concep`               VARCHAR(30) DEFAULT '',\n"
                         + "`folbanc`              VARCHAR(50) DEFAULT '',\n"
                         + "`fvenc`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
-                        + "`fdoc`                 TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',\n"
-                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',\n"
-                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',\n"
+                        + "`fdoc`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`fol`                  INT(11) DEFAULT 0,\n"
                         + "`estac`                VARCHAR(30) NOT NULL,\n"
                         + "`sucu`                 VARCHAR(30) NOT NULL,\n"
@@ -14366,7 +15101,7 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`comp`                 VARCHAR(30) NOT NULL,\n"
                         + "`tot`                  FLOAT NOT NULL,\n"
                         + "`fech`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
-                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`estac`                VARCHAR(30) NOT NULL,\n"
                         + "`sucu`                 VARCHAR(30) NOT NULL,\n"
                         + "`nocaj`                VARCHAR(30) NOT NULL,\n"
@@ -15310,8 +16045,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`tel2`                     VARCHAR(255) DEFAULT '',\n"
                         + "`cel1`                     VARCHAR(255) DEFAULT '',\n"
                         + "`cel2`                     VARCHAR(255) DEFAULT '',\n"
-                        + "`fingemp`                  TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fsalemp`                  TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fingemp`                  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fsalemp`                  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "`teleme1`                  VARCHAR(255) DEFAULT '',\n"
                         + "`teleme2`                  VARCHAR(255) DEFAULT '',\n"
                         + "`contac1`                  VARCHAR(4255) DEFAULT NULL,\n"
@@ -15326,8 +16061,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                    VARCHAR(255) NULL,\n"
                         + "`extr2`                    VARCHAR(255) NULL,\n"
                         + "`extr3`                    VARCHAR(255) NULL,\n"
-                        + "`falt`                     TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                     TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `nom` (`nom`),\n"
                         + "UNIQUE KEY `nom_UNIQUE` (`nom`)\n"
                         + ")";
@@ -15533,8 +16268,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                VARCHAR(255) NULL,\n"
                         + "`extr2`                VARCHAR(255) NULL,\n"
                         + "`extr3`                VARCHAR(255) NULL,\n"
-                        + "`falt`                 TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                 TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "KEY `prov` (`prov`), KEY `ser` (`ser`)\n"
                         + ")";
@@ -15674,8 +16409,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`               VARCHAR(255) NULL,\n"
                         + "`extr2`               VARCHAR(255) NULL,\n"
                         + "`extr3`               VARCHAR(255) NULL,\n"
-                        + "`falt`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `alma_UNIQUE` (`alma`), KEY `alma` (`alma`)\n"
                         + ")";
@@ -15860,8 +16595,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                   VARCHAR(255) NULL,\n"
                         + "`extr2`                   VARCHAR(255) NULL,\n"
                         + "`extr3`                   VARCHAR(255) NULL,\n"
-                        + "`falt`                    TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                    TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`),\n"
                         + "UNIQUE KEY `concep_UNIQUE` (`concep`)\n"
                         + ")";
@@ -16228,8 +16963,8 @@ public class LoadinBD extends javax.swing.JDialog {
                         + "`extr1`                   VARCHAR(255) NULL,\n"
                         + "`extr2`                   VARCHAR(255) NULL,\n"
                         + "`extr3`                   VARCHAR(255) NULL,\n"
-                        + "`falt`                    TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                        + "`fmod`                    TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`falt`                    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                        + "`fmod`                    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
                         + "PRIMARY KEY (`id_id`), UNIQUE KEY `id_id_UNIQUE` (`id_id`), KEY `estac` (`estac`)"
                         + ")";
                 st = con.createStatement();
@@ -16260,4 +16995,39 @@ public class LoadinBD extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField jTInf;
     // End of variables declaration//GEN-END:variables
+
+    //private String regresaId(String cxp) {
+        //SELECT id_id FROM estacs WHERE estac='CXP'
+    //
+
+    private int regresaId(Connection con, String tabla) {
+        Statement   st;
+        ResultSet   rs;
+        String      sQ = "";
+        
+        try {
+            sQ = "SELECT id_id FROM estacs WHERE estac='"+tabla+"'";
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            if(rs.next())
+                return rs.getInt("id_id");
+        } 
+        catch(SQLException ex) 
+        {
+            /*Agrega en el log*/
+            Login.vLog(ex.getMessage());
+
+            /*Borra la base de datos local y servidora*/
+            BDCon.vDelBD(Star.sBD);
+            BDCon.vDelBDLoc(Star.sBD + "_tmp");
+
+            //Mensajea
+            JOptionPane.showMessageDialog(null, "No se crearán los permisos de los usuarios del sistema debido al siguiente error:\n" + "private static void vCreMons() Error en " + sQ + " por " + ex.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            //Cierra la base de datos y sal de la aplicación
+            Star.iCierrBas(con);            
+            System.exit(1);
+        }
+        return 0;
+    }
 }

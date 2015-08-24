@@ -331,7 +331,7 @@ public class Contras extends javax.swing.JFrame
                 
                 /*Dale formato de moneda a los totales*/                
                 double dCant    = Double.parseDouble(sImp);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sImp            = n.format(dCant);
                 dCant           = Double.parseDouble(sImpue);                
                 sImpue          = n.format(dCant);
@@ -1561,7 +1561,7 @@ public class Contras extends javax.swing.JFrame
         
         /*Dale formato de moneda nuevamente al total*/                
         double dCant    = Double.parseDouble(sTot);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTot            = n.format(dCant);
         
         /*Coloca el total en su lugar*/

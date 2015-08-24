@@ -124,11 +124,11 @@
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="199" y="20" width="163" height="40" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
+				<reportElement x="196" y="21" width="163" height="40" forecolor="#009999" uuid="364a0149-2a00-4925-824c-a0d668f6cfde"/>
 				<textElement>
 					<font size="25" isBold="true"/>
 				</textElement>
-				<text><![CDATA[PERSONA(S)]]></text>
+				<text><![CDATA[EMPLEADOS]]></text>
 			</staticText>
 			<image>
 				<reportElement x="6" y="5" width="23" height="20" uuid="4802de5b-f6b8-49bf-aed6-b811e17af945"/>

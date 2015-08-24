@@ -35,13 +35,13 @@ public class LoginOtra extends javax.swing.JFrame
     private Statement       st  = null;
     private ResultSet       rs    = null;
     private Connection      con;
-    private final JFrame    jPrin;
+    private final Princip    jPrin;
     private final JFrame    jPrin2;
         
     
     
     /*Consructor sin argumentos*/
-    public LoginOtra(JFrame jPrincip, JFrame jPrincip2) 
+    public LoginOtra(Princip jPrincip, JFrame jPrincip2) 
     {
         /*Inicializa los componentes gráfcos*/
         initComponents();
@@ -71,7 +71,7 @@ public class LoginOtra extends javax.swing.JFrame
 
     
     /*Metodo para que el formulario no se abra dos veces*/
-    public static LoginOtra getObj(JFrame jPrin, JFrame jPrin2)
+    public static LoginOtra getObj(Princip jPrin, JFrame jPrin2)
     {
         /*Si es null entonces crea una nueva instancia*/
         if(obj==null)
@@ -489,6 +489,9 @@ public class LoginOtra extends javax.swing.JFrame
         /*Llama al recolector de basura*/
         System.gc();
                 
+        //Deshabilita los botones que correspondan a sus permisos
+        jPrin.deshabilitaBotones();
+        
         /*Cierra el formulario*/
         this.dispose();        
         obj = null;

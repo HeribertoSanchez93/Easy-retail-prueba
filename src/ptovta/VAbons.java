@@ -274,7 +274,7 @@ public class VAbons extends javax.swing.JFrame
             {
                 /*Dale formato de moneda al abono*/                
                 double dCant    = Double.parseDouble(rs.getString("abon"));                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 String sAbon    = n.format(dCant);
                 
                 /*Agrega el registro en la tabla*/
@@ -353,7 +353,7 @@ public class VAbons extends javax.swing.JFrame
             {
                 /*Dale formato de moneda al abono*/                
                 double dCant    = Double.parseDouble(rs.getString("abon"));                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 String sAbon    = n.format(dCant);
                 
                 /*Agrega el registro en la tabla*/

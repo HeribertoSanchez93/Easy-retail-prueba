@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="194"/>
+	<property name="ireport.y" value="86"/>
 	<parameter name="F_D" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -26,7 +26,7 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT * FROM (
-SELECT vtas.FOLFISC, vtas.TIPCAM, mon, CASE WHEN tipdoc = 'NOT' THEN vtas.SUBTOT * vtas.TIPCAM ELSE 0 END AS totnot, CASE WHEN tipdoc = 'TIK' THEN vtas.SUBTOT * vtas.TIPCAM ELSE 0 END AS tottik, CASE WHEN tipdoc = 'REM' THEN vtas.SUBTOT * vtas.TIPCAM ELSE 0 END AS totrem, CASE WHEN tipdoc = 'FAC' THEN vtas.SUBTOT * vtas.TIPCAM ELSE 0 END AS totfac, (vtas.SUBTOT * vtas.TIPCAM) AS SUBTOT, vtas.TOTCOST, vtas.TOTCOSTPROM, vtas.TOTUEPS, vtas.TOTPEPS, CASE WHEN vtas.ESTAD = 'DEVP' THEN 1 ELSE 0 END AS cantdevp, CASE WHEN vtas.ESTAD = 'DEV' THEN 1 ELSE 0 END AS cantdev, CASE WHEN vtas.ESTAD = 'PE' THEN 1 ELSE 0 END AS cantpe, CASE WHEN vtas.ESTAD = 'CA' THEN 1 ELSE 0 END AS cantca, CASE WHEN vtas.ESTAD = 'CO' THEN 1 ELSE 0 END AS cantco, CASE WHEN DATE(femi) = DATE(vtas.FALT) THEN (vtas.SUBTOT * vtas.TIPCAM) + (vtas.IMPUE * vtas.TIPCAM) ELSE 0 END AS totconta, CASE WHEN DATE(femi) <> DATE(femi) THEN vtas.TOT * vtas.TIPCAM ELSE 0 END AS totcred, CASE WHEN vtas.TIPDOC = 'TIK' THEN 1 ELSE 0 END AS cantik, CASE WHEN vtas.TIPDOC = 'FAC' THEN 1 ELSE 0 END AS canfac, CASE WHEN vtas.TIPDOC = 'REM' THEN 1 ELSE 0 END AS canrem, CASE WHEN vtas.TIPDOC = 'NOT' THEN 1 ELSE 0 END AS cannot, (vtas.IMPUE * vtas.TIPCAM) AS IMPUE, emps.NOM, norefer, noser, tipdoc, vtas.CODEMP, femi, vtas.SUCU, vtas.ESTAC, vtas.NOCAJ, vtas.ESTAD, tot * tipcam AS tottip, tot 
+SELECT vtas.FOLFISC, vtas.TIPCAM, mon, CASE WHEN tipdoc = 'NOTC' THEN vtas.SUBTOT * vtas.TIPCAM ELSE 0 END AS totnot, CASE WHEN tipdoc = 'TIK' THEN vtas.SUBTOT * vtas.TIPCAM ELSE 0 END AS tottik, CASE WHEN tipdoc = 'REM' THEN vtas.SUBTOT * vtas.TIPCAM ELSE 0 END AS totrem, CASE WHEN tipdoc = 'FAC' THEN vtas.SUBTOT * vtas.TIPCAM ELSE 0 END AS totfac, (vtas.SUBTOT * vtas.TIPCAM) AS SUBTOT, vtas.TOTCOST, vtas.TOTCOSTPROM, vtas.TOTUEPS, vtas.TOTPEPS, CASE WHEN vtas.ESTAD = 'DEVP' THEN 1 ELSE 0 END AS cantdevp, CASE WHEN vtas.ESTAD = 'DEV' THEN 1 ELSE 0 END AS cantdev, CASE WHEN vtas.ESTAD = 'PE' THEN 1 ELSE 0 END AS cantpe, CASE WHEN vtas.ESTAD = 'CA' THEN 1 ELSE 0 END AS cantca, CASE WHEN vtas.ESTAD = 'CO' THEN 1 ELSE 0 END AS cantco, CASE WHEN DATE(femi) = DATE(vtas.FALT) THEN (vtas.SUBTOT * vtas.TIPCAM) + (vtas.IMPUE * vtas.TIPCAM) ELSE 0 END AS totconta, CASE WHEN DATE(femi) <> DATE(femi) THEN vtas.TOT * vtas.TIPCAM ELSE 0 END AS totcred, CASE WHEN vtas.TIPDOC = 'TIK' THEN 1 ELSE 0 END AS cantik, CASE WHEN vtas.TIPDOC = 'FAC' THEN 1 ELSE 0 END AS canfac, CASE WHEN vtas.TIPDOC = 'REM' THEN 1 ELSE 0 END AS canrem, CASE WHEN vtas.TIPDOC = 'NOTC' THEN 1 ELSE 0 END AS cannot, (vtas.IMPUE * vtas.TIPCAM) AS IMPUE, emps.NOM, norefer, noser, tipdoc, vtas.CODEMP, femi, vtas.SUCU, vtas.ESTAC, vtas.NOCAJ, vtas.ESTAD, tot * tipcam AS tottip, tot 
 FROM vtas 
 LEFT OUTER JOIN emps ON CONCAT_WS('', emps.SER, emps.CODEMP ) = vtas.CODEMP 
 WHERE vtas.ESTAD IN($P!{TIPESTAD}) 
@@ -501,7 +501,7 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				<text><![CDATA[Tot.Subtotal:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="117" y="64" width="86" height="13" uuid="0a42161e-fe93-4c47-be78-ce0aaff21bdc"/>
+				<reportElement x="118" y="51" width="86" height="13" uuid="0a42161e-fe93-4c47-be78-ce0aaff21bdc"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -514,13 +514,6 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				</textElement>
 				<text><![CDATA[Cant.Dev.Parcial:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="118" y="77" width="85" height="13" uuid="6847bc76-4fce-49a9-a3c6-178649b92e64"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{CANTNOT}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="375" y="25" width="79" height="13" forecolor="#3333FF" uuid="7e082efb-6b44-419a-8ce4-2acd47939750"/>
 				<textElement>
@@ -542,13 +535,6 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTREG}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="117" y="51" width="86" height="13" uuid="3dc62763-4c82-4884-afc7-946b6a87d336"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{CANTREM}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="375" y="38" width="79" height="13" forecolor="#3333FF" uuid="37938c2d-015b-4764-a605-fd2a28a0a35c"/>
 				<textElement>
@@ -562,13 +548,6 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tot.Remisiones:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="38" y="77" width="79" height="13" forecolor="#3333FF" uuid="a772cd8b-89a2-4029-8b67-34fc218f2c63"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Cant.Notas Crédito:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="203" y="38" width="79" height="13" forecolor="#3333FF" uuid="67525aaf-dcc8-4562-a8f1-b6699da53d35"/>
@@ -585,13 +564,6 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				<text><![CDATA[Tot.Efectivo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="38" y="51" width="79" height="13" forecolor="#3333FF" uuid="d5e0b319-6647-4e5e-a64b-d2d8b62ae83c"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Cant.Remisiones:]]></text>
-			</staticText>
-			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="376" y="113" width="79" height="13" forecolor="#3333FF" uuid="69dfdc96-0ac8-45fa-9ae5-a87a09a7f789"/>
 				<textElement>
 					<font size="8" isBold="true"/>
@@ -599,7 +571,7 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 				<text><![CDATA[Tot.Tickets:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="38" y="64" width="79" height="13" forecolor="#3333FF" uuid="7a25ab37-5b95-4482-a699-cb4e042f0dbe"/>
+				<reportElement stretchType="RelativeToTallestObject" x="39" y="51" width="79" height="13" forecolor="#3333FF" uuid="7a25ab37-5b95-4482-a699-cb4e042f0dbe"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -632,13 +604,6 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cant.Ventas:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="376" y="152" width="79" height="13" forecolor="#3333FF" uuid="7ac38990-a502-4120-9856-48f6d8bc6c7f"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Tot.Notas Crédito:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="376" y="139" width="79" height="13" forecolor="#3333FF" uuid="54b5d273-4556-4797-8e08-cc02b56a0ec3"/>
@@ -758,13 +723,6 @@ AND CASE WHEN '$P!{F_D}'= '' THEN 1=1 ELSE vtas.FEMI BETWEEN '$P!{F_D}' AND '$P!
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTFAC}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="456" y="152" width="69" height="13" uuid="bb0760ba-7017-4b2d-8499-0e1a7f34380a"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTNOT}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="456" y="101" width="67" height="13" uuid="8fc7a441-41f8-4e5e-b45d-c9528e38c3b3"/>

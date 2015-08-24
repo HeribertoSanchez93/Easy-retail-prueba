@@ -965,7 +965,7 @@ public class CotNorm extends javax.swing.JFrame
                         
                         /*Dale formato de moneda al importe*/
                         double dCant    = Double.parseDouble(sImp);                   
-                        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                         sImp            = n.format(dCant);
 
                         /*Dale formato de mon al precio*/
@@ -1106,7 +1106,7 @@ public class CotNorm extends javax.swing.JFrame
                 sCli            = rs.getString("codemp");
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sSubTot);                
                 sSubTot         = n.format(dCant);
                 dCant           = Double.parseDouble(sImpue);                
@@ -1236,7 +1236,7 @@ public class CotNorm extends javax.swing.JFrame
                 String sImpoDesc    =rs.getString("impodesc");
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sPre);                
                 sPre            = n.format(dCant);
                 dCant           = Double.parseDouble(sImpo);                
@@ -3374,7 +3374,7 @@ public class CotNorm extends javax.swing.JFrame
             /*Si el código que va a insertar el usuario ya esta en la tabla entonces*/
             if(jTab.getValueAt(row, 2).toString().trim().compareTo(jTProd.getText().trim())==0 && jTab.getValueAt(row, 3).toString().trim().compareTo(jComUnid.getSelectedItem().toString().trim())==0 && jTab.getValueAt(row, 4).toString().trim().compareTo(jTList.getText().trim())==0 && jTab.getValueAt(row, 5).toString().trim().compareTo(jTDescrip.getText().trim())==0 && Double.parseDouble(jTab.getValueAt(row, 6).toString().trim().replace("$", "").replace(",", ""))==Double.parseDouble(sPre.trim()) && sDesc.trim().compareTo(jTab.getValueAt(row, 7).toString().trim())==0 && jTab.getValueAt(row, 8).toString().trim().compareTo(jComAlma.getSelectedItem().toString().trim())==0 && sImpue.trim().compareTo(jTab.getValueAt(row, 10).toString().trim())==0 && jTab.getValueAt(row, 13).toString().trim().compareTo(jTSerProd.getText().trim())==0 && jTab.getValueAt(row, 15).toString().trim().compareTo(jTGara.getText().trim())==0 && jTab.getValueAt(row, 17).toString().trim().compareTo(jComTall.getSelectedItem().toString().trim())==0 && jTab.getValueAt(row, 18).toString().trim().compareTo(jComColo.getSelectedItem().toString().trim())==0 && jTab.getValueAt(row, 19).toString().trim().compareTo(sBack)==0)
             {
-                JOptionPane.showMessageDialog(null, "Entro", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                //JOptionPane.showMessageDialog(null, "Entro", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
                 /*Obtiene la cantidad que tiene originalmente en la fila*/
                 double dCant    = Double.parseDouble(jTab.getValueAt(row, 1).toString());
                 
@@ -3413,7 +3413,7 @@ public class CotNorm extends javax.swing.JFrame
                 String sImpuImpInt  =Double.toString(Double.parseDouble(sImp) * (Double.parseDouble(sImpue) / 100));
                 
                 /*Vuelve a darle formato al importe*/
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());        
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));        
                 dCant               = Double.parseDouble(sImp);                                                    
                 sImp                = n.format(dCant);
                 
@@ -3453,7 +3453,7 @@ public class CotNorm extends javax.swing.JFrame
         String sImpueImp= Double.toString((Double.parseDouble(sImpue)/100) * Double.parseDouble(sImp));
                         
         /*Dale formato de mneda al precio*/
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());        
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));        
         double dCant    = Double.parseDouble(sPre);                                           
         sPre            = n.format(dCant);
                 
@@ -3757,7 +3757,24 @@ public class CotNorm extends javax.swing.JFrame
             jComSer.grabFocus();
             return;
         }        
-       
+        if(jTCo1.getText().trim().compareTo("")==0&&jCCo1.isSelected())
+        {
+            int seleccion = JOptionPane.showOptionDialog(this,"El correo 1 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+            if (seleccion ==0)
+            return;
+        }
+        if(jTCo1.getText().trim().compareTo("")==0&&jCCo2.isSelected())
+        {
+            int seleccion = JOptionPane.showOptionDialog(this,"El correo 2 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+            if (seleccion ==0)
+            return;
+        }
+        if(jTCo3.getText().trim().compareTo("")==0&&jCCo3.isSelected())
+        {
+            int seleccion = JOptionPane.showOptionDialog(this,"El correo 3 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+            if (seleccion ==0)
+            return;
+        }
         /*Comprueba si existe correo dado de alta para el usuario actual*/
         boolean bMandCo  = false;
         try
@@ -4033,7 +4050,7 @@ public class CotNorm extends javax.swing.JFrame
             if(rs.next())
             {                
                 sNomLoc             = rs.getString("nom");                                    
-                sCallLoc            = rs.getString("call");                                    
+                sCallLoc            = rs.getString("calle");                                    
                 sTelLoc             = rs.getString("tel");                                    
                 sColLoc             = rs.getString("col");                                    
                 sCPLoc              = rs.getString("cp");                                    
@@ -4056,7 +4073,7 @@ public class CotNorm extends javax.swing.JFrame
 
         /*Dale formato de mon al subtot*/        
         double dCant            = Double.parseDouble(sSubTot);                
-        NumberFormat n          = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n          = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sSubTot                 = n.format(dCant);
 
         /*Dale formato de mon al impue*/
@@ -5027,7 +5044,7 @@ public class CotNorm extends javax.swing.JFrame
                     
         /*Dale formato de mon al pre y colocalo en su lugar*/                
         double dCant    = Double.parseDouble(jTPre.getText().replace("$", "").replace(",", ""));                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         jTPre.setText(n.format(dCant));           
                        
     }//GEN-LAST:event_jTPreFocusLost

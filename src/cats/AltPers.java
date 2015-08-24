@@ -73,6 +73,7 @@ public class AltPers extends javax.swing.JFrame
     
     
     /*Constructor sin argumentos*/
+    
     public AltPers() 
     {                
         /*Inicaliza los componentes gráficos*/
@@ -93,7 +94,7 @@ public class AltPers extends javax.swing.JFrame
         jLAyu.setVisible(false);
         
         /*Establece el titulo de la ventana con el usuario, la fec y hora*/                
-        this.setTitle("Alta Personas, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);                               
+        this.setTitle("Alta Empleados, Usuario: <" + Login.sUsrG + "> " + Login.sFLog);                               
         
         /*Inicialmente esta deseleccionada la tabla*/
         bSel        = false;
@@ -315,7 +316,7 @@ public class AltPers extends javax.swing.JFrame
                 
                 /*Formatealo*/
                 dCant               = Double.parseDouble(sSueldAct);
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sSueldAct           = n.format(dCant);
                 
                 /*Obtiene el sueldo foraneo*/
@@ -323,7 +324,7 @@ public class AltPers extends javax.swing.JFrame
                 
                 /*Formatealo*/
                 dCant               = Double.parseDouble(sSueldFora);
-                n                   = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                n                   = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sSueldFora          = n.format(dCant);
                 
                 /*Obtiene el tiempo extra*/
@@ -331,7 +332,7 @@ public class AltPers extends javax.swing.JFrame
                 
                 /*Formatealo*/
                 dCant               = Double.parseDouble(sTExt);
-                n                   = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                n                   = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sTExt               = n.format(dCant);
                        
                 /*Habilita el boton de guardar cambios*/
@@ -415,7 +416,7 @@ public class AltPers extends javax.swing.JFrame
             new File(sCarp).mkdir();
         
         /*Si la carpeta de las personas no existe entonces crea la carpeta*/
-        sCarp                    += "\\Personas";
+        sCarp                    += "\\Empleados";
         if(!new File(sCarp).exists())
             new File(sCarp).mkdir();
         
@@ -561,7 +562,7 @@ public class AltPers extends javax.swing.JFrame
         jP1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("Personas:");
+        jLabel1.setText("Empleados:");
         jP1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 10, 170, -1));
 
         jBSal.setBackground(new java.awt.Color(255, 255, 255));
@@ -977,7 +978,7 @@ public class AltPers extends javax.swing.JFrame
         });
         jP1.add(jTCont1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 540, 210, 20));
 
-        jLabel16.setText("Telèfono de Emergencia 2:");
+        jLabel16.setText("Teléfono de Emergencia 2:");
         jP1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 480, 200, -1));
 
         jTTelEme2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
@@ -1684,7 +1685,7 @@ public class AltPers extends javax.swing.JFrame
         
         /*Pregunta al usuario si están bien los datos*/                
         Object[] op = {"Si","No"};
-        int iRes    = JOptionPane.showOptionDialog(this, "¿Seguro que están bien los datos?", "Agregar Persona", JOptionPane.YES_NO_OPTION,  JOptionPane.QUESTION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
+        int iRes    = JOptionPane.showOptionDialog(this, "¿Seguro que están bien los datos?", "Agregar Empleados", JOptionPane.YES_NO_OPTION,  JOptionPane.QUESTION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
         if(iRes==JOptionPane.NO_OPTION || iRes==JOptionPane.CLOSED_OPTION)
             return;
         
@@ -1800,7 +1801,7 @@ public class AltPers extends javax.swing.JFrame
         jBGuar.setEnabled     (true);
         
         /*Mensajea de éxito*/
-        JOptionPane.showMessageDialog(null, "Persona: " + sNomb + " agregada con éxito.", "Exito al agregar", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                    
+        JOptionPane.showMessageDialog(null, "Empleados: " + sNomb + " agregada con éxito.", "Exito al agregar", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                    
         
     }//GEN-LAST:event_jBNewActionPerformed
 
@@ -1840,7 +1841,7 @@ public class AltPers extends javax.swing.JFrame
         if(jTab.getSelectedRow()==-1)
         {
             /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "No has seleccionado una persona de la lista para borrar.", "Borrar Persona", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            JOptionPane.showMessageDialog(null, "No has seleccionado un Empleados de la lista para borrar.", "Borrar Empleados", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
             
             /*Coloca el foco del teclado en la tabla y regresa*/
             jTab.grabFocus();            
@@ -1850,7 +1851,7 @@ public class AltPers extends javax.swing.JFrame
         
         /*Preguntar al usuario si esta seguro de querer borrar a la persona*/
         Object[] op = {"Si","No"};
-        int iRes    = JOptionPane.showOptionDialog(this, "¿Seguro que quiere borrar a la persona?", "Borrar Persona", JOptionPane.YES_NO_OPTION,  JOptionPane.QUESTION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
+        int iRes    = JOptionPane.showOptionDialog(this, "¿Seguro que quiere borrar a el Empleados?", "Borrar Empleados", JOptionPane.YES_NO_OPTION,  JOptionPane.QUESTION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
         if(iRes==JOptionPane.NO_OPTION || iRes==JOptionPane.CLOSED_OPTION)
             return;
         
@@ -1891,7 +1892,7 @@ public class AltPers extends javax.swing.JFrame
                         return;
                     
                    /*Mensajea y continua*/
-                    JOptionPane.showMessageDialog(null, "Ya existen proyectos con esta persona: " + sNomb + ", no se puede eliminar.", "Personas", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                     
+                    JOptionPane.showMessageDialog(null, "Ya existen proyectos con esta Empleados: " + sNomb + ", no se puede eliminar.", "Empleados", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                     
                     continue; 
                 }
 
@@ -1944,7 +1945,7 @@ public class AltPers extends javax.swing.JFrame
             return;
                    
         /*Mensajea de éxito*/
-        JOptionPane.showMessageDialog(null, "Persona borrada con éxito.", "Personas", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+        JOptionPane.showMessageDialog(null, "Empleados borrada con éxito.", "Empleados", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
         
     }//GEN-LAST:event_jBDelActionPerformed
 
@@ -2360,7 +2361,7 @@ public class AltPers extends javax.swing.JFrame
         double dCant = Double.parseDouble(sTex);
         
         /*Formatealo*/
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTex            = n.format(dCant);
         
         /*Colocalo de nu en el campo de texto*/
@@ -2407,7 +2408,7 @@ public class AltPers extends javax.swing.JFrame
         double dCant = Double.parseDouble(sTex);
         
         /*Formatealo*/
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTex            = n.format(dCant);
         
         /*Colocalo de nu en el campo de texto*/
@@ -2454,7 +2455,7 @@ public class AltPers extends javax.swing.JFrame
         double dCant = Double.parseDouble(sTex);
         
         /*Formatealo*/
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTex            = n.format(dCant);
         
         /*Colocalo de nu en el campo de texto*/
@@ -2912,7 +2913,7 @@ public class AltPers extends javax.swing.JFrame
         
         /*Pregunta al usuario si están bien los datos*/                
         Object[] op = {"Si","No"};
-        int iRes    = JOptionPane.showOptionDialog(this, "¿Seguro que están bien los datos?", "Agregar Persona", JOptionPane.YES_NO_OPTION,  JOptionPane.QUESTION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
+        int iRes    = JOptionPane.showOptionDialog(this, "¿Seguro que están bien los datos?", "Agregar Empleados", JOptionPane.YES_NO_OPTION,  JOptionPane.QUESTION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
         if(iRes==JOptionPane.NO_OPTION || iRes==JOptionPane.CLOSED_OPTION)
             return;
         
@@ -3042,7 +3043,7 @@ public class AltPers extends javax.swing.JFrame
         jTab.setRowSelectionInterval(row, row);
         
         /*Mensajea de éxito*/
-        JOptionPane.showMessageDialog(null, "Persona: " + sNomb + " modificada con éxito.", "Exito al modificar", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                    
+        JOptionPane.showMessageDialog(null, "Empleados: " + sNomb + " modificada con éxito.", "Exito al modificar", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                    
         
     }//GEN-LAST:event_jBGuarActionPerformed
 
@@ -3180,7 +3181,7 @@ public class AltPers extends javax.swing.JFrame
     
     /*Cuando se tipea una tecla en el campo de CP*/
     private void jTCPKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCPKeyTyped
-        
+        Star.SoloNumeros(evt);
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
@@ -3190,7 +3191,8 @@ public class AltPers extends javax.swing.JFrame
     
     /*Cuando se tipea una tecla en el campo de teléfono 1*/
     private void jTTel1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTTel1KeyTyped
-        
+
+        Star.SoloNumeros(evt);
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
@@ -3200,7 +3202,8 @@ public class AltPers extends javax.swing.JFrame
     
     /*Cuando se tipea una tecla en el campo de teléfono 2*/
     private void jTTel2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTTel2KeyTyped
-        
+
+        Star.SoloNumeros(evt);
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
@@ -3210,7 +3213,8 @@ public class AltPers extends javax.swing.JFrame
     
     /*Cuando se tipea una tecla en el control de celular 1*/
     private void jTCel1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCel1KeyTyped
-        
+
+        Star.SoloNumeros(evt);
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
@@ -3220,7 +3224,8 @@ public class AltPers extends javax.swing.JFrame
     
     /*Cuando se tipea una tecla en el campo de celular 2*/
     private void jTCel2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCel2KeyTyped
-        
+
+        Star.SoloNumeros(evt);
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
@@ -3230,7 +3235,8 @@ public class AltPers extends javax.swing.JFrame
     
     /*Cuando se tipea una tecla en el campo de teléfono de emergencia*/
     private void jTTelEm1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTTelEm1KeyTyped
-        
+
+        Star.SoloNumeros(evt);
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
@@ -3250,7 +3256,8 @@ public class AltPers extends javax.swing.JFrame
     
     /*Cuando se tipea una tecla en el campo de teléfono de emergencia 2*/
     private void jTTelEme2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTTelEme2KeyTyped
-        
+
+        Star.SoloNumeros(evt);
         /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
         if(Character.isLowerCase(evt.getKeyChar()))       
             evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));                              
@@ -3420,7 +3427,7 @@ public class AltPers extends javax.swing.JFrame
         if(jTab.getSelectedRow()==-1)
         {
             /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "Selecciona primero una persona.", "Personas", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            JOptionPane.showMessageDialog(null, "Selecciona primero un Empleados.", "Empleados", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
             
             /*Pon el foco del teclado en la tabla de personas y regresa*/
             jTab.grabFocus();                        
@@ -3466,7 +3473,7 @@ public class AltPers extends javax.swing.JFrame
             new File(sCarp).mkdir();
         
         /*Si la carpeta de las personas no existe entonces crea la ruta*/
-        sCarp                    += "\\Personas";
+        sCarp                    += "\\Empleados";
         if(!new File(sCarp).exists())
             new File(sCarp).mkdir();
         
@@ -3487,7 +3494,7 @@ public class AltPers extends javax.swing.JFrame
             if( new File(sCarp).list().length > 0)
             {
                 /*Mensajea y regresa*/
-                JOptionPane.showMessageDialog(null, "Ya existe una imágen para la persona: " + jTab.getValueAt(row, 1).toString() + " en \"" + sCarp + "\".", "Personas", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));           
+                JOptionPane.showMessageDialog(null, "Ya existe una imágen para el Empleados: " + jTab.getValueAt(row, 1).toString() + " en \"" + sCarp + "\".", "Empleados", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));           
                 return;
             }
         }    
@@ -3568,7 +3575,7 @@ public class AltPers extends javax.swing.JFrame
         if(jTab.getSelectedRow()==-1)
         {
             /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "Selecciona primero una persona.", "Personas", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+            JOptionPane.showMessageDialog(null, "Selecciona primero un Empleados.", "Empleados", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
             
             /*Pon el foco del teclado en la tabla y regresa*/
             jTab.grabFocus();                        
@@ -3620,7 +3627,7 @@ public class AltPers extends javax.swing.JFrame
             new File(sCarp).mkdir();
         
         /*Si la carpeta de personas no existe entonces crea la ruta*/
-        sCarp            += "\\Personas";
+        sCarp            += "\\Empleados";
         if(!new File(sCarp).exists())
             new File(sCarp).mkdir();
         
@@ -3641,7 +3648,7 @@ public class AltPers extends javax.swing.JFrame
             if( new File(sCarp).list().length == 0)
             {
                 /*Mensajea y regresa*/
-                JOptionPane.showMessageDialog(null, "La persona: " + jTab.getValueAt(row, 1).toString() + " no contiene imágen para borrar en \"" + sCarp + "\".", "Personas", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));           
+                JOptionPane.showMessageDialog(null, "el Empleado: " + jTab.getValueAt(row, 1).toString() + " no contiene imágen para borrar en \"" + sCarp + "\".", "Empleados", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));           
                 return;
             }
 
@@ -3665,7 +3672,7 @@ public class AltPers extends javax.swing.JFrame
         jLImg.setVisible(false);
 
         /*Mensaje de éxito*/
-        JOptionPane.showMessageDialog(null, "Imágen borrada con éxito para: " + jTab.getValueAt(row, 1).toString() + " desde \"" + sCarp + "\".", "Personas", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+        JOptionPane.showMessageDialog(null, "Imágen borrada con éxito para: " + jTab.getValueAt(row, 1).toString() + " desde \"" + sCarp + "\".", "Empleados", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
         
     }//GEN-LAST:event_jBDelImgActionPerformed
 
@@ -3734,7 +3741,7 @@ public class AltPers extends javax.swing.JFrame
         if(jTab.getSelectedRow()==-1)
         {
             /*Mensajea*/
-            JOptionPane.showMessageDialog(null, "Selecciona primero una persona.", "Personas", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+            JOptionPane.showMessageDialog(null, "Selecciona primero un Empleado.", "Empleados", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
             
             /*Pon el foco del teclado en la tabla y regresa*/
             jTab.grabFocus();                        
@@ -3780,7 +3787,7 @@ public class AltPers extends javax.swing.JFrame
             new File(sCarp).mkdir();
         
         /*Si la carpeta de las personas no existe entonces crea el directorio*/
-        sCarp                    += "\\Personas";
+        sCarp                    += "\\Empleados";
         if(!new File(sCarp).exists())
             new File(sCarp).mkdir();
 
@@ -3801,7 +3808,7 @@ public class AltPers extends javax.swing.JFrame
             if( new File(sCarp).list().length == 0)
             {
                 /*Mensajea y regresa*/
-                JOptionPane.showMessageDialog(null, "No existe una imágen para la persona \"" + sNomb + "\" en \"" + sCarp + "\".", "Personas", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));           
+                JOptionPane.showMessageDialog(null, "No existe una imágen para el Empleados \"" + sNomb + "\" en \"" + sCarp + "\".", "Empleados", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));           
                 return;
             }
         }                    
@@ -3824,7 +3831,7 @@ public class AltPers extends javax.swing.JFrame
                 {
                     /*Agrega en el log y mensajea*/
                     Login.vLog(e.getMessage());            
-                    JOptionPane.showMessageDialog(null, "No se puede abrir archivo de persona por " + e.getMessage(), "Abrir", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+                    JOptionPane.showMessageDialog(null, "No se puede abrir archivo del Empleado por " + e.getMessage(), "Abrir", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
                 }            
             }
         }                    
@@ -3844,13 +3851,6 @@ public class AltPers extends javax.swing.JFrame
     /*Cuando se presiona el botón de visor*/
     private void jBVisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBVisActionPerformed
 
-        /*Si no hay datos en la tabla entonces*/
-        if(jTab.getRowCount()==0)
-        {
-            /*Mensajea y regresa*/
-            JOptionPane.showMessageDialog(null, "No existen personas.", "Reporte", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
-            return;
-        }
         
         /*Crea el th para cargar el reporte en un hilo aparte*/
         Thread th = new Thread()
@@ -3881,7 +3881,17 @@ public class AltPers extends javax.swing.JFrame
                         JasperReport ja     = JasperCompileManager.compileReport(getClass().getResourceAsStream("/jasreport/rptPerson.jrxml"));
                         JasperPrint pr      = JasperFillManager.fillReport(ja, (Map)pa, con2);
                         JasperViewer v      = new JasperViewer(pr, false);
-                        v.setExtendedState(JasperViewer.MAXIMIZED_BOTH);                    
+                        v.setExtendedState(JasperViewer.MAXIMIZED_BOTH);
+                        /*Crea un imageicon con la imàgen del banner*/        
+                        ImageIcon img       = new ImageIcon(new ImageIcon(getClass().getResource(Star.sIconDef)).getImage());        
+
+                        /*Redimensiona la imàgen del banner*/
+                        java.awt.Image im = img.getImage(); 
+                        java.awt.Image newimg = im.getScaledInstance( 600, 350,  java.awt.Image.SCALE_SMOOTH );
+
+
+                        v.setTitle("Reporte Empleados");
+                        v.setIconImage(newimg);
                         v.setVisible(true);                        
 
                         /*Esconde el loading*/
@@ -3914,12 +3924,13 @@ public class AltPers extends javax.swing.JFrame
                     /*Si no a seleccionado una persona de la lista entonces*/
                     if(jTab.getSelectedRow()==-1)
                     {
+                        Star.lCargGral.setVisible(false);
                         //Cierra la base de datos
                         if(Star.iCierrBas(con2)==-1)
                             return;
                         
                         /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "Selecciona primero una persona.", "Persona", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+                        JOptionPane.showMessageDialog(null, "Selecciona primero un empleado.", "Empleado", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
                         
                         /*Pon el foco del teclado en la tabla y regresa*/
                         jTab.grabFocus();                                                
@@ -3929,11 +3940,12 @@ public class AltPers extends javax.swing.JFrame
                     /*Obtiene el nombre de la persona seleccionada*/
                     int row = jTab.getSelectedRow();
                     sNomb   = jTab.getValueAt(row, 1).toString();
-                    
+                    System.out.println(row);
+                    System.out.println(sNomb);
                     /*Crea los parámetros que se pasarán*/
                     Map <String,String> pa = new HashMap<>();             
                     pa.clear();
-                    pa.put("NOMBRE",    sNomb);                        
+                    pa.put("NOM",    sNomb);                        
                     pa.put("LOG",       getClass().getResource(Star.sIconDef).toString());
                     
                     /*Muestra el formulario para una persona en específico*/
@@ -3943,7 +3955,17 @@ public class AltPers extends javax.swing.JFrame
                         JasperReport ja     = JasperCompileManager.compileReport(getClass().getResourceAsStream("/jasreport/rptPerson.jrxml"));
                         JasperPrint pr      = JasperFillManager.fillReport(ja, (Map)pa, con2);
                         JasperViewer v      = new JasperViewer(pr, false);
-                        v.setExtendedState(JasperViewer.MAXIMIZED_BOTH);                    
+                        v.setExtendedState(JasperViewer.MAXIMIZED_BOTH);
+                        /*Crea un imageicon con la imàgen del banner*/        
+                        ImageIcon img       = new ImageIcon(new ImageIcon(getClass().getResource(Star.sIconDef)).getImage());        
+
+                        /*Redimensiona la imàgen del banner*/
+                        java.awt.Image im = img.getImage(); 
+                        java.awt.Image newimg = im.getScaledInstance( 600, 350,  java.awt.Image.SCALE_SMOOTH );
+
+
+                        v.setTitle("Reporte Empleados");
+                        v.setIconImage(newimg);
                         v.setVisible(true);
                         
                         /*Esconde el loading*/
@@ -3974,11 +3996,19 @@ public class AltPers extends javax.swing.JFrame
                 
             }/*Fin de public void run()*/
         };
-
+        /*Si no hay datos en la tabla entonces*/
+        if(jTab.getRowCount()==0)
+        {
+            
+            /*Mensajea y regresa*/
+            JOptionPane.showMessageDialog(null, "No existen empleados.", "Reporte", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+            return;
+        }
+            
         /*Muestra la forma para simular que esta cargando el reporte*/
-        Star.lCargGral = new LoadinGral("Cargando reporte de personas...");
+        Star.lCargGral = new LoadinGral("Cargando reporte de Empleados...");
         Star.lCargGral.setVisible(true);
-
+            
         /*Comienza el hilo*/
         th.start();                        
         
@@ -4171,7 +4201,7 @@ public class AltPers extends javax.swing.JFrame
             new File(sCarp).mkdir();
 
         /*Si la carpeta de las personas no existe entonces creala*/
-        sCarp                    += "\\Personas";
+        sCarp                    += "\\Empleados";
         if(!new File(sCarp).exists())
             new File(sCarp).mkdir();
 
@@ -4536,4 +4566,4 @@ public class AltPers extends javax.swing.JFrame
     private javax.swing.JTextField jTieExt;
     // End of variables declaration//GEN-END:variables
 
-}/*Fin de public class Clientes extends javax.swing.JFrame */
+}/*Fin de public class Clientes extends javax.swing.JFrame Easy Reatail®Admin*/

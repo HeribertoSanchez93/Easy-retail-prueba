@@ -20744,7 +20744,7 @@ public class InterMac240ThinCli extends javax.swing.JFrame
                 else
                 {
                     //Inserta en la base de datos la nueva venta
-                    if(Star.iInsVtas(con, "FAC", sFol.trim(), "", "", sSubTot.replace("$", "").replace(",", ""), sImpue.replace("$", "").replace(",", ""), sTot.replace("$", "").replace(",", ""), "now()","'" + sFech + "'", "'" + sFech + "'", "'CO'", "0", "", sTip, "0", "", "", "", "1", sDesc.replace("$", "").replace(",", ""), "0", "1", "0", sCodVend, sMon, "1", "C", "", "", "", "", "", "", "", "", "", "", "", "", "S", "", "0", "0", "0", "0","")==-1)
+                    if(Star.iInsVtas(con, "FAC", sFol.trim(), "", "", sSubTot.replace("$", "").replace(",", ""), sImpue.replace("$", "").replace(",", ""), sTot.replace("$", "").replace(",", ""), "now()","'" + sFech + "'", "'" + sFech + "'", "'CO'", "0", "", sTip, "0", "", "", "", "1", sDesc.replace("$", "").replace(",", ""), "0", "1", "0", sCodVend, sMon, "1", "C", "", "", "", "", "", "", "", "", "", "", "", "", "S", "", "0", "0", "0", "0","", "")==-1)
                          return;
                 }
                     
@@ -23919,7 +23919,7 @@ public class InterMac240ThinCli extends javax.swing.JFrame
                 Star.lCargGral.jTInf.setText("Insertando remisión con folio: " + sFol.trim());
                 
                 //Inserta en la base de datos la nueva venta
-                if(Star.iInsVtas(con, "REM", sFol.trim(), "", "", sSubTot.replace("$", "").replace(",", ""), sImpue.replace("$", "").replace(",", ""), sTot.replace("$", "").replace(",", ""), "now()", "'" + sFech + "'","'" + sFech + "'", "'CO'", "0", "", sTip, "0", "", "", "", "0", sDesc.replace("$", "").replace(",", ""), "0", "1", "0", sCodVend, "", "1", "C", "", "", "", "", "", "", "", "", "", "", "", "", "S", "", "0", "0", "0", "0","")==-1)
+                if(Star.iInsVtas(con, "REM", sFol.trim(), "", "", sSubTot.replace("$", "").replace(",", ""), sImpue.replace("$", "").replace(",", ""), sTot.replace("$", "").replace(",", ""), "now()", "'" + sFech + "'","'" + sFech + "'", "'CO'", "0", "", sTip, "0", "", "", "", "0", sDesc.replace("$", "").replace(",", ""), "0", "1", "0", sCodVend, "", "1", "C", "", "", "", "", "", "", "", "", "", "", "", "", "S", "", "0", "0", "0", "0","", "")==-1)
                      return;
                                 
             }/*Fin de while((sLec = read.readLine())!=null) */

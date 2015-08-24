@@ -335,7 +335,7 @@ public class UltPrecs extends javax.swing.JFrame
                     String sPre = rs.getString("PRE");
 
                     /*Dale formato de moneda al precio*/                    
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     double dCant    = Double.parseDouble(sPre);                
                     sPre            = n.format(dCant);
 
@@ -376,7 +376,7 @@ public class UltPrecs extends javax.swing.JFrame
                     String sPre = rs.getString("COST");
 
                     /*Dale formato de moneda al costo*/                    
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     double dCant    = Double.parseDouble(sPre);                
                     sPre            = n.format(dCant);
 

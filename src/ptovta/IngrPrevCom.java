@@ -1008,12 +1008,12 @@ public class IngrPrevCom extends javax.swing.JFrame
                         
                         /*Dale formato de moneda al importe*/
                         double dCant                = Double.parseDouble(sImp);                   
-                        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+                        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
                         sImp                        = n.format(dCant);
 
                         /*Dale formato de moneda al cost*/
                         dCant                       = Double.parseDouble(sCost);                   
-                        n                           = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+                        n                           = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
                         sCost                       = n.format(dCant);
 
                         /*Actualiza el importe de la fila en base a la cantidad por el costo*/
@@ -1081,7 +1081,7 @@ public class IngrPrevCom extends javax.swing.JFrame
                 id_id               = rs.getString("prevcomprs.id_id");
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant        = Double.parseDouble(sSubTot);                
                 sSubTot             = n.format(dCant);
                 dCant               = Double.parseDouble(sImpue);                
@@ -1172,7 +1172,7 @@ public class IngrPrevCom extends javax.swing.JFrame
                 
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sCost);                
                 sCost           = n.format(dCant);
                 dCant           = Double.parseDouble(sImpo);                
@@ -1280,29 +1280,29 @@ public class IngrPrevCom extends javax.swing.JFrame
             String sSaldTot     = Double.toString(Double.parseDouble(sTot) - Double.parseDouble(sNot));
 
             /*Formatea el saldo a moneda*/            
-            NumberFormat n      = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+            NumberFormat n      = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
             double dCant        = Double.parseDouble(sSaldTot);        
             sSaldTot            = n.format(dCant);                      
         }
         
         /*Formatea a moneda el subtotal*/
         double dCant                    = Double.parseDouble(sSubTot);
-        NumberFormat n                  = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        NumberFormat n                  = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sSubTot                         = n.format(dCant);
         
         /*Formatear el impuesto a moneda*/
         dCant                           = Double.parseDouble(sImp);
-        n                               = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        n                               = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sImp                            = n.format(dCant);
         
         /*Formatear el total a moneda*/
         dCant                           = Double.parseDouble(sTot);
-        n                               = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        n                               = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sTot                            = n.format(dCant);
         
         /*Formatear el total a descuento*/
         dCant                           = Double.parseDouble(sDesc);
-        n                               = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        n                               = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sDesc                            = n.format(dCant);
         
         /*Colocalos en sus campos correspondientes*/
@@ -3071,6 +3071,25 @@ public class IngrPrevCom extends javax.swing.JFrame
             JOptionPane.showMessageDialog(null, "Selecciona una serie para el previo de compra.", "Guadar previo de compra", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
             return;
         }
+        //modificacion por carlos gonzalo ramirez ramirez para no enviar correos sin estar selecionados
+        if(jTCo1.getText().trim().compareTo("")==0&&jCCo1.isSelected())
+        {
+            int seleccion = JOptionPane.showOptionDialog(this,"El correo 1 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+            if (seleccion ==0)
+            return;
+        }
+        if(jTCo1.getText().trim().compareTo("")==0&&jCCo2.isSelected())
+        {
+            int seleccion = JOptionPane.showOptionDialog(this,"El correo 2 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+            if (seleccion ==0)
+            return;
+        }
+        if(jTCo3.getText().trim().compareTo("")==0&&jCCo3.isSelected())
+        {
+            int seleccion = JOptionPane.showOptionDialog(this,"El correo 3 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+            if (seleccion ==0)
+            return;
+        }
         //modificacion por carlos gonzalo ramirez ramirez para reconoser moneda nacional
         //Abre la base de datos                             
         Connection  con = Star.conAbrBas(false, false);
@@ -4141,7 +4160,7 @@ public class IngrPrevCom extends javax.swing.JFrame
             return;
 
         /*Dale formato de moneda a los totales*/        
-        java.text.NumberFormat n  = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        java.text.NumberFormat n  = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         double dCant    = Double.parseDouble(sTot);
         sTot            = n.format(dCant);
         dCant           = Double.parseDouble(sSubTot);
@@ -4637,7 +4656,7 @@ public class IngrPrevCom extends javax.swing.JFrame
         double dCant    = Double.parseDouble(sTex);
 
         /*Formatealo*/
-        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sTex                        = n.format(dCant);
 
         /*Colocalo de nu en el campo de texto*/
@@ -6405,12 +6424,12 @@ public class IngrPrevCom extends javax.swing.JFrame
 
         /*Dale formato de moneda al importe*/        
         double dCant                    = Double.parseDouble(sImp);
-        java.text.NumberFormat n        = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        java.text.NumberFormat n        = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sImp                            = n.format(dCant);
 
         /*Dale formato de moneda al costo*/
         dCant                           = Double.parseDouble(sCost);
-        n                               = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        n                               = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sCost                           = n.format(dCant);
 
         /*Obtiene la fecha de entrega*/    
@@ -6460,7 +6479,7 @@ public class IngrPrevCom extends javax.swing.JFrame
                 jTab.setValueAt(sImpoImpue, row, 20);
                 
                 /*Vuelve a darle formato al importe*/
-                n                       = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+                n                       = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
                 dCant                   = Double.parseDouble(sImp);
                 sImp                    = n.format(dCant);
 

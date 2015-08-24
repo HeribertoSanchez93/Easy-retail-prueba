@@ -94,10 +94,21 @@ public class Cots extends javax.swing.JFrame
     
     
     /*Constructor sin argumentos*/
-    public Cots() 
+    public Cots(java.util.ArrayList<Boolean> permisos) 
     {
         /*Inicaliza los componentes gráficos*/
         initComponents();
+        
+        //revisa Permisos 
+        jBNew.setEnabled(permisos.get(0));
+        jBAbr.setEnabled(permisos.get(1));
+        jBVer.setEnabled(permisos.get(2));
+        jBCan.setEnabled(permisos.get(3));
+        jBMail.setEnabled(permisos.get(4));
+        jBVta.setEnabled(permisos.get(5));
+        
+        
+        
         
         //se saca acomoda los componentes dependiendo de la resolucion
         vMyLayout();
@@ -515,7 +526,7 @@ public class Cots extends javax.swing.JFrame
                     sKit                = "Si";
                 
                 /*Dales formato de moneda a los totales*/                                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sPre);                                
                 sPre            = n.format(dCant);                
                 dCant           = Double.parseDouble(sImpoImp);                                
@@ -1245,7 +1256,7 @@ public class Cots extends javax.swing.JFrame
                                                 
                 /*Formatea el subtotal a moneda*/
                 double dCant        = Double.parseDouble(sSubTot);                        
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sSubTot             = n.format(dCant);
                 
                 /*Obtiene el importe*/
@@ -2355,6 +2366,47 @@ public class Cots extends javax.swing.JFrame
         int iSel[]              = jTab1.getSelectedRows();        
         for(int x = iSel.length - 1; x >= 0; x--)                
         {
+            
+            //Variable para ver si todas tienen serie
+            boolean bAllSer = true;
+            /*Obtiene las partidas de la cotización*/
+            try
+            {
+                sQ = "SELECT * FROM partcot WHERE codcot = '" + jTab1.getValueAt(iSel[x], 1).toString().trim() + "'";                        
+                st = con.createStatement();
+                rs = st.executeQuery(sQ);
+                
+                while(rs.next())
+                {   
+                    //Se verifica si algun elemento que deba llevar serie tenga
+                    if(rs.getString("serprod").trim().compareTo("")==0 && Star.iProdSolSer(con, rs.getString("prod").trim())==1 && rs.getString("fentre").trim().compareTo("")==0)
+                    {
+                        /*Mensajea y continua*/
+                        JOptionPane.showMessageDialog(null, "La cotización: " + jTab1.getValueAt(iSel[x], 1).toString().trim() + " le faltan series.", "Cotización", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                        bAllSer = false;
+                    }
+                    
+                }/*Fin de while(rs.next())*/
+
+            }/*Fin de try*/
+            catch(SQLException e)
+            {
+                //Cierra la base de datos
+                if(Star.iCierrBas(con)==-1)
+                    return;
+
+                /*Agrega en el log*/
+                Login.vLog(e.getMessage());
+
+                /*Mensajea y regresa*/
+                JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error Inventarios() por " + e.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+                return;
+            }
+            
+            //Si no tiene series continue
+            if(bAllSer == false)
+                continue;
+        
             /*Contiene el estado de la cotización*/
             String sEstad   = "";
             

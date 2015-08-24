@@ -2,6 +2,7 @@
 package ptovta;
 
 //Importaciones
+import java.awt.Color;
 import static ptovta.Princip.bIdle;
 import java.awt.Cursor;
 import java.awt.HeadlessException;
@@ -30,6 +31,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -39,7 +44,7 @@ import javax.swing.UIManager;
 
 
 /*Clase de login para el sistema*/
-public class Login extends JFrame 
+public class Login extends javax.swing.JFrame 
 {
     /*Contiene el color original del botón*/
     private final java.awt.Color    colOri;
@@ -59,7 +64,9 @@ public class Login extends JFrame
     /*Esta variable determina si se debe de cerrar la forma o salir de la aplicación*/
     private final boolean           bCierr;
         
+    /*Bandera que indica que el sistema ya esta configurado o no*/
     
+    private boolean                 bActiv=false;
     
     
     
@@ -102,6 +109,101 @@ public class Login extends JFrame
         /*Inicialmente el código de la empresa no será visible*/
         jTCodEmp.setVisible(false);
         
+        
+        /* Felipe Ruiz Garcia 03 Junio 2015 */
+        /* aqui se inicia el analisis para el envio de correo con la contraseña */
+       
+        /* desactivamos los botones especiales para el envio de la contraseña por correo*/
+        reenviar.setEnabled(false);
+        reenviar.setVisible(false);
+       
+        cambiaCorreo.setEnabled(false);
+        cambiaCorreo.setVisible(false);
+        
+        textEmail.setEnabled(false);
+        textEmail.setVisible(false);
+        
+        labelEmail.setEnabled(false);
+        labelEmail.setVisible(false);
+        
+               
+        try {
+            
+            /* creamos el objeto de envio de correo */
+            correoRegistro correoAUsuario = new correoRegistro();
+        
+            /*revisamos si el campo "ya_entro_booleano" de la  tabla registroemail es 0*/
+            /* esto significa si no ha entrado por primera vez */
+            /* para entrar por primera vez debe emplear la contraseña
+            que se envio a correo elecrónico que el usuario proporciona */
+           
+            /* cuando entra por primera vez se le obliga a cambiar la contraseña
+            y valor del campo "ya_entro_booleano" cambia a 1 */
+            
+            /*"ya_entro_booleano" de la  tabla registroemail es 0 */
+            if(correoAUsuario.es0BaseDatos()){
+                
+                
+                
+                /*hacemos visibles y funcionales los botones de reenviar y  cambiaCorreo*/
+                    reenviar.setEnabled(true);
+                    reenviar.setVisible(true);
+                    
+                    cambiaCorreo.setEnabled(true);
+                    cambiaCorreo.setVisible(true);
+                    
+                    textEmail.setEnabled(true);
+                    textEmail.setVisible(true);
+
+                    labelEmail.setEnabled(true);
+                    labelEmail.setVisible(true);
+
+                    bActiv=true;
+
+                                            
+                /* analizamos si se cuenta con conexion a internet */
+                if(correoRegistro.hayInternet()){
+                    
+                    correoAUsuario.setCorreoA(correoAUsuario.getCorreoBaseDatos());
+                    correoAUsuario.setMensaje(correoAUsuario.creaMensajeCliente(correoAUsuario.getContraBaseDatos()));
+                    
+                    correoRegistro correoEmpresa = new correoRegistro();
+                    
+                    
+                    correoEmpresa.setCorreoA(correoEmpresa.getCorreoDesde());
+                    correoEmpresa.setAsunto("Nuevo usuario de Easy Retail® Admin");
+                    correoEmpresa.setMensaje(correoEmpresa.creaMensajeEmpresa(correoAUsuario.getCorreoA(), correoAUsuario.getContraBaseDatos()));
+                    
+                    
+                    /* ENVIA EL CORREO A USUARIO*/
+                    if(correoAUsuario.enviaCorreo()){
+                        correoEmpresa.enviaCorreo();
+                        
+                        
+            JOptionPane.showMessageDialog(null, "Se envio la contraseña a su correo electrónico "+correoAUsuario.getCorreoA()+" \n Revise su correo. \n \n Para mas información llama al : \n 01-800-890-0365 para todo México \n 01-33-3617-2968 en Jalisco", "Envió de la contraseña exitoso", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                } else{
+                        JOptionPane.showMessageDialog(null, "Hubo un problema al enviar su contraseña. \n \n Para mas información llama al : \n 01-800-890-0365 para todo México \n 01-33-3617-2968 en Jalisco", "Atención", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                    }
+                
+                }
+                /* si no hay conexion a internet */
+                else{
+                    JOptionPane.showMessageDialog(null, "No pudo enviarse la contraseña a su correo electrónico. \n Necesita conexión a internet. \n \n Para mas información llama al : \n 01-800-890-0365 para todo México \n 01-33-3617-2968 en Jalisco", "Sin conexión a internet", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                }
+            }
+            /*"ya_entro_booleano" de la  tabla registroemail es DIFERENTE de 0*/
+            else{
+           
+                this.setSize(342, 290);
+
+            
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }/*Fin de public Login() */
 
     
@@ -140,7 +242,8 @@ public class Login extends JFrame
                 ou.newLine();
                 ou.write(sErr);
                 ou.newLine();
-                ou.newLine();                
+                ou.newLine();
+                ou.close();
             }
             catch(IOException expnIO)
             {
@@ -162,7 +265,8 @@ public class Login extends JFrame
                 ou.newLine();
                 ou.append(sErr);
                 ou.newLine();
-                ou.newLine();                
+                ou.newLine();
+                ou.close();
             }
             catch(IOException expnIO)
             {
@@ -186,7 +290,7 @@ public class Login extends JFrame
         
     }/*Fin de public static Login getObj()*/
     
-    
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -203,6 +307,10 @@ public class Login extends JFrame
         jTCodEmp = new javax.swing.JTextField();
         jCMostC = new javax.swing.JCheckBox();
         jLAyu = new javax.swing.JLabel();
+        reenviar = new javax.swing.JButton();
+        labelEmail = new javax.swing.JLabel();
+        textEmail = new javax.swing.JTextField();
+        cambiaCorreo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Inicio de Sesión");
@@ -425,7 +533,69 @@ public class Login extends JFrame
                 jLAyuMouseExited(evt);
             }
         });
-        jP1.add(jLAyu, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 220, 20));
+        jP1.add(jLAyu, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, 220, 20));
+
+        reenviar.setBackground(new java.awt.Color(255, 255, 255));
+        reenviar.setText("Enviar contraseña");
+        reenviar.setToolTipText("Envia correo electrónico con la contraseña de activación");
+        reenviar.setAlignmentY(0.0F);
+        reenviar.setDefaultCapable(false);
+        reenviar.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        reenviar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        reenviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reenviarActionPerformed(evt);
+            }
+        });
+        jP1.add(reenviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 220, -1));
+
+        labelEmail.setBackground(new java.awt.Color(255, 255, 255));
+        labelEmail.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        labelEmail.setForeground(new java.awt.Color(51, 51, 51));
+        labelEmail.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelEmail.setText("Correo Electrónico:");
+        labelEmail.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jP1.add(labelEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 220, -1));
+
+        textEmail.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        textEmail.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
+        textEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                textEmailFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                textEmailFocusLost(evt);
+            }
+        });
+        textEmail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                textEmailMouseClicked(evt);
+            }
+        });
+        textEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textEmailActionPerformed(evt);
+            }
+        });
+        textEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textEmailKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textEmailKeyTyped(evt);
+            }
+        });
+        jP1.add(textEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 220, 20));
+
+        cambiaCorreo.setBackground(new java.awt.Color(255, 255, 255));
+        cambiaCorreo.setText("Cambiar correo electrónico.");
+        cambiaCorreo.setToolTipText("Cambiar el correo electrónico al cual se enviará el correo con la contraseña de activación");
+        cambiaCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cambiaCorreoActionPerformed(evt);
+            }
+        });
+        jP1.add(cambiaCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, 220, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -433,15 +603,15 @@ public class Login extends JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jP1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jP1, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jP1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jP1, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -537,7 +707,7 @@ public class Login extends JFrame
         SerVali ser         = new SerVali();
         
         /*Contiene la MAC del equipo*/
-        String sMAC;
+        String sMAC = "";
 
         /*Obtiene la MAC del equipo*/
         InetAddress ip;
@@ -560,7 +730,11 @@ public class Login extends JFrame
             /*Inicia la MAC*/
             sMAC    = sb.toString();
         }
-        catch(UnknownHostException expnUnknowHos) 
+        
+        catch(NullPointerException e){
+            
+        }        
+        catch(UnknownHostException  expnUnknowHos ) 
         {
             //Procesa el error y regresa
             Star.iErrProc(this.getClass().getName() + " " + expnUnknowHos.getMessage(), Star.sErrUnknowHos, expnUnknowHos.getStackTrace());            
@@ -592,7 +766,7 @@ public class Login extends JFrame
                 }
                 
                 /*Pidele al usuario que ingrese su llave nueva*/                
-                String sKey     = JOptionPane.showInputDialog("El archvio de validación no existe. Ingresa tu código de revocación:");
+                String sKey     = JOptionPane.showInputDialog("Ingresa tu código de revocación:");
 
                 /*Si es nulo entonces regresa*/
                 if(sKey==null)               
@@ -613,7 +787,7 @@ public class Login extends JFrame
                 String sResp;
                 try
                 {
-                    sResp    = Star.vSerKeyU(Star.sEncyMy("" + Star.sCadVerif + Star.sNomProd), Star.sEncyMy(sKey), Star.sEncyMy(sMAC));
+                    sResp    = Star.vSerKeyU(Star.sEncyMy("" + Star.sCadVerif + Star.sNomProd), Star.sEncyMy(Star.sEncyMy(sKey)), Star.sEncyMy(sMAC));
                 }
                 catch(Exception expnExcep)
                 {                
@@ -661,6 +835,8 @@ public class Login extends JFrame
                 try(FileOutputStream fi     = new FileOutputStream(Star.sArchVal); ObjectOutputStream out  = new ObjectOutputStream(fi))
                 {                    
                     out.writeObject(ser);                    
+					out.close();
+                    fi.close();
                 }
                 catch(IOException expnIO)
                 {
@@ -694,13 +870,50 @@ public class Login extends JFrame
             return;                        
         }
         
+        try
+        {
+             //Abre la base de datos
+            Connection  con = Star.conAbrBas(true, false);
+
+            //Si hubo error entonces regresa
+            if(con==null)
+                return;
+        
+            //Declara variables de la base de datos    
+            Statement   st;
+            ResultSet   rs;        
+            String      sQ;
+            
+             sQ = "SELECT servOestac,tipEstac FROM basdats WHERE codemp = '" + sCodEmpBD + "'";            
+            st = con.createStatement();
+            rs = st.executeQuery(sQ);
+            //Si hay datos entonces obtiene los resultados
+            if(rs.next())
+            {                
+                Star.bEstacTrab   = Integer.parseInt(Star.sDecryp(rs.getString("servOestac")));   
+                Star.tTipoDeEsta  = Integer.parseInt(Star.sDecryp(rs.getString("tipEstac")));   
+                                                                                                         
+            }                        
+        }
+        catch(SQLException expnSQL)
+        {
+            //Procesa el error y regresa
+                       
+            return;                        
+        }   
         /*Si la MAC del equipo no es la misma que la del archivo de validación entonces*/
-//        if(sMAC.replace("-", "").compareTo(Star.sDecryp(ser.sMac).replace("-", ""))!=0)
-//        {
-//            /*Mensajea y regresa*/
-//            JOptionPane.showMessageDialog(null, "El sistema esta incorrectamente validado y no puede continuar.", "Validación", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-//            return;            
-//        }
+        
+        /*29 06 2015 Heriberto Daniel Sanchez Peña*/
+        
+        /*Si la version es del tipo servidor o estacion de trabajo on-line se requerira internet*/
+        /*Si la version es del tipo de estacion de trabajo off-line no se pedira dicho requerimiento*/
+
+        if(sMAC.replace("-", "").compareTo(Star.sDecryp(ser.sMac).replace("-", ""))!=0&&(Star.tTipoDeEsta == 0||bActiv))
+        {
+            /*Mensajea y regresa*/
+            JOptionPane.showMessageDialog(null, "El sistema esta incorrectamente validado y no puede continuar.", "Validación", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            return;            
+        }
         
         /*Obtiene los datos de validación del archivo ya desencriptados*/
         String sKey     = Star.sDecryp(ser.sKey);                
@@ -766,106 +979,106 @@ public class Login extends JFrame
         /*Resetea el contador de intentos*/
         iCont   = 0;
         
-//        /*Si la diferencia desde que se instalo hasta el día de hoy es mayor a 30 entonces o menor a 30 y si la llave es cadena vacia entonces*/
-//        if(sKey.compareTo("")==0 && ((lodDifDay + Integer.parseInt(sCont))>30 || (lodDifDay + Long.parseLong(sCont)) < Long.parseLong(sCont)))
-//        {
-//            /*Mientras no se pueda salir del bucle entonces*/
-//            boolean bSa = false;
-//            do
-//            {
-//                /*Si el número de intentos ya llego a su límite entonces*/
-//                if(iCont>=2)
-//                {
-//                    /*Mensajea y sal de la aplicación*/
-//                    JOptionPane.showMessageDialog(null, "El número de intentos válidos a expirado. Se cerrará el sistema", "Validación", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-//                    System.exit(0);
-//                }
-//                
-//                /*Pidele al usuario que ingrese su llave nueva*/                
-//                sKey    = JOptionPane.showInputDialog("El periodo de prueba de 30 días a concluido. Inserta tu llave o código de revocación:", sSer);
-//
-//                /*Si es nulo entonces regresa*/
-//                if(sKey==null)               
-//                    return;                
-//
-//                /*Si es cadena vacia entonces*/
-//                if(sKey.compareTo("")==0)
-//                {                    
-//                    /*Mensajea*/
-//                    JOptionPane.showMessageDialog(null, "Ingresa una llave o código de revocación válida.", "Validación", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
-//
-//                    /*Pon la bandera en falso y continua*/
-//                    bSa    = false;
-//                    continue;
-//                }
-//
-//                /*Comprueba con el web service si los datos introducidos por el usuario son válidos*/
-//                String sResp;
-//                try
-//                {
-//                    sResp    = Star.vSerKeyU(Star.sEncyMy(sSer+ Star.sCadVerif + Star.sNomProd), Star.sEncyMy(sKey), Star.sEncyMy(sMAC));
-//                }
-//                catch(Exception expnExcep)
-//                {                
-//                    //Procesa el error y regresa
-//                    Star.iErrProc(this.getClass().getName() + " " + expnExcep.getMessage(), Star.sErrExcep, expnExcep.getStackTrace());                                
-//                    return;                                            
-//                }                                                    
-//                
-//                /*Desencripta la respuesta del servidor*/
-//                sResp   = Star.sDencyMy(sResp);
-//                
-//                /*Si la respuesta fue negativa entonces*/
-//                if(sResp.contains("<ERROR>"))
-//                {
-//                    /*Mensajea*/
-//                    JOptionPane.showMessageDialog(null, "Error del servidor." + sResp, "Error Servidor", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-//                    
-//                    /*Aumenta en uno el contador de intentos y continua*/
-//                    ++iCont;
-//                    continue;
-//                }
-//                
-//                /*Si la respuesta fue negativo entonces*/
-//                if(sResp.compareTo("0")==0)
-//                {
-//                    /*Mensajea*/
-//                    JOptionPane.showMessageDialog(null, "Datos de validación incorrectos.", "Validación", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-//                    
-//                    /*Aumenta en uno el contador de intentos y continua*/
-//                    ++iCont;
-//                    continue;
-//                }
-//                
-//                /*Borra el archivo de validación*/
-//                new File(Star.sArchVal).delete();
-//
-//                /*Instancia la clase de validación para serializarla*/                       
-//                ser.sSer            = Star.sEncrip(sSer); 
-//                ser.sMac            = Star.sEncrip(sMAC); 
-//                ser.sFech           = Star.sEncrip(sFech);
-//                ser.sCont           = Star.sEncrip(sCont);
-//                ser.sKey            = Star.sEncrip(sKey);               
-//            
-//                /*Serializa el objeto de validación en un archivo*/
-//                try(FileOutputStream fi     = new FileOutputStream(Star.sArchVal); ObjectOutputStream out  = new ObjectOutputStream(fi))
-//                {                    
-//                    out.writeObject(ser);                    
-//                }
-//                catch(IOException expnIO)
-//                {
-//                    //Procesa el error y regresa
-//                    Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace());                                
-//                    return;                        
-//                }   
-//
-//                /*Poner la bandera en true*/
-//                bSa        = true;                    
-//            }
-//            while(!bSa);                                   
-//                    
-//        }/*Fin de if((lodDifDay + Integer.parseInt(sCont))>30 || (lodDifDay + Integer.parseInt(sCont)) < Integer.parseInt(sCont))*/                                    
-//                
+        /*Si la diferencia desde que se instalo hasta el día de hoy es mayor a 30 entonces o menor a 30 y si la llave es cadena vacia entonces*/
+        if(sKey.compareTo("")==0 && ((lodDifDay + Integer.parseInt(sCont))>30 || (lodDifDay + Long.parseLong(sCont)) < Long.parseLong(sCont)))
+        {
+            /*Mientras no se pueda salir del bucle entonces*/
+            boolean bSa = false;
+            do
+            {
+                /*Si el número de intentos ya llego a su límite entonces*/
+                if(iCont>=2)
+                {
+                    /*Mensajea y sal de la aplicación*/
+                    JOptionPane.showMessageDialog(null, "El número de intentos válidos a expirado. Se cerrará el sistema", "Validación", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                    System.exit(0);
+                }
+                
+                /*Pidele al usuario que ingrese su llave nueva*/                
+                sKey    = JOptionPane.showInputDialog("El periodo de prueba de 30 días a concluido. Inserta tu llave o código de revocación:", sSer);
+
+                /*Si es nulo entonces regresa*/
+                if(sKey==null)               
+                    return;                
+
+                /*Si es cadena vacia entonces*/
+                if(sKey.compareTo("")==0)
+                {                    
+                    /*Mensajea*/
+                    JOptionPane.showMessageDialog(null, "Ingresa una llave o código de revocación válida.", "Validación", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+
+                    /*Pon la bandera en falso y continua*/
+                    bSa    = false;
+                    continue;
+                }
+
+                /*Comprueba con el web service si los datos introducidos por el usuario son válidos*/
+                String sResp;
+                try
+                {
+                    sResp    = Star.vSerKeyU(Star.sEncyMy(sSer+ Star.sCadVerif + Star.sNomProd), Star.sEncyMy(Star.sEncyMy(sKey)), Star.sEncyMy(sMAC));
+                }
+                catch(Exception expnExcep)
+                {                
+                    //Procesa el error y regresa
+                    Star.iErrProc(this.getClass().getName() + " " + expnExcep.getMessage(), Star.sErrExcep, expnExcep.getStackTrace());                                
+                    return;                                            
+                }                                                    
+                
+                /*Desencripta la respuesta del servidor*/
+                sResp   = Star.sDencyMy(sResp);
+                
+                /*Si la respuesta fue negativa entonces*/
+                if(sResp.contains("<ERROR>"))
+                {
+                    /*Mensajea*/
+                    JOptionPane.showMessageDialog(null, "Error del servidor." + sResp, "Error Servidor", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                    
+                    /*Aumenta en uno el contador de intentos y continua*/
+                    ++iCont;
+                    continue;
+                }
+                
+                /*Si la respuesta fue negativo entonces*/
+                if(sResp.compareTo("0")==0)
+                {
+                    /*Mensajea*/
+                    JOptionPane.showMessageDialog(null, "Datos de validación incorrectos.", "Validación", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                    
+                    /*Aumenta en uno el contador de intentos y continua*/
+                    ++iCont;
+                    continue;
+                }
+                
+                /*Borra el archivo de validación*/
+                new File(Star.sArchVal).delete();
+
+                /*Instancia la clase de validación para serializarla*/                       
+                ser.sSer            = Star.sEncrip(sSer); 
+                ser.sMac            = Star.sEncrip(sMAC); 
+                ser.sFech           = Star.sEncrip(sFech);
+                ser.sCont           = Star.sEncrip(sCont);
+                ser.sKey            = Star.sEncrip(sKey);               
+            
+                /*Serializa el objeto de validación en un archivo*/
+                try(FileOutputStream fi     = new FileOutputStream(Star.sArchVal); ObjectOutputStream out  = new ObjectOutputStream(fi))
+                {                    
+                    out.writeObject(ser);                    
+                }
+                catch(IOException expnIO)
+                {
+                    //Procesa el error y regresa
+                    Star.iErrProc(this.getClass().getName() + " " + expnIO.getMessage(), Star.sErrIO, expnIO.getStackTrace());                                
+                    return;                        
+                }   
+
+                /*Poner la bandera en true*/
+                bSa        = true;                    
+            }
+            while(!bSa);                                   
+                    
+        }/*Fin de if((lodDifDay + Integer.parseInt(sCont))>30 || (lodDifDay + Integer.parseInt(sCont)) < Integer.parseInt(sCont))*/                                    
+                
         //Abre la base de datos
         Connection  con = Star.conAbrBas(true, false);
 
@@ -1513,6 +1726,172 @@ public class Login extends JFrame
         jBEmp.setBackground(colOri);
         
     }//GEN-LAST:event_jBEmpMouseExited
+
+    private void reenviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reenviarActionPerformed
+
+           /* creamos el objeto de envio de correo */
+            correoRegistro correoAUsuario = new correoRegistro();
+        
+        /* analizamos si se cuenta con conexion a internet */
+                if(correoRegistro.hayInternet()){
+                    
+                    correoAUsuario.setCorreoA(correoAUsuario.getCorreoBaseDatos());
+                    correoAUsuario.setMensaje(correoAUsuario.creaMensajeCliente(correoAUsuario.getContraBaseDatos()));
+                    
+                    correoRegistro correoEmpresa = new correoRegistro();
+                    
+                    
+                    correoEmpresa.setCorreoA(correoEmpresa.getCorreoDesde());
+                    correoEmpresa.setAsunto("Nuevo usuario de Easy Retail® Admin");
+                    correoEmpresa.setMensaje(correoEmpresa.creaMensajeEmpresa(correoAUsuario.getCorreoA(), correoAUsuario.getContraBaseDatos()));
+                    
+                    
+                    /* ENVIA EL CORREO A USUARIO*/
+                    if(correoAUsuario.enviaCorreo()){
+                        correoEmpresa.enviaCorreo();
+                        
+                        
+            JOptionPane.showMessageDialog(null, "Se envio la contraseña a su correo electrónico "+correoAUsuario.getCorreoA()+" \n Revise su correo. \n \n Para mas información llama al : \n 01-800-890-0365 para todo México \n 01-33-3617-2968 en Jalisco", "Envió de la contraseña exitoso", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                } else{
+                        JOptionPane.showMessageDialog(null, "Hubo un problema al enviar su contraseña. \n \n Para mas información llama al : \n 01-800-890-0365 para todo México \n 01-33-3617-2968 en Jalisco", "Atención", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                    }
+                
+                }
+                /* si no hay conexion a internet */
+                else{
+                    JOptionPane.showMessageDialog(null, "No pudo enviarse la contraseña a su correo electrónico. \n Necesita conexión a internet. \n \n Para mas información llama al : \n 01-800-890-0365 para todo México \n 01-33-3617-2968 en Jalisco", "Sin conexión a internet", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                }
+            
+
+
+
+
+
+    }//GEN-LAST:event_reenviarActionPerformed
+
+    private void cambiaCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cambiaCorreoActionPerformed
+   
+    /* Obtengo el campo Correo Electronico de la forma y lo guardo */
+        Star.correoRegistro  =  textEmail.getText().trim();
+        
+        /*Si el campo Email esta vacio*/
+        if(Star.correoRegistro.compareTo("")==0)
+        {
+            /*Coloca el borde rojo*/                               
+            textEmail.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            
+            /*Mensajea*/
+            JOptionPane.showMessageDialog(null, "El campo de correo electrónico esta vacio.", "Campo vacio", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            /*Coloca el foco del teclado en el campo*/
+            textEmail.grabFocus();           
+            return;
+        } 
+        /*Si el campo Email no esta vacio analizamos si es valido */
+        else {
+      
+        /* Felipe Ruiz Garcia 29 05 2015 */
+        /* se activa la alerta al momento de dar click con el mensaje de que es necesario un email valido */
+        /*Mensajea*/
+        JOptionPane.showMessageDialog(null, "Es necesario que proporcione un correo electrónico valido al cual se le enviara la contraseña para que pueda iniciar el sistema", "Atención", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+            
+        /*Expresion regular*/ /* felipe.ruiz@sos-soft.com */
+        Pattern pat = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@[A-Za-z0-9|-]+(\\.[A-Za-z0-9|-]+)*(\\.[A-Za-z]{2,})$");
+        Matcher mat = pat.matcher(Star.correoRegistro);
+        
+        /* si el Email NO es valido */
+        /* se le hace saber al usuario */
+        if (!mat.find()) {
+            
+            
+            /*Coloca el borde rojo*/                               
+            textEmail.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+            
+            /*Mensajea*/
+            JOptionPane.showMessageDialog(null, "El correo electrónico es invalido.\nPor favor ingresa un correo electrónico valido.", "Correo electrónico invalido", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+
+            /*Coloca el foco del teclado en el campo*/
+            textEmail.grabFocus();           
+            return;   
+            } 
+        /* Si el Email es valido entonces */
+        else {
+            
+            try {
+                /*Restablecemos color del borde*/
+                textEmail.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(204,204,255)));
+                
+                /* creamos el objeto de envio de correo */
+                correoRegistro correoAUsuario = new correoRegistro();
+                
+                
+                //System.out.println(Star.correoRegistro); // PARA DEBUG
+                
+                /*Funcion que guarda a la base de datos el nuevo correo valido y lo encripta  */
+                correoAUsuario.cambiaCorreoBaseDatos(Star.correoRegistro);
+                
+                
+                /* analizamos si se cuenta con conexion a internet */
+                if(correoRegistro.hayInternet()){
+                    
+                    correoAUsuario.setCorreoA(correoAUsuario.getCorreoBaseDatos());
+                    correoAUsuario.setMensaje(correoAUsuario.creaMensajeCliente(correoAUsuario.getContraBaseDatos()));
+                    
+                    correoRegistro correoEmpresa = new correoRegistro();
+                    
+                    
+                    correoEmpresa.setCorreoA(correoEmpresa.getCorreoDesde());
+                    correoEmpresa.setAsunto("Nuevo usuario de Easy Retail® Admin");
+                    correoEmpresa.setMensaje(correoEmpresa.creaMensajeEmpresa(correoAUsuario.getCorreoA(), correoAUsuario.getContraBaseDatos()));
+                    
+                    
+                    /* ENVIA EL CORREO A USUARIO*/
+                    if(correoAUsuario.enviaCorreo()){
+                        correoEmpresa.enviaCorreo();
+                        
+                        
+                        JOptionPane.showMessageDialog(null, "Se envio la contraseña a su correo electrónico "+correoAUsuario.getCorreoA()+" \n Revise su correo. \n \n Para mas información llama al : \n 01-800-890-0365 para todo México \n 01-33-3617-2968 en Jalisco", "Envió de la contraseña exitoso", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                    } else{
+                        JOptionPane.showMessageDialog(null, "Hubo un problema al enviar su contraseña. \n \n Para mas información llama al : \n 01-800-890-0365 para todo México \n 01-33-3617-2968 en Jalisco", "Atención", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                    }
+                
+                }
+                /* si no hay conexion a internet */
+                else{
+                    JOptionPane.showMessageDialog(null, "No pudo enviarse la contraseña a su correo electrónico. \n Necesita conexión a internet. \n \n Para mas información llama al : \n 01-800-890-0365 para todo México \n 01-33-3617-2968 en Jalisco", "Sin conexión a internet", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            }   
+        }
+    
+    }//GEN-LAST:event_cambiaCorreoActionPerformed
+
+    private void textEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textEmailFocusGained
+
+    }//GEN-LAST:event_textEmailFocusGained
+
+    private void textEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textEmailFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textEmailFocusLost
+
+    private void textEmailMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textEmailMouseClicked
+
+    }//GEN-LAST:event_textEmailMouseClicked
+
+    private void textEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textEmailActionPerformed
+
+    }//GEN-LAST:event_textEmailActionPerformed
+
+    private void textEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textEmailKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textEmailKeyPressed
+
+    private void textEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textEmailKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textEmailKeyTyped
        
     
     /*Función escalable para cuando se presiona una tecla en el módulo*/
@@ -1545,8 +1924,8 @@ public class Login extends JFrame
     }/*Fin de void vKeyPreEsc(java.awt.event.KeyEvent evt)*/
 
     
-    
-    // Variables declaration - do not modify                     
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cambiaCorreo;
     private javax.swing.JButton jBEmp;
     private javax.swing.JButton jBIng;
     private javax.swing.JButton jBSal;
@@ -1560,6 +1939,9 @@ public class Login extends JFrame
     private javax.swing.JTextField jTCodEmp;
     private javax.swing.JTextField jTEmp;
     private javax.swing.JTextField jTEsta;
-    // End of variables declaration                                  
+    private javax.swing.JLabel labelEmail;
+    private javax.swing.JButton reenviar;
+    private javax.swing.JTextField textEmail;
+    // End of variables declaration//GEN-END:variables
     
 }/*Fin de public class NuevaEmpresa extends javax.swing.JFrame */

@@ -344,7 +344,7 @@ public class NewNotProv extends javax.swing.JFrame
                         }
                         
                         /*Dale formato de moneda al importe*/                        
-                        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                         double dCant    = Double.parseDouble(sImp);                
                         sImp            = n.format(dCant);
                         
@@ -1920,7 +1920,7 @@ public class NewNotProv extends javax.swing.JFrame
         }  
 
         /*Dale formato de moneda al límite de crédito*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sLimit);                
         sLimit          = n.format(dCant);
 
@@ -2391,7 +2391,7 @@ public class NewNotProv extends javax.swing.JFrame
         /*Dale formato de moneda al total*/
         String sTot             = jTTot.getText().replace("$", "").replace(",", "");        
         double dCant            = Double.parseDouble                (sTot);                
-        NumberFormat n          = NumberFormat.getCurrencyInstance  (Locale.getDefault());
+        NumberFormat n          = NumberFormat.getCurrencyInstance  (new Locale("es","MX"));
         sTot                    = n.format(dCant);
 
         /*Agrega los datos en la tabla de compras del otro formulario*/
@@ -3173,7 +3173,7 @@ public class NewNotProv extends javax.swing.JFrame
             if(rs.next())
             {
                 /*Dale formato de moneda a los totales*/                                
-                NumberFormat n          = NumberFormat.getCurrencyInstance(Locale.getDefault());                                
+                NumberFormat n          = NumberFormat.getCurrencyInstance(new Locale("es","MX"));                                
                 double dCant            = Double.parseDouble(rs.getString("tot"));                                
                 String sTot             = n.format(dCant);
                 dCant                   = Double.parseDouble(rs.getString("subtot"));                                
@@ -4326,7 +4326,7 @@ public class NewNotProv extends javax.swing.JFrame
         String sImpue   = Double.toString(Double.parseDouble(sTex) - Double.parseDouble(sSubTot));
         
         /*Formatealo a moneda a los totales*/
-        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         double dCant    = Double.parseDouble(sTex);               
         sTex                        = n.format(dCant);
         dCant           = Double.parseDouble(sSubTot);               
@@ -4949,7 +4949,7 @@ public class NewNotProv extends javax.swing.JFrame
             }
 
             /*Formatea a moneda los totales*/
-            n                               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            n                               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant                    = Double.parseDouble(sSubTot);                        
             sSubTot                         = n.format(dCant);
             dCant                           = Double.parseDouble(sImpue);                        

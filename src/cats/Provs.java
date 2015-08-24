@@ -51,13 +51,21 @@ public class Provs extends javax.swing.JFrame
     /*Inicialmente no hay error*/
     private boolean                 bErr    = false;
                     
-                    
+    //arreglo de permisos para Modificar y/o Ver
+    private java.util.ArrayList<Boolean> permisosModVer = new java.util.ArrayList<>();
     
     /*Constructor sin argumentos*/
-    public Provs() 
+    public Provs(java.util.ArrayList<Boolean> permisos) 
     {                
         /*Inicaliza los componentes gráficos*/
         initComponents();
+        
+        //(des)habilita botones segun permisos
+        jBNew.setEnabled(permisos.get(0));
+        if(permisos.get(1) || permisos.get(2)){
+            permisosModVer.add(permisos.get(1));
+        }
+        jBDel.setEnabled(permisos.get(3));
         
         /*Obtiene el color original que deben tener los botones*/
         colOri  = jBSal.getBackground();
@@ -539,8 +547,7 @@ public class Provs extends javax.swing.JFrame
         int iSel[] = jTab.getSelectedRows();
         DefaultTableModel tm  = (DefaultTableModel)jTab.getModel();
         for(int x = iSel.length - 1; x >= 0; x--)
-        {   
-            
+        {            
             /*Obtén algunos datos de la filar*/
             sProv   = jTab.getValueAt(iSel[x], 1).toString();                  
             sSer    = jTab.getValueAt(iSel[x], 2).toString();                                          
@@ -633,7 +640,7 @@ public class Provs extends javax.swing.JFrame
         /*Mostrar el formulario de proveedor*/        
         if(Star.gProv==null)
         {            
-            Star.gProv = new Prov("", jTab);
+            Star.gProv = new Prov("", jTab, new java.util.ArrayList<Boolean>());
             Star.gProv.setVisible(true);
         }
         else
@@ -680,7 +687,7 @@ public class Provs extends javax.swing.JFrame
             /*Muestra el gráfico de modificar proveedor*/
             if(Star.gProv==null)
             {            
-                Star.gProv = new Prov(jTab.getValueAt(iSel[x], 1).toString(), jTab);
+                Star.gProv = new Prov(jTab.getValueAt(iSel[x], 1).toString(), jTab, permisosModVer);
                 Star.gProv.setVisible(true);
             }
             else

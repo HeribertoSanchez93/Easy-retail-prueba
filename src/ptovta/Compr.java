@@ -102,11 +102,23 @@ public class Compr extends javax.swing.JFrame
     
     
     /*Constructor sin argumentos*/
-    public Compr() 
+    public Compr(java.util.ArrayList<Boolean> camposPermisos) 
     {                                
         /*Inicaliza los componentes gráficos*/
         initComponents();
-
+        
+        //(Des)habilita botones
+        jBCan.setEnabled(camposPermisos.get(0));
+        jBDev.setEnabled(camposPermisos.get(1));
+        jBDevPar.setEnabled(camposPermisos.get(2));
+        jBNew.setEnabled(camposPermisos.get(3));
+        jBNotC.setEnabled(camposPermisos.get(4));
+        jBVer.setEnabled(camposPermisos.get(5));
+        if(jBVer.isEnabled()){
+            jBCarg.setEnabled(camposPermisos.get(6));
+            jBDel.setEnabled(camposPermisos.get(7));
+        }
+        jBRecOr.setEnabled(camposPermisos.get(8));
         /*Crea el grupo de los radio buttons*/
         javax.swing.ButtonGroup bG = new javax.swing.ButtonGroup();
         bG.add(jRComp);
@@ -1285,7 +1297,7 @@ public class Compr extends javax.swing.JFrame
                 String sImp     = Double.toString(Double.parseDouble(sCost)*Double.parseDouble(rs.getString("cant")));
                 
                 /*Dales formato de moneda a los totes*/                                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sCost);                                
                 sCost           = n.format(dCant);
                 dCant           = Double.parseDouble(sImp);                                
@@ -1698,12 +1710,13 @@ public class Compr extends javax.swing.JFrame
     /*Cuando se presiona el botón de salir*/
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalActionPerformed
         
-        /*Llama al recolector de basura*/
-        System.gc();               
-        
         /*Cierra la forma*/
         this.dispose();
         Star.gComprs = null;
+        
+        
+        /*Llama al recolector de basura*/
+        System.gc();               
         
     }//GEN-LAST:event_jBSalActionPerformed
 
@@ -2152,7 +2165,7 @@ public class Compr extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al cost*/                
                 double dCant    = Double.parseDouble(sTot);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sTot            = n.format(dCant);
 
                 /*Agregalo a la tabla*/
@@ -3987,7 +4000,7 @@ public class Compr extends javax.swing.JFrame
 
                     /*Dales formato de moneda al subtot*/                    
                     double dCant    = Double.parseDouble(sSubTot);                
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     sSubTot         = n.format(dCant);
 
                     /*Dales formato de moneda al impuesto*/
@@ -4237,7 +4250,7 @@ public class Compr extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al tot*/                
                 double dCant    = Double.parseDouble(sTot);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sTot            = n.format(dCant);
         
                 /*Agregalo a la tabla*/

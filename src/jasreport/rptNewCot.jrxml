@@ -483,7 +483,7 @@
 				<text><![CDATA[IMPUESTO:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="362" y="30" width="92" height="13" forecolor="#3333FF" uuid="89814022-1222-4d57-bcd7-bdf594f1b04c"/>
+				<reportElement stretchType="RelativeToTallestObject" x="362" y="43" width="92" height="13" forecolor="#3333FF" uuid="89814022-1222-4d57-bcd7-bdf594f1b04c"/>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
@@ -498,7 +498,7 @@
 				<textFieldExpression><![CDATA[$P{IMPUE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="464" y="30" width="87" height="13" uuid="3e07ed18-3573-40fe-9422-9cba6dc3ffe3"/>
+				<reportElement x="464" y="41" width="87" height="13" uuid="3e07ed18-3573-40fe-9422-9cba6dc3ffe3"/>
 				<textFieldExpression><![CDATA[$P{TOT}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
@@ -526,14 +526,14 @@
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="362" y="43" width="92" height="13" forecolor="#3333FF" uuid="e5423cd7-601b-4476-b80f-05c3a1639b31"/>
+				<reportElement stretchType="RelativeToTallestObject" x="362" y="28" width="92" height="13" forecolor="#3333FF" uuid="e5423cd7-601b-4476-b80f-05c3a1639b31"/>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[DESCUENTO:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
-				<reportElement x="465" y="43" width="87" height="13" uuid="d3013209-3d19-4c56-800f-b5ea4e27539b"/>
+				<reportElement x="464" y="30" width="87" height="13" uuid="d3013209-3d19-4c56-800f-b5ea4e27539b"/>
 				<textFieldExpression><![CDATA[$F{TOTDESCU}]]></textFieldExpression>
 			</textField>
 		</band>

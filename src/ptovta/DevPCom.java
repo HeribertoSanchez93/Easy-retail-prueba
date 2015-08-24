@@ -143,7 +143,7 @@ public class DevPCom extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al subtot*/                
                 double dCant    = Double.parseDouble(sSubTot);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sSubTot         = n.format(dCant);
         
                 /*Obtiene el impuesto*/                
@@ -151,7 +151,7 @@ public class DevPCom extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al impue*/                
                 dCant           = Double.parseDouble(sImpue);                
-                n               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                n               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sImpue          = n.format(dCant);
                 
                 /*Obtiene el total*/                
@@ -159,7 +159,7 @@ public class DevPCom extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al total*/                
                 dCant           = Double.parseDouble(sTot);                
-                n               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                n               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sTot            = n.format(dCant);
                 
                 /*Coloca todos los valores obtenidos en sus campos correspondientes*/
@@ -209,7 +209,7 @@ public class DevPCom extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al costo*/                
                 double dCant        = Double.parseDouble(sCost);                
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sCost               = n.format(dCant);
                 
                 String Impue        =rs.getString("impue");
@@ -218,7 +218,7 @@ public class DevPCom extends javax.swing.JFrame
                 
                 /*Dale formato de moneda al importe*/                
                 dCant               = Double.parseDouble(sImp);                
-                n                   = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                n                   = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sImp                = n.format(dCant);
                 
                 /*Determina si es un kit o no*/

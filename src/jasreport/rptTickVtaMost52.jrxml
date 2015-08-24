@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="180" pageHeight="842" whenNoDataType="BlankPage" columnWidth="180" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="2" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="COD_EMPRESA" class="java.lang.String"/>
 	<parameter name="FDOC" class="java.lang.String"/>
 	<parameter name="NOMEMP" class="java.lang.String"/>
@@ -35,6 +35,9 @@
 	<parameter name="NOEXTLOC" class="java.lang.String"/>
 	<parameter name="LOGE" class="java.lang.String"/>
 	<parameter name="MON" class="java.lang.String"/>
+	<parameter name="WEB" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT cant, prod, descrip, pre, impo, totdescu FROM partvta LEFT OUTER JOIN vtas ON vtas.VTA = partvta.VTA WHERE kitmae = 0 AND partvta.VTA = '$P!{VTA}']]>
 	</queryString>
@@ -62,172 +65,186 @@
 	<title>
 		<band height="222" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="2" y="193" width="151" height="13" uuid="17fe7549-a6a1-4866-b757-7fcdfca613c3"/>
+				<reportElement stretchType="RelativeToTallestObject" x="2" y="195" width="151" height="13" uuid="17fe7549-a6a1-4866-b757-7fcdfca613c3"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{NOMEMP}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="34" y="1" width="85" height="71" uuid="fc9f3c9c-8283-4cd1-ac01-031665b7116f"/>
+				<reportElement x="3" y="1" width="148" height="71" uuid="fc9f3c9c-8283-4cd1-ac01-031665b7116f"/>
 				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
 			</image>
 			<line>
-				<reportElement stretchType="RelativeToTallestObject" x="3" y="189" width="148" height="1" uuid="7c4e4d02-5f43-432d-b972-2a9b3664804d"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="193" width="148" height="1" uuid="7c4e4d02-5f43-432d-b972-2a9b3664804d"/>
 			</line>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="29" y="135" width="121" height="13" uuid="74664b7b-0e78-4974-a305-c531b262eee5"/>
+				<reportElement stretchType="RelativeToTallestObject" x="29" y="128" width="121" height="13" uuid="74664b7b-0e78-4974-a305-c531b262eee5"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{COLLOC}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="82" y="121" width="12" height="13" uuid="f737734a-6416-440f-92b4-3131f971ac96"/>
+				<reportElement stretchType="RelativeToTallestObject" x="82" y="114" width="12" height="13" uuid="f737734a-6416-440f-92b4-3131f971ac96"/>
 				<textElement>
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[No.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="3" y="76" width="27" height="13" uuid="f8f81667-1c80-49db-90e3-52a22714eb7e"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="73" width="27" height="13" uuid="f8f81667-1c80-49db-90e3-52a22714eb7e"/>
 				<textElement>
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[FECHA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="3" y="174" width="25" height="13" uuid="bff226cf-72a8-4ca0-8592-3a15b42102a4"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="168" width="25" height="12" uuid="bff226cf-72a8-4ca0-8592-3a15b42102a4"/>
 				<textElement>
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Tel:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="111" y="148" width="40" height="13" uuid="f3b00d13-2f85-4e7a-b85c-37d57af25d3a"/>
+				<reportElement stretchType="RelativeToTallestObject" x="111" y="141" width="40" height="13" uuid="f3b00d13-2f85-4e7a-b85c-37d57af25d3a"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{ESTADLOC}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="28" y="148" width="30" height="13" uuid="e2c37162-f3e3-422f-8c28-f92176cf3425"/>
+				<reportElement x="28" y="141" width="30" height="13" uuid="e2c37162-f3e3-422f-8c28-f92176cf3425"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CPLOC}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="3" y="92" width="149" height="13" uuid="02ac131e-ddd3-498f-bccb-87518ffb8367"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="86" width="149" height="13" uuid="02ac131e-ddd3-498f-bccb-87518ffb8367"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{EMPLOC}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="3" y="161" width="27" height="13" uuid="3f6807a8-2874-47e4-b205-541758d673b1"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="155" width="27" height="13" uuid="3f6807a8-2874-47e4-b205-541758d673b1"/>
 				<textElement>
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[e-mail:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="33" y="76" width="46" height="13" uuid="6053307a-27af-4942-99e3-174b0cb19ddc"/>
+				<reportElement stretchType="RelativeToTallestObject" x="33" y="73" width="46" height="13" uuid="6053307a-27af-4942-99e3-174b0cb19ddc"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{FDOC}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="79" y="76" width="27" height="13" uuid="c20ff028-88d3-45f8-91e8-db736ffc581e"/>
+				<reportElement stretchType="RelativeToTallestObject" x="79" y="73" width="27" height="13" uuid="c20ff028-88d3-45f8-91e8-db736ffc581e"/>
 				<textElement>
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[TICKET:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="29" y="161" width="121" height="13" uuid="cfa45afc-d3e7-428e-9549-bc31f131eca0"/>
+				<reportElement x="29" y="155" width="121" height="13" uuid="cfa45afc-d3e7-428e-9549-bc31f131eca0"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{MAILLOC}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="3" y="121" width="78" height="13" uuid="a8090099-5db9-4323-b079-143662cc525f"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="114" width="78" height="13" uuid="a8090099-5db9-4323-b079-143662cc525f"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CALLLOC}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="59" y="148" width="47" height="13" uuid="f2051369-44ae-450e-8eb1-b9ff07eda7a0"/>
+				<reportElement stretchType="RelativeToTallestObject" x="59" y="141" width="47" height="13" uuid="f2051369-44ae-450e-8eb1-b9ff07eda7a0"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CIULOC}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="106" y="76" width="46" height="13" uuid="41fb3e87-2183-4020-b148-e0f98936247d"/>
+				<reportElement stretchType="RelativeToTallestObject" x="106" y="73" width="46" height="13" uuid="41fb3e87-2183-4020-b148-e0f98936247d"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CODTIK}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="3" y="135" width="18" height="13" uuid="bcc378f8-5d22-4445-b292-f224f8e5c2ee"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="128" width="18" height="13" uuid="bcc378f8-5d22-4445-b292-f224f8e5c2ee"/>
 				<textElement>
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Col:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="3" y="106" width="148" height="13" uuid="1395c633-9e7e-4b05-a643-8397bebe48bb"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="100" width="148" height="13" uuid="1395c633-9e7e-4b05-a643-8397bebe48bb"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{RFCLOC}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="106" y="148" width="4" height="13" uuid="27522703-7110-4f85-bf19-d431e4e25d1d"/>
+				<reportElement stretchType="RelativeToTallestObject" x="106" y="145" width="4" height="13" uuid="27522703-7110-4f85-bf19-d431e4e25d1d"/>
 				<textElement>
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[,]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="3" y="148" width="18" height="13" uuid="6cdd2d5a-00d9-40ae-a276-d873ae38a7a8"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="141" width="18" height="13" uuid="6cdd2d5a-00d9-40ae-a276-d873ae38a7a8"/>
 				<textElement>
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[CP:]]></text>
 			</staticText>
 			<textField>
-				<reportElement stretchType="RelativeToTallestObject" x="95" y="121" width="56" height="13" uuid="269d2ee3-a552-4ba1-ad41-a5d42b3db56c"/>
+				<reportElement stretchType="RelativeToTallestObject" x="95" y="114" width="56" height="13" uuid="269d2ee3-a552-4ba1-ad41-a5d42b3db56c"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{NOEXTLOC}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="29" y="175" width="121" height="11" uuid="e8eb0de2-6058-4d65-9198-e391b2b15101"/>
+				<reportElement x="29" y="169" width="121" height="11" uuid="e8eb0de2-6058-4d65-9198-e391b2b15101"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{TELLOC}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="3" y="206" width="33" height="13" uuid="b25ebf19-a257-491d-a892-593e2395368f"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="208" width="33" height="13" uuid="b25ebf19-a257-491d-a892-593e2395368f"/>
 				<textElement>
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Moneda:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="36" y="206" width="117" height="13" uuid="6358f89d-6f53-44e7-9991-174cfdf599c2"/>
+				<reportElement x="36" y="208" width="117" height="13" uuid="6358f89d-6f53-44e7-9991-174cfdf599c2"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{MON}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="181" width="25" height="11" uuid="ddc15d2f-ac8d-45ac-a01f-2da339a12512"/>
+				<textElement>
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Web:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="29" y="181" width="121" height="11" uuid="ef2cf954-a53c-46c4-adac-c077511aaaba"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{WEB}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

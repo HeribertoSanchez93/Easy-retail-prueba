@@ -1208,7 +1208,7 @@ public class LPrecs extends javax.swing.JFrame
         String sCostL    = jTCostL.getText().replace("$", "").replace(",", "");        
         
         /*Dale formato de moneda a todos los precios de lista*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sPre1);                
         sPre1           = n.format(dCant);
         dCant           = Double.parseDouble(sPre2);                
@@ -1306,7 +1306,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda al precio 1*/
             String sPre1    = jTPre1.getText().replace("$", "").replace(",", "");                                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre1);                
             sPre1           = n.format(dCant);
             
@@ -1339,7 +1339,7 @@ public class LPrecs extends javax.swing.JFrame
             
             /*Dale formato de moneda al precio y colocalo en su lugar*/                        
             double dCant    = Double.parseDouble(jTPre1.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTPre1.setText(n.format(dCant));           
         }
 
@@ -1403,7 +1403,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda al precio 1*/
             String sPre     = jTPre3.getText().replace("$", "").replace(",", "");                                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre);                
             sPre           = n.format(dCant);
             
@@ -1436,7 +1436,7 @@ public class LPrecs extends javax.swing.JFrame
             
             /*Dale formato de moneda al precio y colocalo en su lugar*/                        
             double dCant    = Double.parseDouble(jTPre3.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTPre3.setText(n.format(dCant));           
         }   
         
@@ -1489,7 +1489,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda al precio 1*/
             String sPre     = jTPre5.getText().replace("$", "").replace(",", "");                                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre);                
             sPre            = n.format(dCant);
             
@@ -1522,7 +1522,7 @@ public class LPrecs extends javax.swing.JFrame
             
             /*Dale formato de moneda al precio y colocalo en su lugar*/                        
             double dCant    = Double.parseDouble(jTPre5.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTPre5.setText(n.format(dCant));           
         }
         
@@ -1575,7 +1575,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda al precio 1*/
             String sPre     = jTPre7.getText().replace("$", "").replace(",", "");                                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre);                
             sPre            = n.format(dCant);
             
@@ -1608,7 +1608,7 @@ public class LPrecs extends javax.swing.JFrame
             
             /*Dale formato de moneda al precio y colocalo en su lugar*/                        
             double dCant    = Double.parseDouble(jTPre7.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTPre7.setText(n.format(dCant));           
         }
         
@@ -1661,7 +1661,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda al precio 1*/
             String sPre     = jTPre9.getText().replace("$", "").replace(",", "");                                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre);                
             sPre            = n.format(dCant);
             
@@ -1694,7 +1694,7 @@ public class LPrecs extends javax.swing.JFrame
             
             /*Dale formato de moneda al precio y colocalo en su lugar*/                        
             double dCant    = Double.parseDouble(jTPre9.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTPre9.setText(n.format(dCant));           
         }
         
@@ -1747,7 +1747,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda al precio 1*/
             String sPre     = jTPre2.getText().replace("$", "").replace(",", "");                                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre);                
             sPre           = n.format(dCant);
             
@@ -1780,7 +1780,7 @@ public class LPrecs extends javax.swing.JFrame
             
             /*Dale formato de moneda al precio y colocalo en su lugar*/                        
             double dCant    = Double.parseDouble(jTPre2.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTPre2.setText(n.format(dCant));           
         }
         
@@ -1836,7 +1836,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda al precio 1*/
             String sPre     = jTPre4.getText().replace("$", "").replace(",", "");                                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre);                
             sPre            = n.format(dCant);
             
@@ -1869,7 +1869,7 @@ public class LPrecs extends javax.swing.JFrame
             
             /*Dale formato de moneda al precio y colocalo en su lugar*/                        
             double dCant    = Double.parseDouble(jTPre4.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTPre4.setText(n.format(dCant));           
         }
         
@@ -1925,7 +1925,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda al precio 1*/
             String sPre     = jTPre6.getText().replace("$", "").replace(",", "");                                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre);                
             sPre            = n.format(dCant);
             
@@ -1958,7 +1958,7 @@ public class LPrecs extends javax.swing.JFrame
             
             /*Dale formato de moneda al precio y colocalo en su lugar*/                        
             double dCant    = Double.parseDouble(jTPre6.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTPre6.setText(n.format(dCant));           
         }
         
@@ -2014,7 +2014,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda al precio 1*/
             String sPre     = jTPre8.getText().replace("$", "").replace(",", "");                                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre);                
             sPre            = n.format(dCant);
             
@@ -2047,7 +2047,7 @@ public class LPrecs extends javax.swing.JFrame
             
             /*Dale formato de moneda al precio y colocalo en su lugar*/                        
             double dCant    = Double.parseDouble(jTPre8.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTPre8.setText(n.format(dCant));           
         }
         
@@ -2103,7 +2103,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda al precio 1*/
             String sPre     = jTPre10.getText().replace("$", "").replace(",", "");                                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant    = Double.parseDouble(sPre);                
             sPre            = n.format(dCant);
             
@@ -2136,7 +2136,7 @@ public class LPrecs extends javax.swing.JFrame
             
             /*Dale formato de moneda al precio y colocalo en su lugar*/                        
             double dCant    = Double.parseDouble(jTPre10.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTPre10.setText(n.format(dCant));           
         }
         
@@ -2199,7 +2199,7 @@ public class LPrecs extends javax.swing.JFrame
         
         /*Dale formato de moneda al precio*/        
         double dCant    = Double.parseDouble(sPre1);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre1           = n.format(dCant);
         
         /*Colocalo en su lugar*/
@@ -2320,7 +2320,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda*/                       
             double dCant    = Double.parseDouble(jTCost.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTCost.setText(n.format(dCant));           
         }
         
@@ -2463,7 +2463,7 @@ public class LPrecs extends javax.swing.JFrame
         
         /*Dale formato de moneda al precio*/       
         double dCant    = Double.parseDouble(sPre1);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre1           = n.format(dCant);
         
         /*Colocalo en su lugar*/
@@ -2509,7 +2509,7 @@ public class LPrecs extends javax.swing.JFrame
         
         /*Dale formato de moneda al precio*/        
         double dCant    = Double.parseDouble(sPre1);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre1           = n.format(dCant);
         
         /*Colocalo en su lugar*/
@@ -2555,7 +2555,7 @@ public class LPrecs extends javax.swing.JFrame
         
         /*Dale formato de moneda al precio*/        
         double dCant    = Double.parseDouble(sPre1);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre1           = n.format(dCant);
         
         /*Colocalo en su lugar*/
@@ -2601,7 +2601,7 @@ public class LPrecs extends javax.swing.JFrame
         
         /*Dale formato de moneda al precio*/        
         double dCant    = Double.parseDouble(sPre1);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre1           = n.format(dCant);
         
         /*Colocalo en su lugar*/
@@ -2647,7 +2647,7 @@ public class LPrecs extends javax.swing.JFrame
         
         /*Dale formato de moneda al precio*/        
         double dCant    = Double.parseDouble(sPre1);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre1           = n.format(dCant);
         
         /*Colocalo en su lugar*/
@@ -2693,7 +2693,7 @@ public class LPrecs extends javax.swing.JFrame
         
         /*Dale formato de moneda al precio*/      
         double dCant    = Double.parseDouble(sPre1);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre1           = n.format(dCant);
         
         /*Colocalo en su lugar*/
@@ -2739,7 +2739,7 @@ public class LPrecs extends javax.swing.JFrame
         
         /*Dale formato de moneda al precio*/        
         double dCant    = Double.parseDouble(sPre1);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre1           = n.format(dCant);
         
         /*Colocalo en su lugar*/
@@ -2785,7 +2785,7 @@ public class LPrecs extends javax.swing.JFrame
         
         /*Dale formato de moneda al precio*/        
         double dCant    = Double.parseDouble(sPre1);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre1           = n.format(dCant);
         
         /*Colocalo en su lugar*/
@@ -2831,7 +2831,7 @@ public class LPrecs extends javax.swing.JFrame
         
         /*Dale formato de moneda al precio*/        
         double dCant    = Double.parseDouble(sPre1);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre1           = n.format(dCant);
         
         /*Colocalo en su lugar*/
@@ -3122,7 +3122,7 @@ public class LPrecs extends javax.swing.JFrame
         {
             /*Dale formato de moneda*/                        
             double dCant    = Double.parseDouble(jTCostL.getText().replace("$", "").replace(",", ""));                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             jTCostL.setText(n.format(dCant));           
         }
         

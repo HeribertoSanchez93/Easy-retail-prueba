@@ -880,6 +880,11 @@ public class CorrElecs extends javax.swing.JFrame
 
         jCActSSLLog.setText("Activar SSL en Login");
         jCActSSLLog.setNextFocusableComponent(jTUsr);
+        jCActSSLLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCActSSLLogActionPerformed(evt);
+            }
+        });
         jCActSSLLog.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jCActSSLLogKeyPressed(evt);
@@ -1387,6 +1392,7 @@ public class CorrElecs extends javax.swing.JFrame
         //Declara variables locales
         String      sServSMTPSal;
         String      sSMTPort;
+        String      sServSMTPSal2="";
         String      sUsr;
         String      sContra;
         String      sCoAlter;        
@@ -1394,17 +1400,43 @@ public class CorrElecs extends javax.swing.JFrame
         String      sEsta;
         String      sId                   = "";
         
+        
         //Declara variables de la base de datos    
         Statement   st;
         String      sQ;
         ResultSet   rs;
         Connection  con;
         
-        
-        
-        
-        
-        
+        //Abre la base de datos                             
+        con = Star.conAbrBas(true, false);
+
+        //Si hubo error entonces regresa
+        if(con==null)
+            return;
+//        /*Trae todos los datos del registro del id del correo*/
+//        try
+//        {
+//            sQ = "SELECT * FROM corrselec";
+//            st = con.createStatement();
+//            rs = st.executeQuery(sQ);
+//            /*Si hay datos*/
+//            if(rs.next())
+//            {
+//                /*Obtiene el servidor smtp*/
+//                sServSMTPSal2                   = rs.getString("srvsmtpsal");                                
+//            }/*Fin de if(rs.next())*/
+//        }
+//        catch(SQLException e)
+//        {
+//        }
+//        if(sServSMTPSal2.compareTo("")==0)
+//        {
+//        }
+//        else if(jTServSMTPSal.getText().compareTo(sServSMTPSal2)==0)
+//        {
+//            JOptionPane.showMessageDialog(null, "El servidor de correo saliente SMTP fue definido como : "+sServSMTPSal2+"\n", "Campo vacio", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            return;
+//        }
         /*Lee El usuario que selecciono el usuario*/
         sEsta           = jTEsta.getText();
         
@@ -1422,12 +1454,7 @@ public class CorrElecs extends javax.swing.JFrame
             return;
         }                
         
-        //Abre la base de datos                             
-        con = Star.conAbrBas(true, false);
-
-        //Si hubo error entonces regresa
-        if(con==null)
-            return;
+        
         
         /*Comprueba si el código de El usuario existe y obtiene su nome*/        
         String sNomb;
@@ -2241,10 +2268,10 @@ public class CorrElecs extends javax.swing.JFrame
             jPContra.grabFocus();                        
             return;
         }
-        System.out.println(sUsr);
-        System.out.println(sContra);
-                final String username = sUsr;
-                final String password = sContra;
+        System.out.println(sActSSL);
+        System.out.println(sServSMTPSal);
+        final String username = sUsr;
+        final String password = sContra;
         /*Manda un correo de pruebas para saber que la conexion esta bien en un thread*/
         (new Thread()
         {
@@ -2256,17 +2283,28 @@ public class CorrElecs extends javax.swing.JFrame
                 {                    
                     Properties props = System.getProperties();
                     props.setProperty("mail.smtp.host", sServSMTPSal);
-                    props.put("mail.smtp.starttls.enable", sActSSL);
+                    props.put("mail.smtp.starttls.enable","true");
+                    if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        System.out.println("llego");
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                     props.put("mail.smtp.auth", "true");
                     props.put("mail.debug", "true");
                     props.put("mail.smtp.port", sSMTPort);
                     props.put("mail.store.protocol", "pop3");
                     props.put("mail.transport.protocol", "smtp");
-                    Session session = Session.getDefaultInstance(props,
+                    Session session = Session.getInstance(props,
                             new Authenticator() {
                                 @Override
                                 protected PasswordAuthentication getPasswordAuthentication() {
-                                    return new PasswordAuthentication(username,password);
+                                    return new PasswordAuthentication(username, password);
                                 }
                             });
 
@@ -2440,9 +2478,6 @@ public class CorrElecs extends javax.swing.JFrame
         String      sQ;
         ResultSet   rs;
         Connection  con;
-        
-        
-        
         
         /*Si el usr no a seleccionado un correo para modificar no puede avanzar*/
         if(jTab.getSelectedRow()==-1)
@@ -3821,6 +3856,10 @@ public class CorrElecs extends javax.swing.JFrame
     private void jTAsunContraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTAsunContraActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTAsunContraActionPerformed
+
+    private void jCActSSLLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCActSSLLogActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCActSSLLogActionPerformed
 
         
     /*Función escalable para cuando se presiona una tecla en el módulo*/

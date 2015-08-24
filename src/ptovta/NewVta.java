@@ -30,6 +30,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -52,6 +53,9 @@ public class NewVta extends javax.swing.JFrame
     
     /*Contiene el texto del label*/
     private String              sLabTex;
+    
+    /*Variable para abrir la ventada del scaner embebido*/
+    private Scan pScan;
     
     /*Declara variables originales*/
     private String              sCostOri;
@@ -992,7 +996,7 @@ public class NewVta extends javax.swing.JFrame
                         
                         /*Dale formato de moneda al importe*/
                         double dCant                = Double.parseDouble(sImp);                   
-                        NumberFormat n              = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                        NumberFormat n              = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                         sImp                        = n.format(dCant);
 
                         /*Dale formato de moneda al total del importe*/
@@ -1061,7 +1065,6 @@ public class NewVta extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTDescrip = new javax.swing.JTextField();
         jP1 = new javax.swing.JPanel();
         jBGuar = new javax.swing.JButton();
         jBSal = new javax.swing.JButton();
@@ -1073,10 +1076,10 @@ public class NewVta extends javax.swing.JFrame
         jTDesc = new javax.swing.JTextField();
         jComUnid = new javax.swing.JComboBox();
         jLabel12 = new javax.swing.JLabel();
+        jTDescrip = new javax.swing.JTextField();
         jTPre = new javax.swing.JTextField();
         jTCant = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
         jComImp = new javax.swing.JComboBox();
         jTValImp = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
@@ -1115,6 +1118,8 @@ public class NewVta extends javax.swing.JFrame
         jBCarSer = new javax.swing.JButton();
         jTCarSer = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
+        jBTipCam1 = new javax.swing.JButton();
+        jLabel43 = new javax.swing.JLabel();
         jPClien = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -1180,7 +1185,6 @@ public class NewVta extends javax.swing.JFrame
         jComSer = new javax.swing.JComboBox();
         jLabel44 = new javax.swing.JLabel();
         jLabel48 = new javax.swing.JLabel();
-        jTMetPag = new javax.swing.JTextField();
         jTCta = new javax.swing.JTextField();
         jCGuaPag = new javax.swing.JCheckBox();
         jCMand = new javax.swing.JCheckBox();
@@ -1202,6 +1206,7 @@ public class NewVta extends javax.swing.JFrame
         jComMon = new javax.swing.JComboBox();
         jLabel18 = new javax.swing.JLabel();
         jComFormPag = new javax.swing.JComboBox();
+        jCFormaPago = new javax.swing.JComboBox();
         jTAlma2 = new javax.swing.JTextField();
         jTCadu = new javax.swing.JTextField();
         jTId = new javax.swing.JTextField();
@@ -1223,23 +1228,10 @@ public class NewVta extends javax.swing.JFrame
         jTSerProd = new javax.swing.JTextField();
         jRPagad = new javax.swing.JRadioButton();
         jRNoPag = new javax.swing.JRadioButton();
-        label1 = new java.awt.Label();
-
-        jTDescrip.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
-        jTDescrip.setNextFocusableComponent(jComAlma);
-        jTDescrip.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTDescripFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTDescripFocusLost(evt);
-            }
-        });
-        jTDescrip.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTDescripKeyPressed(evt);
-            }
-        });
+        jTVend = new javax.swing.JTextField();
+        jBVend = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel51 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
@@ -1305,7 +1297,7 @@ public class NewVta extends javax.swing.JFrame
                 jBGuarKeyPressed(evt);
             }
         });
-        jP1.add(jBGuar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 540, 120, 30));
+        jP1.add(jBGuar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 540, 120, -1));
 
         jBSal.setBackground(new java.awt.Color(255, 255, 255));
         jBSal.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
@@ -1419,6 +1411,23 @@ public class NewVta extends javax.swing.JFrame
         jLabel12.setText("Cod. Color:");
         jPParts.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 87, -1));
 
+        jTDescrip.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
+        jTDescrip.setNextFocusableComponent(jComAlma);
+        jTDescrip.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTDescripFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTDescripFocusLost(evt);
+            }
+        });
+        jTDescrip.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTDescripKeyPressed(evt);
+            }
+        });
+        jPParts.add(jTDescrip, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 210, 20));
+
         jTPre.setText("$0.00");
         jTPre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTPre.setNextFocusableComponent(jTDesc);
@@ -1463,9 +1472,6 @@ public class NewVta extends javax.swing.JFrame
 
         jLabel15.setText("U.Costo:");
         jPParts.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 60, -1));
-
-        jLabel17.setText("Cod. Impuesto:");
-        jPParts.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 110, -1));
 
         jComImp.setNextFocusableComponent(jTValImp);
         jComImp.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -1601,7 +1607,7 @@ public class NewVta extends javax.swing.JFrame
 
         jBProd.setBackground(new java.awt.Color(255, 255, 255));
         jBProd.setText("...");
-        jBProd.setToolTipText("Buscar Producto(s)");
+        jBProd.setToolTipText("Búscar Producto(s)");
         jBProd.setNextFocusableComponent(jTDescrip);
         jBProd.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -1666,11 +1672,11 @@ public class NewVta extends javax.swing.JFrame
                 jBUltPreKeyPressed(evt);
             }
         });
-        jPParts.add(jBUltPre, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 40, 40));
+        jPParts.add(jBUltPre, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 120, 50, 50));
 
         jBList.setBackground(new java.awt.Color(255, 255, 255));
         jBList.setText("jButton1");
-        jBList.setToolTipText("Buscar Listas de Precio");
+        jBList.setToolTipText("Búscar Listas de Precio");
         jBList.setName(""); // NOI18N
         jBList.setNextFocusableComponent(jBUltCostT);
         jBList.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1742,7 +1748,7 @@ public class NewVta extends javax.swing.JFrame
                 jBTipCamKeyPressed(evt);
             }
         });
-        jPParts.add(jBTipCam, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 120, 40, 40));
+        jPParts.add(jBTipCam, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 120, 50, 50));
 
         jSImg.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1942,7 +1948,7 @@ public class NewVta extends javax.swing.JFrame
                 jBUltCostTKeyPressed(evt);
             }
         });
-        jPParts.add(jBUltCostT, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, 40, 40));
+        jPParts.add(jBUltCostT, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 50, 50));
 
         jLabel16.setText("Almacén:");
         jPParts.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 87, -1));
@@ -1984,7 +1990,7 @@ public class NewVta extends javax.swing.JFrame
 
         jBCarSer.setBackground(new java.awt.Color(255, 255, 255));
         jBCarSer.setText("..");
-        jBCarSer.setToolTipText("Buscar archivo EXCEL para series con dos columnas");
+        jBCarSer.setToolTipText("Búscar archivo EXCEL para series con dos columnas");
         jBCarSer.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jBCarSerMouseEntered(evt);
@@ -2003,7 +2009,7 @@ public class NewVta extends javax.swing.JFrame
                 jBCarSerKeyPressed(evt);
             }
         });
-        jPParts.add(jBCarSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 140, 30, 20));
+        jPParts.add(jBCarSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 140, 30, 20));
 
         jTCarSer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTCarSer.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -2019,10 +2025,40 @@ public class NewVta extends javax.swing.JFrame
                 jTCarSerKeyPressed(evt);
             }
         });
-        jPParts.add(jTCarSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 140, 160, 20));
+        jPParts.add(jTCarSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 140, 160, 20));
 
         jLabel23.setText("Importar números de serie:");
-        jPParts.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 120, 190, 20));
+        jPParts.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 120, 190, 20));
+
+        jBTipCam1.setBackground(new java.awt.Color(255, 255, 255));
+        jBTipCam1.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jBTipCam1.setForeground(new java.awt.Color(0, 102, 0));
+        jBTipCam1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Activado-40x40px.png"))); // NOI18N
+        jBTipCam1.setToolTipText("Abrir scaner");
+        jBTipCam1.setNextFocusableComponent(jDBack);
+        jBTipCam1.setOpaque(false);
+        jBTipCam1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jBTipCam1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jBTipCam1MouseExited(evt);
+            }
+        });
+        jBTipCam1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTipCam1ActionPerformed(evt);
+            }
+        });
+        jBTipCam1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBTipCam1KeyPressed(evt);
+            }
+        });
+        jPParts.add(jBTipCam1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 120, 50, 50));
+
+        jLabel43.setText("Cod. Impuesto:");
+        jPParts.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 110, -1));
 
         jP1.add(jPParts, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 710, 175));
 
@@ -2060,7 +2096,7 @@ public class NewVta extends javax.swing.JFrame
         jLabel34.setText("*Ciudad:");
         jPClien.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 50, 70, -1));
 
-        jLabel36.setText("Crédito:");
+        jLabel36.setText("Condiciones:");
         jPClien.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 230, -1));
 
         jLabel37.setText("Lista:");
@@ -2387,7 +2423,7 @@ public class NewVta extends javax.swing.JFrame
 
         jBCli.setBackground(new java.awt.Color(255, 255, 255));
         jBCli.setText("...");
-        jBCli.setToolTipText("Buscar Cliente(s)");
+        jBCli.setToolTipText("Búscar Cliente(s)");
         jBCli.setNextFocusableComponent(jTCall);
         jBCli.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -2432,11 +2468,6 @@ public class NewVta extends javax.swing.JFrame
         jTCond.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTCond.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTCond.setFocusable(false);
-        jTCond.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTCondActionPerformed(evt);
-            }
-        });
         jPClien.add(jTCond, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 320, 20));
 
         jLabel45.setText("Pais:");
@@ -2546,8 +2577,8 @@ public class NewVta extends javax.swing.JFrame
 
         jLabel26.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel26.setText("Sub Total:");
-        jP1.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 540, 110, 20));
+        jLabel26.setText("Vendedor:");
+        jP1.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 550, 90, 20));
 
         jLabel27.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -2734,7 +2765,6 @@ public class NewVta extends javax.swing.JFrame
         jLabel22.setText("*Serie:");
         jPanel1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 100, -1));
 
-        jComSer.setNextFocusableComponent(jTMetPag);
         jComSer.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jComSerFocusLost(evt);
@@ -2752,28 +2782,11 @@ public class NewVta extends javax.swing.JFrame
         });
         jPanel1.add(jComSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 120, 20));
 
-        jLabel44.setText("Forma pago:");
+        jLabel44.setText("Método pago:");
         jPanel1.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 100, -1));
 
         jLabel48.setText("Cuenta:");
         jPanel1.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 100, -1));
-
-        jTMetPag.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
-        jTMetPag.setNextFocusableComponent(jTCta);
-        jTMetPag.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTMetPagFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTMetPagFocusLost(evt);
-            }
-        });
-        jTMetPag.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTMetPagKeyPressed(evt);
-            }
-        });
-        jPanel1.add(jTMetPag, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 120, 20));
 
         jTCta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTCta.setNextFocusableComponent(jCGuaPag);
@@ -2855,7 +2868,7 @@ public class NewVta extends javax.swing.JFrame
 
         jBCatGral.setBackground(new java.awt.Color(255, 255, 255));
         jBCatGral.setText("...");
-        jBCatGral.setToolTipText("Buscar Catálogo General");
+        jBCatGral.setToolTipText("Bùscar Catàlogo General");
         jBCatGral.setNextFocusableComponent(jCFExt);
         jBCatGral.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2965,7 +2978,7 @@ public class NewVta extends javax.swing.JFrame
         });
         jPanel1.add(jDFech, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 120, -1));
 
-        jLabel9.setText("Método pago:");
+        jLabel9.setText("Forma pago:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, 110, -1));
 
         jComMon.setNextFocusableComponent(jComFormPag);
@@ -3005,7 +3018,10 @@ public class NewVta extends javax.swing.JFrame
                 jComFormPagKeyPressed(evt);
             }
         });
-        jPanel1.add(jComFormPag, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, 90, -1));
+        jPanel1.add(jComFormPag, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 120, 20));
+
+        jCFormaPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "PAGO EN UNA SOLA EXHIBICIÓN", "PAGO EN PARCIALIDADES" }));
+        jPanel1.add(jCFormaPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 195, 90, 20));
 
         jP1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 10, 270, 365));
 
@@ -3128,7 +3144,7 @@ public class NewVta extends javax.swing.JFrame
         jLNot.setForeground(new java.awt.Color(204, 0, 0));
         jLNot.setText("NUEVA FACTURA");
         jLNot.setFocusable(false);
-        jP1.add(jLNot, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 540, 500, -1));
+        jP1.add(jLNot, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 540, 260, -1));
 
         jTCantLot.setEditable(false);
         jTCantLot.setText("0");
@@ -3169,8 +3185,55 @@ public class NewVta extends javax.swing.JFrame
         });
         jP1.add(jRNoPag, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 620, -1, -1));
 
-        label1.setText("Presionar F2 para aplicar nota de crédito");
-        jP1.add(label1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 380, -1, -1));
+        jTVend.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
+        jTVend.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTVendFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTVendFocusLost(evt);
+            }
+        });
+        jTVend.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTVendKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTVendKeyTyped(evt);
+            }
+        });
+        jP1.add(jTVend, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 550, 120, 20));
+
+        jBVend.setBackground(new java.awt.Color(255, 255, 255));
+        jBVend.setText("...");
+        jBVend.setToolTipText("Buscar Vendedor(es)");
+        jBVend.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jBVendMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jBVendMouseExited(evt);
+            }
+        });
+        jBVend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBVendActionPerformed(evt);
+            }
+        });
+        jBVend.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBVendKeyPressed(evt);
+            }
+        });
+        jP1.add(jBVend, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 550, 30, 20));
+
+        jLabel21.setText("Cod. Impuesto:");
+        jP1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 110, -1));
+
+        jLabel51.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel51.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel51.setText("Sub Total:");
+        jP1.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 540, 110, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -3205,9 +3268,6 @@ public class NewVta extends javax.swing.JFrame
         String sNoSer   = "";
         String sTip     = "";
         
-        
-        
-        
         /*Obtiene el encabezado de la venta*/        
         try
         {
@@ -3223,7 +3283,7 @@ public class NewVta extends javax.swing.JFrame
                 String sImpue   = rs.getString("vtas.IMPUE");                
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sSubTot);                
                 sSubTot         = n.format(dCant);
                 dCant           = Double.parseDouble(sImpue);                
@@ -3255,7 +3315,7 @@ public class NewVta extends javax.swing.JFrame
                 jTCo2.setText           (rs.getString("emps.CO2"));                
                 jTCo3.setText           (rs.getString("emps.CO3"));                                
                 jTDiaCre.setText        (rs.getString("diacred"));                
-                jTMetPag.setText        (rs.getString("emps.METPAG"));
+                jComFormPag.setSelectedItem(rs.getString("emps.METPAG"));
                 jTCta.setText           (rs.getString("emps.CTA"));
                 jTAObserv.setText       (rs.getString("vtas.OBSERV"));
                 
@@ -3307,7 +3367,7 @@ public class NewVta extends javax.swing.JFrame
                 String sImpo    = rs.getString("impo");                
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sPre);                
                 sPre            = n.format(dCant);
                 dCant           = Double.parseDouble(sImpo);                
@@ -3337,10 +3397,7 @@ public class NewVta extends javax.swing.JFrame
         //Declara variables de la base de datos
         Statement   st;
         ResultSet   rs;        
-        String      sQ; 
-        
-        
-        
+        String      sQ;
         
         /*Obtiene el encabezado de la cotización*/
         try
@@ -3358,7 +3415,7 @@ public class NewVta extends javax.swing.JFrame
                 String sTotDesc = rs.getString("totdescu");                
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sSubTot);                
                 sSubTot         = n.format(dCant);
                 dCant           = Double.parseDouble(sImpue);                
@@ -3417,7 +3474,7 @@ public class NewVta extends javax.swing.JFrame
                 jTCo2.setText           (rs.getString("co2"));                
                 jTCo3.setText           (rs.getString("co3"));                                
                 jTDiaCre.setText        (rs.getString("diacred"));                
-                jTMetPag.setText        (rs.getString("metpag"));
+                jComFormPag.setSelectedItem(rs.getString("metpag"));
                 jTCta.setText           (rs.getString("cta"));
                 jTAObserv.setText       (rs.getString("observ"));
             
@@ -3467,7 +3524,7 @@ public class NewVta extends javax.swing.JFrame
                 String sImpoDesc    = rs.getString("impodesc");
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sPre);                
                 sPre            = n.format(dCant);
                 dCant           = Double.parseDouble(sImpo);                
@@ -3486,8 +3543,17 @@ public class NewVta extends javax.swing.JFrame
                 
                 /*Agrega el registro en la tabla*/
                 DefaultTableModel te    = (DefaultTableModel)jTab.getModel();
-                Object nu[]             = {iContFi, rs.getString("prod"), rs.getString("cant"), rs.getString("unid"), rs.getString("alma"), rs.getString("list"), rs.getString("descrip"), sPre, rs.getString("desc1"), rs.getString("impueval"), sImpo, sKit, sImpueImpo, rs.getString("tall"), rs.getString("colo"), rs.getString("lot"), rs.getString("pedimen"), rs.getString("fcadu"), "", rs.getString("fentre"), sImpoDesc, rs.getString("serprod"), rs.getString("comenser"), rs.getString("garan"), sCost, "", rs.getString("codimpue")};
-                te.addRow(nu);
+                if(sCodCot.compareTo("")!=0)
+                {
+                    Object nu[]             = {iContFi, rs.getString("prod"), rs.getString("cant"), rs.getString("unid"), rs.getString("alma"), rs.getString("list"), rs.getString("descrip"), sPre, rs.getString("desc1"), rs.getString("impueval"), sImpo, sKit, sImpueImpo, rs.getString("tall"), rs.getString("colo"), rs.getString("lot"), rs.getString("pedimen"), rs.getString("fcadu"), rs.getString("fentre"), "", sImpoDesc, rs.getString("serprod"), rs.getString("comenser"), rs.getString("garan"), sCost, "", rs.getString("codimpue")};
+                    te.addRow(nu);
+                }
+                else
+		{
+                    Object nu[]             = {iContFi, rs.getString("prod"), rs.getString("cant"), rs.getString("unid"), rs.getString("alma"), rs.getString("list"), rs.getString("descrip"), sPre, rs.getString("desc1"), rs.getString("impueval"), sImpo, sKit, sImpueImpo, rs.getString("tall"), rs.getString("colo"), rs.getString("lot"), rs.getString("pedimen"), rs.getString("fcadu"), "", rs.getString("fentre"), sImpoDesc, rs.getString("serprod"), rs.getString("comenser"), rs.getString("garan"), sCost, "", rs.getString("codimpue")};
+                    te.addRow(nu);
+                }
+				
                 
                 /*Aumenta en uno el contador de filas*/
                 ++iContFi;
@@ -3545,7 +3611,7 @@ public class NewVta extends javax.swing.JFrame
             bSiCred = true;
         
         /*Dale formato de moneda al límite de crédito*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sLimit);                
         sLimit          = n.format(dCant);
 
@@ -3749,8 +3815,27 @@ public class NewVta extends javax.swing.JFrame
         {
             //Procesa el error y regresa
             Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-            return;                                                
+            return;
         }
+        if(jTCo1.getText().trim().compareTo("")==0&&jCCo1.isSelected())
+        {
+            int seleccion = JOptionPane.showOptionDialog(this,"El correo 1 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+            if (seleccion ==0)
+            return;
+        }
+        if(jTCo2.getText().trim().compareTo("")==0&&jCCo2.isSelected())
+        {
+            int seleccion = JOptionPane.showOptionDialog(this,"El correo 2 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+            if (seleccion ==0)
+            return;
+        }
+        if(jTCo3.getText().trim().compareTo("")==0&&jCCo3.isSelected())
+        {
+            int seleccion = JOptionPane.showOptionDialog(this,"El correo 3 seleccionado no cuenta con información./n¿Desea modificar la cuenta de correo?", "Selector de opciones",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "SI", "NO" },"opcion 1");
+            if (seleccion ==0)
+            return;
+        }
+        
         
         //Declara variables locales
         String sMinFac  = "";
@@ -4114,7 +4199,7 @@ public class NewVta extends javax.swing.JFrame
                     String sSald    = jTSaldDispo.getText();
 
                     /*Dale formato de mon al saldo disponible*/                            
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     double dCant    = Double.parseDouble(sSald);                
                     sSald           = n.format(dCant);
                        
@@ -4385,7 +4470,7 @@ public class NewVta extends javax.swing.JFrame
         }        
         
         /*Obtiene el método de pago*/
-        String sMetPag      = jTMetPag.getText();
+        String sMetPag      = jComFormPag.getSelectedItem().toString();
         
         /*Si el método de pago es cadena vacia entonces el método de pago será no identificable*/
         if(sMetPag.compareTo("")==0)
@@ -4532,15 +4617,13 @@ public class NewVta extends javax.swing.JFrame
                 
         /*Determina si será de contado o crédito para la forma de pago*/
         String sFPag;
-        if(jLTipVta.getText().trim().compareTo("VENTA DE CONTADO")==0)        
-            sFPag  = "C";        
-        else
-            sFPag  = "CR";
+        sFPag = jCFormaPago.getSelectedItem().toString();
+        
         String Bo="";
         if(sBackOrder==1)
                 Bo="BO";
         //Inserta en la base de datos la nueva venta
-        if(Star.iInsVtas(con, jComSer.getSelectedItem().toString().replace("'", "''").trim(), sConFac.replace("'", "''").trim(), jTCli.getText().replace("'", "''").trim(),  "",jTSubTot.getText().replace("$", "").replace(",", ""), jTImp.getText().replace("$", "").replace(",", ""), jTTot.getText().replace("$", "").replace(",", ""), "now()", "'" + sFDoc + "'", sCred, "'CO'", "0", "", sTip, "0", sMetPag.replace("'", "''"), sCta.replace("'", "''"), jTAObserv.getText().replace("'", "''"), "0", jTTotDesc.getText().replace("$", "").replace(",", ""), "0", "1", jTTotCost.getText(), Login.sUsrG, jComMon.getSelectedItem().toString().replace("'", "''"), sTipCam, sFPag, "", "", "", "", "", "", "", "", "", "", "", "", "N", sCodCot, "0", "0", "0", "0",Bo)==-1)
+        if(Star.iInsVtas(con, jComSer.getSelectedItem().toString().replace("'", "''").trim(), sConFac.replace("'", "''").trim(), jTCli.getText().replace("'", "''").trim(),  "",jTSubTot.getText().replace("$", "").replace(",", ""), jTImp.getText().replace("$", "").replace(",", ""), jTTot.getText().replace("$", "").replace(",", ""), "now()", "'" + sFDoc + "'", sCred, "'CO'", "0", "", sTip, "0", sMetPag.replace("'", "''"), sCta.replace("'", "''"), jTAObserv.getText().replace("'", "''"), "0", jTTotDesc.getText().replace("$", "").replace(",", ""), "0", "1", jTTotCost.getText(), Login.sUsrG, jComMon.getSelectedItem().toString().replace("'", "''"), sTipCam, sFPag, "", "", "", "", "", "", "", "", "", "", "", "", "N", sCodCot, "0", "0", "0", "0",Bo,jTVend.getText())==-1)
             return;
             
         //Declara variables locales
@@ -4923,7 +5006,7 @@ public class NewVta extends javax.swing.JFrame
         /*Dale formato de moneda al total*/
         String sTot             = jTTot.getText().replace("$", "").replace(",", "");        
         double dCant            = Double.parseDouble                (sTot);                
-        NumberFormat n          = NumberFormat.getCurrencyInstance  (Locale.getDefault());
+        NumberFormat n          = NumberFormat.getCurrencyInstance  (new Locale("es","MX"));
         sTot                    = n.format(dCant);
 
         /*Dale formato de moneda al costo total*/
@@ -4984,11 +5067,8 @@ public class NewVta extends javax.swing.JFrame
         }        
               
         /*Determina si será de contado o crédito para la forma de pago*/
-        final String sFormPagFi;
-        if(jLTipVta.getText().trim().compareTo("VENTA DE CONTADO")==0)        
-            sFormPagFi  = "Pago en una sola exhibición";        
-        else
-            sFormPagFi  = "Pago en parcialidades";
+        final String sFormPagFi = jCFormaPago.getSelectedItem().toString();
+        
         
         /*Determina si debe de imrpimir o no*/
         final boolean bImpr     = jCImp.isSelected();
@@ -5064,13 +5144,29 @@ public class NewVta extends javax.swing.JFrame
                 }
                 
             }).start();
-        }           
+        } 
+            //CMS05          
+            if(!jCRem.isSelected()){
+            Costo c = Costo.getInstance();
+            c.actualizarCostoVenta(sVta);
+        }
         /*La forma ya no apunta a nada*/
         Star.newVta = null;
             
         /*Sal del formulario*/
+        try
+        {
+            pScan.cerrarCam();
+            pScan.dispose();
+        }
+        catch(Exception ex)
+        {
+            
+        }
         this.dispose();
+        
         Star.newVta = null;
+        pScan=null;
         /*Llama al recolector de basura*/
         System.gc();
         
@@ -5092,10 +5188,19 @@ public class NewVta extends javax.swing.JFrame
             Star.newVta = null;
             
             /*Llama al recolector de basura y cierra la forma*/
-            System.gc();        
+             
+            try
+            {
+                pScan.cerrarCam();
+                pScan.dispose();
+            }
+            catch(Exception ex)
+            {
+            
+            }
             this.dispose();
         }
-        
+        System.gc();
     }//GEN-LAST:event_jBSalActionPerformed
             
     
@@ -5443,7 +5548,7 @@ public class NewVta extends javax.swing.JFrame
         double dCant = Double.parseDouble(sTex);
         
         /*Formatealo*/
-        NumberFormat n = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTex = n.format(dCant);
         
         /*Colocalo de nu en el campo de texto*/
@@ -6161,7 +6266,7 @@ public class NewVta extends javax.swing.JFrame
                         String sSald    = jTSaldDispo.getText();
 
                         /*Dale formato de mon al saldo disponible*/                            
-                        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                         double dCant    = Double.parseDouble(sSald);                
                         sSald           = n.format(dCant);
 
@@ -6188,9 +6293,13 @@ public class NewVta extends javax.swing.JFrame
         
         /*Función para limpiar todos los campos de los productos*/
         vLimpP();
-            
+        
+         /*Coloca 1 en la cantidad*/
+        jTCant.setText("1");
+        
         /*Coloca el foco del teclado en el campo del producto*/
         jTProd.grabFocus();
+        
         
     }//GEN-LAST:event_jBNewActionPerformed
 
@@ -6861,12 +6970,12 @@ public class NewVta extends javax.swing.JFrame
         
         /*Dale formato de moneda al impuesto*/        
         double dCant                = Double.parseDouble(sImpo);                
-        NumberFormat n              = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n              = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sImpo                       = n.format(dCant);
         
         /*Dale formato de moneda al precio*/        
         dCant                       = Double.parseDouble(sPre);                
-        n                           = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        n                           = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sPre                        = n.format(dCant);
         
         /*Recorre toda la tabla de partidas de factura*/
@@ -7382,13 +7491,13 @@ public class NewVta extends javax.swing.JFrame
         jTCo1.setText       ("");
         jTCo2.setText       ("");
         jTCo3.setText       ("");
-        jTMetPag.setText    ("");
         jTCta.setText       ("");
         jTListEmp.setText   ("");
         jTSer.setText       ("");
         jTSaldDispo.setText ("0");
         jTLimCred.setText   ("0");
         jTDiaCre.setText    ("0");
+        jComFormPag.setSelectedIndex(0);
         sPrimVent=false;
         if(Star.gClavMast!=null)
             Star.gClavMast=null;
@@ -7523,7 +7632,7 @@ public class NewVta extends javax.swing.JFrame
                 {
                     jTSer.setText       (rs.getString("ser"));               
                     jTListEmp.setText   (rs.getString("list"));                
-                    jTMetPag.setText    (rs.getString("metpag"));
+                    jComFormPag.setSelectedItem(rs.getString("metpag"));
                     jTCta.setText       (rs.getString("cta"));                
                     
                     /*Si los días de crédito es cadena vacia entonces que sea 0*/
@@ -7726,8 +7835,7 @@ public class NewVta extends javax.swing.JFrame
         if(con==null)
             return;
         
-        /*Coloca 1 en la cantidad*/
-        jTCant.setText("1");
+       
         
         //Declara variables de la base de datos
         Statement   st;
@@ -7750,7 +7858,7 @@ public class NewVta extends javax.swing.JFrame
                 String sCost    = Star.sUltCost(con, jTProd.getText().trim());
                 
                 /*Dale formato de moneda al último costo*/                                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());                                
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));                                
                 double dCant    = Double.parseDouble(sCost);                                
                 sCost           = n.format(dCant);
                 
@@ -7771,7 +7879,7 @@ public class NewVta extends javax.swing.JFrame
                                 
                 /*Dale formato de moneda al precio*/                
                 dCant           = Double.parseDouble(sPre);                
-                n               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                n               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sPre            = n.format(dCant);
 
                 /*Coloca si es kit o no de manera visible*/
@@ -8257,14 +8365,6 @@ public class NewVta extends javax.swing.JFrame
     }//GEN-LAST:event_jCMandKeyPressed
 
     
-    /*Cuando se presiona una tecla en el campo del método de pago*/
-    private void jTMetPagKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTMetPagKeyPressed
-        
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-        
-    }//GEN-LAST:event_jTMetPagKeyPressed
-
     
     /*Cuando se presiona una tecla en el campo de la cuenta*/
     private void jTCtaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCtaKeyPressed
@@ -8284,14 +8384,6 @@ public class NewVta extends javax.swing.JFrame
     }//GEN-LAST:event_jCGuaPagKeyPressed
 
     
-    /*Cuando se gana el foco del teclado en el campo de método de pago*/
-    private void jTMetPagFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTMetPagFocusGained
-        
-        /*Selecciona todo el texto cuando gana el foco*/
-        jTMetPag.setSelectionStart(0);jTMetPag.setSelectionEnd(jTMetPag.getText().length());         
-        
-    }//GEN-LAST:event_jTMetPagFocusGained
-
     
     /*Cuando se gana el foco del teclado en el campo de la cuenta*/
     private void jTCtaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTCtaFocusGained
@@ -9291,14 +9383,6 @@ public class NewVta extends javax.swing.JFrame
 
     
     
-    /*Cuando se pierde el foco del teclado en el campo del método de pago*/
-    private void jTMetPagFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTMetPagFocusLost
-        
-        /*Coloca el caret al principio del control*/
-        jTMetPag.setCaretPosition(0);
-        
-    }//GEN-LAST:event_jTMetPagFocusLost
-
     
     /*Cuando se pierde el foco del teclado en el campo de la cuenta*/
     private void jTCtaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTCtaFocusLost
@@ -10043,11 +10127,7 @@ public class NewVta extends javax.swing.JFrame
     
     //Cuando se pierde el foco del teclado en el combo de la forma de pago
     private void jComFormPagFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jComFormPagFocusLost
- 
-        /*Coloca el borde negro si tiene datos, caso contrario de rojo*/                               
-        if(jComFormPag.getSelectedItem().toString().compareTo("")!=0)
-            jComFormPag.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204,204,255)));
-        
+         
     }//GEN-LAST:event_jComFormPagFocusLost
 
     
@@ -10238,6 +10318,84 @@ public class NewVta extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_jTCondActionPerformed
 
+    private void jBTipCam1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBTipCam1MouseEntered
+        jBTipCam1.setBackground(Star.colBot);  
+    }//GEN-LAST:event_jBTipCam1MouseEntered
+
+    private void jBTipCam1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBTipCam1MouseExited
+        jBTipCam1.setBackground(Star.colOri);
+    }//GEN-LAST:event_jBTipCam1MouseExited
+
+    private void jBTipCam1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTipCam1ActionPerformed
+        pScan = new Scan(jTProd,jBNew,jBTipCam1);
+        SwingUtilities.invokeLater(pScan);
+        jBTipCam1.setEnabled(false);
+        pScan.setVisible(true);
+        jTProd.requestFocus();
+    }//GEN-LAST:event_jBTipCam1ActionPerformed
+
+    private void jBTipCam1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBTipCam1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBTipCam1KeyPressed
+
+    private void jBVendMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBVendMouseEntered
+
+        /*Cambia el color del fondo del botón*/
+        jBVend.setBackground(Star.colBot);
+    }//GEN-LAST:event_jBVendMouseEntered
+
+    private void jBVendMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBVendMouseExited
+
+        /*Cambia el color del fondo del botón al original*/
+        jBVend.setBackground(Star.colOri);
+    }//GEN-LAST:event_jBVendMouseExited
+
+    private void jBVendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBVendActionPerformed
+
+        /*Llama al otro formulario de búsqueda y pasale lo que el usr escribió*/
+        Busc b = new Busc(this, jTVend.getText(), 28, jTVend, null, null, "", null);
+        b.setVisible(true);
+    }//GEN-LAST:event_jBVendActionPerformed
+
+    private void jBVendKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBVendKeyPressed
+
+        //Llama a la función escalable
+        vKeyPreEsc(evt);
+    }//GEN-LAST:event_jBVendKeyPressed
+
+    private void jTVendFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTVendFocusGained
+
+        /*Selecciona todo el texto cuando gana el foco*/
+        jTVend.setSelectionStart(0);jTVend.setSelectionEnd(jTVend.getText().length());
+    }//GEN-LAST:event_jTVendFocusGained
+
+    private void jTVendFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTVendFocusLost
+
+        /*Coloca el caret en la posiciòn 0*/
+        jTVend.setCaretPosition(0);
+
+        /*Coloca el borde negro si tiene datos, caso contrario de rojo*/
+        if(jTVend.getText().compareTo("")!=0)
+        jTVend.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204,204,255)));
+    }//GEN-LAST:event_jTVendFocusLost
+
+    private void jTVendKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTVendKeyPressed
+
+        /*Si se presiona la tecla de abajo entonces presiona el botón de búscar vendedor*/
+        if(evt.getKeyCode() == KeyEvent.VK_DOWN)
+        jBVend.doClick();
+        /*Else, llama a la función para procesarlo normalmente else llama a la función escalable*/
+        else
+        vKeyPreEsc(evt);
+    }//GEN-LAST:event_jTVendKeyPressed
+
+    private void jTVendKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTVendKeyTyped
+
+        /*Si el carácter introducido es minúscula entonces colocalo en el campo con mayúsculas*/
+        if(Character.isLowerCase(evt.getKeyChar()))
+        evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
+    }//GEN-LAST:event_jTVendKeyTyped
+
    
    /*Carga las series en el combobox*/
    private void vCargSer()
@@ -10396,7 +10554,7 @@ public class NewVta extends javax.swing.JFrame
             String sSaldTot     = Double.toString(Double.parseDouble(sTot) - Double.parseDouble(sNot));
             
             /*Formatea el saldo a moneda*/
-            NumberFormat    n               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat    n               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant                    = Double.parseDouble(sSaldTot);        
             sSaldTot                        = n.format(dCant);
             
@@ -10415,7 +10573,7 @@ public class NewVta extends javax.swing.JFrame
             String sTotSald                 = Double.toString(Double.parseDouble(sTot) - Double.parseDouble(jTSaldDispo.getText().replace("$", "").replace(",", "")));
             
             /*Formatea el total menos el saldo a moneda*/
-            NumberFormat    n               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat    n               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             double dCant                    = Double.parseDouble(sTotSald);        
             sTotSald                        = n.format(dCant);
             
@@ -10424,7 +10582,7 @@ public class NewVta extends javax.swing.JFrame
         }
         
         /*Formatea la moneda el subtotal*/
-        NumberFormat    n               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat    n               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant                    = Double.parseDouble(sSubTot);        
         sSubTot                         = n.format(dCant);
 
@@ -10592,16 +10750,19 @@ public class NewVta extends javax.swing.JFrame
     private javax.swing.JButton jBSal;
     private javax.swing.JButton jBTab1;
     private javax.swing.JButton jBTipCam;
+    private javax.swing.JButton jBTipCam1;
     private javax.swing.JButton jBTod;
     private javax.swing.JButton jBUltCostT;
     private javax.swing.JButton jBUltPre;
     private javax.swing.JButton jBVeGran;
+    private javax.swing.JButton jBVend;
     private javax.swing.JCheckBox jCBack;
     private javax.swing.JCheckBox jCCo1;
     private javax.swing.JCheckBox jCCo2;
     private javax.swing.JCheckBox jCCo3;
     private javax.swing.JCheckBox jCConta;
     private javax.swing.JCheckBox jCFExt;
+    private javax.swing.JComboBox jCFormaPago;
     private javax.swing.JCheckBox jCGDats;
     private javax.swing.JCheckBox jCGuaPag;
     private javax.swing.JCheckBox jCImp;
@@ -10634,10 +10795,10 @@ public class NewVta extends javax.swing.JFrame
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
@@ -10661,6 +10822,7 @@ public class NewVta extends javax.swing.JFrame
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
@@ -10668,6 +10830,7 @@ public class NewVta extends javax.swing.JFrame
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jP1;
@@ -10719,7 +10882,6 @@ public class NewVta extends javax.swing.JFrame
     private javax.swing.JTextField jTList;
     private javax.swing.JTextField jTListEmp;
     private javax.swing.JTextField jTLot;
-    private javax.swing.JTextField jTMetPag;
     private javax.swing.JTextField jTNoExt;
     private javax.swing.JTextField jTNoInt;
     private javax.swing.JTextField jTNom;
@@ -10738,9 +10900,9 @@ public class NewVta extends javax.swing.JFrame
     private javax.swing.JTextField jTTotDesc;
     private javax.swing.JTextField jTTotSald;
     private javax.swing.JTextField jTValImp;
+    private javax.swing.JTextField jTVend;
     private javax.swing.JTable jTab;
     private javax.swing.JTable jTabDir;
-    private java.awt.Label label1;
     // End of variables declaration//GEN-END:variables
 
 }/*Fin de public class NuevaEmpresa extends javax.swing.JFrame */

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="180" pageHeight="842" columnWidth="180" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="2" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="156"/>
+	<property name="ireport.y" value="96"/>
 	<parameter name="COD_EMPRESA" class="java.lang.String"/>
 	<parameter name="FDOC" class="java.lang.String"/>
 	<parameter name="NOMEMP" class="java.lang.String"/>
@@ -35,6 +35,9 @@
 	<parameter name="NOEXTLOC" class="java.lang.String"/>
 	<parameter name="LOGE" class="java.lang.String"/>
 	<parameter name="MON" class="java.lang.String"/>
+	<parameter name="WEB" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT cant, prod, descrip, pre, impo, totdescu FROM partvta LEFT OUTER JOIN vtas ON vtas.VTA = partvta.VTA WHERE kitmae = 0 AND partvta.VTA = '$P!{VTA}']]>
 	</queryString>
@@ -132,7 +135,7 @@
 				<textFieldExpression><![CDATA[$P{RFC}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="34" y="0" width="85" height="71" uuid="fc9f3c9c-8283-4cd1-ac01-031665b7116f"/>
+				<reportElement x="5" y="0" width="136" height="71" uuid="fc9f3c9c-8283-4cd1-ac01-031665b7116f"/>
 				<imageExpression><![CDATA[$P{LOG}]]></imageExpression>
 			</image>
 			<line>
@@ -230,7 +233,7 @@
 				<textFieldExpression><![CDATA[$P{MAILLOC}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="4" y="169" width="25" height="13" uuid="9521f72b-5a55-484b-8c47-bb05e7b5139a"/>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="169" width="25" height="13" uuid="9521f72b-5a55-484b-8c47-bb05e7b5139a"/>
 				<textElement>
 					<font size="7" isBold="true"/>
 				</textElement>
@@ -258,7 +261,7 @@
 				<textFieldExpression><![CDATA[$P{NOEXTLOC}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="37" y="171" width="104" height="11" uuid="74661fa6-022f-4c19-9a05-afc323318563"/>
+				<reportElement x="37" y="170" width="104" height="11" uuid="74661fa6-022f-4c19-9a05-afc323318563"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
@@ -313,6 +316,20 @@
 				</textElement>
 				<text><![CDATA[CP:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="182" width="27" height="13" uuid="4119ab59-44f1-4c34-b9f7-468f731051d8"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Web:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="33" y="182" width="107" height="13" uuid="7821b006-2d21-42fb-b77d-e7644663499a"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{WEB}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

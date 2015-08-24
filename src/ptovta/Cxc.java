@@ -502,7 +502,7 @@ public class Cxc extends javax.swing.JFrame
                        
                 /*Dale formato de moneda a los impos*/                
                 double dCant    = Double.parseDouble(sImpue);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sImpue          = n.format(dCant);
                 dCant           = Double.parseDouble(sImpo);                
                 sImpo           = n.format(dCant);
@@ -657,7 +657,7 @@ public class Cxc extends javax.swing.JFrame
                 
                 /*Dale formato de moneda a los totales*/                
                 double dCant    = Double.parseDouble(sSubTot);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sSubTot         = n.format(dCant);
                 dCant           = Double.parseDouble(sImpue);                
                 sImpue          = n.format(dCant);
@@ -1835,7 +1835,7 @@ public class Cxc extends javax.swing.JFrame
         String sAbon    = jTAbon.getText().replace("$", "").replace(",", "");
         
         /*Dale formato de moneda a la cantidad a abonar*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sAbon);                
         sAbon           = n.format(dCant);
         
@@ -1939,7 +1939,7 @@ public class Cxc extends javax.swing.JFrame
         String sAbon    = jTAbon.getText().replace("$", "").replace(",", "");
         
         /*Dale formato de moneda a la cantidad a abonar*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sAbon);                
         sAbon           = n.format(dCant);
         
@@ -2189,7 +2189,7 @@ public class Cxc extends javax.swing.JFrame
         /*Dale formato de moneda a la cantidad*/
         String sAbon    = jTAbon.getText().replace("$", "").replace(",", "");        
         double dCant    = Double.parseDouble(sAbon);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sAbon           = n.format(dCant);
         
         /*Colocalo en el campo*/
@@ -2396,7 +2396,7 @@ public class Cxc extends javax.swing.JFrame
             sDiaCred    = "0";
         
         /*Dale formato de moneda al límite de crédito*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sLimCred);                
         sLimCred        = n.format(dCant);
 
@@ -3152,6 +3152,17 @@ public class Cxc extends javax.swing.JFrame
                 Properties props = System.getProperties();
                 props.setProperty("mail.smtp.host", sServSMTPSal);
                 props.put("mail.smtp.starttls.enable", sActSSL);
+                if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        System.out.println("llego");
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                 props.put("mail.smtp.auth", "true");
                 props.put("mail.debug", "true");
                 props.put("mail.smtp.port", sSMTPPort);
@@ -3159,7 +3170,7 @@ public class Cxc extends javax.swing.JFrame
                 props.put("mail.transport.protocol", "smtp");
                 final String username = sUsrFi;
                 final String password = sContraFi;
-                Session session = Session.getDefaultInstance(props,
+                Session session = Session.getInstance(props,
                         new Authenticator() {
                             @Override
                             protected PasswordAuthentication getPasswordAuthentication() {

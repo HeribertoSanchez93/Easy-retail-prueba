@@ -123,7 +123,7 @@ public class AcerD extends javax.swing.JFrame
         jP1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jLabel4.setText("1.0");
+        jLabel4.setText("1.1");
         jP1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 80, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N

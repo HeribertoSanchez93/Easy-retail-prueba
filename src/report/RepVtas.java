@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -110,14 +111,12 @@ public class RepVtas extends javax.swing.JFrame
         jTSer = new javax.swing.JTextField();
         jCFac = new javax.swing.JCheckBox();
         jCTik = new javax.swing.JCheckBox();
-        jCRem = new javax.swing.JCheckBox();
         jCDevP = new javax.swing.JCheckBox();
         jCCo = new javax.swing.JCheckBox();
         jCCa = new javax.swing.JCheckBox();
         jCDev = new javax.swing.JCheckBox();
         jLAyu = new javax.swing.JLabel();
         jCDesglo = new javax.swing.JCheckBox();
-        jCNot = new javax.swing.JCheckBox();
         jBSelT2 = new javax.swing.JButton();
         jBSelT = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -323,37 +322,23 @@ public class RepVtas extends javax.swing.JFrame
         jCFac.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jCFac.setSelected(true);
         jCFac.setText("Facturas");
-        jCFac.setNextFocusableComponent(jCNot);
         jCFac.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jCFacKeyPressed(evt);
             }
         });
-        jP1.add(jCFac, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 80, -1));
+        jP1.add(jCFac, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 80, -1));
 
         jCTik.setBackground(new java.awt.Color(255, 255, 255));
         jCTik.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jCTik.setSelected(true);
         jCTik.setText("Tickets");
-        jCTik.setNextFocusableComponent(jCRem);
         jCTik.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jCTikKeyPressed(evt);
             }
         });
         jP1.add(jCTik, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 90, -1));
-
-        jCRem.setBackground(new java.awt.Color(255, 255, 255));
-        jCRem.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jCRem.setSelected(true);
-        jCRem.setText("Remisiones");
-        jCRem.setNextFocusableComponent(jCFac);
-        jCRem.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jCRemKeyPressed(evt);
-            }
-        });
-        jP1.add(jCRem, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 90, -1));
 
         jCDevP.setBackground(new java.awt.Color(255, 255, 255));
         jCDevP.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -435,17 +420,6 @@ public class RepVtas extends javax.swing.JFrame
             }
         });
         jP1.add(jCDesglo, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, 80, -1));
-
-        jCNot.setBackground(new java.awt.Color(255, 255, 255));
-        jCNot.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jCNot.setText("Notas de Crédito");
-        jCNot.setNextFocusableComponent(jCCo);
-        jCNot.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jCNotKeyPressed(evt);
-            }
-        });
-        jP1.add(jCNot, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 10, 120, -1));
 
         jBSelT2.setBackground(new java.awt.Color(255, 255, 255));
         jBSelT2.setToolTipText("Seleccionar/Deseleccionar Todos los Estados de Ventas");
@@ -800,7 +774,7 @@ public class RepVtas extends javax.swing.JFrame
     
     /*Cuando se presiona el botón de abrir*/
     private void jBAbrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAbrActionPerformed
-               
+        
         /*Si no esta seleccionado por lo menos una opción en los check de ventas administrativas o de punto de venta*/
         if(!jCVta.isSelected() && !jCPtoVta.isSelected())
         {
@@ -924,7 +898,7 @@ public class RepVtas extends javax.swing.JFrame
         }
         
         /*Si no selecciono por lo menos un tipo de venta a ver entonces*/
-        if(!jCTik.isSelected() && !jCRem.isSelected() && !jCFac.isSelected() && !jCNot.isSelected())
+        if(!jCTik.isSelected() && !jCFac.isSelected())
         {
             /*Mensajea*/
             JOptionPane.showMessageDialog(null, "Selecciona por lo menos un tipo de venta.", "Reporte", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
@@ -949,12 +923,8 @@ public class RepVtas extends javax.swing.JFrame
         String sTipVta  = "";
         if(jCTik.isSelected())
             sTipVta += "'TIK',";
-        if(jCRem.isSelected())
-            sTipVta += "'REM',";
         if(jCFac.isSelected())
             sTipVta += "'FAC',";
-        if(jCNot.isSelected())
-            sTipVta += "'NOT',";
                 
         /*Obtiene los tipos de estado que tiene que mostrar*/
         String sTipEstad  = "";
@@ -1018,7 +988,7 @@ public class RepVtas extends javax.swing.JFrame
                 try
                 {
                     /*Crea los parámetros que se pasarán*/
-                    Map <String,String> pa = new HashMap<>();
+                    Map <String,Object> pa = new HashMap<>();
                     pa.clear();
                     pa.put(Star.sSerMostG,  sEmpFi);
                     pa.put("F_D",           sFDeFi);
@@ -1031,6 +1001,7 @@ public class RepVtas extends javax.swing.JFrame
                     pa.put("PROD",          sProdFi);
                     pa.put("FACTU",         sFactuFi); 
                     pa.put("LOG",           getClass().getResource(Star.sIconDef).toString());
+                    pa.put(JRParameter.REPORT_LOCALE,new java.util.Locale("es","MX"));
                     
                     /*Compila el reporte y maximizado*/
                     JasperReport ja     = JasperCompileManager.compileReport(getClass().getResourceAsStream(sTip));
@@ -1185,14 +1156,6 @@ public class RepVtas extends javax.swing.JFrame
     }//GEN-LAST:event_jCTikKeyPressed
 
     
-    /*Cuando se presiona una tecla en el checkbox de remisiones*/
-    private void jCRemKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCRemKeyPressed
-        
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-        
-    }//GEN-LAST:event_jCRemKeyPressed
-
     
     /*Cuando se presiona una tecla en el checkbox de factura*/
     private void jCFacKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCFacKeyPressed
@@ -1342,14 +1305,6 @@ public class RepVtas extends javax.swing.JFrame
     }//GEN-LAST:event_jCDesgloKeyPressed
 
     
-    /*Cuando se presiona una tecla en el checkbox de notas de crédito*/
-    private void jCNotKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCNotKeyPressed
-        
-        //Llama a la función escalable
-        vKeyPreEsc(evt);
-        
-    }//GEN-LAST:event_jCNotKeyPressed
-
     
     /*Cuando se presiona el botón de seleccionar todo 1*/
     private void jBSelTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSelTActionPerformed
@@ -1359,9 +1314,7 @@ public class RepVtas extends javax.swing.JFrame
         {
             /*Deselecciona todos los check 1*/
             jCTik.setSelected(false);
-            jCRem.setSelected(false);
             jCFac.setSelected(false);
-            jCNot.setSelected(false);
             
             /*Coloca la bandera para la próxima selección*/
             bSel    = false;
@@ -1370,9 +1323,7 @@ public class RepVtas extends javax.swing.JFrame
         {
             /*Selecciona todos los check 1*/
             jCTik.setSelected(true);
-            jCRem.setSelected(true);
             jCFac.setSelected(true);
-            jCNot.setSelected(true);
             
             /*Coloca la bandera para la próxima selección*/
             bSel    = true;
@@ -1803,10 +1754,8 @@ public class RepVtas extends javax.swing.JFrame
     private javax.swing.JCheckBox jCFac;
     private javax.swing.JCheckBox jCFactu;
     private javax.swing.JCheckBox jCNoFactu;
-    private javax.swing.JCheckBox jCNot;
     private javax.swing.JCheckBox jCPe;
     private javax.swing.JCheckBox jCPtoVta;
-    private javax.swing.JCheckBox jCRem;
     private javax.swing.JCheckBox jCTFech;
     private javax.swing.JCheckBox jCTik;
     private javax.swing.JCheckBox jCVta;

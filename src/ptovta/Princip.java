@@ -1,3 +1,7 @@
+/*CR01 Modificado para JPS Ingenieros 
+13327 botones de manejo de proyecto y empleados
+*/
+//CRR01 modificación para entrar a ventana de cambio de contraseña280
 /*Paquete*/
 package ptovta;
 
@@ -25,16 +29,13 @@ import cats.Clients;
 import cats.ClasCli;
 import cats.CatMsjs;
 import cats.Almas;
-import cats.AltPers;
 import java.awt.Cursor;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -53,12 +54,23 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JOptionPane;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.Comment;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import report.*;
@@ -83,6 +95,26 @@ public class Princip extends javax.swing.JFrame
     /*Bandera para menajar los errores de las funciones*/
     private boolean             bErr                = false;
     
+    //Permisos del boton de compras
+    private java.util.ArrayList<Boolean> btnsCompras = new java.util.ArrayList<>();
+    
+    //Permisos del boton de proveedores
+    private java.util.ArrayList<Boolean> btnsProvee = new java.util.ArrayList<>();
+    
+    //Permisos del boton de proveedores
+    private java.util.ArrayList<Boolean> btnsPrevio = new java.util.ArrayList<>();
+    
+    //Permisos del boton de proveedores
+    private java.util.ArrayList<Boolean> btnsProductos = new java.util.ArrayList<>();
+    
+    //Permisos del boton de proveedores
+    private java.util.ArrayList<Boolean> btnsClientes = new java.util.ArrayList<>();
+    
+    //Permisos del boton de proveedores
+    private java.util.ArrayList<Boolean> btnsVentas = new java.util.ArrayList<>();
+    
+    //Permisos del boton de proveedores
+    private java.util.ArrayList<Boolean> btnsCotiza = new java.util.ArrayList<>();
     
     /*Constructor sin argumentos*/
     public Princip() 
@@ -104,6 +136,14 @@ public class Princip extends javax.swing.JFrame
         
         /*Asigna el nuevo ìcono a la forma principal*/
         jLImg.setIcon(img);
+        
+        javax.swing.JLabel lblVersion = new javax.swing.JLabel();
+        lblVersion.setText("Versión 1.1");
+        //lblVersion.setBounds(695, 428, 160, 26);    
+        lblVersion.setBounds(695, 450, 160, 40);    
+        lblVersion.setFont(new java.awt.Font("Tahoma", 2, 25)); // NOI18N
+        lblVersion.setForeground(new java.awt.Color(255, 255, 255));
+        this.jLImg.add(lblVersion);
         
         /*Obtiene el color original que deben tener los botones*/
         colOri  = jBPtoVta.getBackground();
@@ -130,6 +170,9 @@ public class Princip extends javax.swing.JFrame
         
         //Establece el ícono de la forma
         Star.vSetIconFram(this);
+        
+        //Deshabilita los botones correspondientes
+        deshabilitaBotones();
                 
         /*Crea el runable para que respalde en caso de que así deba ser*/
         (new Thread()
@@ -248,61 +291,44 @@ public class Princip extends javax.swing.JFrame
                 vLic();              
             }
         }).start();
-
+        //CRR01
         //Declara variables de la base de datos
         Statement   st;
-        ResultSet   rs;        
+        ResultSet   rs;
         String      sQ; 
         
-        String control="1";
-        try
-        {
-            sQ = "SELECT extr1 FROM estacs WHERE estac = 'SUP'";
-            st = con.createStatement();
-            rs = st.executeQuery(sQ);
-            /*Si hay datos*/
-            if(rs.next())
-            {
-                control=rs.getString("extr1");
-            }
-        }
-        catch(SQLException expnSQL)
-        {            
-            //Procesa el error y regresa
-            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);
-            return;                        
-        }
-        if(control==null)
-        {
-        }
-        else
-        if(control.compareTo("0")==0)
-        {
-            ClavCamb_1 c = new ClavCamb_1(null,true);
-            c.getObj().setVisible(true);
-            if(ClavCamb_1.bSi==true)
-            {
-                try 
-                {            
-                    sQ = "UPDATE estacs SET "
-                        + "extr1       = '1' "
-                        + "WHERE estac = 'SUP'";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                }
-                catch(SQLException expnSQL) 
-                {              
-                    //Procesa el error y regresa
-                    Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
-                    return;
-                }
-            }
-            if(ClavCamb_1.bSi==false)
-            {
-                Star.vExitAp();
-            }
+        try {
             
-        }
+            /* creamos el objeto de envio de correo */
+            correoRegistro correoAUsuario = new correoRegistro();
+        
+            /*revisamos si el campo "ya_entro_booleano" de la  tabla registroemail es 0*/
+            /* esto significa si no ha entrado por primera vez */
+            /* para entrar por primera vez debe emplear la contraseña
+            que se envio a correo elecrónico que el usuario proporciona */
+           
+            /* cuando entra por primera vez se le obliga a cambiar la contraseña
+            y valor del campo "ya_entro_booleano" cambia a 1 */
+            
+            /*"ya_entro_booleano" de la  tabla registroemail es 0 */
+                if(correoAUsuario.es0BaseDatos())
+                {
+                    ClavCamb_1 c = new ClavCamb_1(null,true);
+                    c.getObj().setVisible(true);
+                    if(ClavCamb_1.bSi==true)
+                    {
+                        correoAUsuario.cambia1BaseDatos();
+                    }
+                    if(ClavCamb_1.bSi==false)
+                    {
+                        Star.vExitAp();
+                    }
+                }
+            
+            } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        //CRR01
         /*Comprueba si esta habilitado el deslogeo por tiempo de inactividad*/        
         try
         {
@@ -911,7 +937,7 @@ public class Princip extends javax.swing.JFrame
             return -1;        
                 
         //Inserta en la base de datos la nueva venta
-        if(Star.iInsVtas(con, sSerFac, sConFac.replace("'", "''").trim(), sCli, sSer, sSubTot, sImpueVal, sTot, "now()", "now()", "now()", "'CO'", "0", "", "FAC", "0", sMetPag.replace("'", "''"), sCta.replace("'", "''"), "", "0", "0", "0", "1", "0", Login.sUsrG, sMon, sTipCam, "C", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "0", "0", "0", "0","")==-1)
+        if(Star.iInsVtas(con, sSerFac, sConFac.replace("'", "''").trim(), sCli, sSer, sSubTot, sImpueVal, sTot, "now()", "now()", "now()", "'CO'", "0", "", "FAC", "0", sMetPag.replace("'", "''"), sCta.replace("'", "''"), "", "0", "0", "0", "1", "0", Login.sUsrG, sMon, sTipCam, "C", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "0", "0", "0", "0","","")==-1)
             return -1;        
             
         /*Obtiene la última venta insertada*/
@@ -2579,6 +2605,9 @@ public class Princip extends javax.swing.JFrame
         jMenItProdsBajMin = new javax.swing.JMenuItem();
         jMenItProdsArrMax = new javax.swing.JMenuItem();
         jMenItDefEstacs = new javax.swing.JMenuItem();
+        jMenTraspas = new javax.swing.JMenu();
+        jMenItTraspas = new javax.swing.JMenuItem();
+        jMenItIngr = new javax.swing.JMenuItem();
         jMMUbic = new javax.swing.JMenu();
         jMenItAlmas = new javax.swing.JMenuItem();
         jMenIt5 = new javax.swing.JMenuItem();
@@ -2619,9 +2648,6 @@ public class Princip extends javax.swing.JFrame
         jMFlujAct = new javax.swing.JMenuItem();
         jMCatGara = new javax.swing.JMenuItem();
         jMZon = new javax.swing.JMenuItem();
-        jMenTraspas = new javax.swing.JMenu();
-        jMenItTraspas = new javax.swing.JMenuItem();
-        jMenItIngr = new javax.swing.JMenuItem();
         jMGir = new javax.swing.JMenuItem();
         jMenItMons = new javax.swing.JMenuItem();
         jMeItImps = new javax.swing.JMenuItem();
@@ -2644,8 +2670,6 @@ public class Princip extends javax.swing.JFrame
         jMenCambIco = new javax.swing.JMenuItem();
         jMConfAd = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
-        jMContpaq = new javax.swing.JMenuItem();
-        jMMacroP = new javax.swing.JMenuItem();
         jMMAyu = new javax.swing.JMenu();
         jMAcerc = new javax.swing.JMenuItem();
 
@@ -4848,6 +4872,47 @@ public class Princip extends javax.swing.JFrame
 
         jMInven.add(jMenMaxsMins);
 
+        jMenTraspas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/movalma.png"))); // NOI18N
+        jMenTraspas.setMnemonic('r');
+        jMenTraspas.setText("Movimientos almacenes");
+        jMenTraspas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jMenTraspasKeyPressed(evt);
+            }
+        });
+
+        jMenItTraspas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/traspas.png"))); // NOI18N
+        jMenItTraspas.setMnemonic('t');
+        jMenItTraspas.setText("Traspasos");
+        jMenItTraspas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenItTraspasActionPerformed(evt);
+            }
+        });
+        jMenItTraspas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jMenItTraspasKeyPressed(evt);
+            }
+        });
+        jMenTraspas.add(jMenItTraspas);
+
+        jMenItIngr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/ingrsal.png"))); // NOI18N
+        jMenItIngr.setMnemonic('i');
+        jMenItIngr.setText("Entradas/salidas");
+        jMenItIngr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenItIngrActionPerformed(evt);
+            }
+        });
+        jMenItIngr.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jMenItIngrKeyPressed(evt);
+            }
+        });
+        jMenTraspas.add(jMenItIngr);
+
+        jMInven.add(jMenTraspas);
+
         jMMUbic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/ubics.png"))); // NOI18N
         jMMUbic.setMnemonic('i');
         jMMUbic.setText("Ubicaciones");
@@ -5429,47 +5494,6 @@ public class Princip extends javax.swing.JFrame
         });
         jMenInvents.add(jMZon);
 
-        jMenTraspas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/movalma.png"))); // NOI18N
-        jMenTraspas.setMnemonic('r');
-        jMenTraspas.setText("Movimientos almacenes");
-        jMenTraspas.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jMenTraspasKeyPressed(evt);
-            }
-        });
-
-        jMenItTraspas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/traspas.png"))); // NOI18N
-        jMenItTraspas.setMnemonic('t');
-        jMenItTraspas.setText("Traspasos");
-        jMenItTraspas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenItTraspasActionPerformed(evt);
-            }
-        });
-        jMenItTraspas.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jMenItTraspasKeyPressed(evt);
-            }
-        });
-        jMenTraspas.add(jMenItTraspas);
-
-        jMenItIngr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/ingrsal.png"))); // NOI18N
-        jMenItIngr.setMnemonic('i');
-        jMenItIngr.setText("Entradas/salidas");
-        jMenItIngr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenItIngrActionPerformed(evt);
-            }
-        });
-        jMenItIngr.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jMenItIngrKeyPressed(evt);
-            }
-        });
-        jMenTraspas.add(jMenItIngr);
-
-        jMenInvents.add(jMenTraspas);
-
         jMGir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/gir.png"))); // NOI18N
         jMGir.setMnemonic('g');
         jMGir.setText("Giros");
@@ -5767,39 +5791,17 @@ public class Princip extends javax.swing.JFrame
 
         jMenBar1.add(jMSist);
 
-        jMenu4.setMnemonic('i');
-        jMenu4.setText("Interfaces");
-        jMenu4.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jMenu4KeyPressed(evt);
+        jMenu4.setText("Sincronizar");
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu4MouseClicked(evt);
             }
         });
-
-        jMContpaq.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/ci.png"))); // NOI18N
-        jMContpaq.setMnemonic('c');
-        jMContpaq.setText("Contpaq i Comercial");
-        jMContpaq.addActionListener(new java.awt.event.ActionListener() {
+        jMenu4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMContpaqActionPerformed(evt);
+                jMenu4ActionPerformed(evt);
             }
         });
-        jMContpaq.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jMContpaqKeyPressed(evt);
-            }
-        });
-        jMenu4.add(jMContpaq);
-
-        jMMacroP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/mactoconta.png"))); // NOI18N
-        jMMacroP.setMnemonic('m');
-        jMMacroP.setText("Macropro 2.40 Thin Client");
-        jMMacroP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMMacroPActionPerformed(evt);
-            }
-        });
-        jMenu4.add(jMMacroP);
-
         jMenBar1.add(jMenu4);
 
         jMMAyu.setMnemonic('y');
@@ -5935,7 +5937,7 @@ public class Princip extends javax.swing.JFrame
     {
         if(Star.gClients==null)
         {            
-            Star.gClients = new Clients();
+            Star.gClients = new Clients(btnsClientes);
             Star.gClients.setVisible(true);
         }
         else
@@ -5972,7 +5974,7 @@ public class Princip extends javax.swing.JFrame
     {
         if(Star.gProvs==null)
         {            
-            Star.gProvs = new Provs();
+            Star.gProvs = new Provs(btnsProvee);
             Star.gProvs.setVisible(true);
         }
         else
@@ -6002,10 +6004,7 @@ public class Princip extends javax.swing.JFrame
         
     }//GEN-LAST:event_jMenItManProvsKeyPressed
 
-    
-    
-               
-    
+
     /*Cuando se presiona el menú de permisos de usuarios*/
     private void jMenItPermEstacsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenItPermEstacsActionPerformed
 
@@ -6185,7 +6184,7 @@ public class Princip extends javax.swing.JFrame
         /*Abre la forma de las compras una sola vez*/
         if(Star.gComprs==null)
         {            
-            Star.gComprs = new Compr();
+            Star.gComprs = new Compr(btnsCompras);
             Star.gComprs.setVisible(true);
         }
         else
@@ -6219,12 +6218,13 @@ public class Princip extends javax.swing.JFrame
 
 
     /*Método para que se abra una sola vez la forma de cotizaciones*/
+    
     private void vAbrCots()
     {
         /*Abre la forma de las cotizaciones una sola vez*/
         if(Star.gCots==null)
         {            
-            Star.gCots = new Cots();
+            Star.gCots = new Cots(btnsCotiza);
             Star.gCots.setVisible(true);
         }
         else
@@ -6243,7 +6243,7 @@ public class Princip extends javax.swing.JFrame
         /*Abre la forma de las cotizaciones una sola vez*/
         if(Star.gPrevComps==null)
         {            
-            Star.gPrevComps = new PrevComp();
+            Star.gPrevComps = new PrevComp(btnsPrevio);
             Star.gPrevComps.setVisible(true);
         }
         else
@@ -6665,7 +6665,7 @@ public class Princip extends javax.swing.JFrame
             /*Si es nulo entonces crea la referencia y regresa la referencia*/
             if(Star.gProds==null)
             {            
-                Star.gProds = new Prods();
+                Star.gProds = new Prods(btnsProductos);
                 Star.gProds.setVisible(true);
             }
             else
@@ -8334,7 +8334,7 @@ public class Princip extends javax.swing.JFrame
         /*Abre la forma de las cotizaciones una sola vez*/
         if(Star.gVtas==null)
         {            
-            Star.gVtas = new Vtas();
+            Star.gVtas = new Vtas(btnsVentas);
             Star.gVtas.setVisible(true);
         }
         else
@@ -9198,42 +9198,7 @@ public class Princip extends javax.swing.JFrame
         vKeyPreEsc(evt);
         
     }//GEN-LAST:event_jMInvenImpoSerKeyPressed
-
-    
-    /*Cuando se presiona el menú de importar catálogo de productos desde excel*/
-    private void jMInvenImpoActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        
-        /*Configura el file chooser para escogerl a ruta donde esta el archivo de excel*/
-        JFileChooser fc = new JFileChooser();
-        fc.setDialogTitle("Archivo de excel");
-
-        /*Si el usuario no presiono aceptar entonces*/
-        String sRut;
-        if(fc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
-            return;                                            
-        
-        /*Lee la ruta seleccionada*/
-        sRut    = fc.getCurrentDirectory().getAbsolutePath();
-
-        /*Concatena la carpeta final seleccionada*/
-        sRut    += "\\" + fc.getSelectedFile().getName();   
-
-        /*Si no es un archivo de excel entonces*/
-        if(!sRut.endsWith("xlsx") && !sRut.endsWith("xls"))
-        {
-            /*Mensajea y regresa*/
-            JOptionPane.showMessageDialog(null, "No es un archivo de excel. Ingresa por favor un archivo .xlsx o .xls", "Archivo no VÃ¡lido", JOptionPane.INFORMATION_MESSAGE, null); 
-            return;
-        }                
-
-        /*Llama a la forma que harÃ¡ la importaciÃ³n*/
-        Loadin lo = new Loadin(sRut);
-        lo.setVisible(true);                                                                
-        
-    }                                           
-
-
-    
+ 
     /*Cuando se presiona el menú de exportar catálogo de productos a excel*/
     private void jMInvenExporActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMInvenExporActionPerformed
         
@@ -9398,11 +9363,11 @@ public class Princip extends javax.swing.JFrame
                     Star.lCargGral.setVisible(false);
 
                 /*Mensaje de Ã©xito*/
-                JOptionPane.showMessageDialog(null, "Archivo exportado en \"" + sRut + "\" con Ã©xito.", "Exportar", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+                JOptionPane.showMessageDialog(null, "Archivo exportado en \"" + sRut + "\" con Éxito.", "Exportar", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
 
                 /*Preguntar al usuario si quiere abrir el archivo*/
                 Object[] op     = {"Si","No"};
-                int iRes        = JOptionPane.showOptionDialog(null, "Â¿Quieres abrir el archivo?", "Abrir archivo", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
+                int iRes        = JOptionPane.showOptionDialog(null, "¿Quieres abrir el archivo?", "Abrir archivo", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
                 if(iRes==JOptionPane.NO_OPTION || iRes==JOptionPane.CLOSED_OPTION)
                     return;                       
 
@@ -10059,46 +10024,51 @@ public class Princip extends javax.swing.JFrame
 //                ResultSet       rs;                
 
         /*Borra todos los clientes de la base de datos*/
-        try 
-        {            
-            //borra todos los registros, y reinica el contador autoincrementable (Truncate solo es aplicable a tablas sin llaves foreaneas)
-            sQ = "Truncate table emps";                    
-            st = con.createStatement();
-            st.executeUpdate(sQ);
-         }
-         catch(SQLException | HeadlessException e) 
-         {                                
-
-
-            /*Esconde el loading*/
-            if(Star.lCargGral!=null)
-                Star.lCargGral.setVisible(false);
-
-            //Cierra la base de datos y regresa
-            if(Star.iCierrBas(con)==-1)                                
-                return;
-
-            //Agrega en el log
-            Login.vLog(e.getMessage());                        
-
-            //Mensajea y regresa
-            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));             
-            return;
-        }
+//        try 
+//        {            
+//            //borra todos los registros, y reinica el contador autoincrementable (Truncate solo es aplicable a tablas sin llaves foreaneas)
+//            sQ = "Truncate table emps";                    
+//            st = con.createStatement();
+//            st.executeUpdate(sQ);
+//         }
+//         catch(SQLException | HeadlessException e) 
+//         {                                
+//
+//
+//            /*Esconde el loading*/
+//            if(Star.lCargGral!=null)
+//                Star.lCargGral.setVisible(false);
+//
+//            //Cierra la base de datos y regresa
+//            if(Star.iCierrBas(con)==-1)                                
+//                return;
+//
+//            //Agrega en el log
+//            Login.vLog(e.getMessage());                        
+//
+//            //Mensajea y regresa
+//            JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));             
+//            return;
+//        }
 
         /*Contador de fila*/
         int iConta = 0;               
 
         /*Inicializa el contador de la celda por cada fila*/
-        int iContCell = 1;
+        int iContCell;
 
+        //Contador de rows de errores
+        int iRows = 0;
+        
         /*Recorre todas las hojas de excel*/
         Iterator<Row> rowIt     = sheet.iterator();
         while(rowIt.hasNext())
         {                    
             cliente:{
+                //Reinicia el contador
+                iContCell = 1;
                 /*Obtiene la fila*/
-                Row row = rowIt.next();
+                XSSFRow row = (XSSFRow)rowIt.next();
 
                  /*Si el contador es igual a uno entonces continua ya que no quiero leer la primera fila de encabezados y que continue*/
                 if(iConta < 1)
@@ -10118,7 +10088,7 @@ public class Princip extends javax.swing.JFrame
                 java.util.ArrayList<String> valores = new java.util.ArrayList<>();
 
                 //Uso la variable para hacer entero el list
-                Double d;
+                //Double d;
 
                 //Uso para cadena de rfc en el matches
                 String rfc = "";
@@ -10130,7 +10100,7 @@ public class Princip extends javax.swing.JFrame
                 for(int i=1; i <= 51; i++) 
                 {
                     /*Obtiene el objeto de la celda*/      
-                    Cell cell = row.getCell(i, Row.CREATE_NULL_AS_BLANK);
+                    XSSFCell cell = row.getCell(i, Row.CREATE_NULL_AS_BLANK);
                     if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
                         sIn = cell.getNumericCellValue()+"";  
                     else
@@ -10142,21 +10112,25 @@ public class Princip extends javax.swing.JFrame
                     switch(iContCell)
                     {
                         case 1://codigo
-                            sIn = Star.checaLongitud(30, sIn);
+                            sIn = Star.checaLongitud(30, sIn.trim());
                             if(tipo == 0 && !sIn.isEmpty())
                                 sIn = quitaDoble(sIn);
                              if( !sIn.matches("\\d+")) 
                                  valores.add("");
                              else{
-                                 d = cell.getNumericCellValue();
-                                 valores.add(d.intValue()+""); 
+                                 //d = cell.getNumericCellValue();
+                                 valores.add(sIn+""); 
                              }
                             break;
                         case 2:{//serie
                             sIn = Star.checaLongitud(30, sIn);
                             if(! sIn.matches("[a-zA-Z\\d]+,.+")){
-                                if(valores.get(0).isEmpty())
-                                    break cliente;
+                                if(valores.get(0).isEmpty()){
+                                    //escribo el registro en una nueva pagina de excel
+                                    wkbok = agregaError(row, wkbok, iRows, iContCell, "El registro no tiene codigo y tampoco cuenta con una serie valida.");
+                                    iRows++;
+                                     break cliente;
+                                }
                                 else
                                     valores.add("");
                             }
@@ -10192,8 +10166,11 @@ public class Princip extends javax.swing.JFrame
                             break;
                         case 4: case 6: case 7: case 10: case 11: case 12: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 39://razon social,calle, colonia, ciudad, estado, pais, pagweb1, pagweb2, contac1-2,puesto1-2, observaciones, metPago
                             if(sIn.isEmpty()){
-                                if( iContCell <= 12)
-                                    break cliente;
+                                if( iContCell <= 12){
+                                    wkbok = agregaError(row, wkbok, iRows, iContCell, "");
+                                    iRows++;
+                                     break cliente;
+                                }
                                 else
                                     valores.add("");
                             }
@@ -10211,8 +10188,12 @@ public class Princip extends javax.swing.JFrame
                             if(tipo == 0 && !sIn.isEmpty())
                                 sIn = quitaDoble(sIn);
                             
-                             if( !sIn.matches("[1-9]|10")) 
+                             if( !sIn.matches("[1-9]|10")){
+                                 wkbok = agregaError(row, wkbok, iRows, iContCell,"Formato de lista de precios invalida.");
+                                 iRows++;
                                  break cliente;
+                             } 
+                                
                              else{
                                  valores.add(sIn); 
                              }
@@ -10221,9 +10202,13 @@ public class Princip extends javax.swing.JFrame
                         case 8: case 22://no ext
                             if(tipo == 0 && !sIn.isEmpty())
                                 sIn = quitaDoble(sIn);
-                             if( !sIn.matches("[\\da-zA-Z\\-]+")){
-                                 if(iContCell == 8)
-                                    break cliente;
+                             if( !sIn.matches("[\\da-zA-Z\\- ]+")){
+                                 if(iContCell == 8){
+                                     wkbok = agregaError(row, wkbok, iRows, iContCell," Formato de numero exterior invalido.");
+                                    iRows++;
+                                     break cliente;
+                                 }
+                                    
                                  else
                                      valores.add("");
                              }
@@ -10233,32 +10218,47 @@ public class Princip extends javax.swing.JFrame
                         case 9://CP
                             //le quita los decimales a los numeros que pudiran haber escrito
                             if(tipo == 0 && !sIn.isEmpty())
-                                sIn = quitaDoble(sIn);
-                             if( !sIn.matches("\\d{5}")) 
-                                 break cliente;
+                                sIn = quitaDoble(sIn.trim());
+                             if( !sIn.matches("\\d{5}")){
+                                wkbok = agregaError(row, wkbok, iRows, iContCell,"Formato de codigo postal invalido");
+                                iRows++;
+                                break cliente;
+                             } 
+                                 
                              else{
                                  valores.add(sIn);
                              }
                                  
                             break;
                         case 13://RFC
-                            sIn = ( valores.get(2).equals("0") )? Star.checaLongitud(13, sIn): Star.checaLongitud(12, sIn);
-                            rfc = ( valores.get(2).equals("0") )? "[a-zA-Z]{4}\\d{6}.{3}":  "[a-zA-Z]{3}\\d{6}.{3}";
+                            sIn = Star.checaLongitud(255, sIn.trim());
                             
-                            if( !sIn.matches(rfc))
+                            if( !sIn.trim().matches("[a-zA-Z\\&]{4}\\d{6}.{3}") && !sIn.trim().matches("[a-zA-Z\\&]{3}\\d{6}.{3}")){
+                                wkbok = agregaError(row, wkbok, iRows, iContCell,"Formato de RFC Invalido.");
+                                iRows++;
                                 break cliente;
+                            }
                             else{//Si no existe el rfc, lo agrega
                                 if( Star.iExisteRFC(con, sIn, "emps") == 0)
                                     valores.add(sIn);
                                 else//si ya existe o hay algun error se brinca al siguiente cliente
+                                {
+                                    wkbok = agregaError(row, wkbok, iRows, iContCell,"El RFC ya se encuentra registrado en otro cliente.");
+                                    iRows++;
                                     break cliente;
+                                }
+                                    
                             }
                              break;
                         case 14: case 27: case 28://email
                             sIn = Star.checaLongitud(100, sIn);
                             if( !sIn.matches(".+@.+")){
                                 if(iContCell == 14)//si es el correo obligatorio y no cumple se brinca al siguiente cliente
+                                {
+                                    wkbok = agregaError(row, wkbok, iRows, iContCell, "Formato de email invalido");
+                                    iRows++;
                                     break cliente;
+                                }
                                 else
                                     valores.add("");
                             }
@@ -10457,7 +10457,13 @@ public class Princip extends javax.swing.JFrame
                     
                     //si no tiene codigo, mando llamar el consecutivo
                     if(valores.get(0).isEmpty()){
-                        String s = regresaConsecutivo(valores.get(1),"EMP", con);
+                        String s;
+                        
+                        s = regresaConsecutivo(valores.get(1),"EMP", con);
+                        //Mientras exista un cliente con ese codigo+serie, pide el siguiente consecutivo
+                        while(Star.iExistCliProv(con,  valores.get(1) + s, true) == 1){
+                            s = regresaConsecutivo(valores.get(1),"EMP", con);
+                        }
                         
                         if(s.contentEquals("-1"))//si hubo error regresa
                             return;
@@ -10467,7 +10473,7 @@ public class Princip extends javax.swing.JFrame
 
                     pst.executeUpdate();
                 }
-                catch(SQLException | HeadlessException e)
+                catch(Exception e)
                 {                        
 
                     /*Esconde el loading*/
@@ -10491,6 +10497,17 @@ public class Princip extends javax.swing.JFrame
             }   
         }/*Fin de while(rowIt.hasNext())*/                                    
 
+        if(iRows > 0){
+            try{
+                boolean delete = new File(sRut).delete();
+                FileOutputStream fileOut = new FileOutputStream(sRut);
+                wkbok.write(fileOut);
+                fileOut.close();
+            }catch(Exception e){
+            /*Mensajea y regresa*/
+                    JOptionPane.showMessageDialog(null, "Error al escribir los errores encontrados en los registros por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));                    
+            }
+        }
         if(Star.lCargGral != null)
             Star.lCargGral.setVisible(false);
         
@@ -10718,7 +10735,7 @@ public class Princip extends javax.swing.JFrame
             return;
                 
         /*Muestra la forma para simular que esta cargando el reporte*/
-        Star.lCargGral = new LoadinGral("Importando catÃ¡logo de proveedores...");
+        Star.lCargGral = new LoadinGral("Importando catalogo de proveedores...");
         Star.lCargGral.setVisible(true);
 
         /*Lee la ruta seleccionada con el nombre del archivo*/
@@ -10799,30 +10816,32 @@ public class Princip extends javax.swing.JFrame
                 String sQ = "";
 
                 /*Borra todos los registros de la base de datos de los proveedores*/
-                try 
-                {            
-                    sQ = "DELETE FROM provs WHERE CONCAT_WS('', ser, prov) <> 'PROVSYS'";                    
-                    st = con.createStatement();
-                    st.executeUpdate(sQ);
-                 }
-                 catch(SQLException | HeadlessException e) 
-                 { 
-                    //Cierra la base de datos y regresa
-                    if(Star.iCierrBas(con)==-1)                                
-                        return;
-                    
-                    /*Agrega en el log*/
-                    Login.vLog(e.getMessage());
-
-                    /*Mensajea y regresa*/
-                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
-                    return;
-                 }
+//                try 
+//                {            
+//                    sQ = "DELETE FROM provs WHERE CONCAT_WS('', ser, prov) <> 'PROVSYS'";                    
+//                    st = con.createStatement();
+//                    st.executeUpdate(sQ);
+//                 }
+//                 catch(SQLException | HeadlessException e) 
+//                 { 
+//                    //Cierra la base de datos y regresa
+//                    if(Star.iCierrBas(con)==-1)                                
+//                        return;
+//                    
+//                    /*Agrega en el log*/
+//                    Login.vLog(e.getMessage());
+//
+//                    /*Mensajea y regresa*/
+//                    JOptionPane.showMessageDialog(null, this.getClass().getName() + " Error en " + sQ + " por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr))); 
+//                    return;
+//                 }
 
                 /*Contador de fila y de celda respectivamente*/        
                 int             iCont           = 0;
                 //Inicializa el contador de la celda por cada fila
-                int             iContCell = 1;                        
+                int             iContCell;                        
+                //Variable de errores 
+                int iRows = 0;
 
                 /*Recorre todas las filas una por una*/
                 Iterator<Row> rowIterator = sheet.iterator();
@@ -10833,7 +10852,7 @@ public class Princip extends javax.swing.JFrame
                         iContCell       = 1;
                         
                         /*Objeto para recorrer todas las celdas*/
-                        Row row = rowIterator.next();
+                        XSSFRow row = (XSSFRow)rowIterator.next();
 
                         /*Si el contador no es igual a uno entonces continua ya que no quiero leer la primera fila y que continue*/
                         if(iCont < 1)
@@ -10867,7 +10886,7 @@ public class Princip extends javax.swing.JFrame
                         for(int i=1; i <= 46; i++) 
                         {
                             /*Obtiene la primera celda*/
-                            Cell cell = row.getCell(i, Row.CREATE_NULL_AS_BLANK);
+                            XSSFCell cell = row.getCell(i, Row.CREATE_NULL_AS_BLANK);
                             if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
                                 sIn = cell.getNumericCellValue()+"";  
                             else
@@ -10892,8 +10911,12 @@ public class Princip extends javax.swing.JFrame
                                 case 2:{//serie
                                     sIn = Star.checaLongitud(30, sIn);
                                     if(! sIn.matches("[a-zA-Z\\d]+,.+")){
-                                        if(valores.get(0).isEmpty())
+                                        if(valores.get(0).isEmpty()){
+                                            wkbok = agregaError(row, wkbok, iRows, iContCell, "El registro no tiene codigo y tampoco cuenta con una serie valida.");
+                                            iRows++;
                                             break proveedor;
+                                        }
+                                            
                                         else
                                             valores.add("");
                                     }
@@ -10932,8 +10955,11 @@ public class Princip extends javax.swing.JFrame
                                 break;
                                 case 4: case 5: case 6: case 9: case 10: case 11: case 27: case 28: case 29: case 30: case 31: case 32: case 35: case 42://razon, calle, colonia, ciudad, estado, pais, pagweb1, pagweb2, eje, eje2, observ, metpag, banco, tentre
                                     if(sIn.isEmpty()){
-                                        if(iContCell <= 11)
+                                        if(iContCell <= 11){
+                                            wkbok = agregaError(row, wkbok, iRows, iContCell, "No puede ser vacio, ya que es un campo obligatorio.");
+                                            iRows++;
                                             break proveedor;
+                                        }
                                         else
                                             valores.add("");
                                     }
@@ -10950,8 +10976,11 @@ public class Princip extends javax.swing.JFrame
                                     if(tipo == 0 && !sIn.isEmpty())
                                         sIn = quitaDoble(sIn);
                                     if( !sIn.matches("[\\da-zA-Z\\-]+")){
-                                        if(iContCell == 7)
-                                           break proveedor;
+                                        if(iContCell == 7){
+                                            wkbok = agregaError(row, wkbok, iRows, iContCell, "Formato de numero exterior invalido.");
+                                            iRows++;
+                                            break proveedor;
+                                        }
                                         else
                                             valores.add("");
                                     }
@@ -10959,34 +10988,46 @@ public class Princip extends javax.swing.JFrame
                                        valores.add(sIn); 
                                 break;
                                 case 8://CP
-                                    sIn = Star.checaLongitud(20, sIn);
+                                    sIn = Star.checaLongitud(20, sIn.trim());
                                     //le quita los decimales a los numeros que pudiran haber escrito
                                     if(tipo == 0 && !sIn.isEmpty())
                                         sIn = quitaDoble(sIn);
-                                     if( !sIn.matches("\\d{5}")) 
-                                         break proveedor;
+                                     if( !sIn.matches("\\d{5}")){
+                                         wkbok = agregaError(row, wkbok, iRows, iContCell, "Formato invalido.");
+                                        iRows++;
+                                        break proveedor;
+                                     } 
                                      else{
                                          valores.add(sIn);
                                      }
                                 break;
                                 case 12://RFC
-                                    sIn = ( valores.get(2).equals("0") )? Star.checaLongitud(13, sIn): Star.checaLongitud(12, sIn);
-                                    rfc = ( valores.get(2).equals("0") )?     "[a-zA-Z]{4}\\d{6}.{3}":  "[a-zA-Z]{3}\\d{6}.{3}";
-
-                                    if( !sIn.matches(rfc))
+                                    if( !sIn.trim().matches("[a-zA-Z\\&]{4}\\d{6}.{3}") && !sIn.trim().matches("[a-zA-Z\\&]{3}\\d{6}.{3}")){
+                                        wkbok = agregaError(row, wkbok, iRows, iContCell,"Formato de RFC Invalido.");
+                                        iRows++;
                                         break proveedor;
+                                    }
                                     else{//Si no existe el rfc, lo agrega
                                         if( Star.iExisteRFC(con, sIn, "provs") == 0)
                                             valores.add(sIn);
                                         else//si ya existe o hay algun error se brinca al siguiente cliente
+                                        {
+                                            wkbok = agregaError(row, wkbok, iRows, iContCell,"El RFC ya se encuentra registrado en otro proveedor.");
+                                            iRows++;
                                             break proveedor;
+                                        }
+
                                     }
                                  break;
                                 case 13: case 25: case 26://email
                                     sIn = Star.checaLongitud(100, sIn);
                                     if( !sIn.matches(".+@.+")){
                                         if(iContCell == 13)//si es el correo obligatorio y no cumple se brinca al siguiente cliente
-                                            break proveedor;
+                                        {
+                                            wkbok = agregaError(row, wkbok, iRows, iContCell,"Formato de email invalido.");
+                                            iRows++;
+                                            break proveedor;   
+                                        }
                                         else
                                             valores.add("");
                                     }
@@ -11197,8 +11238,33 @@ public class Princip extends javax.swing.JFrame
 
                         //si no tiene codigo, mando llamar el consecutivo
                         if(valores.get(0).isEmpty()){
-                            String s = regresaConsecutivo(valores.get(1),"PROV", con);
+                            boolean existe = false;
+                            String s;
+                            //mienstras existea algun otro proveedor con el mismo codigo+serie
+                            do{
+                                s = regresaConsecutivo(valores.get(1),"PROV", con);
+                                try
+                                {
+                                    sQ = "SELECT prov FROM provs WHERE CONCAT_WS('', ser, prov) = '" + sSer + s + "'";	                        
+                                    st = con.createStatement();
+                                    rs = st.executeQuery(sQ);
+                                    /*Si hay datos entonces si existe y continua*/
+                                    if(rs.next())
+                                        existe = true;
+                                }
+                                catch(SQLException e)
+                                {
+                                    //Cierra la base de datos y regresa
+                                    if(Star.iCierrBas(con)==-1)                                
+                                        return;
 
+                                    /*Agrega en el log*/
+                                    Login.vLog(e.getMessage());
+
+                                    s = "-1";
+                                }
+                            }while(existe);
+                                    
                             if(s.contentEquals("-1"))//si hubo error regresa
                                 return;
                             else//sino, reemplaza el condigo por el consecutivo
@@ -11231,17 +11297,27 @@ public class Princip extends javax.swing.JFrame
                 }
             }/*Fin de while (rowIterator.hasNext())*/
              
-
-                /*Esconde la forma de loading*/
-                if(Star.lCargGral!=null)
-                    Star.lCargGral.setVisible(false);
+            if(iRows > 0){
+                try{
+                    boolean delete = new File(sRut).delete();
+                    FileOutputStream fileOut = new FileOutputStream(sRut);
+                    wkbok.write(fileOut);
+                    fileOut.close();
+                }catch(Exception e){
+                /*Mensajea y regresa*/
+                        JOptionPane.showMessageDialog(null, "Error al escribir los errores encontrados en los registros por " + e.getMessage(), "Error BD", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconEr)));                    
+                }
+            }        
+            /*Esconde la forma de loading*/
+            if(Star.lCargGral!=null)
+                Star.lCargGral.setVisible(false);
 
                 /*Mensaje de Ã©xito*/
                 //JOptionPane.showMessageDialog(null, "Termino importaciÃ³n desde \"" + sRut + "\".", "Proveedores", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
 
 //            }/*Fin de public void run()*/
 //        };
-//        th.start();                                   
+//        th.start();  
         
     }//GEN-LAST:event_jMImpProvsActionPerformed
 
@@ -13304,7 +13380,59 @@ public class Princip extends javax.swing.JFrame
         RepPrevCom c = new RepPrevCom();
         c.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
-    
+
+    private void jMenu4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu4ActionPerformed
+    /*1 07 2015 Felipe Ruiz Garcia*/
+    /*Metodo hace que la forma Sincronizar se abra solo una vez */
+    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+        
+          /*Abre la forma de sincronizar una sola vez*/
+        if(Star.ventanaSincronizar==null)
+        {            
+        Star.ventanaSincronizar = new correoTerminal();
+        Star.ventanaSincronizar.setVisible(true);
+        }
+        else
+        {    
+            /*Si ya esta visible entonces traela al frente*/
+            if(Star.ventanaSincronizar.isVisible())            
+                Star.ventanaSincronizar.toFront();
+            else
+                Star.ventanaSincronizar.setVisible(true);            
+        }   
+    }//GEN-LAST:event_jMenu4MouseClicked
+
+    private void jMInvenImpoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMInvenImpoActionPerformed
+        /*Configura el file chooser para escogerl a ruta donde esta el archivo de excel*/
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Archivo de excel");
+
+        /*Si el usuario no presiono aceptar entonces*/
+        String sRut;
+        if(fc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
+            return;                                            
+        
+        /*Lee la ruta seleccionada*/
+        sRut    = fc.getCurrentDirectory().getAbsolutePath();
+
+        /*Concatena la carpeta final seleccionada*/
+        sRut    += "\\" + fc.getSelectedFile().getName();   
+
+        /*Si no es un archivo de excel entonces*/
+        if(!sRut.endsWith("xlsx") && !sRut.endsWith("xls"))
+        {
+            /*Mensajea y regresa*/
+            JOptionPane.showMessageDialog(null, "No es un archivo de excel. Ingresa por favor un archivo .xlsx o .xls", "Archivo no válido", JOptionPane.INFORMATION_MESSAGE, null); 
+            return;
+        }                
+
+        /*Llama a la forma que harÃ¡ la importaciÃ³n*/
+        Loadin lo = new Loadin(sRut);
+        lo.setVisible(true);
+    }//GEN-LAST:event_jMInvenImpoActionPerformed
+/**/    
         /*Cuando se presiona el botón de intérfaz de contapaqi*/
     private void jMContpaqActionPerformed(java.awt.event.ActionEvent evt) {                                          
      
@@ -13677,6 +13805,221 @@ public class Princip extends javax.swing.JFrame
         /*Coloca la bandera para saber que hubo un evento del teclado*/
         bIdle   = true;                                            
     }            
+
+    public static XSSFWorkbook agregaError(XSSFRow row, XSSFWorkbook wkbok, final int cont,final int celdaError,final String comentario) {
+        //Si no existe la hoja de errores la creo
+        if(wkbok.getSheet("Errores") == null){
+            wkbok.createSheet("Errores");
+            XSSFRow r = wkbok.getSheet("Errores").createRow(0);
+            //Creo los encabezados 
+            for (int i = 1; i < wkbok.getSheetAt(0).getRow(0).getLastCellNum(); i++) {
+                //r.createCell(i,Cell.CELL_TYPE_STRING).setCellStyle(wkbok.getSheetAt(0).getRow(0).getCell(i).getCellStyle());
+                r.createCell(i,Cell.CELL_TYPE_STRING).setCellValue(wkbok.getSheetAt(0).getRow(0).getCell(i).getStringCellValue());
+            }
+
+        }
+        //Obtengo la hoja
+        XSSFSheet sh = wkbok.getSheet("Errores");
+        //Creo la row
+        sh.createRow(cont+1);
+        //Creo la nueva row
+        XSSFRow nRow = sh.getRow(cont+1);
+        //Nueva y vieja celda
+        XSSFCell oldCell;
+        
+        try{
+            for (int i = 1; i <= row.getLastCellNum(); i++) {
+                oldCell = row.getCell(i);
+                nRow.createCell(i);
+                 // Set the cell data value
+                if(oldCell == null)
+                    nRow.getCell(i).setCellValue("");
+                else
+                    switch (oldCell.getCellType()) {
+                        case Cell.CELL_TYPE_BLANK:
+                            nRow.getCell(i).setCellValue("");
+                            break;
+                        case Cell.CELL_TYPE_STRING:
+                            nRow.getCell(i).setCellValue(oldCell.getStringCellValue());
+                            break;
+                        case Cell.CELL_TYPE_NUMERIC:
+                            nRow.getCell(i).setCellValue(oldCell.getNumericCellValue());
+                            break;
+                        default: System.out.println(oldCell.getCellType());
+                    }
+                //Si es la celda que causo el error la pinto y agrego el comentario
+                if(i == celdaError){
+                    XSSFCellStyle style = wkbok.createCellStyle();
+                    style.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+                    style.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+                    nRow.getCell(i).setCellStyle(style);
+                    
+                    nRow.getCell(i).setCellComment( creaComentario(comentario, wkbok, i, nRow.getRowNum()));
+                    //Ajusto el size de la celda al contenido
+                    wkbok.getSheetAt(2).autoSizeColumn(i);
+                }
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return wkbok;
+    }
+
+public static Comment creaComentario(final String comentario, XSSFWorkbook wb, final int i,final int rowNum) {
+
+        CreationHelper factory = wb.getCreationHelper();
+
+        Drawing drawing = wb.getSheetAt(2).createDrawingPatriarch();
+
+        // When the comment box is visible, have it show in a 1x3 space
+        ClientAnchor anchor = factory.createClientAnchor();
+        anchor.setCol1(wb.getSheetAt(2).getRow(rowNum).getCell(i).getColumnIndex());
+        anchor.setCol2(wb.getSheetAt(2).getRow(rowNum).getCell(i).getColumnIndex()+1);
+        anchor.setRow1(rowNum);
+        anchor.setRow2(rowNum+3);
+
+        // Create the comment and set the text+author
+        Comment comment = drawing.createCellComment(anchor);
+        RichTextString str = factory.createRichTextString(comentario);
+        comment.setString(str);
+        //comment.setAuthor("");
+
+        return comment;
+    }
+    
+    public void deshabilitaBotones() {
+        //Abre la conexion
+        Connection con = Star.conAbrBas(true, false);
+        
+        //Declara variables de la base de datos    
+        java.sql.Statement   st;
+        java.sql.ResultSet   rs;                        
+        String      sQ;
+        try {
+            /*Obtiene todos los datos del usuario*/
+            sQ  = "SELECT * FROM er_permisos WHERE FKIdUsuario = (SELECT id_id FROM estacs WHERE estac = '"+Login.sUsrG+"')";
+            st = con.createStatement();
+            rs  = st.executeQuery(sQ);
+            /*Si hay datos*/
+            if(rs.next())
+            {
+                jMSist.setEnabled((Integer.parseInt(rs.getString("permisoConf"))==(1)));
+                if(jMSist.isEnabled()){
+                    jMenIt4.setEnabled((Integer.parseInt(rs.getString("permisoCorreos"))==(1)));
+                    jMenItDatsGenEmp.setEnabled((Integer.parseInt(rs.getString("permisoDatosEmpresa"))==(1)));
+                    jMenSer.setEnabled((Integer.parseInt(rs.getString("permisoSeries"))==(1)));
+                    jMenItImpres.setEnabled((Integer.parseInt(rs.getString("permisoImpresoras"))==(1)));
+                    jMenCambIco.setEnabled((Integer.parseInt(rs.getString("permisoCambiarIcono"))==(1)));
+                    jMConfAd.setEnabled((Integer.parseInt(rs.getString("permisoConfiguracionesGenerales"))==(1)));
+                }
+                jMMUsr.setEnabled((Integer.parseInt(rs.getString("permisoUsuarios"))==(1)));
+                if(jMMUsr.isEnabled()){
+                    jMenItEstacs.setEnabled((Integer.parseInt(rs.getString("permisoUsuariosDefinir"))==(1)));
+                    jMUsr.setEnabled((Integer.parseInt(rs.getString("permisoUsuariosConectados"))==(1)));
+                    jMenItPermEstacs.setEnabled((Integer.parseInt(rs.getString("permisoUsuariosPermisos"))==(1)));
+                }
+                jMen2.setEnabled((Integer.parseInt(rs.getString("permisoClaves"))==(1)));
+                jMenRep.setEnabled((Integer.parseInt(rs.getString("permisoReparar"))==(1)));
+                if(jMenRep.isEnabled()){
+                    jMenIt8.setEnabled((Integer.parseInt(rs.getString("permisoRepararErrores"))==(1)));
+                    jMenIt9.setEnabled((Integer.parseInt(rs.getString("permisoRepararRestaurar"))==(1)));
+                }
+                jMenBDs.setEnabled((Integer.parseInt(rs.getString("permisoBaseDatos"))==(1)));
+                if(jMenBDs.isEnabled()){
+                    jMenItModBD.setEnabled((Integer.parseInt(rs.getString("permisoBaseDatosConexiones"))==(1)));
+                    jMenConfigFil.setEnabled((Integer.parseInt(rs.getString("permisoBaseDatosArchivo"))==(1)));
+                }
+                jMMRep.setEnabled((Integer.parseInt(rs.getString("permisoReportes"))==(1)));
+                if(jMMRep.isEnabled()){
+                    jMEstacs.setEnabled((Integer.parseInt(rs.getString("permisoReportesUsuarios"))==(1)));
+                    jMResp.setEnabled((Integer.parseInt(rs.getString("permisoReportesRespaldos"))==(1)));
+                    jMRepLogCo.setEnabled((Integer.parseInt(rs.getString("permisoReportesLog"))==(1)));
+                    jMEstadisCor.setEnabled((Integer.parseInt(rs.getString("permisoReportesEstadistica"))==(1)));
+                }
+                jMRevo.setEnabled((Integer.parseInt(rs.getString("permisoRevocacion"))==(1)));
+                jMActSis.setEnabled((Integer.parseInt(rs.getString("permisoActivarSistema"))==(1)));
+                jMConta.setEnabled((Integer.parseInt(rs.getString("permisoContabilidad"))==(1)));
+                jMConcepNot.setEnabled((Integer.parseInt(rs.getString("permisoConceptosNC"))==(1)));
+                jMCatGara.setEnabled((Integer.parseInt(rs.getString("permisoCatalogoGarantias"))==(1)));
+                jMZon.setEnabled((Integer.parseInt(rs.getString("permisoZonas"))==(1)));
+                jMGir.setEnabled((Integer.parseInt(rs.getString("permisoGiros"))==(1)));
+                jMenItMons.setEnabled((Integer.parseInt(rs.getString("permisoMonedas"))==(1)));
+                jMeItImps.setEnabled((Integer.parseInt(rs.getString("permisoImpuestos"))==(1)));
+                jBComps.setEnabled((Integer.parseInt(rs.getString("permisoCompras"))==(1)));
+                if(jBComps.isEnabled()){
+                    btnsCompras.add((Integer.parseInt(rs.getString("permisoComprasCancelar"))==(1)));
+                    btnsCompras.add((Integer.parseInt(rs.getString("permisoComprasDevolucion"))==(1)));
+                    btnsCompras.add((Integer.parseInt(rs.getString("permisoComprasParcial"))==(1)));
+                    btnsCompras.add((Integer.parseInt(rs.getString("permisoComprasNuevo"))==(1)));
+                    btnsCompras.add((Integer.parseInt(rs.getString("permisoComprasNotCredito"))==(1)));
+                    btnsCompras.add((Integer.parseInt(rs.getString("permisoComprasVer"))==(1)));
+                    btnsCompras.add((Integer.parseInt(rs.getString("permisoComprasCargarArchivo"))==(1)));
+                    btnsCompras.add((Integer.parseInt(rs.getString("permisoComprasBorrarArchivo"))==(1)));
+                    btnsCompras.add((Integer.parseInt(rs.getString("permisoComprasRecibirOrden"))==(1)));
+                }
+                jBProvs.setEnabled((Integer.parseInt(rs.getString("permisoProvee"))==(1)));
+                if(jBProvs.isEnabled()){
+                    btnsProvee.add((Integer.parseInt(rs.getString("permisoProveeNuevo"))==(1)));
+                    btnsProvee.add((Integer.parseInt(rs.getString("permisoProveeModificar"))==(1)));
+                    btnsProvee.add((Integer.parseInt(rs.getString("permisoProveeVer"))==(1)));
+                    btnsProvee.add((Integer.parseInt(rs.getString("permisoProveeBorrar"))==(1)));
+                }
+                jBPrevComp.setEnabled((Integer.parseInt(rs.getString("permisoPrevio"))==(1)));
+                if(jBPrevComp.isEnabled()){
+                    btnsPrevio.add((Integer.parseInt(rs.getString("permisoPrevioNueva"))==(1)));
+                    btnsPrevio.add((Integer.parseInt(rs.getString("permisoPrevioAbrir"))==(1)));
+                    btnsPrevio.add((Integer.parseInt(rs.getString("permisoPrevioVer"))==(1)));
+                    btnsPrevio.add((Integer.parseInt(rs.getString("permisoPrevioCancelar"))==(1))); 
+                    btnsPrevio.add((Integer.parseInt(rs.getString("permisoPrevioSeries"))==(1)));
+                    btnsPrevio.add((Integer.parseInt(rs.getString("permisoPrevioCompra"))==(1)));
+                }
+                jMInven.setEnabled((Integer.parseInt(rs.getString("permisoInventario"))==(1)));
+                jBProds.setEnabled((Integer.parseInt(rs.getString("permisoProductos"))==(1)));
+                if(jBProds.isEnabled()){
+                    btnsProductos.add((Integer.parseInt(rs.getString("permisoProductosNuevo"))==(1)));
+                    btnsProductos.add((Integer.parseInt(rs.getString("permisoProductosModificar"))==(1)));
+                    btnsProductos.add((Integer.parseInt(rs.getString("permisProductosBorrar"))==(1)));
+                }
+                jBEmps.setEnabled((Integer.parseInt(rs.getString("permisoClientes"))==(1)));
+                if(jBEmps.isEnabled()){
+                    btnsClientes.add((Integer.parseInt(rs.getString("permisoClientesNuevo"))==(1)));
+                    btnsClientes.add((Integer.parseInt(rs.getString("permisoClientesModificar"))==(1)));
+                    btnsClientes.add((Integer.parseInt(rs.getString("permisoClientesVer"))==(1)));
+                    btnsClientes.add((Integer.parseInt(rs.getString("permisoClientesBorrar"))==(1))); 
+                    btnsClientes.add((Integer.parseInt(rs.getString("permisoClientesEnviar"))==(1)));
+                }
+                jBVtas.setEnabled((Integer.parseInt(rs.getString("permisoVentas"))==(1)));
+                if(jBVtas.isEnabled()){
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasCancelar"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasDevolucion"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasParcial"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasNueva"))==(1))); 
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasNotCredito"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasVer"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasEnviar"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasTimbrar"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasEntregar"))==(1))); 
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasComprobar"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasAcuse"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasObtenerXml"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasFacturar"))==(1)));
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasCargarArchivo"))==(1))); 
+                    btnsVentas.add((Integer.parseInt(rs.getString("permisoVentasBorrarArchivo"))==(1)));
+                }
+                jBCots.setEnabled((Integer.parseInt(rs.getString("permisoCotiza"))==(1)));
+                if(jBCots.isEnabled()){
+                    btnsCotiza.add((Integer.parseInt(rs.getString("permisoCotizaNueva"))==(1)));
+                    btnsCotiza.add((Integer.parseInt(rs.getString("permisoCotizaAbrir"))==(1)));
+                    btnsCotiza.add((Integer.parseInt(rs.getString("permisoCotizaVer"))==(1)));
+                    btnsCotiza.add((Integer.parseInt(rs.getString("permisoCotizaCancelar"))==(1)));
+                    btnsCotiza.add((Integer.parseInt(rs.getString("permisoCotizaReenviar"))==(1))); 
+                    btnsCotiza.add((Integer.parseInt(rs.getString("permisoCotizaVenta"))==(1)));
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PermsEstacs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     class ExtensionFileFilter extends FileFilter {
   String description;
 
@@ -13762,7 +14105,6 @@ public class Princip extends javax.swing.JFrame
     private javax.swing.JMenuItem jMConcepPags;
     private javax.swing.JMenuItem jMConfAd;
     private javax.swing.JMenu jMConta;
-    private javax.swing.JMenuItem jMContpaq;
     private javax.swing.JMenuItem jMContra;
     private javax.swing.JMenuItem jMCosts;
     private javax.swing.JMenuItem jMCuade;
@@ -13837,7 +14179,6 @@ public class Princip extends javax.swing.JFrame
     private javax.swing.JMenu jMMUbic;
     private javax.swing.JMenu jMMUsr;
     private javax.swing.JMenu jMMUtil;
-    private javax.swing.JMenuItem jMMacroP;
     private javax.swing.JMenuItem jMModel;
     private javax.swing.JMenuItem jMMsj;
     private javax.swing.JMenuItem jMNotic;

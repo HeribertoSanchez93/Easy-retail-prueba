@@ -480,7 +480,7 @@ public class Cxp extends javax.swing.JFrame
                 String sPre     = rs.getString("cost");                                            
                 
                 /*Dale formato de moneda a los importes*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());                
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));                
                 double dCant    = Double.parseDouble(sImpo);                
                 sImpo           = n.format(dCant);
                 dCant           = Double.parseDouble(sPre);                
@@ -632,7 +632,7 @@ public class Cxp extends javax.swing.JFrame
                 
                 /*Dale formato de moneda a los totales*/                
                 double dCant    = Double.parseDouble(sSubTot);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sSubTot         = n.format(dCant);
                 dCant           = Double.parseDouble(sImpue);                
                 sImpue          = n.format(dCant);
@@ -1641,7 +1641,7 @@ public class Cxp extends javax.swing.JFrame
         String sAbon    = jTAbon.getText().replace("$", "").replace(",", "");
         
         /*Dale formato de moneda a la cantidad a abonar*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sAbon);                
         sAbon           = n.format(dCant);
         
@@ -1815,7 +1815,7 @@ public class Cxp extends javax.swing.JFrame
         String sAbon    = jTAbon.getText().replace("$", "").replace(",", "");
         
         /*Dale formato de moneda a la cantidad a abonar*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sAbon);                
         sAbon           = n.format(dCant);
         
@@ -2065,7 +2065,7 @@ public class Cxp extends javax.swing.JFrame
         /*Dale formato de moneda a la cantidad*/
         String sAbon    = jTAbon.getText().replace("$", "").replace(",", "");        
         double dCant    = Double.parseDouble(sAbon);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sAbon           = n.format(dCant);
         
         /*Colocalo en el campo*/
@@ -2272,7 +2272,7 @@ public class Cxp extends javax.swing.JFrame
             sDiaCred    = "0";
         
         /*Dale formato de moneda al límite de crédito*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(sLimCred);                
         sLimCred        = n.format(dCant);
 

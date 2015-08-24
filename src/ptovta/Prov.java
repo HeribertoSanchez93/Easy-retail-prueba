@@ -100,10 +100,16 @@ public class Prov extends javax.swing.JFrame
     
     
     /*Consructor sin argumentos*/
-    public Prov(String sProv, javax.swing.JTable jTabPro) 
+    public Prov(String sProv, javax.swing.JTable jTabPro, java.util.ArrayList<Boolean> permisos) 
     {
         /*Inicializa los componentes gráfcos*/
         initComponents();
+        
+        //Revisa permisos
+        if(!permisos.isEmpty()){
+            jBGuar.setEnabled(permisos.get(0));
+        }
+        
         if(sProv.compareTo("")==0)
         {
             jComSer.setVisible(true);
@@ -290,7 +296,7 @@ public class Prov extends javax.swing.JFrame
                 if(sLimCred.compareTo("")!=0)
                 {                    
                     double dCant    = Double.parseDouble(sLimCred);                   
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     sLimCred        = n.format(dCant);                    
                 }                                                                       
                 
@@ -3669,7 +3675,7 @@ public class Prov extends javax.swing.JFrame
         double dCant    = Double.parseDouble(sTex);
         
         /*Formatealo*/
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTex            = n.format(dCant);
         
         /*Colocalo de nu en el campo de texto*/

@@ -671,7 +671,7 @@ public class AOrd extends javax.swing.JFrame
                         
                         /*Dale formato de moneda al importe*/                                                
                         double dCant    = Double.parseDouble(sImp);                
-                        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                         sImp            = n.format(dCant);
                         
                         /*Dale formato de moneda al importe del impuesto*/
@@ -748,7 +748,7 @@ public class AOrd extends javax.swing.JFrame
                 sImpueImp               = rs.getString("impoimpue");
                 
                 /*Dales formato de moneda a los campos que lo requieren*/                
-                NumberFormat n          = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n          = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant            = Double.parseDouble(sUltCost);                                
                 sUltCost                = n.format(dCant);
                 dCant                   = Double.parseDouble(sImp);                                
@@ -788,7 +788,7 @@ public class AOrd extends javax.swing.JFrame
                 
                 /*Dales formato de moneda a los totales*/                                
                 double dCant    = Double.parseDouble(sSub);                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sSub            = n.format(dCant);
                 dCant           = Double.parseDouble(sImpue);                                
                 sImpue          = n.format(dCant);
@@ -886,17 +886,17 @@ public class AOrd extends javax.swing.JFrame
             
             /*Formatea a moneda el subtotal*/
             double dCant                    = Double.parseDouble(sSubTot);
-            n                               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            n                               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sSubTot                         = n.format(dCant);
             
             /*Formatea a moneda al impuesto*/
             dCant                           = Double.parseDouble(sImpuest);
-            n                               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            n                               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sImpuest                        = n.format(dCant);
             
             /*Formatea a moneda al total*/
             dCant                           = Double.parseDouble(sTot);
-            n                               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            n                               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sTot                            = n.format(dCant);
 
             /*Colocalos en los campos*/
@@ -2401,13 +2401,13 @@ public class AOrd extends javax.swing.JFrame
                 sTotImpue               = Double.toString((Double.parseDouble(sImp) * (Double.parseDouble(sImpueVal) / 100)));
                 
                 /*Vuelve a darle formato al importe*/                                
-                NumberFormat n          = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n          = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant            = Double.parseDouble(sImp);                                                    
                 sImp                    = n.format(dCant);
         
                 /*Dale formato de moneda al total del impuesto*/        
                 dCant                   = Double.parseDouble(sTotImpue);                
-                n                       = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                n                       = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sTotImpue               = n.format(dCant);
 
                 /*Pon la bandera para saber que si existe ya en la tabla*/
@@ -2432,17 +2432,17 @@ public class AOrd extends javax.swing.JFrame
                
         /*Dale formato de moneda al importe*/        
         double dCant                    = Double.parseDouble(sImp);                
-        NumberFormat n                  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n                  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sImp                            = n.format(dCant);
         
         /*Dale formato de moneda al costo*/        
         dCant                           = Double.parseDouble(sCost);                
-        n                               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        n                               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sCost                           = n.format(dCant);
         
         /*Dale formato de moneda al total del impuesto*/        
         dCant                           = Double.parseDouble(sTotImpue);                
-        n                               = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        n                               = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTotImpue                       = n.format(dCant);
         
         /*Si el producto no existe en la tabla entonces*/
@@ -3237,7 +3237,7 @@ public class AOrd extends javax.swing.JFrame
             
             /*Dale formato de moneda al costo*/            
             double dCant    = Double.parseDouble(sCost);                
-            NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             sCost           = n.format(dCant);
             
             /*Colocalo en el campo nuevamente*/
@@ -3717,7 +3717,7 @@ public class AOrd extends javax.swing.JFrame
                 
         /*Dale formato de moneda a los totales*/        
         double dCant    = Double.parseDouble(sSubTot);                
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sSubTot         = n.format(dCant);
         dCant           = Double.parseDouble(sImpue);                        
         sImpue          = n.format(dCant);
@@ -3864,7 +3864,7 @@ public class AOrd extends javax.swing.JFrame
                         return;
 
                     /*Si la carpeta de easy reatail no existe entonces creala*/
-                    sCarp += "\\Easy Retail® Admin";
+                    sCarp += "\\Easy Retail Admin";
                     if(!new File(sCarp).exists())
                         new File(sCarp).mkdir();
 
@@ -4005,6 +4005,17 @@ public class AOrd extends javax.swing.JFrame
             Properties props = System.getProperties();
             props.setProperty("mail.smtp.host", sServSMTPSal);
             props.put("mail.smtp.starttls.enable", sActSSL);
+            if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        System.out.println("llego");
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
             props.put("mail.smtp.auth", "true");
             props.put("mail.debug", "true");
             props.put("mail.smtp.port", sSMTPPort);
@@ -4012,7 +4023,7 @@ public class AOrd extends javax.swing.JFrame
             props.put("mail.transport.protocol", "smtp");
             final String username = sUser;
             final String password = sContra;
-            Session session = Session.getDefaultInstance(props,
+            Session session = Session.getInstance(props,
                     new Authenticator() {
                         @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
@@ -4168,13 +4179,24 @@ public class AOrd extends javax.swing.JFrame
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sSrvSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sSrvSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        System.out.println("llego");
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
                         final String password = sContra;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -4260,13 +4282,24 @@ public class AOrd extends javax.swing.JFrame
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sSrvSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sSrvSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        System.out.println("llego");
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
                         final String password = sContra;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -4353,13 +4386,24 @@ public class AOrd extends javax.swing.JFrame
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sSrvSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sSrvSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        System.out.println("llego");
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
                         props.put("mail.store.protocol", "pop3");
                         props.put("mail.transport.protocol", "smtp");
                         final String password = sContra;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {

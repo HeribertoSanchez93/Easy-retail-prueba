@@ -91,20 +91,6 @@ public class Vtas extends javax.swing.JFrame
     private String          sVtaDevOri;
     private String          sFolFiscOri;
     
-    /*Declara variables originales del automóvil*/
-    private String          sAutRecibOri;
-    private String          sAutMarcOri;
-    private String          sAutModOri;
-    private String          sAutColoOri;
-    private String          sAutPlacOri;
-    private String          sAutNomOri;
-    private String          sAutNoCircOri;
-    private String          sAutNoLicOri;
-    private String          sAutTelOri;
-    private String          sAutDirPartOri;
-    private String          sAutDirOficOri;
-    private String          sAutTelOfiOri;    
-    
     /*Declara variables originales de la tabla 2*/
     private String          sCantOri;
     private String          sCantEntreOri;
@@ -134,11 +120,27 @@ public class Vtas extends javax.swing.JFrame
     
     
     /*Constructor sin argumentos*/
-        public Vtas() 
+        public Vtas(java.util.ArrayList<Boolean> permisos) 
     {                                
         /*Inicaliza los componentes gráficos*/
         initComponents();
         
+        //Revisa Permisos
+        jBCa.setEnabled(permisos.get(0));
+        jBDev.setEnabled(permisos.get(1));
+        jBDevP.setEnabled(permisos.get(2));
+        jBNew.setEnabled(permisos.get(3));
+        jBNotC.setEnabled(permisos.get(4));
+        jBVer.setEnabled(permisos.get(5));
+        jBMail.setEnabled(permisos.get(6));
+        jBTim.setEnabled(permisos.get(7));
+        jBEntre.setEnabled(permisos.get(8));
+        jBCompro.setEnabled(permisos.get(9));
+        jBAcus.setEnabled(permisos.get(10));
+        jBXML.setEnabled(permisos.get(11));
+        jBFac.setEnabled(permisos.get(12));
+        jBCarg.setEnabled(permisos.get(13));
+        jBDel.setEnabled(permisos.get(14));
         //se saca acomoda los componentes dependiendo de la resolucion
         vMyLayout();
         
@@ -1878,7 +1880,7 @@ public class Vtas extends javax.swing.JFrame
                 String sImp             = rs.getString("impo");
                 String test             = rs.getString("extr1");
                 /*Dales formato de moneda a los totales*/                                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sPre);                                
                 sPre            = n.format(dCant);
                 dCant           = Double.parseDouble(sImp);                                
@@ -2553,7 +2555,7 @@ public class Vtas extends javax.swing.JFrame
                     }
 
                     /*Dale formato de moneda a los totales*/                    
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     double dCant    = Double.parseDouble(sSubTot);                
                     sSubTot         = n.format(dCant);
                     dCant           = Double.parseDouble(sImpue);                
@@ -3220,7 +3222,7 @@ public class Vtas extends javax.swing.JFrame
                     }
 
                     /*Dale formato de moneda a los totales*/                    
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     double dCant    = Double.parseDouble(sSubTot);                
                     sSubTot         = n.format(dCant);
                     dCant           = Double.parseDouble(sImpue);                
@@ -3523,7 +3525,7 @@ public class Vtas extends javax.swing.JFrame
                 dCont           = dCont + rs.getDouble("vtas.TOT");
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sTot);                                
                 sTot            = n.format(dCant);
                 dCant           = Double.parseDouble(sTotDesc);                                
@@ -3552,7 +3554,7 @@ public class Vtas extends javax.swing.JFrame
             return;
 
         //Dale formato de moneda al total de ventas
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         String sTotVtas = n.format(dCont);
         
         //Coloca el total de ventas y el contador igual
@@ -4836,11 +4838,12 @@ public class Vtas extends javax.swing.JFrame
         String sEstLoc      = "";
         String sPaiLoc      = "";
         String sRFCLoc      = "";
+        String sWeb         = "";
                 
         /*Obtiene todos los datos de la empresa local*/
         try
         {                  
-            sQ = "SELECT noext, noint, nom, calle, tel, col, cp, ciu, estad, pai, rfc FROM basdats WHERE codemp = '" + Login.sCodEmpBD + "'";
+            sQ = "SELECT noext, noint, nom, calle, tel, col, cp, ciu, estad, pai, rfc, pagweb FROM basdats WHERE codemp = '" + Login.sCodEmpBD + "'";
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos entonces obtiene los resultados*/
@@ -4857,6 +4860,7 @@ public class Vtas extends javax.swing.JFrame
                 sRFCLoc             = rs.getString("rfc");
                 sNoExtLoc           = rs.getString("noext");
                 sNoIntLoc           = rs.getString("noint");
+                sWeb                = rs.getString("pagweb");
             }                        
         }
         catch(SQLException expnSQL)
@@ -4907,7 +4911,7 @@ public class Vtas extends javax.swing.JFrame
             /*Obtiene algunos datos del cliente de la venta*/
             try
             {
-                sQ = "SELECT catgral, emps.CTAPRED, regfisc, lugexp, certsat, sell, sellsat, cadori, folfisc, vtas.MON, subtot, impue, CASE WHEN vtas.FORMPAG = 'CR' THEN 'Crédito' ELSE 'Contado' END conds, emps.NOM, vtas.FALT, vtas.TIPDOC, vtas.NOREFER, vtas.NOSER, vtas.CTA, vtas.METPAG, tot, calle, tel, col, pai, cp, noext, noint, ciu, emps.ESTAD, rfc, co1 FROM vtas LEFT OUTER JOIN emps ON CONCAT_WS('', emps.SER, emps.CODEMP) = vtas.CODEMP WHERE vta = " + jTab1.getValueAt(iSel[x], 1).toString();	
+                sQ = "SELECT catgral,CONCAT_WS('',emps.lada,emps.tel) as tel, emps.CTAPRED, regfisc, lugexp, certsat, sell, sellsat, cadori, folfisc, vtas.MON, subtot, impue, vtas.FORMPAG as conds, emps.NOM, vtas.FALT, vtas.TIPDOC, vtas.NOREFER, vtas.NOSER, vtas.CTA, vtas.METPAG, tot, calle, tel, col, pai, cp, noext, noint, ciu, emps.ESTAD, rfc, co1 FROM vtas LEFT OUTER JOIN emps ON CONCAT_WS('', emps.SER, emps.CODEMP) = vtas.CODEMP WHERE vta = " + jTab1.getValueAt(iSel[x], 1).toString();	
                 st = con.createStatement();
                 rs = st.executeQuery(sQ);
                 /*Si hay datos entonces obtiene los resultados*/
@@ -4929,7 +4933,8 @@ public class Vtas extends javax.swing.JFrame
                     sNoSer      = rs.getString("noser");                                   
                     sCall       = rs.getString("calle");                                   
                     sCol        = rs.getString("col");                                   
-                    sPai        = rs.getString("pai");                                   
+                    sPai        = rs.getString("pai");
+                    sTel        = rs.getString("tel");
                     sCP         = rs.getString("cp");                                   
                     sNoExt      = rs.getString("noext");                                   
                     sNoInt      = rs.getString("noint");                                   
@@ -5044,6 +5049,7 @@ public class Vtas extends javax.swing.JFrame
             final String sRegFiscFi = sRegFisc;
             final String sTipRepFi  = sTipRep;
             final String sCatGralFi = sCatGral;
+            final String sWebFi     = sWeb;
             
             /*Genera el PDF si es factura, remisión o nota de crédito*/
             if(sTipDoc.compareTo("FAC")==0 || sTipDoc.compareTo("REM")==0 || sTipDoc.compareTo("NOTC")==0)
@@ -5054,7 +5060,7 @@ public class Vtas extends javax.swing.JFrame
                     @Override
                     public void run()
                     {                                                                                          
-                        Star.vPDF("", sMonFi, sFolFi, sCatGralFi, sVtaFi, sSerFi, sFechFi, sNomFi, sPaiFi, sTelFi, sCallFi, sColFi, sCPFi, sNoExtFi, sNoIntFi, sCiuFi, sEstadFi, sRFCFi, sCo1Fi, Star.sObLet(sTotFi, sMonFi, sSimbFi, true), sSubTotFi, sImpueFi, sTotFi, sMetPagFi, sCtaFi, sCondsFi, sNomLocFi, sTelLocFi, sColLocFi, sCallLocFi, sCPLocFi, sCiuLocFi, sEstLocFi, sPaiLocFi, sRFCLocFi, sRutLogFi, true, false, false, getClass().getResourceAsStream(sTipRepFi), null, "", sRutFi, 1, true, false, 0, true, "", sFolFiscFi, sSellFi, sSellSATFi, sCadOriFi, sNoIntLocFi, sNoExtLocFi, sNoCertSATFi, sLugExpFi, sRegFiscFi, sCtaPredFi);                                        
+                        Star.vPDF("", sMonFi, sFolFi, sCatGralFi, sVtaFi, sSerFi, sFechFi, sNomFi, sPaiFi, sTelFi, sCallFi, sColFi, sCPFi, sNoExtFi, sNoIntFi, sCiuFi, sEstadFi, sRFCFi, sCo1Fi, Star.sObLet(sTotFi, sMonFi, sSimbFi, true), sSubTotFi, sImpueFi, sTotFi, sMetPagFi, sCtaFi, sCondsFi, sNomLocFi, sTelLocFi, sColLocFi, sCallLocFi, sCPLocFi, sCiuLocFi, sEstLocFi, sPaiLocFi, sRFCLocFi, sRutLogFi, true, false, false, getClass().getResourceAsStream(sTipRepFi), null, "", sRutFi, 1, true, false, 0, true, "", sFolFiscFi, sSellFi, sSellSATFi, sCadOriFi, sNoIntLocFi, sNoExtLocFi, sNoCertSATFi, sLugExpFi, sRegFiscFi, sCtaPredFi, "");                                        
                     }
                 }).start();
                 
@@ -5153,7 +5159,7 @@ public class Vtas extends javax.swing.JFrame
                             return;
 
                         /*Genera el PDF*/
-                        Star.vPDF("", sMonFi, sFolFi, "", sVtaFi, sSerFi, sFechFi, sNomFi, sPaiFi, sTelFi, sCallFi, sColFi, sCPFi, sNoExtFi, sNoIntFi, sCiuFi, sEstadFi, sRFCFi, sCo1Fi, Star.sObLet(sTotFi, sMonFi, sSimb, true), sSubTotFi, sImpueFi, sTotFi, "", "", "", sNomLocFi, sTelLocFi, sColLocFi, sCallLocFi, sCPLocFi, sCiuLocFi, sEstLocFi, sPaiLocFi, sRFCLocFi, sRutLogFi, true, false, false, in, null, "", sRutFi, 2, true, false, i52, true, "", "", "", "", "", "", "", "", "", "", "");                                                                                                                                                                           
+                        Star.vPDF("", sMonFi, sFolFi, "", sVtaFi, sSerFi, sFechFi, sNomFi, sPaiFi, sTelFi, sCallFi, sColFi, sCPFi, sNoExtFi, sNoIntFi, sCiuFi, sEstadFi, sRFCFi, sCo1Fi, Star.sObLet(sTotFi, sMonFi, sSimb, true), sSubTotFi, sImpueFi, sTotFi, "", "", "", sNomLocFi, sTelLocFi, sColLocFi, sCallLocFi, sCPLocFi, sCiuLocFi, sEstLocFi, sPaiLocFi, sRFCLocFi, sRutLogFi, true, false, false, in, null, "", sRutFi, 2, true, false, i52, true, "", "", "", "", "", "", "", "", "", "", "", sWebFi);                                                                                                                                                                           
                     }
                 }).start();
                 
@@ -7041,8 +7047,7 @@ public class Vtas extends javax.swing.JFrame
             solAcu.setToken(facCli.createSolicitudAcuseToken(sNewTok));
             solAcu.setTransaccionID(Long.parseLong(sTransId));
             solAcu.setUUID(sTID);
-            
-            System.out.println("sip");
+
             /*Pide al WS el acuse*/
             wscance.RespuestaRecuperarAcuse wsResp;
             try
@@ -7055,8 +7060,7 @@ public class Vtas extends javax.swing.JFrame
                 Star.iErrProc(this.getClass().getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC, expnWSPAC.getStackTrace());                                                       
                 continue;                
             }
-            
-            System.out.println("sip2");
+                        
             /*Completa la ruta donde se guardara el acuse*/
             String sRut = sCarp + "\\ACU-" + sRFCLoc + "-" + sSerFac + "-" + sFol + ".xml";
             
@@ -8198,7 +8202,7 @@ public class Vtas extends javax.swing.JFrame
         }                                       
         
         //Inserta en la base de datos la nueva factura
-        if(Star.iInsVtas(con, sSerFac.replace("'", "''"), sConsFac.replace("'", "''"), sCli, sSer, sSubTot, sImpue, sTot, "now()", "now()", "now()", "'CO'", "0", "", "FAC", "0", "EFE", "0000", "FAC VTAS", "0", sTotDescu, "0", "1", sTotCost, Login.sUsrG, sMon, "1", "C", "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "1", "0", "0", "0","")==-1)
+        if(Star.iInsVtas(con, sSerFac.replace("'", "''"), sConsFac.replace("'", "''"), sCli, sSer, sSubTot, sImpue, sTot, "now()", "now()", "now()", "'CO'", "0", "", "FAC", "0", "EFE", "0000", "FAC VTAS", "0", sTotDescu, "0", "1", sTotCost, Login.sUsrG, sMon, "1", "C", "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "1", "0", "0", "0","", "")==-1)
             return;
             
         /*Declara variables*/
@@ -8293,7 +8297,7 @@ public class Vtas extends javax.swing.JFrame
         
         /*Dale formato de moneda al total para quitar todos los decimales que por eso falla la función de convertir a letra*/        	
         double dCant                    = Double.parseDouble(sTot);                
-        NumberFormat n                  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n                  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         sTot                            = n.format(dCant).replace("$", "").replace(",", "");
         
         /*Obtiene el total con letra*/        

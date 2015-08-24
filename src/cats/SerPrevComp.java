@@ -452,7 +452,7 @@ public class SerPrevComp extends javax.swing.JFrame
                 String sImpoImpue               = Double.toString(Double.parseDouble(sImpo) * (Double.parseDouble(sImpueImpo) / 100));
                 
                 /*Dale formato de moneda a los totales*/                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sCost);                
                 sCost            = n.format(dCant);
                 dCant           = Double.parseDouble(sImpo);                

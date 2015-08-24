@@ -784,7 +784,18 @@ public class SelCorr extends javax.swing.JFrame
                     {
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sServSMTPSal);
-                        props.put("mail.smtp.starttls.enable", sActSSL);
+                        props.put("mail.smtp.starttls.enable","true");
+                        if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        System.out.println("llego");
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -792,7 +803,7 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUser;
                         final String password = sContraFi;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -883,7 +894,17 @@ public class SelCorr extends javax.swing.JFrame
                     {
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sServSMTPSal);
-                        props.put("mail.smtp.starttls.enable", sActSSL);
+                        props.put("mail.smtp.starttls.enable", "true");
+                        if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -891,7 +912,7 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUser;
                         final String password = sContraFi;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -982,7 +1003,17 @@ public class SelCorr extends javax.swing.JFrame
                     {
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sServSMTPSal);
-                        props.put("mail.smtp.starttls.enable", sActSSL);
+                        props.put("mail.smtp.starttls.enable", "true");
+                        if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -990,7 +1021,7 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUser;
                         final String password = sContraFi;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -1245,6 +1276,16 @@ public class SelCorr extends javax.swing.JFrame
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sServSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -1252,7 +1293,7 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUser;
                         final String password = sContraFi;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -1338,6 +1379,16 @@ public class SelCorr extends javax.swing.JFrame
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sServSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -1345,7 +1396,7 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUser;
                         final String password = sContraFi;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -1431,6 +1482,16 @@ public class SelCorr extends javax.swing.JFrame
                         Properties props = System.getProperties();
                         props.setProperty("mail.smtp.host", sServSMTPSal);
                         props.put("mail.smtp.starttls.enable", sActSSL);
+                        if(0!=sServSMTPSal.compareTo("smtp.yandex.com"))
+                    {
+                        //props.put("mail.smtp.EnableSSL.enable","true");
+                    }
+                    if(0==sSMTPPort.compareTo("465"))
+                    {
+                    props.put("mail.smtp.socketFactory.port", sSMTPPort);
+                    props.put("mail.smtp.socketFactory.class",
+                              "javax.net.ssl.SSLSocketFactory");
+                    }
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.debug", "true");
                         props.put("mail.smtp.port", sSMTPPort);
@@ -1438,7 +1499,7 @@ public class SelCorr extends javax.swing.JFrame
                         props.put("mail.transport.protocol", "smtp");
                         final String username = sUser;
                         final String password = sContraFi;
-                        Session session = Session.getDefaultInstance(props,
+                        Session session = Session.getInstance(props,
                                 new Authenticator() {
                                     @Override
                                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -1537,7 +1598,6 @@ public class SelCorr extends javax.swing.JFrame
         {
 //            /*Mensajea*/
            JOptionPane.showMessageDialog(null, "No has seleccionado un correo del que se reenviara.", "Reenviar Factura", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-//
 //            /*Coloca el foco del teclado en la tabla y regresa*/
             jTab.grabFocus();            
             return;

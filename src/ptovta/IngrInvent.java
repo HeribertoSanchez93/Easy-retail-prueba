@@ -3426,7 +3426,7 @@ public class IngrInvent extends javax.swing.JFrame
         double dCant    = Double.parseDouble(sTex);
 
         /*Formatealo*/
-        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.getDefault());
+        java.text.NumberFormat n    = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es","MX"));
         sTex                        = n.format(dCant);
 
         /*Colocalo de nu en el campo de texto*/

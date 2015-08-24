@@ -2921,7 +2921,7 @@ public class ConfGral extends javax.swing.JFrame
                         jCInsAutCaj.setSelected(false);
                     
                     /*Dale formato de moneda a la cantidad a insertar*/                    
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     double dCant    = Double.parseDouble(rs.getString("extr"));                
                     String sCan     = n.format(dCant);
                     
@@ -5988,7 +5988,7 @@ public class ConfGral extends javax.swing.JFrame
         }
         
         /*Dale formato de moneda a la cantidad y colocalo en su lugar*/        
-        NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
         double dCant    = Double.parseDouble(jTDinCaj.getText());                
         jTDinCaj.setText(n.format(dCant));          
         
@@ -8427,7 +8427,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "extr         = '" + jComSerF.getSelectedItem().toString().replace("'", "''").trim() + "', "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'serfac'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8448,7 +8448,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "extr         = '" + jComSerFac.getSelectedItem().toString().replace("'", "''").trim() + "', "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'serfacfij'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8469,7 +8469,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "extr         = '" + jComMonFac.getSelectedItem().toString().replace("'", "''").trim() + "', "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'monfacfij'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8490,7 +8490,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "extr         = '" + jTAlma.getText().replace("'", "''").trim() + "', "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'almapto'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8511,7 +8511,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "extr         = '" + jTAlmaVta.getText().replace("'", "''").trim() + "', "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'almavtaf'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8532,7 +8532,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "nume         = " + jTMinFac.getText().replace("$", "").replace(",", "").trim() + ", "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'minfac'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8553,7 +8553,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "extr         = '" + jComSerR.getSelectedItem().toString().replace("'", "''") + "', "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'serrem'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8574,7 +8574,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "extr         = '" + jComSerT.getSelectedItem().toString().replace("'", "''") + "', "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'sertic'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8602,7 +8602,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "val          = " + sVal + ", "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'otramon'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8899,7 +8899,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "val          = " + sVal + ", "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'hoyvtap'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8926,7 +8926,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "val          = " + sVal + ", "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'autcortx'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -8953,7 +8953,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "val          = " + sVal + ", "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'modp'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);                        
@@ -9064,7 +9064,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "val          = " + sVal + ", "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'vmsjpto'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -9091,7 +9091,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "val          = " + sVal + ", "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'chatptoc'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -9118,7 +9118,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "val          = " + sVal + ", "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'vtas' AND conf = 'vercanvtaf'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);
@@ -10348,7 +10348,7 @@ public class ConfGral extends javax.swing.JFrame
             sQ = "UPDATE confgral SET "
                     + "extr         = '" + jTAlmaCot.getText().replace("'", "''").trim() + "', "
                     + "sucu         = '" + Star.sSucu.replace("'", "''") + "', "
-                    + "nocaj        = '" + Star.sSucu.replace("'", "''") + "' "
+                    + "nocaj        = '" + Star.sNoCaj.replace("'", "''") + "' "
                     + "WHERE clasif = 'cots' AND conf = 'almavtac'";                    
             st = con.createStatement();
             st.executeUpdate(sQ);

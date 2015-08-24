@@ -109,12 +109,18 @@ public class PrevComp extends javax.swing.JFrame
     
     
     /*Constructor sin argumentos*/
-    public PrevComp() 
+    public PrevComp(java.util.ArrayList<Boolean> permisos) 
     {
         /*Inicaliza los componentes gráficos*/
         initComponents();
         
-        Star.lCargGral=null;
+        //revisa permisos
+        jBNew.setEnabled(permisos.get(0));
+        jBAbr.setEnabled(permisos.get(1));
+        jBVer.setEnabled(permisos.get(2));
+        jBCan.setEnabled(permisos.get(3));
+        jBPonSer.setEnabled(permisos.get(4));
+        jBVta.setEnabled(permisos.get(5));
         
         //se saca acomoda los componentes dependiendo de la resolucion
         vMyLayout();
@@ -592,7 +598,7 @@ public class PrevComp extends javax.swing.JFrame
                     sKit                = "Si";
                 
                 /*Dales formato de moneda a los totales*/                                
-                NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 double dCant    = Double.parseDouble(sPre);                                
                 sPre            = n.format(dCant);                
                 dCant           = Double.parseDouble(sImpoImp);                                
@@ -1363,7 +1369,7 @@ public class PrevComp extends javax.swing.JFrame
                                                
                 /*Formatea el subtotal a moneda*/
                 double dCant        = Double.parseDouble(sSubTot);                        
-                NumberFormat n      = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                NumberFormat n      = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                 sSubTot             = n.format(dCant);
                 
                 /*Formatea el importe a moneda*/
@@ -2854,7 +2860,7 @@ public class PrevComp extends javax.swing.JFrame
 
                     /*Dales formato de moneda al subtot*/                    
                     double dCant    = Double.parseDouble(sSubTot);                
-                    NumberFormat n  = NumberFormat.getCurrencyInstance(Locale.getDefault());
+                    NumberFormat n  = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
                     sSubTot         = n.format(dCant);
 
                     /*Dales formato de moneda al impuesto*/
