@@ -738,8 +738,9 @@ public class Client extends javax.swing.JFrame
         jLabel2.setToolTipText("Nombre de la Empresa o Nombnre del Cliente");
         jP1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 130, -1));
 
-        jLabel3.setText("*Calle:");
+        jLabel3.setText("Calle:");
         jP1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, -1, -1));
+        jLabel3.getAccessibleContext().setAccessibleName("Calle:");
 
         jTCall.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
         jTCall.setNextFocusableComponent(jTCol);
@@ -766,7 +767,7 @@ public class Client extends javax.swing.JFrame
         });
         jP1.add(jTCall, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 230, 20));
 
-        jLabel4.setText("*Colonia:");
+        jLabel4.setText("Colonia:");
         jP1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, -1));
 
         jTCol.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
@@ -809,10 +810,10 @@ public class Client extends javax.swing.JFrame
         });
         jP1.add(jTEstad, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 290, 230, 20));
 
-        jLabel5.setText("*Estado:");
+        jLabel5.setText("Estado:");
         jP1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, -1, -1));
 
-        jLabel6.setText("*País:");
+        jLabel6.setText("País:");
         jP1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, -1, -1));
 
         jTPai.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
@@ -855,7 +856,7 @@ public class Client extends javax.swing.JFrame
         });
         jP1.add(jTCiu, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 270, 230, 20));
 
-        jLabel7.setText("*Ciudad:");
+        jLabel7.setText("Ciudad:");
         jP1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
 
         jLabel8.setText("Cuenta bancaria:");
@@ -1196,10 +1197,10 @@ public class Client extends javax.swing.JFrame
         });
         jP1.add(jTTelPer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 230, 20));
 
-        jLabel10.setText("*CP:");
+        jLabel10.setText("CP:");
         jP1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, -1, -1));
 
-        jLabel22.setText("*No. exterior:");
+        jLabel22.setText("No. exterior:");
         jP1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 100, -1));
 
         jTNoExt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 255)));
@@ -2270,33 +2271,34 @@ public class Client extends javax.swing.JFrame
         }          
         
         
-        /*Comprueba si el nombre del cliente existe en la base de datos con ese RFC*/                
-        try
-        {
-            sQ  = "SELECT nom FROM emps WHERE nom = '" + jTRazSoc.getText().trim() + "' AND rfc = '" + jTRFC.getText().trim() + "' AND '" + jTRFC.getText().trim() + "' <> ''";
-            st = con.createStatement();
-            rs = st.executeQuery(sQ);
-            /*Si hay datos, entonces*/
-            if(rs.next())
-            {         
-                //Cierra la base de datos
-                if(Star.iCierrBas(con)==-1)
-                    return -1;
-
-                /*Coloca el borde rojo*/                               
-                jTRazSoc.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
-            
-                /*Mensajea y regresa error*/
-                JOptionPane.showMessageDialog(null, " El nombre del cliente: " + jTRazSoc.getText() + " ya existe para el RFC: " + jTRFC.getText() + ". Cambia de nombre de cliente o de RFC.", "Cliente existente", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                                                
-                return -1;                
-            } 
-        }
-        catch(SQLException expnSQL)
-        {
-            //Procesa el error y regresa
-            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
-            return -1;
-        }
+//        /*Comprueba si el nombre del cliente existe en la base de datos con ese RFC*/                
+//        try
+//        {
+//            sQ  = "SELECT nom FROM emps WHERE nom = '" + jTRazSoc.getText().trim() + "' AND rfc = '" + jTRFC.getText().trim() + "' AND '" + jTRFC.getText().trim() + "' <> ''";
+//            st = con.createStatement();
+//            rs = st.executeQuery(sQ);
+//            /*Si hay datos, entonces*/
+//            if(rs.next())
+//            {         
+//                //Cierra la base de datos
+//                if(Star.iCierrBas(con)==-1)
+//                    return -1;
+//
+//                /*Coloca el borde rojo*/                               
+//                jTRazSoc.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+//            
+//                /*Mensajea y regresa error*/
+//                JOptionPane.showMessageDialog(null, " El nombre del cliente: " + jTRazSoc.getText() + " ya existe para el RFC: " + jTRFC.getText() + ". Cambia de nombre de cliente o de RFC.", "Cliente existente", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));                                                
+//                return -1;                
+//            } 
+//        }
+//        catch(SQLException expnSQL)
+//        {
+//            //Procesa el error y regresa
+//            Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
+//            return -1;
+//        }
+        
         //razon social existe
         if(jTRazSoc.getText().compareTo("") != 0)
         {
@@ -2317,136 +2319,134 @@ public class Client extends javax.swing.JFrame
             jTRazSoc.grabFocus();                   
                     return -1;
         }
-        //calle existe
-        if(jTCall.getText().compareTo("") != 0)
-        {
-            text=jTCall.getText();
-            z=text.length();
-            z--;
-            for(;z>=0;z--)
-            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
-            {
-                JOptionPane.showMessageDialog(null, "la calle del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-                jTCall.grabFocus();                   
-                    return -1;
-            }
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "la calle es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTCall.grabFocus();                   
-                    return -1;
-        }
-        //falta colonia
-        if(jTCol.getText().compareTo("") != 0)
-        {
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "la colonia es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTCol.grabFocus();                   
-                    return -1;
-        }
-        //falta numero de exterior
-        if(jTNoExt.getText().compareTo("") != 0)
-        {
-            text=jTNoExt.getText();
-            z=text.length();
-            z--;
-            for(;z>=0;z--)
-            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
-            {
-                JOptionPane.showMessageDialog(null, "El numero del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-                jTNoExt.grabFocus();                   
-                    return -1;
-            }
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "El numero de exterior es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTNoExt.grabFocus();                   
-                    return -1;
-        }
-        //falta numero de cp
-        if(jTCP.getText().compareTo("") != 0)
-        {
-            text=jTCP.getText();
-            z=text.length();
-            z--;
-            for(;z>=0;z--)
-            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
-            {
-                JOptionPane.showMessageDialog(null, "El codigo postal del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-                jTCP.grabFocus();                   
-                    return -1;
-            }
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "El codigo postal es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTCP.grabFocus();                   
-                    return -1;
-        }
-        //falta cuidad
-        if(jTCiu.getText().compareTo("") != 0)
-        {
-            text=jTCiu.getText();
-            z=text.length();
-            z--;
-            for(;z>=0;z--)
-            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
-            {
-                JOptionPane.showMessageDialog(null, "La cuidad del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-                jTCiu.grabFocus();                   
-                    return -1;
-            }
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "la cuidad es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTCiu.grabFocus();                   
-                    return -1;
-        }
-        //falta stado
-        if(jTEstad.getText().compareTo("") != 0)
-        {
-            text=jTEstad.getText();
-            z=text.length();
-            z--;
-            for(;z>=0;z--)
-            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
-            {
-                JOptionPane.showMessageDialog(null, "El estado del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-                jTEstad.grabFocus();                   
-                    return -1;
-            }
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "El estado es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTEstad.grabFocus();                   
-                    return -1;
-        }
-        //falta pais
-        if(jTPai.getText().compareTo("") != 0)
-        {
-            text=jTPai.getText();
-            z=text.length();
-            z--;
-            for(;z>=0;z--)
-            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
-            {
-                JOptionPane.showMessageDialog(null, "El país del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-                jTPai.grabFocus();                   
-                    return -1;
-            }
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "El país es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTPai.grabFocus();                   
-                    return -1;
-        }
+//        //calle existe
+//        if(jTCall.getText().compareTo("") != 0)
+//        {
+//            text=jTCall.getText();
+//            z=text.length();
+//            z--;
+//            for(;z>=0;z--)
+//            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+//            {
+//                JOptionPane.showMessageDialog(null, "la calle del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//                jTCall.grabFocus();                   
+//                    return -1;
+//            }
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "la calle es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTCall.grabFocus();                   
+//                    return -1;
+//        }
+//        
+//        //falta colonia
+//        if(jTCol.getText().compareTo("") == 0)
+//        {   
+//            JOptionPane.showMessageDialog(null, "la colonia es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTCol.grabFocus();                   
+//                    return -1;
+//        }
+//        //falta numero de exterior
+//        if(jTNoExt.getText().compareTo("") != 0)
+//        {
+//            text=jTNoExt.getText();
+//            z=text.length();
+//            z--;
+//            for(;z>=0;z--)
+//            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+//            {
+//                JOptionPane.showMessageDialog(null, "El numero del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//                jTNoExt.grabFocus();                   
+//                    return -1;
+//            }
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "El numero de exterior es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTNoExt.grabFocus();                   
+//                    return -1;
+//        }
+//        //falta numero de cp
+//        if(jTCP.getText().compareTo("") != 0)
+//        {
+//            text=jTCP.getText();
+//            z=text.length();
+//            z--;
+//            for(;z>=0;z--)
+//            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+//            {
+//                JOptionPane.showMessageDialog(null, "El codigo postal del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//                jTCP.grabFocus();                   
+//                    return -1;
+//            }
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "El codigo postal es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTCP.grabFocus();                   
+//                    return -1;
+//        }
+//        //falta cuidad
+//        if(jTCiu.getText().compareTo("") != 0)
+//        {
+//            text=jTCiu.getText();
+//            z=text.length();
+//            z--;
+//            for(;z>=0;z--)
+//            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+//            {
+//                JOptionPane.showMessageDialog(null, "La cuidad del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//                jTCiu.grabFocus();                   
+//                    return -1;
+//            }
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "la cuidad es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTCiu.grabFocus();                   
+//                    return -1;
+//        }
+//        //falta stado
+//        if(jTEstad.getText().compareTo("") != 0)
+//        {
+//            text=jTEstad.getText();
+//            z=text.length();
+//            z--;
+//            for(;z>=0;z--)
+//            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+//            {
+//                JOptionPane.showMessageDialog(null, "El estado del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//                jTEstad.grabFocus();                   
+//                    return -1;
+//            }
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "El estado es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTEstad.grabFocus();                   
+//                    return -1;
+//        }
+//        //falta pais
+//        if(jTPai.getText().compareTo("") != 0)
+//        {
+//            text=jTPai.getText();
+//            z=text.length();
+//            z--;
+//            for(;z>=0;z--)
+//            if((text.charAt(z) == '|')  || (text.charAt(z) == '¬') )         
+//            {
+//                JOptionPane.showMessageDialog(null, "El país del cliente no puede tener los caracteres Pipe (|) o Negación lógica (¬). Favor de eliminarlos para poder continuar." + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//                jTPai.grabFocus();                   
+//                    return -1;
+//            }
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "El país es necesario para poder continuar" + "" + "", "Mensaje", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTPai.grabFocus();                   
+//                    return -1;
+//        }
         /*Si el RFC no es cadena vacia entonces*/
         if(jTRFC.getText().compareTo("") != 0)
         {
@@ -2494,36 +2494,36 @@ public class Client extends javax.swing.JFrame
                 }       
             }
                             
-            /*Comprueba que el RFC no exista en la base de datos*/
-            try
-            {
-                sQ  = "SELECT nom FROM emps WHERE rfc = '" + jTRFC.getText().trim() + "'";                
-                st  = con.createStatement();
-                rs  = st.executeQuery(sQ);
-                /*Si hay datos*/
-                if(rs.next())
-                {
-                    /*Coloca el borde rojo*/                               
-                    jTRFC.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
-            
-                    /*Mensajea*/
-                    JOptionPane.showMessageDialog(null, "El RFC ya existe en la base de datos para: " + rs.getString("nom") + "", "RFC Existente", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
-
-                    //Cierra la base de datos
-                    if(Star.iCierrBas(con)==-1)
-                        return -1;
-
-                    /*Pon el foco del teclado en el campo de RFC y regresa error*/
-                    jTRFC.grabFocus();                   
-                    return -1;
-                }
-            }
-            catch(SQLException expnSQL)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
-                return -1;
-            }           
+//            /*Comprueba que el RFC no exista en la base de datos*/
+//            try
+//            {
+//                sQ  = "SELECT nom FROM emps WHERE rfc = '" + jTRFC.getText().trim() + "'";                
+//                st  = con.createStatement();
+//                rs  = st.executeQuery(sQ);
+//                /*Si hay datos*/
+//                if(rs.next())
+//                {
+//                    /*Coloca el borde rojo*/                               
+//                    jTRFC.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.RED));
+//            
+//                    /*Mensajea*/
+//                    JOptionPane.showMessageDialog(null, "El RFC ya existe en la base de datos para: " + rs.getString("nom") + "", "RFC Existente", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+//
+//                    //Cierra la base de datos
+//                    if(Star.iCierrBas(con)==-1)
+//                        return -1;
+//
+//                    /*Pon el foco del teclado en el campo de RFC y regresa error*/
+//                    jTRFC.grabFocus();                   
+//                    return -1;
+//                }
+//            }
+//            catch(SQLException expnSQL)
+//            {
+//                //Procesa el error y regresa
+//                Star.iErrProc(this.getClass().getName() + " " + expnSQL.getMessage(), Star.sErrSQL, expnSQL.getStackTrace(), con);                                
+//                return -1;
+//            }           
             
         }/*Fin de if(sRFC.compareTo("") != 0)*/                           
         //agregados para evitar avanzar sin llenar esos campos. correcion carlos
@@ -2533,66 +2533,66 @@ public class Client extends javax.swing.JFrame
             jTRFC.grabFocus();                   
                     return -1;
         }
-        //falta calle
-        if(jTCall.getText().compareTo("") != 0)
-        {
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "la calle es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTCall.grabFocus();                   
-                    return -1;
-        }
-        //falta colonia
-        if(jTCol.getText().compareTo("") != 0)
-        {
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "la colonia es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTCol.grabFocus();                   
-                    return -1;
-        }
-        //falta numero de exterior
-        if(jTNoExt.getText().compareTo("") != 0)
-        {
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "El numero de exterior es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTNoExt.grabFocus();                   
-                    return -1;
-        }
-        //falta cuidad
-        if(jTCiu.getText().compareTo("") != 0)
-        {
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "la cuidad es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTCiu.grabFocus();                   
-                    return -1;
-        }
-        //falta stado
-        if(jTEstad.getText().compareTo("") != 0)
-        {
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "El estado es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTEstad.grabFocus();                   
-                    return -1;
-        }
-        //falta pais
-        if(jTPai.getText().compareTo("") != 0)
-        {
-        }
-        else
-        {   
-            JOptionPane.showMessageDialog(null, "El país es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
-            jTPai.grabFocus();                   
-                    return -1;
-        }
+//        //falta calle
+//        if(jTCall.getText().compareTo("") != 0)
+//        {
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "la calle es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTCall.grabFocus();                   
+//                    return -1;
+//        }
+//        //falta colonia
+//        if(jTCol.getText().compareTo("") != 0)
+//        {
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "la colonia es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTCol.grabFocus();                   
+//                    return -1;
+//        }
+//        //falta numero de exterior
+//        if(jTNoExt.getText().compareTo("") != 0)
+//        {
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "El numero de exterior es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTNoExt.grabFocus();                   
+//                    return -1;
+//        }
+//        //falta cuidad
+//        if(jTCiu.getText().compareTo("") != 0)
+//        {
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "la cuidad es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTCiu.grabFocus();                   
+//                    return -1;
+//        }
+//        //falta stado
+//        if(jTEstad.getText().compareTo("") != 0)
+//        {
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "El estado es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTEstad.grabFocus();                   
+//                    return -1;
+//        }
+//        //falta pais
+//        if(jTPai.getText().compareTo("") != 0)
+//        {
+//        }
+//        else
+//        {   
+//            JOptionPane.showMessageDialog(null, "El país es necesario para poder continuar" + "" + "", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd)));
+//            jTPai.grabFocus();                   
+//                    return -1;
+//        }
                 /*Si no se selecciono ser entonces la ser va a ser la vacia, caso contrario obtiene la ser*/
         String sSerInt;
         if(jComSer.getSelectedIndex()== -1)

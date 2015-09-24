@@ -11,12 +11,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 //Importaciones
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
@@ -71,7 +65,6 @@ import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -107,6 +100,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -118,7 +114,6 @@ import net.sf.jasperreports.view.JasperViewer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.xmlbeans.impl.util.Base64;
-import static ptovta.BDCon.vDelBD;
 import static ptovta.Login.sUsrG;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -3866,7 +3861,23 @@ public class Star
             wbPara.setToken                     (facCli.createSolicitudTimbraXMLToken(sNewTok));
             wbPara.setRFC                       (facCli.createSolicitudTimbraXMLRFC(sRFCLoc));
             wbPara.setComprobanteXML            (facCli.createComprobanteXML(xmlComp));
+            
+            try {
 
+		File file = new File("C:\\test\\file.xml");
+		JAXBContext jaxbContext = JAXBContext.newInstance(wstimb.SolicitudTimbraXML.class);
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+		// output pretty printed
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		jaxbMarshaller.marshal(wbPara, file);
+		jaxbMarshaller.marshal(wbPara, System.out);
+
+	      } catch (JAXBException e) {
+		e.printStackTrace();
+	      }
+            
             /*Manda timbrar con el WS*/                        
             wstimb.RespuestaTimbraXML wsResp;
             try
@@ -4585,7 +4596,7 @@ public class Star
             catch(JRException expnJASR)
             {
                 //Procesa el error y regresa
-                Star.iErrProc(Star.class.getName() + " " + expnJASR.getMessage(), Star.sErrJASR, con);                                                                   
+                Star.iErrProc(Star.class.getName() + " " + expnJASR.getMessage(), Star.sErrJASR,expnJASR.getStackTrace(), con);                                                                   
                 return;                                               
             }                        
             
@@ -4742,7 +4753,7 @@ public class Star
             //se divide el numero 0000000,00 -> entero y decimal
             String Num[] = numero.split(",");            
             //de da formato al numero decimal
-            parte_decimal = Num[1] + "/100 " + sMon + " " + sSimb;
+            parte_decimal = sMon + " ." + Num[1] + "/100 " + "M.N.";
             //se convierte el numero a literal
             if(Integer.parseInt(Num[0]) == 0) {//si el valor es cero
                 literal = "cero ";
@@ -4812,7 +4823,6 @@ public class Star
         }
         
     }/*Fin de private String getDec(String num) */
-    
         
     /*Obtiene las centenas*/
     private static String getCent(String num) 
@@ -4831,7 +4841,6 @@ public class Star
             return getDec(Integer.parseInt(num)+"");            
         }                
     }
-
     
     /*Obtiene las unids*/
     private static String getUnid(String numero) 
@@ -5703,38 +5712,6 @@ public class Star
                     bValRFC  = false;
                     return;
                 }
-
-                /*Si el pnúltimo dígito es O entonces*/
-                if(sRFC.substring(sRFC.length() - 2, sRFC.length()-1).compareTo("O")==0)
-                {
-                    /*Si el último dígito no es 0 entonces*/
-                    if(!sRFC.endsWith("0"))
-                    {
-                        /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "Si el penúltimo dígito es O entonces el último dígito del RFC debe ser 0.", "RFC", JOptionPane.INFORMATION_MESSAGE, null); 
-
-                        /*Pon la bandera en false y regresa*/
-                        bValRFC  = false;
-                        return;
-                    }
-                                        
-                }
-                
-                /*Si el pnúltimo dígito es S entonces*/
-                if(sRFC.substring(sRFC.length() - 2, sRFC.length()-1).compareTo("S")==0)
-                {
-                    /*Si el último dígito no es 5 entonces*/
-                    if(!sRFC.endsWith("5"))
-                    {
-                        /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "Si el penúltimo dígito es S entonces el último dígito del RFC debe ser 5.", "RFC", JOptionPane.INFORMATION_MESSAGE, null); 
-
-                        /*Pon la bandera en false y regresa*/
-                        bValRFC  = false;
-                        return;
-                    }
-                                            
-                }
                 
                 /*Devuelve el resultado*/
                 bValRFC   = true;        
@@ -5799,38 +5776,6 @@ public class Star
                     /*Pon la bandera en false y regresa*/
                     bValRFC  = false;
                     return;
-                }
-
-                /*Si el pnúltimo dígito es O entonces*/
-                if(sRFC.substring(sRFC.length() - 2, sRFC.length()-1).compareTo("O")==0)
-                {
-                    /*Si el último dígito no es 0 entonces*/
-                    if(!sRFC.endsWith("0"))
-                    {
-                        /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "Si el penúltimo dígito es O entonces el último dígito del RFC debe ser 0.", "RFC", JOptionPane.INFORMATION_MESSAGE, null); 
-
-                        /*Pon la bandera en false y regresa*/
-                        bValRFC  = false;
-                        return;
-                    }
-                                        
-                }
-                
-                /*Si el pnúltimo dígito es S entonces*/
-                if(sRFC.substring(sRFC.length() - 2, sRFC.length()-1).compareTo("S")==0)
-                {
-                    /*Si el último dígito no es 5 entonces*/
-                    if(!sRFC.endsWith("5"))
-                    {
-                        /*Mensajea*/
-                        JOptionPane.showMessageDialog(null, "Si el penúltimo dígito es S entonces el último dígito del RFC debe ser 5.", "RFC", JOptionPane.INFORMATION_MESSAGE, null); 
-
-                        /*Pon la bandera en false y regresa*/
-                        bValRFC  = false;
-                        return;
-                    }
-                                            
                 }
                 
                 /*Devuelve el resultado*/
@@ -11771,7 +11716,7 @@ public class Star
 
         /*Crea la lista de los UUDI a cancelar*/
         wscance.ListaCancelar lstUid = facCli.createListaCancelar();
-        lstUid.getGuid().add(sFolFisc);                  
+        lstUid.getGuid().add(sFolFisc);
 
         /*Crea la solicitud para cancelación multiple*/
         wscance.SolicitudCancelaMultiple solicitud = new wscance.SolicitudCancelaMultiple();
@@ -11779,23 +11724,24 @@ public class Star
         solicitud.setToken(facCli.createSolicitudCancelaMultipleToken(sNewTok));
         solicitud.setTransaccionID(Long.parseLong(sTransId));
         solicitud.setListaCancelar(facCli.createSolicitudCancelaMultipleListaCancelar(lstUid));
-
+        
         /*Cancela los comprobantes*/
         RespuestaCancelaMultiple wsRes;
         try
         {
             wscance.Cancelaciones_Service servicio  = new wscance.Cancelaciones_Service();
-            wscance.Cancelaciones puerto            = servicio.getPuertoCancelacion();
-            wsRes                                   = puerto.cancelaMultiple(solicitud);  
+            wscance.Cancelaciones puerto            = servicio.getPuertoCancelacionSeguro();
+            //wsRes                                   = puerto.cancelaMultiple(solicitud);  
             wsRes                                   = Star.cancelaMultiple(solicitud);                
         }
         catch(CancelacionesCancelaMultipleFallaServicioFaultFaultMessage | CancelacionesCancelaMultipleFallaSesionFaultFaultMessage expnWSPAC)
         {
             //Procesa el error y regresa error
-            Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC);                                                                   
+            Star.iErrProc(Star.class.getName() + " " + expnWSPAC.getMessage(), Star.sErrWSPAC); 
             return -1;                                                    
         }                        
-                
+            
+        
         //Regresa que todo fue bien
         return 0;
         

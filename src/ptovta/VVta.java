@@ -186,7 +186,7 @@ public class VVta extends javax.swing.JFrame
             st = con.createStatement();
             rs = st.executeQuery(sQ);
             /*Si hay datos entonces*/
-            if(rs.next())
+            while(rs.next())
             {
                 /*Obtiene los totales*/
                 String sPre     = rs.getString("pre");

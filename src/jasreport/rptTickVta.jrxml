@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="255" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="234" leftMargin="1" rightMargin="20" topMargin="0" bottomMargin="20" whenResourceMissingType="Empty" uuid="9704ac55-57bb-4424-9622-f93114b4b088">
 	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="7"/>
-	<property name="ireport.y" value="144"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="824"/>
 	<parameter name="COD_EMPRESA" class="java.lang.String"/>
 	<parameter name="FDOC" class="java.lang.String"/>
 	<parameter name="NOMEMP" class="java.lang.String"/>
@@ -59,6 +59,9 @@
 	<field name="totdescu" class="java.lang.Float">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<variable name="cant_1" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{cant}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -357,7 +360,7 @@
 				<textElement>
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Qyt.]]></text>
+				<text><![CDATA[Cant.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="21" y="1" width="41" height="18" uuid="e812b7a4-9739-46d7-9d62-c60a3440a663"/>
@@ -513,6 +516,20 @@
 				</textElement>
 				<text><![CDATA[.]]></text>
 			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="-1" y="67" width="48" height="11" uuid="ef4b411a-1a4e-4ac7-a9c6-11d7d02737b8"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Total piezas:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="47" y="67" width="89" height="11" uuid="577ad819-aa54-479f-95fb-593574be867a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{cant_1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

@@ -120,7 +120,7 @@ public class Vtas extends javax.swing.JFrame
     
     
     /*Constructor sin argumentos*/
-        public Vtas(java.util.ArrayList<Boolean> permisos) 
+    public Vtas(java.util.ArrayList<Boolean> permisos) 
     {                                
         /*Inicaliza los componentes gráficos*/
         initComponents();
@@ -2970,12 +2970,13 @@ public class Vtas extends javax.swing.JFrame
                 continue;
             }
 
-            if(sEstad.compareTo("CA")==0)
-            {
-                /*Mensajea y continua*/
-                JOptionPane.showMessageDialog(null, "La venta " + jTab1.getValueAt(iSel[x], 1).toString().trim() + " no se puede cancelar por que fue por devolución parcial.", "Venta de Devolución Parcial", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
-                continue;
-            }
+//            if(sEstad.compareTo("CA")==0)
+//            {
+//                /*Mensajea y continua*/
+//                JOptionPane.showMessageDialog(null, "La venta " + jTab1.getValueAt(iSel[x], 1).toString().trim() + " ya fue previamente cancelada.", "Venta Cancelada", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconAd))); 
+//                continue;
+//            }
+            
             /*Si el abono es mayor a 0 entonces*/            
             if(Double.parseDouble(sAbon)>0)
             {

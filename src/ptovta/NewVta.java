@@ -710,8 +710,7 @@ public class NewVta extends javax.swing.JFrame
             public void propertyChange(PropertyChangeEvent event) 
             {
                 /*Si no hay selección regresa*/                    
-                if(jTab.getSelectedRow()==-1)
-                    return;
+                if(jTab.getSelectedRow()==-1)                  return;
 
                 /*Obtén la propiedad que a sucedio en el control*/
                 String prop = event.getPropertyName();                                
@@ -1230,7 +1229,6 @@ public class NewVta extends javax.swing.JFrame
         jRNoPag = new javax.swing.JRadioButton();
         jTVend = new javax.swing.JTextField();
         jBVend = new javax.swing.JButton();
-        jLabel21 = new javax.swing.JLabel();
         jLabel51 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -3227,9 +3225,6 @@ public class NewVta extends javax.swing.JFrame
         });
         jP1.add(jBVend, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 550, 30, 20));
 
-        jLabel21.setText("Cod. Impuesto:");
-        jP1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 110, -1));
-
         jLabel51.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel51.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel51.setText("Sub Total:");
@@ -3246,10 +3241,10 @@ public class NewVta extends javax.swing.JFrame
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jP1, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -7094,9 +7089,12 @@ public class NewVta extends javax.swing.JFrame
             if(sPedimen.compareTo("")!=0)
                 sPedimen        = "PED:" + sPedimen;
             
+            String sImpuesto = jTValImp.getText();
+            if(sImpuesto.compareTo("") == 0) sImpuesto = "0.0";
+            
             /*Agrega los datos en la tabla*/
             DefaultTableModel temp = (DefaultTableModel)jTab.getModel();
-            Object nu[]     = {iContFi, jTProd.getText(), dCan, jComUnid.getSelectedItem().toString(), jComAlma.getSelectedItem().toString(), sList, jTDescrip.getText().trim() + " " + sSerProd + " " + sComenSer + " " + sLotC + " " + sPedimen + " " + sGara + " " + jComTall.getSelectedItem().toString() + " " + jComColo.getSelectedItem().toString() + " " + sBack, sPre, sDesc, jTValImp.getText(), sImpo, sKit, sTotImpue, jComTall.getSelectedItem().toString(), jComColo.getSelectedItem().toString(), jTLot.getText(), jTPedimen.getText(), jTCadu.getText(), jTId.getText(), sBack, sDescConve, sSer.trim(), sComenSer, sGara, jTCost.getText().replace("$", "").replace(",", ""), jTCantLot.getText().trim(), jComImp.getSelectedItem().toString().trim()};        
+            Object nu[]     = {iContFi, jTProd.getText(), dCan, jComUnid.getSelectedItem().toString(), jComAlma.getSelectedItem().toString(), sList, jTDescrip.getText().trim() + " " + sSerProd + " " + sComenSer + " " + sLotC + " " + sPedimen + " " + sGara + " " + jComTall.getSelectedItem().toString() + " " + jComColo.getSelectedItem().toString() + " " + sBack, sPre, sDesc, sImpuesto, sImpo, sKit, sTotImpue, jComTall.getSelectedItem().toString(), jComColo.getSelectedItem().toString(), jTLot.getText(), jTPedimen.getText(), jTCadu.getText(), jTId.getText(), sBack, sDescConve, sSer.trim(), sComenSer, sGara, jTCost.getText().replace("$", "").replace(",", ""), jTCantLot.getText().trim(), jComImp.getSelectedItem().toString().trim()};        
             temp.addRow(nu);
             
             /*Aumenta el contador de filas en uno*/
@@ -10798,7 +10796,6 @@ public class NewVta extends javax.swing.JFrame
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
