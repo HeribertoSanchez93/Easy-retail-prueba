@@ -150,6 +150,7 @@ public class Princip extends javax.swing.JFrame
                 
         /*Esconde el link de ayuda*/
         jLAyu.setVisible(false);
+        this.jMenCatGral.setVisible(false);
         
         /*Centra la ventana*/
         this.setLocationRelativeTo(null);                            
